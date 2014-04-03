@@ -35,3 +35,29 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# IDE files (Netbeans, eclipse, IntelliJ) #
+##########################################
+.idea/
+*.iml
+*.iws
+.classpath
+.classpath
+.project
+.settings/
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# Java specific #
+##################
+*.class
+*.jar
+*.war
+*.ear
+
+
