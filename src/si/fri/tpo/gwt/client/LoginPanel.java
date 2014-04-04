@@ -11,6 +11,7 @@ import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.MessageBox;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.components.BCrypt;
+import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.AdminNaviPanel;
 import si.fri.tpo.gwt.client.form.search.UserSearchForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
@@ -92,7 +93,7 @@ public class LoginPanel extends FormPanel {
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
             // open appropriate navigation panel and main form
-            fillNavigationMainAndHeader(new AdminNaviPanel(mainContainer, service),
+            fillNavigationMainAndHeader(new AdminNavPanel(mainContainer, service),
                     new UserSearchForm(service), message);
         } else {
             // if user is not an admin, display user message

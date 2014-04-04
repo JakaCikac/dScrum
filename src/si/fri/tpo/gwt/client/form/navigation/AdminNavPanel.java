@@ -19,11 +19,11 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
-public class AdminNaviPanel extends LayoutContainer {
+public class AdminNavPanel extends LayoutContainer {
     private RootPanel mainContainer;
     private DScrumServiceAsync service;
 
-    public AdminNaviPanel(RootPanel mainContainer, DScrumServiceAsync service) {
+    public AdminNavPanel(RootPanel mainContainer, DScrumServiceAsync service) {
         this.mainContainer = mainContainer;
         this.service = service;
     }
