@@ -59,12 +59,11 @@ public class DScrum implements EntryPoint {
 
     protected RootPanel initNavigationContainer() {
         MyResources myResources = GWT.create(MyResources.class);
-        //RootPanel navigationContainer = RootPanel.get("navigationContainer");
-        //navigationContainer.getElement().getStyle().setBackgroundColor("#FFF");
+        RootPanel navigationContainer = RootPanel.get("navigationContainer");
+        navigationContainer.getElement().getStyle().setBackgroundColor("#FFF");
         //Image myImage = new Image(myResources.logoFri());
         //navigationContainer.add(myImage);
-        //return navigationContainer;
-        return null;
+        return navigationContainer;
     }
 
     private void startupConnectCallback() {
