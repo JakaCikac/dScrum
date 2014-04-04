@@ -81,11 +81,11 @@ public class SprintDTO extends BaseModelData {
         set("project", project);
     }
 
-    public List<UserStory> getUserStories() {
+    public List<UserStoryDTO> getUserStories() {
         return get("userStories");
     }
 
-    public void setUserStories(List<UserStory> userStories) {
+    public void setUserStories(List<UserStoryDTO> userStories) {
         set("userStories", userStories);
     }
 }

@@ -53,7 +53,7 @@ public class TeamDTO extends BaseModelData {
         set("userId", userId);
     }
 
-    public List<Project> getProjects() {
+    public List<ProjectDTO> getProjects() {
         return get("projects");
     }
 
@@ -61,11 +61,11 @@ public class TeamDTO extends BaseModelData {
         set("projects", projects);
     }
 
-    public List<User> getUsers() {
+    public List<UserDTO> getUsers() {
         return get("users");
     }
 
-    public void setUsers(List<User> users) {
+    public void setUsers(List<UserDTO> users) {
         set("users", users);
     }
 }

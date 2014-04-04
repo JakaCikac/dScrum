@@ -55,19 +55,19 @@ public class UserStoryDTO extends BaseModelData {
         set("name", name);
     }
 
-    public List<AcceptanceTest> getAcceptanceTests() {
+    public List<AcceptanceTestDTO> getAcceptanceTests() {
         return get("acceptanceTests");
     }
 
-    public void setAcceptanceTests(List<AcceptanceTest> acceptanceTests) {
+    public void setAcceptanceTests(List<AcceptanceTestDTO> acceptanceTests) {
         set("acceptanceTests", acceptanceTests);
     }
 
-    public List<Task> getTasks() {
+    public List<TaskDTO> getTasks() {
         return get("tasks");
     }
 
-    public void setTasks(List<Task> tasks) {
+    public void setTasks(List<TaskDTO> tasks) {
         set("tasks", tasks);
     }
 

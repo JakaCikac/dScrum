@@ -1,0 +1,17 @@
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0//EN"
+        "http://google-web-toolkit.googlecode.com/svn/releases/2.0/distro-source/core/src/gwt-module.dtd">
+<module>
+
+    <!-- Inherit core WebToolkit -->
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name="com.extjs.gxt.ui.GXT"/>
+
+    <!-- Inherit the default GWT style sheet. -->
+    <inherits name='com.google.gwt.user.theme.clean.Clean'/>
+
+    <entry-point class='si.fri.tpo.gwt.client.DScrum'/>
+
+    <source path='client'/>
+    <source path='server'/>
+
+</module>

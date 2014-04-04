@@ -111,43 +111,43 @@ public class UserDTO extends BaseModelData{
         set("username", username);
     }
 
-    public List<DailyScrumEntry> getDailyScrumEntries() {
+    public List<DailyScrumEntryDTO> getDailyScrumEntries() {
         return get("dailyScrumEntries");
     }
 
-    public void setDailyScrumEntries(List<DailyScrumEntry> dailyScrumEntries) {
+    public void setDailyScrumEntries(List<DailyScrumEntryDTO> dailyScrumEntries) {
         set("dailyScrumEntries", dailyScrumEntries);
     }
 
-    public List<Discussion> getDiscussions() {
+    public List<DiscussionDTO> getDiscussions() {
         return get("discussions");
     }
 
-    public void setDiscussions(List<Discussion> discussions) {
+    public void setDiscussions(List<DiscussionDTO> discussions) {
         set("discussions", discussions);
     }
 
-    public List<Task> getTasks() {
+    public List<TaskDTO> getTasks() {
         return get("tasks");
     }
 
-    public void setTasks(List<Task> tasks) {
+    public void setTasks(List<TaskDTO> tasks) {
         set("tasks", tasks);
     }
 
-    public List<Team> getTeams() {
+    public List<TeamDTO> getTeams() {
         return get("teams");
     }
 
-    public void setTeams(List<Team> teams) {
+    public void setTeams(List<TeamDTO> teams) {
         set("teams", teams);
     }
 
-    public List<Workload> getWorkloads() {
+    public List<WorkloadDTO> getWorkloads() {
         return get("workloads");
     }
 
-    public void setWorkloads(List<Workload> workloads) {
+    public void setWorkloads(List<WorkloadDTO> workloads) {
         set("workloads", workloads);
     }
 }

@@ -81,11 +81,11 @@ public class TaskDTO extends BaseModelData {
         set("userStory", userStory);
     }
 
-    public List<Workload> getWorkloads() {
+    public List<WorkloadDTO> getWorkloads() {
         return get("workloads");
     }
 
-    public void setWorkloads(List<Workload> workloads) {
+    public void setWorkloads(List<WorkloadDTO> workloads) {
         set("workloads", workloads);
     }
 }

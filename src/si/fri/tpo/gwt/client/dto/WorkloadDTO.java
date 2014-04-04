@@ -38,11 +38,11 @@ public class WorkloadDTO extends BaseModelData {
         set("timeSpent", timeSpent);
     }
 
-    public List<Workblock> getWorkblocks() {
+    public List<WorkblockDTO> getWorkblocks() {
         return get("workblocks");
     }
 
-    public void setWorkblocks(List<Workblock> workblocks) {
+    public void setWorkblocks(List<WorkblockDTO> workblocks) {
         set("workblocks", workblocks);
     }
 

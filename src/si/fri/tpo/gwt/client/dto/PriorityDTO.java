@@ -33,11 +33,11 @@ public class PriorityDTO extends BaseModelData {
         set("name", name);
     }
 
-    public List<UserStory> getUserStories() {
+    public List<UserStoryDTO> getUserStories() {
         return get("userStories");
     }
 
-    public void setUserStories(List<UserStory> userStories) {
+    public void setUserStories(List<UserStoryDTO> userStories) {
         set("userStories", userStories);
     }
 }
