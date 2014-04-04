@@ -45,6 +45,7 @@ Thumbs.db
 .classpath
 .project
 .settings/
+gwt-unitCache/
 nbproject/private/
 build/
 nbbuild/
