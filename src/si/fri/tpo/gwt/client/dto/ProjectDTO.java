@@ -54,19 +54,19 @@ public class ProjectDTO extends BaseModelData{
         set("status", status);
     }
 
-    public List<DailyScrumEntry> getDailyScrumEntries() {
+    public List<DailyScrumEntryDTO> getDailyScrumEntries() {
         return get("dailyScrumEntries");
     }
 
-    public void setDailyScrumEntries(List<DailyScrumEntry> dailyScrumEntries) {
+    public void setDailyScrumEntries(List<DailyScrumEntryDTO> dailyScrumEntries) {
         set("dailyScrumEntries", dailyScrumEntries);
     }
 
-    public List<Discussion> getDiscussions() {
+    public List<DiscussionDTO> getDiscussions() {
         return get("discussions");
     }
 
-    public void setDiscussions(List<Discussion> discussions) {
+    public void setDiscussions(List<DiscussionDTO> discussions) {
         set("discussions", discussions);
     }
 
@@ -78,19 +78,19 @@ public class ProjectDTO extends BaseModelData{
         set("team", team);
     }
 
-    public List<Sprint> getSprints() {
+    public List<SprintDTO> getSprints() {
         return get("sprints");
     }
 
-    public void setSprints(List<Sprint> sprints) {
+    public void setSprints(List<SprintDTO> sprints) {
         set("sprints", sprints);
     }
 
-    public List<UserStory> getUserStories() {
+    public List<UserStoryDTO> getUserStories() {
         return get("userStories");
     }
 
-    public void setUserStories(List<UserStory> userStories) {
+    public void setUserStories(List<UserStoryDTO> userStories) {
         set("userStories", userStories);
     }
 }
