@@ -1,8 +1,8 @@
 package si.fri.tpo.gwt.client.dto;
 
+import com.extjs.gxt.ui.client.data.BaseModelData;
 import si.fri.tpo.jpa.*;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -10,147 +10,144 @@ import java.util.List;
  * Created by t13db on 3.4.2014.
  */
 
-// TODO: dodaj Base model kot lib (extend)
-// TODO: zakomentiraj private in popravi metode za get in set
+public class UserDTO extends BaseModelData{
 
-public class UserDTO implements Serializable{
-
-    private int userId;
-    private String email;
-    private String firstName;
-    private byte isActive;
-    private byte isAdmin;
-    private String lastName;
-    private String password;
-    private String salt;
-    private Date timeCreated;
-    private String username;
-    private List<DailyScrumEntry> dailyScrumEntries;
-    private List<Discussion> discussions;
-    private List<Task> tasks;
-    private List<Team> teams;
-    private List<Workload> workloads;
+    //private int userId;
+    //private String email;
+    //private String firstName;
+    //private byte isActive;
+    //private byte isAdmin;
+    //private String lastName;
+    //private String password;
+    //private String salt;
+    //private Date timeCreated;
+    //private String username;
+    //private List<DailyScrumEntry> dailyScrumEntries;
+    //private List<Discussion> discussions;
+    //private List<Task> tasks;
+    //private List<Team> teams;
+    //private List<Workload> workloads;
 
     public UserDTO() {
     }
 
     public int getUserId() {
-        return userId;
+        return get("userId");
     }
 
     public void setUserId(int userId) {
-        this.userId = userId;
+        set("userId", userId);
     }
 
     public String getEmail() {
-        return email;
+        return get("email");
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        set("email", email);
     }
 
     public String getFirstName() {
-        return firstName;
+        return get("firstName");
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        set("firstName", firstName);
     }
 
     public byte getIsActive() {
-        return isActive;
+        return get("isActive");
     }
 
     public void setIsActive(byte isActive) {
-        this.isActive = isActive;
+        set("isActive", isActive);
     }
 
     public byte getIsAdmin() {
-        return isAdmin;
+        return get("isAdmin");
     }
 
     public void setIsAdmin(byte isAdmin) {
-        this.isAdmin = isAdmin;
+        set("isAdmin", isAdmin);
     }
 
     public String getLastName() {
-        return lastName;
+        return get("lastName");
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        set("lastName", lastName);
     }
 
     public String getPassword() {
-        return password;
+        return get("password");
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        set("password", password);
     }
 
     public String getSalt() {
-        return salt;
+        return get("salt");
     }
 
     public void setSalt(String salt) {
-        this.salt = salt;
+        set("salt", salt);
     }
 
     public Date getTimeCreated() {
-        return timeCreated;
+        return get("timeCreated");
     }
 
     public void setTimeCreated(Date timeCreated) {
-        this.timeCreated = timeCreated;
+        set("timeCreated", timeCreated);
     }
 
     public String getUsername() {
-        return username;
+        return get("username");
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        set("username", username);
     }
 
     public List<DailyScrumEntry> getDailyScrumEntries() {
-        return dailyScrumEntries;
+        return get("dailyScrumEntries");
     }
 
     public void setDailyScrumEntries(List<DailyScrumEntry> dailyScrumEntries) {
-        this.dailyScrumEntries = dailyScrumEntries;
+        set("dailyScrumEntries", dailyScrumEntries);
     }
 
     public List<Discussion> getDiscussions() {
-        return discussions;
+        return get("discussions");
     }
 
     public void setDiscussions(List<Discussion> discussions) {
-        this.discussions = discussions;
+        set("discussions", discussions);
     }
 
     public List<Task> getTasks() {
-        return tasks;
+        return get("tasks");
     }
 
     public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
+        set("tasks", tasks);
     }
 
     public List<Team> getTeams() {
-        return teams;
+        return get("teams");
     }
 
     public void setTeams(List<Team> teams) {
-        this.teams = teams;
+        set("teams", teams);
     }
 
     public List<Workload> getWorkloads() {
-        return workloads;
+        return get("workloads");
     }
 
     public void setWorkloads(List<Workload> workloads) {
-        this.workloads = workloads;
+        set("workloads", workloads);
     }
 }
