@@ -11,8 +11,11 @@ import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.MessageBox;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.components.BCrypt;
+import si.fri.tpo.gwt.client.form.navigation.AdminNaviPanel;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
+import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.session.SessionInfo;
 
 import java.io.Serializable;
 
@@ -52,12 +55,12 @@ public class LoginPanel extends FormPanel {
         });
     }
 
-    /* private void validateResult(String username, String passwordMD5) {
+     private void validateResult(String username, String passwordMD5) {
         //todo verify username & password in database
-        AsyncCallback<Pair<PersonDTO, String>> callback = new AsyncCallback<Pair<PersonDTO, String>>() {
+        AsyncCallback<Pair<UserDTO, String>> callback = new AsyncCallback<Pair<UserDTO, String>>() {
 
             @Override
-            public void onSuccess(Pair<PersonDTO, String> result) {
+            public void onSuccess(Pair<UserDTO, String> result) {
                 if (result.getFirst() != null)
                     openNavigationContainer(result.getFirst());
                 else
@@ -71,50 +74,34 @@ public class LoginPanel extends FormPanel {
         };
 
         service.performUserLogin(username, passwordMD5, callback);
-    } */
+    } 
 
-    /* private void openNavigationContainer(PersonDTO personDTO) {
+     private void openNavigationContainer(UserDTO UserDTO) {
         mainContainer.remove(this);
         navigationContainer.remove(0);
-        openContainersByPersonRole(personDTO.getRole(), personDTO);
-        //mainContainer.getElement().getStyle().setHeight(1000, Unit.PX);
-    } */
+        openContainersByPersonRole(UserDTO.getRole(), UserDTO);
+        checkUserRole(UserDTO.getIsAdmin(), UserDTO);
+    }
+
+    private void checkUserRole(byte isAdmin, UserDTO userDTO) {
+        SessionInfo.userDTO = UserDTO;
+        // Check if user is administrator and display appropriate message
+        if (isAdmin == 1) {
+
+            String message = "Welcome to dScrum admin " +
+                    userDTO.getFirstName() + " " + userDTO.getLastName();
+
+            fillNavigationMainAndHeader(new AdminNaviPanel(mainContainer, service),
+                    new StudentSearchEngineForm(service), message);
+        } else {
+            // if user is not an admin, display user message
+
+            String message = "Welcome to dScrum user " +
+                    userDTO.getFirstName() + " " + userDTO.getLastName();
 
 
-   /* private void openContainersByPersonRole(final String role, final PersonDTO personDTO) {
-        SessionInfo.personDTO = personDTO;
-        if (role.equals(RoleConstaints.ADMINISTRATOR)) {
-            String headerMessage = "Pozdravljeni na e-študentu, skrbnik: " +
-                    personDTO.getName() + " " + personDTO.getSurname() +
-                    (personDTO.getSurname2() != null ? " " + personDTO.getSurname2() + "" : "");
-            fillNavigationMainAndHeader(new AdministratorNavigationPanel(mainContainer, service),
-                    new StudentSearchEngineForm(service), headerMessage);
-        } else if (role.equals(RoleConstaints.CLERK)) {
-            String headerMessage = "Pozdravljeni na e-študentu, referent(ka): " +
-                    personDTO.getName() + " " + personDTO.getSurname() +
-                    (personDTO.getSurname2() != null ? " " + personDTO.getSurname2() + "" : "");
-            fillNavigationMainAndHeader(new ClerkNavigationPanel(mainContainer, service),
-                    new StudentSearchEngineForm(service), headerMessage);
-        } else if (role.equals(RoleConstaints.PROFESSOR)) {
-            String title = personDTO.getProfessorDTO() != null ? personDTO.getProfessorDTO().getTitle() : "";
-            String headerMessage = "Pozdravljeni na e-študentu, profesor(ica): " + title + " " +
-                    personDTO.getName() + " " + personDTO.getSurname() +
-                    (personDTO.getSurname2() != null ? " " + personDTO.getSurname2() + "" : "");
-            fillNavigationMainAndHeader(new ProfessorNavigationPanel(mainContainer, service),
-                    new Label("Prva stran profesorja"), headerMessage);
-        } else if (role.equals(RoleConstaints.REPRESENTATIVE_PERSON)) {
-            //TODO
-        } else if (role.equals(RoleConstaints.DEPUTY_DEAN)) {
-            //TODO
-        } else if (role.equals(RoleConstaints.STUDENT)) {
-            String headerMessage = "Pozdravljeni na e-študentu, študent(ka): " +
-                    personDTO.getName() + " " + personDTO.getSurname() +
-                    (personDTO.getSurname2() != null ? " " + personDTO.getSurname2() + ", " : ", ") +
-                    "vpis. št.: " + personDTO.getUsername();
-            fillNavigationMainAndHeader(new StudentNavigationPanel(mainContainer, service),
-                    new StudentGradeRecordForm(service), headerMessage);
         }
-    }*/
+    }
 
     private void fillNavigationMainAndHeader(LayoutContainer navigationPanel1, Widget mainContainer1, String headerMessage) {
         navigationContainer.add(navigationPanel1, -1, -1);
