@@ -12,7 +12,6 @@ import com.extjs.gxt.ui.client.widget.MessageBox;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.components.BCrypt;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
-import si.fri.tpo.gwt.client.form.navigation.AdminNaviPanel;
 import si.fri.tpo.gwt.client.form.search.UserSearchForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.dto.UserDTO;

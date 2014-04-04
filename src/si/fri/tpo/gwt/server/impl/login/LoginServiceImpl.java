@@ -15,7 +15,7 @@ import java.util.List;
 public class LoginServiceImpl {
 
     public static Pair<UserDTO, String> performUserLogin(String username, String passworHash) {
-        Person person = ProxyManager.getPersonProxy().findPersonByUsername(username);
+        /* Person person = ProxyManager.getPersonProxy().findPersonByUsername(username);
 
         if (person == null)
             return Pair.of(null, "Uporabnik s takšnim uporabniškim imenom ne obstaja!");
@@ -59,7 +59,8 @@ public class LoginServiceImpl {
         if (!successAttemp)
             return Pair.of(null, "Geslo je napačno!");
 
-        return Pair.of(DTOfiller.fillPersonDTO(person), "success");
+        return Pair.of(DTOfiller.fillPersonDTO(person), "success"); */
+        return null;
     }
 
 }
