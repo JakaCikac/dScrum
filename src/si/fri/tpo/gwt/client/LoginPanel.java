@@ -12,7 +12,6 @@ import com.extjs.gxt.ui.client.widget.MessageBox;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.components.BCrypt;
 import si.fri.tpo.gwt.client.form.navigation.AdminNaviPanel;
-import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.session.SessionInfo;
@@ -49,13 +48,13 @@ public class LoginPanel extends FormPanel {
                 String plainPassword = passwordTB.getText();
                 // Hashed password (SHA?)
                 // Passwordi, ki jih shranimo v bazo morajo biti poheshani na enak nacin
-                String hashPassword = BCrypt.hashpw(plainPassword, BCrypt.gensalt());
-                //validateResult(usernameTB.getText(), hashPassword);
+                String passwordHash = BCrypt.hashpw(plainPassword, BCrypt.gensalt());
+                validateResult(usernameTB.getText(), passwordHash);
             }
         });
     }
 
-     private void validateResult(String username, String passwordMD5) {
+     private void validateResult(String username, String passwordHash) {
         //todo verify username & password in database
         AsyncCallback<Pair<UserDTO, String>> callback = new AsyncCallback<Pair<UserDTO, String>>() {
 
@@ -73,13 +72,13 @@ public class LoginPanel extends FormPanel {
             }
         };
 
-        service.performUserLogin(username, passwordMD5, callback);
+        service.performUserLogin(username, passwordHash, callback);
     } 
 
      private void openNavigationContainer(UserDTO UserDTO) {
         mainContainer.remove(this);
         navigationContainer.remove(0);
-        openContainersByPersonRole(UserDTO.getRole(), UserDTO);
+         // check if user is admin and open appropriate navigation
         checkUserRole(UserDTO.getIsAdmin(), UserDTO);
     }
 
@@ -91,6 +90,7 @@ public class LoginPanel extends FormPanel {
             String message = "Welcome to dScrum admin " +
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
+            // open appropriate navigation panel and main form
             fillNavigationMainAndHeader(new AdminNaviPanel(mainContainer, service),
                     new StudentSearchEngineForm(service), message);
         } else {
@@ -98,7 +98,6 @@ public class LoginPanel extends FormPanel {
 
             String message = "Welcome to dScrum user " +
                     userDTO.getFirstName() + " " + userDTO.getLastName();
-
 
         }
     }

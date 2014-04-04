@@ -5,4 +5,12 @@
 		  http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
            version="3.0">
 
+    <servlet>
+        <servlet-name>si.fri.tpo.gwt.DScrum DScrumService</servlet-name>
+        <servlet-class>si.fri.tpo.gwt.server.servlet.DScrumServiceImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>si.fri.tpo.gwt.DScrum DScrumService</servlet-name>
+        <url-pattern>/si.fri.tpo.gwt.DScrum/dscrum</url-pattern>
+    </servlet-mapping>
 </web-app>
