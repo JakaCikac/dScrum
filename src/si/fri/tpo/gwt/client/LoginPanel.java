@@ -12,6 +12,7 @@ import com.extjs.gxt.ui.client.widget.MessageBox;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.components.BCrypt;
 import si.fri.tpo.gwt.client.form.navigation.AdminNaviPanel;
+import si.fri.tpo.gwt.client.form.search.UserSearchForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.session.SessionInfo;
@@ -83,7 +84,7 @@ public class LoginPanel extends FormPanel {
     }
 
     private void checkUserRole(byte isAdmin, UserDTO userDTO) {
-        SessionInfo.userDTO = UserDTO;
+        SessionInfo.userDTO = userDTO;
         // Check if user is administrator and display appropriate message
         if (isAdmin == 1) {
 
@@ -92,7 +93,7 @@ public class LoginPanel extends FormPanel {
 
             // open appropriate navigation panel and main form
             fillNavigationMainAndHeader(new AdminNaviPanel(mainContainer, service),
-                    new StudentSearchEngineForm(service), message);
+                    new UserSearchForm(service), message);
         } else {
             // if user is not an admin, display user message
 
