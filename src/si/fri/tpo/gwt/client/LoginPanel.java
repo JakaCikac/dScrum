@@ -11,6 +11,8 @@ import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.MessageBox;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.components.BCrypt;
+import si.fri.tpo.gwt.client.service.DScrumService;
+import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 import java.io.Serializable;
 
@@ -27,13 +29,14 @@ public class LoginPanel extends FormPanel {
     private PasswordTextBox passwordTB;
     private TextBox usernameTB;
     private DScrum dscrum;
+    private DScrumServiceAsync service;
 
-    public LoginPanel(DScrum dscrum, RootPanel navigationContainer, RootPanel mainContainer, RootPanel headerContainer) {
+    public LoginPanel(DScrum dscrum, RootPanel navigationContainer, RootPanel mainContainer, RootPanel headerContainer, DScrumServiceAsync service) {
         this.dscrum = dscrum;
         this.navigationContainer = navigationContainer;
         this.mainContainer = mainContainer;
         this.headerContainer = headerContainer;
-        //this.service = service;
+        this.service = service;
 
         initComponents();
 
