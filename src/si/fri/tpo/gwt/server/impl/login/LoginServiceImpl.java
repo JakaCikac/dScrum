@@ -3,6 +3,7 @@ package si.fri.tpo.gwt.server.impl.login;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import si.fri.tpo.gwt.client.components.Pair;
+import si.fri.tpo.gwt.client.dto.UserDTO;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public class LoginServiceImpl {
 
-    public static Pair<PersonDTO, String> performUserLogin(String username, String passwordMD5) {
+    public static Pair<UserDTO, String> performUserLogin(String username, String passworHash) {
         Person person = ProxyManager.getPersonProxy().findPersonByUsername(username);
 
         if (person == null)
