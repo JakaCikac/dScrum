@@ -4,6 +4,9 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.server.impl.fill.FillDTO;
+import si.fri.tpo.jpa.User;
+import si.fri.tpo.jpa.proxy.ProxyManager;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -15,52 +18,18 @@ import java.util.List;
 public class LoginServiceImpl {
 
     public static Pair<UserDTO, String> performUserLogin(String username, String passworHash) {
-        /* Person person = ProxyManager.getPersonProxy().findPersonByUsername(username);
+         User user = ProxyManager.getUserProxy().findUserByUsername(username);
 
-        if (person == null)
-            return Pair.of(null, "Uporabnik s takšnim uporabniškim imenom ne obstaja!");
-
-        List<LoginLog> personLogins = person.getLoginLog();
-        DateTimeZone zone = DateTimeZone.getDefault();
-        DateTime dt = new DateTime(zone);
-        DateTime dtMin30 = dt.minusMinutes(ServerConstants.LOCK_TIME_MINS);
-
-
-        // check failed logins for last 10 minutes
-        int countAttemps = 0;
-        for (LoginLog loginLog : personLogins) {
-            if (!loginLog.isSuccess() && dtMin30.isBefore(loginLog.getTimeLogin().getTime()))
-                countAttemps++;
-        }
-
-        // lock username
-        if (countAttemps >= ServerConstants.MAX_LOGIN_ATTEMPTS)
-            return Pair.of(null, "Sistem je zaklenjen! Prijavili se boste lahko čez cca " + ServerConstants.LOCK_TIME_MINS + " minut.");
+        if (user == null)
+            return Pair.of(null, "Username with this username does not exist!");
 
         // verify password
-        final boolean successAttemp = person.getPassword().equals(passwordMD5);
+        final boolean attempt = user.getPassword().equals(passwordMD5);
 
-        //write login attemp to database
-        LoginLog log = new LoginLog();
-        log.setSuccess(successAttemp);
-        log.setTimeLogin(new Timestamp(dt.getMillis()));
-        ProxyManager.getLoginLogProxy().create(log);
+        if (!attempt)
+            return Pair.of(null, "Wrong password!");
 
-        if (personLogins == null)
-            personLogins = new ArrayList<LoginLog>();
-
-        personLogins.add(log);
-        try {
-            ProxyManager.getPersonProxy().edit(person);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (!successAttemp)
-            return Pair.of(null, "Geslo je napačno!");
-
-        return Pair.of(DTOfiller.fillPersonDTO(person), "success"); */
-        return null;
+        return Pair.of(FillDTO.fillUserData(user), "success");
     }
 
 }

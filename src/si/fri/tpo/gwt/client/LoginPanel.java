@@ -2,22 +2,12 @@ package si.fri.tpo.gwt.client;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
-import com.extjs.gxt.ui.client.widget.MessageBox;
-import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.components.BCrypt;
-import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
-import si.fri.tpo.gwt.client.form.search.UserSearchForm;
+import si.fri.tpo.gwt.client.verification.PassHash;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
-import si.fri.tpo.gwt.client.dto.UserDTO;
-import si.fri.tpo.gwt.client.session.SessionInfo;
-
-import java.io.Serializable;
 
 /**
  * Created by nanorax on 4/4/14.
@@ -49,8 +39,11 @@ public class LoginPanel extends FormPanel {
                 String plainPassword = passwordTB.getText();
                 // Hashed password (SHA?)
                 // Passwordi, ki jih shranimo v bazo morajo biti poheshani na enak nacin
-                String passwordHash = BCrypt.hashpw(plainPassword, BCrypt.gensalt());
+                // MD5 password
+                final String passwordHash = PassHash.getMD5Password(passwordTB.getText());
                 //validateResult(usernameTB.getText(), passwordHash);
+
+                //System.out.println("plain: " + plainPassword + " hashed: " + passwordHash);
             }
         });
     }
