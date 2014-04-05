@@ -10,7 +10,7 @@ import si.fri.tpo.gwt.client.dto.UserDTO;
  */
 public interface DScrumServiceAsync {
 
-    void performUserLogin(String username, String passwordHash, AsyncCallback<Pair<UserDTO, String>> async);
+    //void performUserLogin(String username, String passwordHash, AsyncCallback<Pair<UserDTO, String>> async);
 
 }
 

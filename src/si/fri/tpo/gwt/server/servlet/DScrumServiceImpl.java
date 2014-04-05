@@ -11,8 +11,9 @@ import si.fri.tpo.gwt.server.impl.login.LoginServiceImpl;
  */
 public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumService {
 
-    @Override
+    // TODO: ker ne returna pravilne zadeve -> crash
+   /* @Override
     public Pair<UserDTO, String> performUserLogin(String username, String passwordHash) {
         return LoginServiceImpl.performUserLogin(username, passwordHash);
-    }
+    } */
 }

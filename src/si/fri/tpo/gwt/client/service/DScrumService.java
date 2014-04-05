@@ -12,6 +12,6 @@ import si.fri.tpo.gwt.client.dto.UserDTO;
 @RemoteServiceRelativePath("dscrum")
 public interface DScrumService extends RemoteService {
 
-    public Pair<UserDTO, String> performUserLogin(String username, String passwordHash);
+    //public Pair<UserDTO, String> performUserLogin(String username, String passwordHash);
 
 }

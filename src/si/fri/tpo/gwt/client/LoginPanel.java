@@ -50,12 +50,12 @@ public class LoginPanel extends FormPanel {
                 // Hashed password (SHA?)
                 // Passwordi, ki jih shranimo v bazo morajo biti poheshani na enak nacin
                 String passwordHash = BCrypt.hashpw(plainPassword, BCrypt.gensalt());
-                validateResult(usernameTB.getText(), passwordHash);
+                //validateResult(usernameTB.getText(), passwordHash);
             }
         });
     }
 
-     private void validateResult(String username, String passwordHash) {
+     /* private void validateResult(String username, String passwordHash) {
         //todo verify username & password in database
         AsyncCallback<Pair<UserDTO, String>> callback = new AsyncCallback<Pair<UserDTO, String>>() {
 
@@ -74,16 +74,16 @@ public class LoginPanel extends FormPanel {
         };
 
         service.performUserLogin(username, passwordHash, callback);
-    } 
+    } */
 
-     private void openNavigationContainer(UserDTO UserDTO) {
+   /*  private void openNavigationContainer(UserDTO UserDTO) {
         mainContainer.remove(this);
         navigationContainer.remove(0);
          // check if user is admin and open appropriate navigation
         checkUserRole(UserDTO.getIsAdmin(), UserDTO);
-    }
+    } */
 
-    private void checkUserRole(byte isAdmin, UserDTO userDTO) {
+   /* private void checkUserRole(byte isAdmin, UserDTO userDTO) {
         SessionInfo.userDTO = userDTO;
         // Check if user is administrator and display appropriate message
         if (isAdmin == 1) {
@@ -101,7 +101,7 @@ public class LoginPanel extends FormPanel {
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
         }
-    }
+    } */
 
     private void fillNavigationMainAndHeader(LayoutContainer navigationPanel1, Widget mainContainer1, String headerMessage) {
         navigationContainer.add(navigationPanel1, -1, -1);
