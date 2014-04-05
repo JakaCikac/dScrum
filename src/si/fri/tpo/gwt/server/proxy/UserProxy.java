@@ -1,10 +1,10 @@
 package si.fri.tpo.gwt.server.proxy;
 
-import si.fri.tpo.gwt.server.controllers.UserJpaController;
-import si.fri.tpo.gwt.server.jpa.User;
 
+import si.fri.tpo.gwt.server.controllers.UserJpaController;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import si.fri.tpo.gwt.server.jpa.User;
 
 /**
  * Created by nanorax on 05/04/14.
