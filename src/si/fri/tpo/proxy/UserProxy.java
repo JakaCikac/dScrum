@@ -22,8 +22,7 @@ public class UserProxy extends UserJpaController {
             em = getEntityManager();
             User u;
             try {
-                // TODO: named query for findUserByUsername
-                u = em.createNamedQuery("User.findUserByUsername", User.class).setParameter("username", username).getSingleResult();
+                u = em.createNamedQuery("User.findByUsername", User.class).setParameter("username", username).getSingleResult();
                 return u;
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -33,5 +32,4 @@ public class UserProxy extends UserJpaController {
             em.close();
         }
     }
-
 }

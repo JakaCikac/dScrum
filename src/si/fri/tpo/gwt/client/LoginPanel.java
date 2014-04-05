@@ -128,7 +128,7 @@ public class LoginPanel extends FormPanel {
         grid.setWidget(0, 0, lblNewLabel);
 
         usernameTB = new TextBox();
-        usernameTB.setText("referentka1");
+        usernameTB.setText("t13as");
         grid.setWidget(0, 1, usernameTB);
         usernameTB.setWidth("100%");
 

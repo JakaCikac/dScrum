@@ -83,7 +83,7 @@ public class UserSearchForm extends VerticalPanel {
             simple.setWidth(438);
 
             simple.add(fieldSet);
-            simple.add(new Button("Išči", new SelectionListener<ButtonEvent>() {
+            simple.add(new Button("Search", new SelectionListener<ButtonEvent>() {
                 public void componentSelected(ButtonEvent ce) {
                     reconfigureData();
                 }
