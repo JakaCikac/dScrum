@@ -23,6 +23,11 @@ import si.fri.tpo.gwt.server.jpa.UserStory;
  * @author Administrator
  */
 public class AcceptanceTestJpaController implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    public AcceptanceTestJpaController() {
+
+    }
 
     public AcceptanceTestJpaController(EntityManagerFactory emf) {
         this.emf = emf;

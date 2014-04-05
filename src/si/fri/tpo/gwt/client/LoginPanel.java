@@ -1,11 +1,19 @@
 package si.fri.tpo.gwt.client;
 
+import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
+import si.fri.tpo.gwt.client.components.Pair;
+import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
+import si.fri.tpo.gwt.client.form.search.UserSearchForm;
+import si.fri.tpo.gwt.client.session.SessionInfo;
 import si.fri.tpo.gwt.client.verification.PassHash;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
@@ -41,14 +49,14 @@ public class LoginPanel extends FormPanel {
                 // Passwordi, ki jih shranimo v bazo morajo biti poheshani na enak nacin
                 // MD5 password
                 final String passwordHash = PassHash.getMD5Password(passwordTB.getText());
-                //validateResult(usernameTB.getText(), passwordHash);
+                validateResult(usernameTB.getText(), passwordHash);
 
-                //System.out.println("plain: " + plainPassword + " hashed: " + passwordHash);
+                System.out.println("plain: " + plainPassword + " hashed: " + passwordHash);
             }
         });
     }
 
-     /* private void validateResult(String username, String passwordHash) {
+      private void validateResult(String username, String passwordHash) {
         //todo verify username & password in database
         AsyncCallback<Pair<UserDTO, String>> callback = new AsyncCallback<Pair<UserDTO, String>>() {
 
@@ -67,19 +75,19 @@ public class LoginPanel extends FormPanel {
         };
 
         service.performUserLogin(username, passwordHash, callback);
-    } */
+    }
 
-   /*  private void openNavigationContainer(UserDTO UserDTO) {
+     private void openNavigationContainer(UserDTO userDTO) {
         mainContainer.remove(this);
         navigationContainer.remove(0);
          // check if user is admin and open appropriate navigation
-        checkUserRole(UserDTO.getIsAdmin(), UserDTO);
-    } */
+        checkUserRole(userDTO.isAdmin(), userDTO);
+    }
 
-   /* private void checkUserRole(byte isAdmin, UserDTO userDTO) {
+    private void checkUserRole(boolean isAdmin, UserDTO userDTO) {
         SessionInfo.userDTO = userDTO;
         // Check if user is administrator and display appropriate message
-        if (isAdmin == 1) {
+        if (isAdmin) {
 
             String message = "Welcome to dScrum admin " +
                     userDTO.getFirstName() + " " + userDTO.getLastName();
@@ -94,7 +102,7 @@ public class LoginPanel extends FormPanel {
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
         }
-    } */
+    }
 
     private void fillNavigationMainAndHeader(LayoutContainer navigationPanel1, Widget mainContainer1, String headerMessage) {
         navigationContainer.add(navigationPanel1, -1, -1);
