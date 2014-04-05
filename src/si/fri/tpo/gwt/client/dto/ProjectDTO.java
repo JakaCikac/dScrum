@@ -2,6 +2,7 @@ package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
 import si.fri.tpo.jpa.*;
+
 import java.util.List;
 
 /**
@@ -9,33 +10,25 @@ import java.util.List;
  */
 public class ProjectDTO extends BaseModelData{
 
-    //private int projectId;
-    //private String description;
+    //private Integer projectId;
     //private String name;
+    //private String description;
     //private String status;
-    //private List<DailyScrumEntry> dailyScrumEntries;
-    //private List<Discussion> discussions;
-    //private Team team;
-    //private List<Sprint> sprints;
-    //private List<UserStory> userStories;
+    //private Team teamTeamId;
+    //private List<Discussion> discussionList;
+    //private List<DailyScrumEntry> dailyScrumEntryList;
+    //private List<Sprint> sprintList;
+    //private List<UserStory> userStoryList;
 
     public ProjectDTO() {
     }
 
-    public int getProjectId() {
+    public Integer getProjectId() {
         return get("projectId");
     }
 
-    public void setProjectId(int projectId) {
+    public void setProjectId(Integer projectId) {
         set("projectId", projectId);
-    }
-
-    public String getDescription() {
-        return get("description");
-    }
-
-    public void setDescription(String description) {
-        set("description", description);
     }
 
     public String getName() {
@@ -46,6 +39,14 @@ public class ProjectDTO extends BaseModelData{
         set("name", name);
     }
 
+    public String getDescription() {
+        return get("description");
+    }
+
+    public void setDescription(String description) {
+        set("description", description);
+    }
+
     public String getStatus() {
         return get("status");
     }
@@ -54,43 +55,43 @@ public class ProjectDTO extends BaseModelData{
         set("status", status);
     }
 
-    public List<DailyScrumEntryDTO> getDailyScrumEntries() {
-        return get("dailyScrumEntries");
+    public Team getTeamTeamId() {
+        return get("teamTeamId");
     }
 
-    public void setDailyScrumEntries(List<DailyScrumEntryDTO> dailyScrumEntries) {
-        set("dailyScrumEntries", dailyScrumEntries);
+    public void setTeamTeamId(Team teamTeamId) {
+       set("teamTeamId", teamTeamId);
     }
 
-    public List<DiscussionDTO> getDiscussions() {
-        return get("discussions");
+    public List<DiscussionDTO> getDiscussionList() {
+        return get("discussionList");
     }
 
-    public void setDiscussions(List<DiscussionDTO> discussions) {
-        set("discussions", discussions);
+    public void setDiscussionList(List<DiscussionDTO> discussionList) {
+        set("discussionList", discussionList);
     }
 
-    public Team getTeam() {
-        return get("team");
+    public List<DailyScrumEntryDTO> getDailyScrumEntryList() {
+        return get("dailyScrumEntryList");
     }
 
-    public void setTeam(Team team) {
-        set("team", team);
+    public void setDailyScrumEntryList(List<DailyScrumEntryDTO> dailyScrumEntryList) {
+        set("dailyScrumEntryList", dailyScrumEntryList);
     }
 
-    public List<SprintDTO> getSprints() {
-        return get("sprints");
+    public List<SprintDTO> getSprintList() {
+        return get("sprintList");
     }
 
-    public void setSprints(List<SprintDTO> sprints) {
-        set("sprints", sprints);
+    public void setSprintList(List<SprintDTO> sprintList) {
+        set("sprintList", sprintList);
     }
 
-    public List<UserStoryDTO> getUserStories() {
-        return get("userStories");
+    public List<UserStoryDTO> getUserStoryList() {
+        return get("userStoryList");
     }
 
-    public void setUserStories(List<UserStoryDTO> userStories) {
-        set("userStories", userStories);
+    public void setUserStoryList(List<UserStoryDTO> userStoryList) {
+        set("userStoryList", userStoryList);
     }
 }

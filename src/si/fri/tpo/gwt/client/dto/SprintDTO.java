@@ -3,7 +3,6 @@ package si.fri.tpo.gwt.client.dto;
 import com.extjs.gxt.ui.client.data.BaseModelData;
 import si.fri.tpo.jpa.Project;
 import si.fri.tpo.jpa.SprintPK;
-import si.fri.tpo.jpa.UserStory;
 
 import java.util.Date;
 import java.util.List;
@@ -13,39 +12,31 @@ import java.util.List;
  */
 public class SprintDTO extends BaseModelData {
 
-    //private SprintPK id;
-    //private Date endDate;
-    //private int seqNumber;
+    //protected SprintPK sprintPK;
+    //private Integer seqNumber;
     //private Date startDate;
+    //private Date endDate;
+    //private Integer velocity;
     //private String status;
-    //private int velocity;
     //private Project project;
-    //private List<UserStory> userStories;
+    //private List<UserStory> userStoryList;
 
     public SprintDTO() {
     }
 
-    public SprintPK getId() {
-        return get("id");
+    public SprintPK getSprintPK() {
+        return get("sprintPK");
     }
 
-    public void setId(SprintPK id) {
-        set("id", id);
+    public void setSprintPK(SprintPK sprintPK) {
+        set("sprintPK", sprintPK);
     }
 
-    public Date getEndDate() {
-        return get("endDate");
-    }
-
-    public void setEndDate(Date endDate) {
-        set("endDate", endDate);
-    }
-
-    public int getSeqNumber() {
+    public Integer getSeqNumber() {
         return get("seqNumber");
     }
 
-    public void setSeqNumber(int seqNumber) {
+    public void setSeqNumber(Integer seqNumber) {
         set("seqNumber", seqNumber);
     }
 
@@ -57,20 +48,28 @@ public class SprintDTO extends BaseModelData {
         set("startDate", startDate);
     }
 
+    public Date getEndDate() {
+        return get("endDate");
+    }
+
+    public void setEndDate(Date endDate) {
+        set("endDate", endDate);
+    }
+
+    public Integer getVelocity() {
+        return get("velocity");
+    }
+
+    public void setVelocity(Integer velocity) {
+        set("velocity", velocity);
+    }
+
     public String getStatus() {
         return get("status");
     }
 
     public void setStatus(String status) {
         set("status", status);
-    }
-
-    public int getVelocity() {
-        return get("velocity");
-    }
-
-    public void setVelocity(int velocity) {
-        set("velocity", velocity);
     }
 
     public Project getProject() {
@@ -81,11 +80,11 @@ public class SprintDTO extends BaseModelData {
         set("project", project);
     }
 
-    public List<UserStoryDTO> getUserStories() {
-        return get("userStories");
+    public List<UserStoryDTO> getUserStoryList() {
+        return get("userStoryList");
     }
 
-    public void setUserStories(List<UserStoryDTO> userStories) {
-        set("userStories", userStories);
+    public void setUserStoryList(List<UserStoryDTO> userStoryList) {
+        set("userStoryList", userStoryList);
     }
 }

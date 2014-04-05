@@ -6,27 +6,29 @@ import si.fri.tpo.jpa.Project;
 import si.fri.tpo.jpa.User;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by t13db on 4.4.2014.
  */
 public class DiscussionDTO extends BaseModelData {
 
-    //private DiscussionPK id;
+    //protected DiscussionPK discussionPK;
     //private String content;
     //private Date createtime;
-    //private User user;
     //private Project project;
+    //private User user;
+    //private List<Comment> commentList;
 
     public DiscussionDTO() {
     }
 
-    public DiscussionPK getId() {
-        return get("id");
+    public DiscussionPK getDiscussionPK() {
+        return get("discussionPK");
     }
 
-    public void setId(DiscussionPK id) {
-        set("id", id);
+    public void setDiscussionPK(DiscussionPK discussionPK) {
+        set("discussionPK", discussionPK);
     }
 
     public String getContent() {
@@ -45,6 +47,14 @@ public class DiscussionDTO extends BaseModelData {
         set("createtime", createtime);
     }
 
+    public Project getProject() {
+        return get("project");
+    }
+
+    public void setProject(Project project) {
+        set("project", project);
+    }
+
     public User getUser() {
         return get("user");
     }
@@ -53,11 +63,11 @@ public class DiscussionDTO extends BaseModelData {
         set("user", user);
     }
 
-    public Project getProject() {
-        return get("project");
+    public List<CommentDTO> getCommentList() {
+        return get("commentList");
     }
 
-    public void setProject(Project project) {
-        set("project", project);
+    public void setCommentList(List<CommentDTO> commentList) {
+        set("commentList", commentList);
     }
 }

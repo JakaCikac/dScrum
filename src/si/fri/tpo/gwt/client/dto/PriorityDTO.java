@@ -1,7 +1,6 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import si.fri.tpo.jpa.UserStory;
 
 import java.util.List;
 
@@ -10,18 +9,18 @@ import java.util.List;
  */
 public class PriorityDTO extends BaseModelData {
 
-    //private int priorityId;
+    //private Integer priorityId;
     //private String name;
-    //private List<UserStory> userStories;
+    //private List<UserStory> userStoryList;
 
     public PriorityDTO() {
     }
 
-    public int getPriorityId() {
+    public Integer getPriorityId() {
         return get("priorityId");
     }
 
-    public void setPriorityId(int priorityId) {
+    public void setPriorityId(Integer priorityId) {
         set("priorityId", priorityId);
     }
 
@@ -33,11 +32,11 @@ public class PriorityDTO extends BaseModelData {
         set("name", name);
     }
 
-    public List<UserStoryDTO> getUserStories() {
-        return get("userStories");
+    public List<UserStoryDTO> getUserStoryList() {
+        return get("userStoryList");
     }
 
-    public void setUserStories(List<UserStoryDTO> userStories) {
-        set("userStories", userStories);
+    public void setUserStoryList(List<UserStoryDTO> userStoryList) {
+        set("userStoryList", userStoryList);
     }
 }

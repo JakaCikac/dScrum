@@ -1,7 +1,6 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import si.fri.tpo.jpa.*;
 
 import java.util.Date;
 import java.util.List;
@@ -12,95 +11,32 @@ import java.util.List;
 
 public class UserDTO extends BaseModelData{
 
-    //private int userId;
-    //private String email;
-    //private String firstName;
-    //private byte isActive;
-    //private byte isAdmin;
-    //private String lastName;
-    //private String password;
-    //private String salt;
-    //private Date timeCreated;
+    //private Integer userId;
     //private String username;
-    //private List<DailyScrumEntry> dailyScrumEntries;
-    //private List<Discussion> discussions;
-    //private List<Task> tasks;
-    //private List<Team> teams;
-    //private List<Workload> workloads;
+    //private String password;
+    //private String firstName;
+    //private String lastName;
+    //private String email;
+    //private boolean isAdmin;
+    //private String salt;
+    //private boolean isActive;
+    //private Date timeCreated;
+    //private List<Team> teamList;
+    //private List<Workload> workloadList;
+    //private List<Discussion> discussionList;
+    //private List<Task> taskList;
+    //private List<DailyScrumEntry> dailyScrumEntryList;
+    //private List<Comment> commentList;
 
     public UserDTO() {
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return get("userId");
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         set("userId", userId);
-    }
-
-    public String getEmail() {
-        return get("email");
-    }
-
-    public void setEmail(String email) {
-        set("email", email);
-    }
-
-    public String getFirstName() {
-        return get("firstName");
-    }
-
-    public void setFirstName(String firstName) {
-        set("firstName", firstName);
-    }
-
-    public byte getIsActive() {
-        return get("isActive");
-    }
-
-    public void setIsActive(byte isActive) {
-        set("isActive", isActive);
-    }
-
-    public byte getIsAdmin() {
-        return get("isAdmin");
-    }
-
-    public void setIsAdmin(byte isAdmin) {
-        set("isAdmin", isAdmin);
-    }
-
-    public String getLastName() {
-        return get("lastName");
-    }
-
-    public void setLastName(String lastName) {
-        set("lastName", lastName);
-    }
-
-    public String getPassword() {
-        return get("password");
-    }
-
-    public void setPassword(String password) {
-        set("password", password);
-    }
-
-    public String getSalt() {
-        return get("salt");
-    }
-
-    public void setSalt(String salt) {
-        set("salt", salt);
-    }
-
-    public Date getTimeCreated() {
-        return get("timeCreated");
-    }
-
-    public void setTimeCreated(Date timeCreated) {
-        set("timeCreated", timeCreated);
     }
 
     public String getUsername() {
@@ -111,43 +47,115 @@ public class UserDTO extends BaseModelData{
         set("username", username);
     }
 
-    public List<DailyScrumEntryDTO> getDailyScrumEntries() {
-        return get("dailyScrumEntries");
+    public String getPassword() {
+        return get("password");
     }
 
-    public void setDailyScrumEntries(List<DailyScrumEntryDTO> dailyScrumEntries) {
-        set("dailyScrumEntries", dailyScrumEntries);
+    public void setPassword(String password) {
+        set("password", password);
     }
 
-    public List<DiscussionDTO> getDiscussions() {
-        return get("discussions");
+    public String getFirstName() {
+        return get("firstName");
     }
 
-    public void setDiscussions(List<DiscussionDTO> discussions) {
-        set("discussions", discussions);
+    public void setFirstName(String firstName) {
+        set("firstName", firstName);
     }
 
-    public List<TaskDTO> getTasks() {
-        return get("tasks");
+    public String getLastName() {
+        return get("lastName");
     }
 
-    public void setTasks(List<TaskDTO> tasks) {
-        set("tasks", tasks);
+    public void setLastName(String lastName) {
+        set("lastName", lastName);
     }
 
-    public List<TeamDTO> getTeams() {
-        return get("teams");
+    public String getEmail() {
+        return get("email");
     }
 
-    public void setTeams(List<TeamDTO> teams) {
-        set("teams", teams);
+    public void setEmail(String email) {
+        set("email", email);
     }
 
-    public List<WorkloadDTO> getWorkloads() {
-        return get("workloads");
+    public boolean isAdmin() {
+        return get("isAdmin");
     }
 
-    public void setWorkloads(List<WorkloadDTO> workloads) {
-        set("workloads", workloads);
+    public void setAdmin(boolean isAdmin) {
+        set("isAdmin", isAdmin);
+    }
+
+    public String getSalt() {
+        return get("salt");
+    }
+
+    public void setSalt(String salt) {
+        set("salt", salt);
+    }
+
+    public boolean isActive() {
+        return get("isActive");
+    }
+
+    public void setActive(boolean isActive) {
+        set("isActive", isActive);
+    }
+
+    public Date getTimeCreated() {
+        return get("timeCreated");
+    }
+
+    public void setTimeCreated(Date timeCreated) {
+        set("timeCreated", timeCreated);
+    }
+
+    public List<TeamDTO> getTeamList() {
+        return get("teamList");
+    }
+
+    public void setTeamList(List<TeamDTO> teamList) {
+        set("teamList", teamList);
+    }
+
+    public List<WorkloadDTO> getWorkloadList() {
+        return get("workloadList");
+    }
+
+    public void setWorkloadList(List<WorkloadDTO> workloadList) {
+        set("workloadList", workloadList);
+    }
+
+    public List<DiscussionDTO> getDiscussionList() {
+        return get("discussionList");
+    }
+
+    public void setDiscussionList(List<DiscussionDTO> discussionList) {
+        set("discussionList", discussionList);
+    }
+
+    public List<TaskDTO> getTaskList() {
+        return get("taskList");
+    }
+
+    public void setTaskList(List<TaskDTO> taskList) {
+        set("taskList", taskList);
+    }
+
+    public List<DailyScrumEntryDTO> getDailyScrumEntryList() {
+        return get("dailyScrumEntryList");
+    }
+
+    public void setDailyScrumEntryList(List<DailyScrumEntryDTO> dailyScrumEntryList) {
+        set("dailyScrumEntryList", dailyScrumEntryList);
+    }
+
+    public List<CommentDTO> getCommentList() {
+        return get("commentList");
+    }
+
+    public void setCommentList(List<CommentDTO> commentList) {
+        set("commentList", commentList);
     }
 }

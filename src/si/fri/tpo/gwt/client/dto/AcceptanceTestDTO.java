@@ -8,18 +8,18 @@ import si.fri.tpo.jpa.UserStory;
  */
 public class AcceptanceTestDTO extends BaseModelData {
 
-    //private int acceptanceTestId;
+    //private Integer acceptanceTestId;
     //private String content;
-    //private UserStory userStory;
+    //private UserStory userStoryStoryId;
 
     public AcceptanceTestDTO() {
     }
 
-    public int getAcceptanceTestId() {
+    public Integer getAcceptanceTestId() {
         return get("acceptanceTestId");
     }
 
-    public void setAcceptanceTestId(int acceptanceTestId) {
+    public void setAcceptanceTestId(Integer acceptanceTestId) {
         set("acceptanceTestId", acceptanceTestId);
     }
 
@@ -31,11 +31,11 @@ public class AcceptanceTestDTO extends BaseModelData {
         set("content", content);
     }
 
-    public UserStory getUserStory() {
-        return get("userStory");
+    public UserStory getUserStoryStoryId() {
+        return get("userStoryStoryId");
     }
 
-    public void setUserStory(UserStory userStory) {
-        set("userStory", userStory);
+    public void setUserStoryStoryId(UserStory userStoryStoryId) {
+        set("userStoryStoryId", userStoryStoryId);
     }
 }

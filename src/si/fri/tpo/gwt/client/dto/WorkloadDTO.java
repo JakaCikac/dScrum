@@ -3,7 +3,6 @@ package si.fri.tpo.gwt.client.dto;
 import com.extjs.gxt.ui.client.data.BaseModelData;
 import si.fri.tpo.jpa.Task;
 import si.fri.tpo.jpa.User;
-import si.fri.tpo.jpa.Workblock;
 import si.fri.tpo.jpa.WorkloadPK;
 
 import java.util.List;
@@ -13,21 +12,21 @@ import java.util.List;
  */
 public class WorkloadDTO extends BaseModelData {
 
-    //private WorkloadPK id;
+    //protected WorkloadPK workloadPK;
     //private String timeSpent;
-    //private List<Workblock> workblocks;
-    //private Task task;
     //private User user;
+    //private Task task;
+    //private List<Workblock> workblockList;
 
     public WorkloadDTO() {
     }
 
-    public WorkloadPK getId() {
-        return get("id");
+    public WorkloadPK getWorkloadPK() {
+        return get("workloadPK");
     }
 
-    public void setId(WorkloadPK id) {
-        set("id", id);
+    public void setWorkloadPK(WorkloadPK workloadPK) {
+        set("workloadPK", workloadPK);
     }
 
     public String getTimeSpent() {
@@ -38,12 +37,12 @@ public class WorkloadDTO extends BaseModelData {
         set("timeSpent", timeSpent);
     }
 
-    public List<WorkblockDTO> getWorkblocks() {
-        return get("workblocks");
+    public User getUser() {
+        return get("user");
     }
 
-    public void setWorkblocks(List<WorkblockDTO> workblocks) {
-        set("workblocks", workblocks);
+    public void setUser(User user) {
+        set("user", user);
     }
 
     public Task getTask() {
@@ -54,11 +53,11 @@ public class WorkloadDTO extends BaseModelData {
         set("task", task);
     }
 
-    public User getUser() {
-        return get("user");
+    public List<WorkblockDTO> getWorkblockList() {
+        return get("workblockList");
     }
 
-    public void setUser(User user) {
-        set("user", user);
+    public void setWorkblockList(List<WorkblockDTO> workblockList) {
+        set("workblockList", workblockList);
     }
 }

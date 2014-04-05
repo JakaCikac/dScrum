@@ -10,41 +10,25 @@ import java.util.List;
  */
 public class UserStoryDTO extends BaseModelData {
 
-    //private int storyId;
-    //private int businessValue;
-    //private String content;
+    //private Integer storyId;
     //private String name;
-    //private List<AcceptanceTest> acceptanceTests;
-    //private List<Task> tasks;
-    //private Project project;
-    //private Priority priority;
+    //private String content;
+    //private Integer businessValue;
+    //private List<Task> taskList;
+    //private List<AcceptanceTest> acceptanceTestList;
     //private Sprint sprint;
+    //private Priority priorityPriorityId;
+    //private Project projectProjectId;
 
     public UserStoryDTO() {
     }
 
-    public int getStoryId() {
+    public Integer getStoryId() {
         return get("storyId");
     }
 
-    public void setStoryId(int storyId) {
+    public void setStoryId(Integer storyId) {
         set("storyId", storyId);
-    }
-
-    public int getBusinessValue() {
-        return get("businessValue");
-    }
-
-    public void setBusinessValue(int businessValue) {
-        set("businessValue", businessValue);
-    }
-
-    public String getContent() {
-        return get("content");
-    }
-
-    public void setContent(String content) {
-        set("content", content);
     }
 
     public String getName() {
@@ -55,36 +39,36 @@ public class UserStoryDTO extends BaseModelData {
         set("name", name);
     }
 
-    public List<AcceptanceTestDTO> getAcceptanceTests() {
-        return get("acceptanceTests");
+    public String getContent() {
+        return get("content");
     }
 
-    public void setAcceptanceTests(List<AcceptanceTestDTO> acceptanceTests) {
-        set("acceptanceTests", acceptanceTests);
+    public void setContent(String content) {
+        set("content", content);
     }
 
-    public List<TaskDTO> getTasks() {
-        return get("tasks");
+    public Integer getBusinessValue() {
+        return get("businessValue");
     }
 
-    public void setTasks(List<TaskDTO> tasks) {
-        set("tasks", tasks);
+    public void setBusinessValue(Integer businessValue) {
+        set("businessValue", businessValue);
     }
 
-    public Project getProject() {
-        return get("project");
+    public List<TaskDTO> getTaskList() {
+        return get("taskList");
     }
 
-    public void setProject(Project project) {
-        set("project", project);
+    public void setTaskList(List<TaskDTO> taskList) {
+        set("taskList", taskList);
     }
 
-    public Priority getPriority() {
-        return get("priority");
+    public List<AcceptanceTestDTO> getAcceptanceTestList() {
+        return get("acceptanceTestList");
     }
 
-    public void setPriority(Priority priority) {
-        set("priority", priority);
+    public void setAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestList) {
+        set("acceptanceTestList", acceptanceTestList);
     }
 
     public Sprint getSprint() {
@@ -93,5 +77,21 @@ public class UserStoryDTO extends BaseModelData {
 
     public void setSprint(Sprint sprint) {
         set("sprint", sprint);
+    }
+
+    public Priority getPriorityPriorityId() {
+        return get("priorityPriorityId");
+    }
+
+    public void setPriorityPriorityId(Priority priorityPriorityId) {
+        set("priorityPriorityId", priorityPriorityId);
+    }
+
+    public Project getProjectProjectId() {
+        return get("projectProjectId");
+    }
+
+    public void setProjectProjectId(Project projectProjectId) {
+        set("projectProjectId", projectProjectId);
     }
 }

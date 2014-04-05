@@ -1,8 +1,6 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import si.fri.tpo.jpa.Project;
-import si.fri.tpo.jpa.User;
 
 import java.util.List;
 
@@ -11,61 +9,52 @@ import java.util.List;
  */
 public class TeamDTO extends BaseModelData {
 
-    //private int teamId;
-    //private byte isProductOwner;
-    //private byte isScrumMaster;
-    //private String userId;
-    //private List<Project> projects;
-    //private List<User> users;
+    //private Integer teamId;
+    //private int scrumMasterId;
+    //private int productOwnerId;
+    //private List<User> userList;
+    //private List<Project> projectList;
 
     public TeamDTO() {
     }
 
-    public int getTeamId() {
+    public Integer getTeamId() {
         return get("teamId");
     }
 
-    public void setTeamId(int teamId) {
+    public void setTeamId(Integer teamId) {
         set("teamId", teamId);
     }
 
-    public byte getIsProductOwner() {
-        return get("isProductOwner");
+    public int getScrumMasterId() {
+        return get("scrumMasterId");
     }
 
-    public void setIsProductOwner(byte isProductOwner) {
-        set("isProductOwner;", isProductOwner);
+    public void setScrumMasterId(int scrumMasterId) {
+        set("scrumMasterId", scrumMasterId);
     }
 
-    public byte getIsScrumMaster() {
-        return get("isScrumMaster");
+    public int getProductOwnerId() {
+        return get("productOwnerId");
     }
 
-    public void setIsScrumMaster(byte isScrumMaster) {
-        set("isScrumMaster", isScrumMaster);
+    public void setProductOwnerId(int productOwnerId) {
+        set("productOwnerId", productOwnerId);
     }
 
-    public String getUserId() {
-        return get("userId");
+    public List<UserDTO> getUserList() {
+        return get("userList");
     }
 
-    public void setUserId(String userId) {
-        set("userId", userId);
+    public void setUserList(List<UserDTO> userList) {
+        set("userList", userList);
     }
 
-    public List<ProjectDTO> getProjects() {
-        return get("projects");
+    public List<ProjectDTO> getProjectList() {
+        return get("projectList");
     }
 
-    public void setProjects(List<Project> projects) {
-        set("projects", projects);
-    }
-
-    public List<UserDTO> getUsers() {
-        return get("users");
-    }
-
-    public void setUsers(List<UserDTO> users) {
-        set("users", users);
+    public void setProjectList(List<ProjectDTO> projectList) {
+        set("projectList", projectList);
     }
 }

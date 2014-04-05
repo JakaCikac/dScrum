@@ -12,23 +12,23 @@ import java.util.Date;
  */
 public class DailyScrumEntryDTO extends BaseModelData {
 
-    //private DailyScrumEntryPK id;
+    //protected DailyScrumEntryPK dailyScrumEntryPK;
     //private Date date;
-    //private String futureWork;
     //private String pastWork;
+    //private String futureWork;
     //private String problemsAndIssues;
-    //private User user;
     //private Project project;
+    //private User user;
 
     public DailyScrumEntryDTO() {
     }
 
-    public DailyScrumEntryPK getId() {
-        return get("id");
+    public DailyScrumEntryPK getDailyScrumEntryPK() {
+        return get("dailyScrumEntryPK");
     }
 
-    public void setId(DailyScrumEntryPK id) {
-        set("id", id);
+    public void setDailyScrumEntryPK(DailyScrumEntryPK dailyScrumEntryPK) {
+        set("dailyScrumEntryPK", dailyScrumEntryPK);
     }
 
     public Date getDate() {
@@ -39,20 +39,20 @@ public class DailyScrumEntryDTO extends BaseModelData {
         set("date", date);
     }
 
-    public String getFutureWork() {
-        return get("futureWork");
-    }
-
-    public void setFutureWork(String futureWork) {
-        set("futureWork", futureWork);
-    }
-
     public String getPastWork() {
         return get("pastWork");
     }
 
     public void setPastWork(String pastWork) {
         set("pastWork", pastWork);
+    }
+
+    public String getFutureWork() {
+        return get("futureWork");
+    }
+
+    public void setFutureWork(String futureWork) {
+        set("futureWork", futureWork);
     }
 
     public String getProblemsAndIssues() {
@@ -63,19 +63,19 @@ public class DailyScrumEntryDTO extends BaseModelData {
         set("problemsAndIssues", problemsAndIssues);
     }
 
-    public User getUser() {
-        return get("user");
-    }
-
-    public void setUser(User user) {
-        set("user", user);
-    }
-
     public Project getProject() {
         return get("project");
     }
 
     public void setProject(Project project) {
         set("project", project);
+    }
+
+    public User getUser() {
+        return get("user");
+    }
+
+    public void setUser(User user) {
+        set("user", user);
     }
 }

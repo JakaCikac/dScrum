@@ -4,7 +4,6 @@ import com.extjs.gxt.ui.client.data.BaseModelData;
 import si.fri.tpo.jpa.TaskPK;
 import si.fri.tpo.jpa.User;
 import si.fri.tpo.jpa.UserStory;
-import si.fri.tpo.jpa.Workload;
 
 import java.util.List;
 
@@ -13,24 +12,24 @@ import java.util.List;
  */
 public class TaskDTO extends BaseModelData {
 
-    //private TaskPK id;
+    //protected TaskPK taskPK;
     //private String description;
+    //private int timeRemaining;
     //private int estimatedTime;
     //private String status;
-    //private int timeRemaining;
-    //private User user;
+    //private List<Workload> workloadList;
     //private UserStory userStory;
-    //private List<Workload> workloads;
+    //private User userUserId;
 
     public TaskDTO() {
     }
 
-    public TaskPK getId() {
-        return get("id");
+    public TaskPK getTaskPK() {
+        return get("taskPK");
     }
 
-    public void setId(TaskPK id) {
-        set("id", id);
+    public void setTaskPK(TaskPK taskPK) {
+        set("taskPK", taskPK);
     }
 
     public String getDescription() {
@@ -38,7 +37,15 @@ public class TaskDTO extends BaseModelData {
     }
 
     public void setDescription(String description) {
-        set("description", description);
+       set("description", description);
+    }
+
+    public int getTimeRemaining() {
+        return get("timeRemaining");
+    }
+
+    public void setTimeRemaining(int timeRemaining) {
+        set("timeRemaining", timeRemaining);
     }
 
     public int getEstimatedTime() {
@@ -57,20 +64,12 @@ public class TaskDTO extends BaseModelData {
         set("status", status);
     }
 
-    public int getTimeRemaining() {
-        return get("timeRemaining");
+    public List<WorkloadDTO> getWorkloadList() {
+        return get("workloadList");
     }
 
-    public void setTimeRemaining(int timeRemaining) {
-        set("timeRemaining", timeRemaining);
-    }
-
-    public User getUser() {
-        return get("user");
-    }
-
-    public void setUser(User user) {
-        set("user", user);
+    public void setWorkloadList(List<WorkloadDTO> workloadList) {
+        set("workloadList", workloadList);
     }
 
     public UserStory getUserStory() {
@@ -81,11 +80,11 @@ public class TaskDTO extends BaseModelData {
         set("userStory", userStory);
     }
 
-    public List<WorkloadDTO> getWorkloads() {
-        return get("workloads");
+    public User getUserUserId() {
+        return get("userUserId");
     }
 
-    public void setWorkloads(List<WorkloadDTO> workloads) {
-        set("workloads", workloads);
+    public void setUserUserId(User userUserId) {
+        set("userUserId", userUserId);
     }
 }

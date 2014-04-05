@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public class WorkblockDTO extends BaseModelData {
 
-    //private WorkblockPK id;
+    //protected WorkblockPK workblockPK;
     //private Date timeStart;
     //private Date timeStop;
     //private Workload workload;
@@ -19,12 +19,12 @@ public class WorkblockDTO extends BaseModelData {
     public WorkblockDTO() {
     }
 
-    public WorkblockPK getId() {
-        return get("id");
+    public WorkblockPK getWorkblockPK() {
+        return get("workblockPK");
     }
 
-    public void setId(WorkblockPK id) {
-        set("id", id);
+    public void setWorkblockPK(WorkblockPK workblockPK) {
+        set("workblockPK", workblockPK);
     }
 
     public Date getTimeStart() {
