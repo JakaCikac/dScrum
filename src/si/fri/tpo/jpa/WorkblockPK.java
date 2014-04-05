@@ -1,90 +1,128 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 /**
- * The primary key class for the WORKBLOCK database table.
- * 
+ *
+ * @author Administrator
  */
 @Embeddable
 public class WorkblockPK implements Serializable {
-	//default serial version id, required for serializable classes.
-	private static final long serialVersionUID = 1L;
+    @Basic(optional = false)
+    @Column(name = "workblock_id")
+    private int workblockId;
+    @Basic(optional = false)
+    @Column(name = "WORKLOAD_workload_id")
+    private int wORKLOADworkloadid;
+    @Basic(optional = false)
+    @Column(name = "WORKLOAD_TASK_task_id")
+    private int wORKLOADTASKtaskid;
+    @Basic(optional = false)
+    @Column(name = "WORKLOAD_TASK_USER_STORY_story_id")
+    private int wORKLOADTASKUSERSTORYstoryid;
+    @Basic(optional = false)
+    @Column(name = "WORKLOAD_USER_user_id")
+    private int wORKLOADUSERuserid;
 
-	@Column(name="workblock_id")
-	private int workblockId;
+    public WorkblockPK() {
+    }
 
-	@Column(insertable=false, updatable=false)
-	private int WORKLOAD_workload_id;
+    public WorkblockPK(int workblockId, int wORKLOADworkloadid, int wORKLOADTASKtaskid, int wORKLOADTASKUSERSTORYstoryid, int wORKLOADUSERuserid) {
+        this.workblockId = workblockId;
+        this.wORKLOADworkloadid = wORKLOADworkloadid;
+        this.wORKLOADTASKtaskid = wORKLOADTASKtaskid;
+        this.wORKLOADTASKUSERSTORYstoryid = wORKLOADTASKUSERSTORYstoryid;
+        this.wORKLOADUSERuserid = wORKLOADUSERuserid;
+    }
 
-	@Column(insertable=false, updatable=false)
-	private int WORKLOAD_TASK_task_id;
+    public int getWorkblockId() {
+        return workblockId;
+    }
 
-	@Column(insertable=false, updatable=false)
-	private int WORKLOAD_TASK_USER_STORY_story_id;
+    public void setWorkblockId(int workblockId) {
+        this.workblockId = workblockId;
+    }
 
-	@Column(insertable=false, updatable=false)
-	private int WORKLOAD_USER_user_id;
+    public int getWORKLOADworkloadid() {
+        return wORKLOADworkloadid;
+    }
 
-	public WorkblockPK() {
-	}
-	public int getWorkblockId() {
-		return this.workblockId;
-	}
-	public void setWorkblockId(int workblockId) {
-		this.workblockId = workblockId;
-	}
-	public int getWORKLOAD_workload_id() {
-		return this.WORKLOAD_workload_id;
-	}
-	public void setWORKLOAD_workload_id(int WORKLOAD_workload_id) {
-		this.WORKLOAD_workload_id = WORKLOAD_workload_id;
-	}
-	public int getWORKLOAD_TASK_task_id() {
-		return this.WORKLOAD_TASK_task_id;
-	}
-	public void setWORKLOAD_TASK_task_id(int WORKLOAD_TASK_task_id) {
-		this.WORKLOAD_TASK_task_id = WORKLOAD_TASK_task_id;
-	}
-	public int getWORKLOAD_TASK_USER_STORY_story_id() {
-		return this.WORKLOAD_TASK_USER_STORY_story_id;
-	}
-	public void setWORKLOAD_TASK_USER_STORY_story_id(int WORKLOAD_TASK_USER_STORY_story_id) {
-		this.WORKLOAD_TASK_USER_STORY_story_id = WORKLOAD_TASK_USER_STORY_story_id;
-	}
-	public int getWORKLOAD_USER_user_id() {
-		return this.WORKLOAD_USER_user_id;
-	}
-	public void setWORKLOAD_USER_user_id(int WORKLOAD_USER_user_id) {
-		this.WORKLOAD_USER_user_id = WORKLOAD_USER_user_id;
-	}
+    public void setWORKLOADworkloadid(int wORKLOADworkloadid) {
+        this.wORKLOADworkloadid = wORKLOADworkloadid;
+    }
 
-	public boolean equals(Object other) {
-		if (this == other) {
-			return true;
-		}
-		if (!(other instanceof WorkblockPK)) {
-			return false;
-		}
-		WorkblockPK castOther = (WorkblockPK)other;
-		return 
-			(this.workblockId == castOther.workblockId)
-			&& (this.WORKLOAD_workload_id == castOther.WORKLOAD_workload_id)
-			&& (this.WORKLOAD_TASK_task_id == castOther.WORKLOAD_TASK_task_id)
-			&& (this.WORKLOAD_TASK_USER_STORY_story_id == castOther.WORKLOAD_TASK_USER_STORY_story_id)
-			&& (this.WORKLOAD_USER_user_id == castOther.WORKLOAD_USER_user_id);
-	}
+    public int getWORKLOADTASKtaskid() {
+        return wORKLOADTASKtaskid;
+    }
 
-	public int hashCode() {
-		final int prime = 31;
-		int hash = 17;
-		hash = hash * prime + this.workblockId;
-		hash = hash * prime + this.WORKLOAD_workload_id;
-		hash = hash * prime + this.WORKLOAD_TASK_task_id;
-		hash = hash * prime + this.WORKLOAD_TASK_USER_STORY_story_id;
-		hash = hash * prime + this.WORKLOAD_USER_user_id;
-		
-		return hash;
-	}
+    public void setWORKLOADTASKtaskid(int wORKLOADTASKtaskid) {
+        this.wORKLOADTASKtaskid = wORKLOADTASKtaskid;
+    }
+
+    public int getWORKLOADTASKUSERSTORYstoryid() {
+        return wORKLOADTASKUSERSTORYstoryid;
+    }
+
+    public void setWORKLOADTASKUSERSTORYstoryid(int wORKLOADTASKUSERSTORYstoryid) {
+        this.wORKLOADTASKUSERSTORYstoryid = wORKLOADTASKUSERSTORYstoryid;
+    }
+
+    public int getWORKLOADUSERuserid() {
+        return wORKLOADUSERuserid;
+    }
+
+    public void setWORKLOADUSERuserid(int wORKLOADUSERuserid) {
+        this.wORKLOADUSERuserid = wORKLOADUSERuserid;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (int) workblockId;
+        hash += (int) wORKLOADworkloadid;
+        hash += (int) wORKLOADTASKtaskid;
+        hash += (int) wORKLOADTASKUSERSTORYstoryid;
+        hash += (int) wORKLOADUSERuserid;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof WorkblockPK)) {
+            return false;
+        }
+        WorkblockPK other = (WorkblockPK) object;
+        if (this.workblockId != other.workblockId) {
+            return false;
+        }
+        if (this.wORKLOADworkloadid != other.wORKLOADworkloadid) {
+            return false;
+        }
+        if (this.wORKLOADTASKtaskid != other.wORKLOADTASKtaskid) {
+            return false;
+        }
+        if (this.wORKLOADTASKUSERSTORYstoryid != other.wORKLOADTASKUSERSTORYstoryid) {
+            return false;
+        }
+        if (this.wORKLOADUSERuserid != other.wORKLOADUSERuserid) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "si.fri.tpo.jpa.WorkblockPK[ workblockId=" + workblockId + ", wORKLOADworkloadid=" + wORKLOADworkloadid + ", wORKLOADTASKtaskid=" + wORKLOADTASKtaskid + ", wORKLOADTASKUSERSTORYstoryid=" + wORKLOADTASKUSERSTORYstoryid + ", wORKLOADUSERuserid=" + wORKLOADUSERuserid + " ]";
+    }
+    
 }

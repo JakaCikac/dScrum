@@ -1,4 +1,4 @@
-package si.fri.tpo.jpa.proxy;
+package si.fri.tpo.proxy;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;

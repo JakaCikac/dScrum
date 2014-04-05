@@ -1,157 +1,184 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
-
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the USER_STORY database table.
- * 
+ *
+ * @author Administrator
  */
 @Entity
-@Table(name="USER_STORY")
-@NamedQuery(name="UserStory.findAll", query="SELECT u FROM UserStory u")
+@Table(name = "USER_STORY")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "UserStory.findAll", query = "SELECT u FROM UserStory u"),
+    @NamedQuery(name = "UserStory.findByStoryId", query = "SELECT u FROM UserStory u WHERE u.storyId = :storyId"),
+    @NamedQuery(name = "UserStory.findByName", query = "SELECT u FROM UserStory u WHERE u.name = :name"),
+    @NamedQuery(name = "UserStory.findByContent", query = "SELECT u FROM UserStory u WHERE u.content = :content"),
+    @NamedQuery(name = "UserStory.findByBusinessValue", query = "SELECT u FROM UserStory u WHERE u.businessValue = :businessValue")})
 public class UserStory implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "story_id")
+    private Integer storyId;
+    @Basic(optional = false)
+    @Column(name = "name")
+    private String name;
+    @Basic(optional = false)
+    @Column(name = "content")
+    private String content;
+    @Column(name = "business_value")
+    private Integer businessValue;
+    @JoinColumns({
+        @JoinColumn(name = "SPRINT_sprint_id", referencedColumnName = "sprint_id"),
+        @JoinColumn(name = "SPRINT_PROJECT_project_id", referencedColumnName = "PROJECT_project_id")})
+    @ManyToOne
+    private Sprint sprint;
+    @JoinColumn(name = "PRIORITY_priority_id", referencedColumnName = "priority_id")
+    @ManyToOne(optional = false)
+    private Priority pRIORITYpriorityid;
+    @JoinColumn(name = "PROJECT_project_id", referencedColumnName = "project_id")
+    @ManyToOne(optional = false)
+    private Project pROJECTprojectid;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userStory")
+    private Collection<Task> taskCollection;
+    @OneToMany(mappedBy = "uSERSTORYstoryid")
+    private Collection<AcceptanceTest> acceptanceTestCollection;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="story_id")
-	private int storyId;
+    public UserStory() {
+    }
 
-	@Column(name="business_value")
-	private int businessValue;
+    public UserStory(Integer storyId) {
+        this.storyId = storyId;
+    }
 
-	private String content;
+    public UserStory(Integer storyId, String name, String content) {
+        this.storyId = storyId;
+        this.name = name;
+        this.content = content;
+    }
 
-	private String name;
+    public Integer getStoryId() {
+        return storyId;
+    }
 
-	//bi-directional many-to-one association to AcceptanceTest
-	@OneToMany(mappedBy="userStory")
-	private List<AcceptanceTest> acceptanceTests;
+    public void setStoryId(Integer storyId) {
+        this.storyId = storyId;
+    }
 
-	//bi-directional many-to-one association to Task
-	@OneToMany(mappedBy="userStory")
-	private List<Task> tasks;
+    public String getName() {
+        return name;
+    }
 
-	//bi-directional many-to-one association to Project
-	@ManyToOne
-	private Project project;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	//bi-directional many-to-one association to Priority
-	@ManyToOne
-	private Priority priority;
+    public String getContent() {
+        return content;
+    }
 
-	//bi-directional many-to-one association to Sprint
-	@ManyToOne
-	@JoinColumns({
-		@JoinColumn(name="SPRINT_PROJECT_project_id", referencedColumnName="PROJECT_project_id"),
-		@JoinColumn(name="SPRINT_sprint_id", referencedColumnName="sprint_id")
-		})
-	private Sprint sprint;
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public UserStory() {
-	}
+    public Integer getBusinessValue() {
+        return businessValue;
+    }
 
-	public int getStoryId() {
-		return this.storyId;
-	}
+    public void setBusinessValue(Integer businessValue) {
+        this.businessValue = businessValue;
+    }
 
-	public void setStoryId(int storyId) {
-		this.storyId = storyId;
-	}
+    public Sprint getSprint() {
+        return sprint;
+    }
 
-	public int getBusinessValue() {
-		return this.businessValue;
-	}
+    public void setSprint(Sprint sprint) {
+        this.sprint = sprint;
+    }
 
-	public void setBusinessValue(int businessValue) {
-		this.businessValue = businessValue;
-	}
+    public Priority getPRIORITYpriorityid() {
+        return pRIORITYpriorityid;
+    }
 
-	public String getContent() {
-		return this.content;
-	}
+    public void setPRIORITYpriorityid(Priority pRIORITYpriorityid) {
+        this.pRIORITYpriorityid = pRIORITYpriorityid;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public Project getPROJECTprojectid() {
+        return pROJECTprojectid;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public void setPROJECTprojectid(Project pROJECTprojectid) {
+        this.pROJECTprojectid = pROJECTprojectid;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @XmlTransient
+    public Collection<Task> getTaskCollection() {
+        return taskCollection;
+    }
 
-	public List<AcceptanceTest> getAcceptanceTests() {
-		return this.acceptanceTests;
-	}
+    public void setTaskCollection(Collection<Task> taskCollection) {
+        this.taskCollection = taskCollection;
+    }
 
-	public void setAcceptanceTests(List<AcceptanceTest> acceptanceTests) {
-		this.acceptanceTests = acceptanceTests;
-	}
+    @XmlTransient
+    public Collection<AcceptanceTest> getAcceptanceTestCollection() {
+        return acceptanceTestCollection;
+    }
 
-	public AcceptanceTest addAcceptanceTest(AcceptanceTest acceptanceTest) {
-		getAcceptanceTests().add(acceptanceTest);
-		acceptanceTest.setUserStory(this);
+    public void setAcceptanceTestCollection(Collection<AcceptanceTest> acceptanceTestCollection) {
+        this.acceptanceTestCollection = acceptanceTestCollection;
+    }
 
-		return acceptanceTest;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (storyId != null ? storyId.hashCode() : 0);
+        return hash;
+    }
 
-	public AcceptanceTest removeAcceptanceTest(AcceptanceTest acceptanceTest) {
-		getAcceptanceTests().remove(acceptanceTest);
-		acceptanceTest.setUserStory(null);
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof UserStory)) {
+            return false;
+        }
+        UserStory other = (UserStory) object;
+        if ((this.storyId == null && other.storyId != null) || (this.storyId != null && !this.storyId.equals(other.storyId))) {
+            return false;
+        }
+        return true;
+    }
 
-		return acceptanceTest;
-	}
-
-	public List<Task> getTasks() {
-		return this.tasks;
-	}
-
-	public void setTasks(List<Task> tasks) {
-		this.tasks = tasks;
-	}
-
-	public Task addTask(Task task) {
-		getTasks().add(task);
-		task.setUserStory(this);
-
-		return task;
-	}
-
-	public Task removeTask(Task task) {
-		getTasks().remove(task);
-		task.setUserStory(null);
-
-		return task;
-	}
-
-	public Project getProject() {
-		return this.project;
-	}
-
-	public void setProject(Project project) {
-		this.project = project;
-	}
-
-	public Priority getPriority() {
-		return this.priority;
-	}
-
-	public void setPriority(Priority priority) {
-		this.priority = priority;
-	}
-
-	public Sprint getSprint() {
-		return this.sprint;
-	}
-
-	public void setSprint(Sprint sprint) {
-		this.sprint = sprint;
-	}
-
+    @Override
+    public String toString() {
+        return "si.fri.tpo.jpa.UserStory[ storyId=" + storyId + " ]";
+    }
+    
 }

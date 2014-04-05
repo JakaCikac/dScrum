@@ -1,124 +1,174 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
-
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the TASK database table.
- * 
+ *
+ * @author Administrator
  */
 @Entity
-@NamedQuery(name="Task.findAll", query="SELECT t FROM Task t")
+@Table(name = "TASK")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Task.findAll", query = "SELECT t FROM Task t"),
+    @NamedQuery(name = "Task.findByTaskId", query = "SELECT t FROM Task t WHERE t.taskPK.taskId = :taskId"),
+    @NamedQuery(name = "Task.findByDescription", query = "SELECT t FROM Task t WHERE t.description = :description"),
+    @NamedQuery(name = "Task.findByTimeRemaining", query = "SELECT t FROM Task t WHERE t.timeRemaining = :timeRemaining"),
+    @NamedQuery(name = "Task.findByEstimatedTime", query = "SELECT t FROM Task t WHERE t.estimatedTime = :estimatedTime"),
+    @NamedQuery(name = "Task.findByStatus", query = "SELECT t FROM Task t WHERE t.status = :status"),
+    @NamedQuery(name = "Task.findByUSERSTORYstoryid", query = "SELECT t FROM Task t WHERE t.taskPK.uSERSTORYstoryid = :uSERSTORYstoryid")})
 public class Task implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected TaskPK taskPK;
+    @Basic(optional = false)
+    @Column(name = "description")
+    private String description;
+    @Basic(optional = false)
+    @Column(name = "time_remaining")
+    private int timeRemaining;
+    @Basic(optional = false)
+    @Column(name = "estimated_time")
+    private int estimatedTime;
+    @Basic(optional = false)
+    @Column(name = "status")
+    private String status;
+    @JoinColumn(name = "USER_STORY_story_id", referencedColumnName = "story_id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private UserStory userStory;
+    @JoinColumn(name = "USER_user_id", referencedColumnName = "user_id")
+    @ManyToOne
+    private User uSERuserid;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "task")
+    private Collection<Workload> workloadCollection;
 
-	@EmbeddedId
-	private TaskPK id;
+    public Task() {
+    }
 
-	private String description;
+    public Task(TaskPK taskPK) {
+        this.taskPK = taskPK;
+    }
 
-	@Column(name="estimated_time")
-	private int estimatedTime;
+    public Task(TaskPK taskPK, String description, int timeRemaining, int estimatedTime, String status) {
+        this.taskPK = taskPK;
+        this.description = description;
+        this.timeRemaining = timeRemaining;
+        this.estimatedTime = estimatedTime;
+        this.status = status;
+    }
 
-	private String status;
+    public Task(int taskId, int uSERSTORYstoryid) {
+        this.taskPK = new TaskPK(taskId, uSERSTORYstoryid);
+    }
 
-	@Column(name="time_remaining")
-	private int timeRemaining;
+    public TaskPK getTaskPK() {
+        return taskPK;
+    }
 
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	private User user;
+    public void setTaskPK(TaskPK taskPK) {
+        this.taskPK = taskPK;
+    }
 
-	//bi-directional many-to-one association to UserStory
-	@ManyToOne
-	@JoinColumn(name="USER_STORY_story_id")
-	private UserStory userStory;
+    public String getDescription() {
+        return description;
+    }
 
-	//bi-directional many-to-one association to Workload
-	@OneToMany(mappedBy="task")
-	private List<Workload> workloads;
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public Task() {
-	}
+    public int getTimeRemaining() {
+        return timeRemaining;
+    }
 
-	public TaskPK getId() {
-		return this.id;
-	}
+    public void setTimeRemaining(int timeRemaining) {
+        this.timeRemaining = timeRemaining;
+    }
 
-	public void setId(TaskPK id) {
-		this.id = id;
-	}
+    public int getEstimatedTime() {
+        return estimatedTime;
+    }
 
-	public String getDescription() {
-		return this.description;
-	}
+    public void setEstimatedTime(int estimatedTime) {
+        this.estimatedTime = estimatedTime;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public int getEstimatedTime() {
-		return this.estimatedTime;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public void setEstimatedTime(int estimatedTime) {
-		this.estimatedTime = estimatedTime;
-	}
+    public UserStory getUserStory() {
+        return userStory;
+    }
 
-	public String getStatus() {
-		return this.status;
-	}
+    public void setUserStory(UserStory userStory) {
+        this.userStory = userStory;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public User getUSERuserid() {
+        return uSERuserid;
+    }
 
-	public int getTimeRemaining() {
-		return this.timeRemaining;
-	}
+    public void setUSERuserid(User uSERuserid) {
+        this.uSERuserid = uSERuserid;
+    }
 
-	public void setTimeRemaining(int timeRemaining) {
-		this.timeRemaining = timeRemaining;
-	}
+    @XmlTransient
+    public Collection<Workload> getWorkloadCollection() {
+        return workloadCollection;
+    }
 
-	public User getUser() {
-		return this.user;
-	}
+    public void setWorkloadCollection(Collection<Workload> workloadCollection) {
+        this.workloadCollection = workloadCollection;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (taskPK != null ? taskPK.hashCode() : 0);
+        return hash;
+    }
 
-	public UserStory getUserStory() {
-		return this.userStory;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Task)) {
+            return false;
+        }
+        Task other = (Task) object;
+        if ((this.taskPK == null && other.taskPK != null) || (this.taskPK != null && !this.taskPK.equals(other.taskPK))) {
+            return false;
+        }
+        return true;
+    }
 
-	public void setUserStory(UserStory userStory) {
-		this.userStory = userStory;
-	}
-
-	public List<Workload> getWorkloads() {
-		return this.workloads;
-	}
-
-	public void setWorkloads(List<Workload> workloads) {
-		this.workloads = workloads;
-	}
-
-	public Workload addWorkload(Workload workload) {
-		getWorkloads().add(workload);
-		workload.setTask(this);
-
-		return workload;
-	}
-
-	public Workload removeWorkload(Workload workload) {
-		getWorkloads().remove(workload);
-		workload.setTask(null);
-
-		return workload;
-	}
-
+    @Override
+    public String toString() {
+        return "si.fri.tpo.jpa.Task[ taskPK=" + taskPK + " ]";
+    }
+    
 }

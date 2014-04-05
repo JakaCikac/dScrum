@@ -1,68 +1,96 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 /**
- * The primary key class for the DISCUSSION database table.
- * 
+ *
+ * @author Administrator
  */
 @Embeddable
 public class DiscussionPK implements Serializable {
-	//default serial version id, required for serializable classes.
-	private static final long serialVersionUID = 1L;
+    @Basic(optional = false)
+    @Column(name = "discussion_id")
+    private int discussionId;
+    @Basic(optional = false)
+    @Column(name = "USER_user_id")
+    private int uSERuserid;
+    @Basic(optional = false)
+    @Column(name = "PROJECT_project_id")
+    private int pROJECTprojectid;
 
-	@Column(name="discussion_id")
-	private int discussionId;
+    public DiscussionPK() {
+    }
 
-	@Column(insertable=false, updatable=false)
-	private int USER_user_id;
+    public DiscussionPK(int discussionId, int uSERuserid, int pROJECTprojectid) {
+        this.discussionId = discussionId;
+        this.uSERuserid = uSERuserid;
+        this.pROJECTprojectid = pROJECTprojectid;
+    }
 
-	@Column(insertable=false, updatable=false)
-	private int PROJECT_project_id;
+    public int getDiscussionId() {
+        return discussionId;
+    }
 
-	public DiscussionPK() {
-	}
-	public int getDiscussionId() {
-		return this.discussionId;
-	}
-	public void setDiscussionId(int discussionId) {
-		this.discussionId = discussionId;
-	}
-	public int getUSER_user_id() {
-		return this.USER_user_id;
-	}
-	public void setUSER_user_id(int USER_user_id) {
-		this.USER_user_id = USER_user_id;
-	}
-	public int getPROJECT_project_id() {
-		return this.PROJECT_project_id;
-	}
-	public void setPROJECT_project_id(int PROJECT_project_id) {
-		this.PROJECT_project_id = PROJECT_project_id;
-	}
+    public void setDiscussionId(int discussionId) {
+        this.discussionId = discussionId;
+    }
 
-	public boolean equals(Object other) {
-		if (this == other) {
-			return true;
-		}
-		if (!(other instanceof DiscussionPK)) {
-			return false;
-		}
-		DiscussionPK castOther = (DiscussionPK)other;
-		return 
-			(this.discussionId == castOther.discussionId)
-			&& (this.USER_user_id == castOther.USER_user_id)
-			&& (this.PROJECT_project_id == castOther.PROJECT_project_id);
-	}
+    public int getUSERuserid() {
+        return uSERuserid;
+    }
 
-	public int hashCode() {
-		final int prime = 31;
-		int hash = 17;
-		hash = hash * prime + this.discussionId;
-		hash = hash * prime + this.USER_user_id;
-		hash = hash * prime + this.PROJECT_project_id;
-		
-		return hash;
-	}
+    public void setUSERuserid(int uSERuserid) {
+        this.uSERuserid = uSERuserid;
+    }
+
+    public int getPROJECTprojectid() {
+        return pROJECTprojectid;
+    }
+
+    public void setPROJECTprojectid(int pROJECTprojectid) {
+        this.pROJECTprojectid = pROJECTprojectid;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (int) discussionId;
+        hash += (int) uSERuserid;
+        hash += (int) pROJECTprojectid;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof DiscussionPK)) {
+            return false;
+        }
+        DiscussionPK other = (DiscussionPK) object;
+        if (this.discussionId != other.discussionId) {
+            return false;
+        }
+        if (this.uSERuserid != other.uSERuserid) {
+            return false;
+        }
+        if (this.pROJECTprojectid != other.pROJECTprojectid) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "si.fri.tpo.jpa.DiscussionPK[ discussionId=" + discussionId + ", uSERuserid=" + uSERuserid + ", pROJECTprojectid=" + pROJECTprojectid + " ]";
+    }
+    
 }

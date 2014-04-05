@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.1">
-
-    <persistence-unit name="NewPersistenceUnit"/>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="DScrum">
+    <class>si.fri.tpo.jpa.AcceptanceTest</class>
+    <class>si.fri.tpo.jpa.Comment</class>
+    <class>si.fri.tpo.jpa.CommentPK</class>
+    <class>si.fri.tpo.jpa.DailyScrumEntry</class>
+    <class>si.fri.tpo.jpa.DailyScrumEntryPK</class>
+    <class>si.fri.tpo.jpa.Discussion</class>
+    <class>si.fri.tpo.jpa.DiscussionPK</class>
+    <class>si.fri.tpo.jpa.Priority</class>
+    <class>si.fri.tpo.jpa.Project</class>
+    <class>si.fri.tpo.jpa.Sprint</class>
+    <class>si.fri.tpo.jpa.SprintPK</class>
+    <class>si.fri.tpo.jpa.Task</class>
+    <class>si.fri.tpo.jpa.TaskPK</class>
+    <class>si.fri.tpo.jpa.Team</class>
+    <class>si.fri.tpo.jpa.User</class>
+    <class>si.fri.tpo.jpa.UserStory</class>
+    <class>si.fri.tpo.jpa.Workblock</class>
+    <class>si.fri.tpo.jpa.WorkblockPK</class>
+    <class>si.fri.tpo.jpa.Workload</class>
+    <class>si.fri.tpo.jpa.WorkloadPK</class>
+  </persistence-unit>
 </persistence>

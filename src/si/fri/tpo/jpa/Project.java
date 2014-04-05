@@ -1,179 +1,173 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
-
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the PROJECT database table.
- * 
+ *
+ * @author Administrator
  */
 @Entity
-@NamedQuery(name="Project.findAll", query="SELECT p FROM Project p")
+@Table(name = "PROJECT")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Project.findAll", query = "SELECT p FROM Project p"),
+    @NamedQuery(name = "Project.findByProjectId", query = "SELECT p FROM Project p WHERE p.projectId = :projectId"),
+    @NamedQuery(name = "Project.findByName", query = "SELECT p FROM Project p WHERE p.name = :name"),
+    @NamedQuery(name = "Project.findByDescription", query = "SELECT p FROM Project p WHERE p.description = :description"),
+    @NamedQuery(name = "Project.findByStatus", query = "SELECT p FROM Project p WHERE p.status = :status")})
 public class Project implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "project_id")
+    private Integer projectId;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "description")
+    private String description;
+    @Column(name = "status")
+    private String status;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
+    private Collection<Sprint> sprintCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pROJECTprojectid")
+    private Collection<UserStory> userStoryCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
+    private Collection<Discussion> discussionCollection;
+    @JoinColumn(name = "TEAM_team_id", referencedColumnName = "team_id")
+    @ManyToOne
+    private Team tEAMteamid;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
+    private Collection<DailyScrumEntry> dailyScrumEntryCollection;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="project_id")
-	private int projectId;
+    public Project() {
+    }
 
-	private String description;
+    public Project(Integer projectId) {
+        this.projectId = projectId;
+    }
 
-	private String name;
+    public Integer getProjectId() {
+        return projectId;
+    }
 
-	private String status;
+    public void setProjectId(Integer projectId) {
+        this.projectId = projectId;
+    }
 
-	//bi-directional many-to-one association to DailyScrumEntry
-	@OneToMany(mappedBy="project")
-	private List<DailyScrumEntry> dailyScrumEntries;
+    public String getName() {
+        return name;
+    }
 
-	//bi-directional many-to-one association to Discussion
-	@OneToMany(mappedBy="project")
-	private List<Discussion> discussions;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	//bi-directional many-to-one association to Team
-	@ManyToOne
-	private Team team;
+    public String getDescription() {
+        return description;
+    }
 
-	//bi-directional many-to-one association to Sprint
-	@OneToMany(mappedBy="project")
-	private List<Sprint> sprints;
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	//bi-directional many-to-one association to UserStory
-	@OneToMany(mappedBy="project")
-	private List<UserStory> userStories;
+    public String getStatus() {
+        return status;
+    }
 
-	public Project() {
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public int getProjectId() {
-		return this.projectId;
-	}
+    @XmlTransient
+    public Collection<Sprint> getSprintCollection() {
+        return sprintCollection;
+    }
 
-	public void setProjectId(int projectId) {
-		this.projectId = projectId;
-	}
+    public void setSprintCollection(Collection<Sprint> sprintCollection) {
+        this.sprintCollection = sprintCollection;
+    }
 
-	public String getDescription() {
-		return this.description;
-	}
+    @XmlTransient
+    public Collection<UserStory> getUserStoryCollection() {
+        return userStoryCollection;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setUserStoryCollection(Collection<UserStory> userStoryCollection) {
+        this.userStoryCollection = userStoryCollection;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    @XmlTransient
+    public Collection<Discussion> getDiscussionCollection() {
+        return discussionCollection;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setDiscussionCollection(Collection<Discussion> discussionCollection) {
+        this.discussionCollection = discussionCollection;
+    }
 
-	public String getStatus() {
-		return this.status;
-	}
+    public Team getTEAMteamid() {
+        return tEAMteamid;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setTEAMteamid(Team tEAMteamid) {
+        this.tEAMteamid = tEAMteamid;
+    }
 
-	public List<DailyScrumEntry> getDailyScrumEntries() {
-		return this.dailyScrumEntries;
-	}
+    @XmlTransient
+    public Collection<DailyScrumEntry> getDailyScrumEntryCollection() {
+        return dailyScrumEntryCollection;
+    }
 
-	public void setDailyScrumEntries(List<DailyScrumEntry> dailyScrumEntries) {
-		this.dailyScrumEntries = dailyScrumEntries;
-	}
+    public void setDailyScrumEntryCollection(Collection<DailyScrumEntry> dailyScrumEntryCollection) {
+        this.dailyScrumEntryCollection = dailyScrumEntryCollection;
+    }
 
-	public DailyScrumEntry addDailyScrumEntry(DailyScrumEntry dailyScrumEntry) {
-		getDailyScrumEntries().add(dailyScrumEntry);
-		dailyScrumEntry.setProject(this);
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (projectId != null ? projectId.hashCode() : 0);
+        return hash;
+    }
 
-		return dailyScrumEntry;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Project)) {
+            return false;
+        }
+        Project other = (Project) object;
+        if ((this.projectId == null && other.projectId != null) || (this.projectId != null && !this.projectId.equals(other.projectId))) {
+            return false;
+        }
+        return true;
+    }
 
-	public DailyScrumEntry removeDailyScrumEntry(DailyScrumEntry dailyScrumEntry) {
-		getDailyScrumEntries().remove(dailyScrumEntry);
-		dailyScrumEntry.setProject(null);
-
-		return dailyScrumEntry;
-	}
-
-	public List<Discussion> getDiscussions() {
-		return this.discussions;
-	}
-
-	public void setDiscussions(List<Discussion> discussions) {
-		this.discussions = discussions;
-	}
-
-	public Discussion addDiscussion(Discussion discussion) {
-		getDiscussions().add(discussion);
-		discussion.setProject(this);
-
-		return discussion;
-	}
-
-	public Discussion removeDiscussion(Discussion discussion) {
-		getDiscussions().remove(discussion);
-		discussion.setProject(null);
-
-		return discussion;
-	}
-
-	public Team getTeam() {
-		return this.team;
-	}
-
-	public void setTeam(Team team) {
-		this.team = team;
-	}
-
-	public List<Sprint> getSprints() {
-		return this.sprints;
-	}
-
-	public void setSprints(List<Sprint> sprints) {
-		this.sprints = sprints;
-	}
-
-	public Sprint addSprint(Sprint sprint) {
-		getSprints().add(sprint);
-		sprint.setProject(this);
-
-		return sprint;
-	}
-
-	public Sprint removeSprint(Sprint sprint) {
-		getSprints().remove(sprint);
-		sprint.setProject(null);
-
-		return sprint;
-	}
-
-	public List<UserStory> getUserStories() {
-		return this.userStories;
-	}
-
-	public void setUserStories(List<UserStory> userStories) {
-		this.userStories = userStories;
-	}
-
-	public UserStory addUserStory(UserStory userStory) {
-		getUserStories().add(userStory);
-		userStory.setProject(this);
-
-		return userStory;
-	}
-
-	public UserStory removeUserStory(UserStory userStory) {
-		getUserStories().remove(userStory);
-		userStory.setProject(null);
-
-		return userStory;
-	}
-
+    @Override
+    public String toString() {
+        return "si.fri.tpo.jpa.Project[ projectId=" + projectId + " ]";
+    }
+    
 }

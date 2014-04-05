@@ -1,104 +1,140 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
-
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the TEAM database table.
- * 
+ *
+ * @author Administrator
  */
 @Entity
-@NamedQuery(name="Team.findAll", query="SELECT t FROM Team t")
+@Table(name = "TEAM")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Team.findAll", query = "SELECT t FROM Team t"),
+    @NamedQuery(name = "Team.findByTeamId", query = "SELECT t FROM Team t WHERE t.teamId = :teamId"),
+    @NamedQuery(name = "Team.findByScrumMasterId", query = "SELECT t FROM Team t WHERE t.scrumMasterId = :scrumMasterId"),
+    @NamedQuery(name = "Team.findByProductOwnerId", query = "SELECT t FROM Team t WHERE t.productOwnerId = :productOwnerId")})
 public class Team implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "team_id")
+    private Integer teamId;
+    @Basic(optional = false)
+    @Column(name = "scrum_master_id")
+    private int scrumMasterId;
+    @Basic(optional = false)
+    @Column(name = "product_owner_id")
+    private int productOwnerId;
+    @JoinTable(name = "TEAM_has_USER", joinColumns = {
+        @JoinColumn(name = "TEAM_team_id", referencedColumnName = "team_id")}, inverseJoinColumns = {
+        @JoinColumn(name = "USER_user_id", referencedColumnName = "user_id")})
+    @ManyToMany
+    private Collection<User> userCollection;
+    @OneToMany(mappedBy = "tEAMteamid")
+    private Collection<Project> projectCollection;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="team_id")
-	private int teamId;
+    public Team() {
+    }
 
-	@Column(name="is_product_owner")
-	private byte isProductOwner;
+    public Team(Integer teamId) {
+        this.teamId = teamId;
+    }
 
-	@Column(name="is_scrum_master")
-	private byte isScrumMaster;
+    public Team(Integer teamId, int scrumMasterId, int productOwnerId) {
+        this.teamId = teamId;
+        this.scrumMasterId = scrumMasterId;
+        this.productOwnerId = productOwnerId;
+    }
 
-	@Column(name="user_id")
-	private String userId;
+    public Integer getTeamId() {
+        return teamId;
+    }
 
-	//bi-directional many-to-one association to Project
-	@OneToMany(mappedBy="team")
-	private List<Project> projects;
+    public void setTeamId(Integer teamId) {
+        this.teamId = teamId;
+    }
 
-	//bi-directional many-to-many association to User
-	@ManyToMany(mappedBy="teams")
-	private List<User> users;
+    public int getScrumMasterId() {
+        return scrumMasterId;
+    }
 
-	public Team() {
-	}
+    public void setScrumMasterId(int scrumMasterId) {
+        this.scrumMasterId = scrumMasterId;
+    }
 
-	public int getTeamId() {
-		return this.teamId;
-	}
+    public int getProductOwnerId() {
+        return productOwnerId;
+    }
 
-	public void setTeamId(int teamId) {
-		this.teamId = teamId;
-	}
+    public void setProductOwnerId(int productOwnerId) {
+        this.productOwnerId = productOwnerId;
+    }
 
-	public byte getIsProductOwner() {
-		return this.isProductOwner;
-	}
+    @XmlTransient
+    public Collection<User> getUserCollection() {
+        return userCollection;
+    }
 
-	public void setIsProductOwner(byte isProductOwner) {
-		this.isProductOwner = isProductOwner;
-	}
+    public void setUserCollection(Collection<User> userCollection) {
+        this.userCollection = userCollection;
+    }
 
-	public byte getIsScrumMaster() {
-		return this.isScrumMaster;
-	}
+    @XmlTransient
+    public Collection<Project> getProjectCollection() {
+        return projectCollection;
+    }
 
-	public void setIsScrumMaster(byte isScrumMaster) {
-		this.isScrumMaster = isScrumMaster;
-	}
+    public void setProjectCollection(Collection<Project> projectCollection) {
+        this.projectCollection = projectCollection;
+    }
 
-	public String getUserId() {
-		return this.userId;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (teamId != null ? teamId.hashCode() : 0);
+        return hash;
+    }
 
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Team)) {
+            return false;
+        }
+        Team other = (Team) object;
+        if ((this.teamId == null && other.teamId != null) || (this.teamId != null && !this.teamId.equals(other.teamId))) {
+            return false;
+        }
+        return true;
+    }
 
-	public List<Project> getProjects() {
-		return this.projects;
-	}
-
-	public void setProjects(List<Project> projects) {
-		this.projects = projects;
-	}
-
-	public Project addProject(Project project) {
-		getProjects().add(project);
-		project.setTeam(this);
-
-		return project;
-	}
-
-	public Project removeProject(Project project) {
-		getProjects().remove(project);
-		project.setTeam(null);
-
-		return project;
-	}
-
-	public List<User> getUsers() {
-		return this.users;
-	}
-
-	public void setUsers(List<User> users) {
-		this.users = users;
-	}
-
+    @Override
+    public String toString() {
+        return "si.fri.tpo.jpa.Team[ teamId=" + teamId + " ]";
+    }
+    
 }

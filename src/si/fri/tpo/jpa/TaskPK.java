@@ -1,57 +1,80 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 /**
- * The primary key class for the TASK database table.
- * 
+ *
+ * @author Administrator
  */
 @Embeddable
 public class TaskPK implements Serializable {
-	//default serial version id, required for serializable classes.
-	private static final long serialVersionUID = 1L;
+    @Basic(optional = false)
+    @Column(name = "task_id")
+    private int taskId;
+    @Basic(optional = false)
+    @Column(name = "USER_STORY_story_id")
+    private int uSERSTORYstoryid;
 
-	@Column(name="task_id")
-	private int taskId;
+    public TaskPK() {
+    }
 
-	@Column(insertable=false, updatable=false)
-	private int USER_STORY_story_id;
+    public TaskPK(int taskId, int uSERSTORYstoryid) {
+        this.taskId = taskId;
+        this.uSERSTORYstoryid = uSERSTORYstoryid;
+    }
 
-	public TaskPK() {
-	}
-	public int getTaskId() {
-		return this.taskId;
-	}
-	public void setTaskId(int taskId) {
-		this.taskId = taskId;
-	}
-	public int getUSER_STORY_story_id() {
-		return this.USER_STORY_story_id;
-	}
-	public void setUSER_STORY_story_id(int USER_STORY_story_id) {
-		this.USER_STORY_story_id = USER_STORY_story_id;
-	}
+    public int getTaskId() {
+        return taskId;
+    }
 
-	public boolean equals(Object other) {
-		if (this == other) {
-			return true;
-		}
-		if (!(other instanceof TaskPK)) {
-			return false;
-		}
-		TaskPK castOther = (TaskPK)other;
-		return 
-			(this.taskId == castOther.taskId)
-			&& (this.USER_STORY_story_id == castOther.USER_STORY_story_id);
-	}
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
+    }
 
-	public int hashCode() {
-		final int prime = 31;
-		int hash = 17;
-		hash = hash * prime + this.taskId;
-		hash = hash * prime + this.USER_STORY_story_id;
-		
-		return hash;
-	}
+    public int getUSERSTORYstoryid() {
+        return uSERSTORYstoryid;
+    }
+
+    public void setUSERSTORYstoryid(int uSERSTORYstoryid) {
+        this.uSERSTORYstoryid = uSERSTORYstoryid;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (int) taskId;
+        hash += (int) uSERSTORYstoryid;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof TaskPK)) {
+            return false;
+        }
+        TaskPK other = (TaskPK) object;
+        if (this.taskId != other.taskId) {
+            return false;
+        }
+        if (this.uSERSTORYstoryid != other.uSERSTORYstoryid) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "si.fri.tpo.jpa.TaskPK[ taskId=" + taskId + ", uSERSTORYstoryid=" + uSERSTORYstoryid + " ]";
+    }
+    
 }

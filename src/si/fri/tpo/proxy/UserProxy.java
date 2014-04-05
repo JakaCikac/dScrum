@@ -1,7 +1,7 @@
-package si.fri.tpo.jpa.proxy;
+package si.fri.tpo.proxy;
 
+import si.fri.tpo.controllers.UserJpaController;
 import si.fri.tpo.jpa.User;
-import si.fri.tpo.jpa.UserJpaController;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

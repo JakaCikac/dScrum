@@ -1,97 +1,134 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
-
+import java.util.Collection;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the WORKLOAD database table.
- * 
+ *
+ * @author Administrator
  */
 @Entity
-@NamedQuery(name="Workload.findAll", query="SELECT w FROM Workload w")
+@Table(name = "WORKLOAD")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Workload.findAll", query = "SELECT w FROM Workload w"),
+    @NamedQuery(name = "Workload.findByWorkloadId", query = "SELECT w FROM Workload w WHERE w.workloadPK.workloadId = :workloadId"),
+    @NamedQuery(name = "Workload.findByTASKtaskid", query = "SELECT w FROM Workload w WHERE w.workloadPK.tASKtaskid = :tASKtaskid"),
+    @NamedQuery(name = "Workload.findByTASKUSERSTORYstoryid", query = "SELECT w FROM Workload w WHERE w.workloadPK.tASKUSERSTORYstoryid = :tASKUSERSTORYstoryid"),
+    @NamedQuery(name = "Workload.findByUSERuserid", query = "SELECT w FROM Workload w WHERE w.workloadPK.uSERuserid = :uSERuserid")})
 public class Workload implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @EmbeddedId
+    protected WorkloadPK workloadPK;
+    @Lob
+    @Column(name = "time_spent")
+    private String timeSpent;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workload")
+    private Collection<Workblock> workblockCollection;
+    @JoinColumn(name = "USER_user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private User user;
+    @JoinColumns({
+        @JoinColumn(name = "TASK_task_id", referencedColumnName = "task_id", insertable = false, updatable = false),
+        @JoinColumn(name = "TASK_USER_STORY_story_id", referencedColumnName = "USER_STORY_story_id", insertable = false, updatable = false)})
+    @ManyToOne(optional = false)
+    private Task task;
 
-	@EmbeddedId
-	private WorkloadPK id;
+    public Workload() {
+    }
 
-	@Lob
-	@Column(name="time_spent")
-	private String timeSpent;
+    public Workload(WorkloadPK workloadPK) {
+        this.workloadPK = workloadPK;
+    }
 
-	//bi-directional many-to-one association to Workblock
-	@OneToMany(mappedBy="workload")
-	private List<Workblock> workblocks;
+    public Workload(int workloadId, int tASKtaskid, int tASKUSERSTORYstoryid, int uSERuserid) {
+        this.workloadPK = new WorkloadPK(workloadId, tASKtaskid, tASKUSERSTORYstoryid, uSERuserid);
+    }
 
-	//bi-directional many-to-one association to Task
-	@ManyToOne
-	@JoinColumns({
-		@JoinColumn(name="TASK_task_id", referencedColumnName="task_id"),
-		@JoinColumn(name="TASK_USER_STORY_story_id", referencedColumnName="USER_STORY_story_id")
-		})
-	private Task task;
+    public WorkloadPK getWorkloadPK() {
+        return workloadPK;
+    }
 
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	private User user;
+    public void setWorkloadPK(WorkloadPK workloadPK) {
+        this.workloadPK = workloadPK;
+    }
 
-	public Workload() {
-	}
+    public String getTimeSpent() {
+        return timeSpent;
+    }
 
-	public WorkloadPK getId() {
-		return this.id;
-	}
+    public void setTimeSpent(String timeSpent) {
+        this.timeSpent = timeSpent;
+    }
 
-	public void setId(WorkloadPK id) {
-		this.id = id;
-	}
+    @XmlTransient
+    public Collection<Workblock> getWorkblockCollection() {
+        return workblockCollection;
+    }
 
-	public String getTimeSpent() {
-		return this.timeSpent;
-	}
+    public void setWorkblockCollection(Collection<Workblock> workblockCollection) {
+        this.workblockCollection = workblockCollection;
+    }
 
-	public void setTimeSpent(String timeSpent) {
-		this.timeSpent = timeSpent;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public List<Workblock> getWorkblocks() {
-		return this.workblocks;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	public void setWorkblocks(List<Workblock> workblocks) {
-		this.workblocks = workblocks;
-	}
+    public Task getTask() {
+        return task;
+    }
 
-	public Workblock addWorkblock(Workblock workblock) {
-		getWorkblocks().add(workblock);
-		workblock.setWorkload(this);
+    public void setTask(Task task) {
+        this.task = task;
+    }
 
-		return workblock;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (workloadPK != null ? workloadPK.hashCode() : 0);
+        return hash;
+    }
 
-	public Workblock removeWorkblock(Workblock workblock) {
-		getWorkblocks().remove(workblock);
-		workblock.setWorkload(null);
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Workload)) {
+            return false;
+        }
+        Workload other = (Workload) object;
+        if ((this.workloadPK == null && other.workloadPK != null) || (this.workloadPK != null && !this.workloadPK.equals(other.workloadPK))) {
+            return false;
+        }
+        return true;
+    }
 
-		return workblock;
-	}
-
-	public Task getTask() {
-		return this.task;
-	}
-
-	public void setTask(Task task) {
-		this.task = task;
-	}
-
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
+    @Override
+    public String toString() {
+        return "si.fri.tpo.jpa.Workload[ workloadPK=" + workloadPK + " ]";
+    }
+    
 }

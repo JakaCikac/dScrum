@@ -1,69 +1,111 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import javax.persistence.*;
-import java.util.List;
-
+import java.util.Collection;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the PRIORITY database table.
- * 
+ *
+ * @author Administrator
  */
 @Entity
-@NamedQuery(name="Priority.findAll", query="SELECT p FROM Priority p")
+@Table(name = "PRIORITY")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Priority.findAll", query = "SELECT p FROM Priority p"),
+    @NamedQuery(name = "Priority.findByPriorityId", query = "SELECT p FROM Priority p WHERE p.priorityId = :priorityId"),
+    @NamedQuery(name = "Priority.findByName", query = "SELECT p FROM Priority p WHERE p.name = :name")})
 public class Priority implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "priority_id")
+    private Integer priorityId;
+    @Basic(optional = false)
+    @Column(name = "name")
+    private String name;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pRIORITYpriorityid")
+    private Collection<UserStory> userStoryCollection;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="priority_id")
-	private int priorityId;
+    public Priority() {
+    }
 
-	private String name;
+    public Priority(Integer priorityId) {
+        this.priorityId = priorityId;
+    }
 
-	//bi-directional many-to-one association to UserStory
-	@OneToMany(mappedBy="priority")
-	private List<UserStory> userStories;
+    public Priority(Integer priorityId, String name) {
+        this.priorityId = priorityId;
+        this.name = name;
+    }
 
-	public Priority() {
-	}
+    public Integer getPriorityId() {
+        return priorityId;
+    }
 
-	public int getPriorityId() {
-		return this.priorityId;
-	}
+    public void setPriorityId(Integer priorityId) {
+        this.priorityId = priorityId;
+    }
 
-	public void setPriorityId(int priorityId) {
-		this.priorityId = priorityId;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getName() {
-		return this.name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @XmlTransient
+    public Collection<UserStory> getUserStoryCollection() {
+        return userStoryCollection;
+    }
 
-	public List<UserStory> getUserStories() {
-		return this.userStories;
-	}
+    public void setUserStoryCollection(Collection<UserStory> userStoryCollection) {
+        this.userStoryCollection = userStoryCollection;
+    }
 
-	public void setUserStories(List<UserStory> userStories) {
-		this.userStories = userStories;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (priorityId != null ? priorityId.hashCode() : 0);
+        return hash;
+    }
 
-	public UserStory addUserStory(UserStory userStory) {
-		getUserStories().add(userStory);
-		userStory.setPriority(this);
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Priority)) {
+            return false;
+        }
+        Priority other = (Priority) object;
+        if ((this.priorityId == null && other.priorityId != null) || (this.priorityId != null && !this.priorityId.equals(other.priorityId))) {
+            return false;
+        }
+        return true;
+    }
 
-		return userStory;
-	}
-
-	public UserStory removeUserStory(UserStory userStory) {
-		getUserStories().remove(userStory);
-		userStory.setPriority(null);
-
-		return userStory;
-	}
-
+    @Override
+    public String toString() {
+        return "si.fri.tpo.jpa.Priority[ priorityId=" + priorityId + " ]";
+    }
+    
 }

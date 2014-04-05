@@ -1,57 +1,80 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 /**
- * The primary key class for the SPRINT database table.
- * 
+ *
+ * @author Administrator
  */
 @Embeddable
 public class SprintPK implements Serializable {
-	//default serial version id, required for serializable classes.
-	private static final long serialVersionUID = 1L;
+    @Basic(optional = false)
+    @Column(name = "sprint_id")
+    private int sprintId;
+    @Basic(optional = false)
+    @Column(name = "PROJECT_project_id")
+    private int pROJECTprojectid;
 
-	@Column(name="sprint_id")
-	private int sprintId;
+    public SprintPK() {
+    }
 
-	@Column(insertable=false, updatable=false)
-	private int PROJECT_project_id;
+    public SprintPK(int sprintId, int pROJECTprojectid) {
+        this.sprintId = sprintId;
+        this.pROJECTprojectid = pROJECTprojectid;
+    }
 
-	public SprintPK() {
-	}
-	public int getSprintId() {
-		return this.sprintId;
-	}
-	public void setSprintId(int sprintId) {
-		this.sprintId = sprintId;
-	}
-	public int getPROJECT_project_id() {
-		return this.PROJECT_project_id;
-	}
-	public void setPROJECT_project_id(int PROJECT_project_id) {
-		this.PROJECT_project_id = PROJECT_project_id;
-	}
+    public int getSprintId() {
+        return sprintId;
+    }
 
-	public boolean equals(Object other) {
-		if (this == other) {
-			return true;
-		}
-		if (!(other instanceof SprintPK)) {
-			return false;
-		}
-		SprintPK castOther = (SprintPK)other;
-		return 
-			(this.sprintId == castOther.sprintId)
-			&& (this.PROJECT_project_id == castOther.PROJECT_project_id);
-	}
+    public void setSprintId(int sprintId) {
+        this.sprintId = sprintId;
+    }
 
-	public int hashCode() {
-		final int prime = 31;
-		int hash = 17;
-		hash = hash * prime + this.sprintId;
-		hash = hash * prime + this.PROJECT_project_id;
-		
-		return hash;
-	}
+    public int getPROJECTprojectid() {
+        return pROJECTprojectid;
+    }
+
+    public void setPROJECTprojectid(int pROJECTprojectid) {
+        this.pROJECTprojectid = pROJECTprojectid;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (int) sprintId;
+        hash += (int) pROJECTprojectid;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof SprintPK)) {
+            return false;
+        }
+        SprintPK other = (SprintPK) object;
+        if (this.sprintId != other.sprintId) {
+            return false;
+        }
+        if (this.pROJECTprojectid != other.pROJECTprojectid) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "si.fri.tpo.jpa.SprintPK[ sprintId=" + sprintId + ", pROJECTprojectid=" + pROJECTprojectid + " ]";
+    }
+    
 }

@@ -1,255 +1,271 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
-
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * The persistent class for the USER database table.
- * 
+ *
+ * @author Administrator
  */
 @Entity
-@NamedQuery(name="User.findAll", query="SELECT u FROM User u")
+@Table(name = "USER")
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
+    @NamedQuery(name = "User.findByUserId", query = "SELECT u FROM User u WHERE u.userId = :userId"),
+    @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.username = :username"),
+    @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password"),
+    @NamedQuery(name = "User.findByFirstName", query = "SELECT u FROM User u WHERE u.firstName = :firstName"),
+    @NamedQuery(name = "User.findByLastName", query = "SELECT u FROM User u WHERE u.lastName = :lastName"),
+    @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
+    @NamedQuery(name = "User.findByIsAdmin", query = "SELECT u FROM User u WHERE u.isAdmin = :isAdmin"),
+    @NamedQuery(name = "User.findBySalt", query = "SELECT u FROM User u WHERE u.salt = :salt"),
+    @NamedQuery(name = "User.findByIsActive", query = "SELECT u FROM User u WHERE u.isActive = :isActive"),
+    @NamedQuery(name = "User.findByTimeCreated", query = "SELECT u FROM User u WHERE u.timeCreated = :timeCreated")})
 public class User implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "user_id")
+    private Integer userId;
+    @Basic(optional = false)
+    @Column(name = "username")
+    private String username;
+    @Basic(optional = false)
+    @Column(name = "password")
+    private String password;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+    @Basic(optional = false)
+    @Column(name = "email")
+    private String email;
+    @Basic(optional = false)
+    @Column(name = "is_admin")
+    private boolean isAdmin;
+    @Basic(optional = false)
+    @Column(name = "salt")
+    private String salt;
+    @Basic(optional = false)
+    @Column(name = "is_active")
+    private boolean isActive;
+    @Basic(optional = false)
+    @Column(name = "time_created")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timeCreated;
+    @ManyToMany(mappedBy = "userCollection")
+    private Collection<Team> teamCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Collection<Discussion> discussionCollection;
+    @OneToMany(mappedBy = "uSERuserid")
+    private Collection<Task> taskCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Collection<Comment> commentCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Collection<Workload> workloadCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    private Collection<DailyScrumEntry> dailyScrumEntryCollection;
 
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="user_id")
-	private int userId;
+    public User() {
+    }
 
-	private String email;
+    public User(Integer userId) {
+        this.userId = userId;
+    }
 
-	@Column(name="first_name")
-	private String firstName;
+    public User(Integer userId, String username, String password, String email, boolean isAdmin, String salt, boolean isActive, Date timeCreated) {
+        this.userId = userId;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.isAdmin = isAdmin;
+        this.salt = salt;
+        this.isActive = isActive;
+        this.timeCreated = timeCreated;
+    }
 
-	@Column(name="is_active")
-	private byte isActive;
+    public Integer getUserId() {
+        return userId;
+    }
 
-	@Column(name="is_admin")
-	private byte isAdmin;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
-	@Column(name="last_name")
-	private String lastName;
+    public String getUsername() {
+        return username;
+    }
 
-	private String password;
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	private String salt;
+    public String getPassword() {
+        return password;
+    }
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="time_created")
-	private Date timeCreated;
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	private String username;
+    public String getFirstName() {
+        return firstName;
+    }
 
-	//bi-directional many-to-one association to DailyScrumEntry
-	@OneToMany(mappedBy="user")
-	private List<DailyScrumEntry> dailyScrumEntries;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	//bi-directional many-to-one association to Discussion
-	@OneToMany(mappedBy="user")
-	private List<Discussion> discussions;
+    public String getLastName() {
+        return lastName;
+    }
 
-	//bi-directional many-to-one association to Task
-	@OneToMany(mappedBy="user")
-	private List<Task> tasks;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	//bi-directional many-to-many association to Team
-	@ManyToMany
-	@JoinTable(
-		name="TEAM_has_USER"
-		, joinColumns={
-			@JoinColumn(name="USER_user_id")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="TEAM_team_id")
-			}
-		)
-	private List<Team> teams;
+    public String getEmail() {
+        return email;
+    }
 
-	//bi-directional many-to-one association to Workload
-	@OneToMany(mappedBy="user")
-	private List<Workload> workloads;
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public User() {
-	}
+    public boolean getIsAdmin() {
+        return isAdmin;
+    }
 
-	public int getUserId() {
-		return this.userId;
-	}
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
 
-	public void setUserId(int userId) {
-		this.userId = userId;
-	}
+    public String getSalt() {
+        return salt;
+    }
 
-	public String getEmail() {
-		return this.email;
-	}
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public boolean getIsActive() {
+        return isActive;
+    }
 
-	public String getFirstName() {
-		return this.firstName;
-	}
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public Date getTimeCreated() {
+        return timeCreated;
+    }
 
-	public byte getIsActive() {
-		return this.isActive;
-	}
+    public void setTimeCreated(Date timeCreated) {
+        this.timeCreated = timeCreated;
+    }
 
-	public void setIsActive(byte isActive) {
-		this.isActive = isActive;
-	}
+    @XmlTransient
+    public Collection<Team> getTeamCollection() {
+        return teamCollection;
+    }
 
-	public byte getIsAdmin() {
-		return this.isAdmin;
-	}
+    public void setTeamCollection(Collection<Team> teamCollection) {
+        this.teamCollection = teamCollection;
+    }
 
-	public void setIsAdmin(byte isAdmin) {
-		this.isAdmin = isAdmin;
-	}
+    @XmlTransient
+    public Collection<Discussion> getDiscussionCollection() {
+        return discussionCollection;
+    }
 
-	public String getLastName() {
-		return this.lastName;
-	}
+    public void setDiscussionCollection(Collection<Discussion> discussionCollection) {
+        this.discussionCollection = discussionCollection;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    @XmlTransient
+    public Collection<Task> getTaskCollection() {
+        return taskCollection;
+    }
 
-	public String getPassword() {
-		return this.password;
-	}
+    public void setTaskCollection(Collection<Task> taskCollection) {
+        this.taskCollection = taskCollection;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    @XmlTransient
+    public Collection<Comment> getCommentCollection() {
+        return commentCollection;
+    }
 
-	public String getSalt() {
-		return this.salt;
-	}
+    public void setCommentCollection(Collection<Comment> commentCollection) {
+        this.commentCollection = commentCollection;
+    }
 
-	public void setSalt(String salt) {
-		this.salt = salt;
-	}
+    @XmlTransient
+    public Collection<Workload> getWorkloadCollection() {
+        return workloadCollection;
+    }
 
-	public Date getTimeCreated() {
-		return this.timeCreated;
-	}
+    public void setWorkloadCollection(Collection<Workload> workloadCollection) {
+        this.workloadCollection = workloadCollection;
+    }
 
-	public void setTimeCreated(Date timeCreated) {
-		this.timeCreated = timeCreated;
-	}
+    @XmlTransient
+    public Collection<DailyScrumEntry> getDailyScrumEntryCollection() {
+        return dailyScrumEntryCollection;
+    }
 
-	public String getUsername() {
-		return this.username;
-	}
+    public void setDailyScrumEntryCollection(Collection<DailyScrumEntry> dailyScrumEntryCollection) {
+        this.dailyScrumEntryCollection = dailyScrumEntryCollection;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (userId != null ? userId.hashCode() : 0);
+        return hash;
+    }
 
-	public List<DailyScrumEntry> getDailyScrumEntries() {
-		return this.dailyScrumEntries;
-	}
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof User)) {
+            return false;
+        }
+        User other = (User) object;
+        if ((this.userId == null && other.userId != null) || (this.userId != null && !this.userId.equals(other.userId))) {
+            return false;
+        }
+        return true;
+    }
 
-	public void setDailyScrumEntries(List<DailyScrumEntry> dailyScrumEntries) {
-		this.dailyScrumEntries = dailyScrumEntries;
-	}
-
-	public DailyScrumEntry addDailyScrumEntry(DailyScrumEntry dailyScrumEntry) {
-		getDailyScrumEntries().add(dailyScrumEntry);
-		dailyScrumEntry.setUser(this);
-
-		return dailyScrumEntry;
-	}
-
-	public DailyScrumEntry removeDailyScrumEntry(DailyScrumEntry dailyScrumEntry) {
-		getDailyScrumEntries().remove(dailyScrumEntry);
-		dailyScrumEntry.setUser(null);
-
-		return dailyScrumEntry;
-	}
-
-	public List<Discussion> getDiscussions() {
-		return this.discussions;
-	}
-
-	public void setDiscussions(List<Discussion> discussions) {
-		this.discussions = discussions;
-	}
-
-	public Discussion addDiscussion(Discussion discussion) {
-		getDiscussions().add(discussion);
-		discussion.setUser(this);
-
-		return discussion;
-	}
-
-	public Discussion removeDiscussion(Discussion discussion) {
-		getDiscussions().remove(discussion);
-		discussion.setUser(null);
-
-		return discussion;
-	}
-
-	public List<Task> getTasks() {
-		return this.tasks;
-	}
-
-	public void setTasks(List<Task> tasks) {
-		this.tasks = tasks;
-	}
-
-	public Task addTask(Task task) {
-		getTasks().add(task);
-		task.setUser(this);
-
-		return task;
-	}
-
-	public Task removeTask(Task task) {
-		getTasks().remove(task);
-		task.setUser(null);
-
-		return task;
-	}
-
-	public List<Team> getTeams() {
-		return this.teams;
-	}
-
-	public void setTeams(List<Team> teams) {
-		this.teams = teams;
-	}
-
-	public List<Workload> getWorkloads() {
-		return this.workloads;
-	}
-
-	public void setWorkloads(List<Workload> workloads) {
-		this.workloads = workloads;
-	}
-
-	public Workload addWorkload(Workload workload) {
-		getWorkloads().add(workload);
-		workload.setUser(this);
-
-		return workload;
-	}
-
-	public Workload removeWorkload(Workload workload) {
-		getWorkloads().remove(workload);
-		workload.setUser(null);
-
-		return workload;
-	}
-
+    @Override
+    public String toString() {
+        return "si.fri.tpo.jpa.User[ userId=" + userId + " ]";
+    }
+    
 }
