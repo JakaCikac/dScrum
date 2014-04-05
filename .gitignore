@@ -53,7 +53,7 @@ dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
-war/WEB-INF/deploy/
+web/WEB-INF/deploy/
 
 # Java specific #
 ##################

@@ -1,2 +1,0 @@
-serviceClass: si.fri.tpo.gwt.client.service.DScrumService
-path: 1CA884E6C244DA663568F9AB121D1CED.gwt.rpc
