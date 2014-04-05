@@ -1,8 +1,8 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import si.fri.tpo.jpa.Project;
-import si.fri.tpo.jpa.SprintPK;
+import si.fri.tpo.gwt.server.jpa.Project;
+import si.fri.tpo.gwt.server.jpa.SprintPK;
 
 import java.util.Date;
 import java.util.List;

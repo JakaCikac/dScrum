@@ -1,16 +1,10 @@
 package si.fri.tpo.gwt.server.impl.login;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.server.impl.fill.FillDTO;
-import si.fri.tpo.jpa.User;
-import si.fri.tpo.proxy.ProxyManager;
-
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import si.fri.tpo.gwt.server.jpa.User;
+import si.fri.tpo.gwt.server.proxy.ProxyManager;
 
 /**
  * Created by nanorax on 04/04/14.

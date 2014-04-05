@@ -1,9 +1,9 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import si.fri.tpo.jpa.CommentPK;
-import si.fri.tpo.jpa.Discussion;
-import si.fri.tpo.jpa.User;
+import si.fri.tpo.gwt.server.jpa.CommentPK;
+import si.fri.tpo.gwt.server.jpa.Discussion;
+import si.fri.tpo.gwt.server.jpa.User;
 
 import java.util.Date;
 

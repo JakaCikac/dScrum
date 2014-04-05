@@ -1,7 +1,7 @@
 package si.fri.tpo.gwt.server.impl.fill;
 
 import si.fri.tpo.gwt.client.dto.UserDTO;
-import si.fri.tpo.jpa.User;
+import si.fri.tpo.gwt.server.jpa.User;
 
 /**
  * Created by nanorax on 05/04/14.

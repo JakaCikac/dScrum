@@ -1,9 +1,9 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import si.fri.tpo.jpa.TaskPK;
-import si.fri.tpo.jpa.User;
-import si.fri.tpo.jpa.UserStory;
+import si.fri.tpo.gwt.server.jpa.TaskPK;
+import si.fri.tpo.gwt.server.jpa.User;
+import si.fri.tpo.gwt.server.jpa.UserStory;
 
 import java.util.List;
 
