@@ -7,7 +7,7 @@
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,16 +22,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Administrator
  */
 @Entity
-@Table(name = "USER_STORY")
-@XmlRootElement
+@Table(name = "user_story")
 @NamedQueries({
     @NamedQuery(name = "UserStory.findAll", query = "SELECT u FROM UserStory u"),
     @NamedQuery(name = "UserStory.findByStoryId", query = "SELECT u FROM UserStory u WHERE u.storyId = :storyId"),
@@ -53,21 +50,21 @@ public class UserStory implements Serializable {
     private String content;
     @Column(name = "business_value")
     private Integer businessValue;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userStory")
+    private List<Task> taskList;
+    @OneToMany(mappedBy = "userStoryStoryId")
+    private List<AcceptanceTest> acceptanceTestList;
     @JoinColumns({
-        @JoinColumn(name = "SPRINT_sprint_id", referencedColumnName = "sprint_id"),
-        @JoinColumn(name = "SPRINT_PROJECT_project_id", referencedColumnName = "PROJECT_project_id")})
+        @JoinColumn(name = "sprint_sprint_id", referencedColumnName = "sprint_id"),
+        @JoinColumn(name = "sprint_project_project_id", referencedColumnName = "project_project_id")})
     @ManyToOne
     private Sprint sprint;
-    @JoinColumn(name = "PRIORITY_priority_id", referencedColumnName = "priority_id")
+    @JoinColumn(name = "priority_priority_id", referencedColumnName = "priority_id")
     @ManyToOne(optional = false)
-    private Priority pRIORITYpriorityid;
-    @JoinColumn(name = "PROJECT_project_id", referencedColumnName = "project_id")
+    private Priority priorityPriorityId;
+    @JoinColumn(name = "project_project_id", referencedColumnName = "project_id")
     @ManyToOne(optional = false)
-    private Project pROJECTprojectid;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userStory")
-    private Collection<Task> taskCollection;
-    @OneToMany(mappedBy = "uSERSTORYstoryid")
-    private Collection<AcceptanceTest> acceptanceTestCollection;
+    private Project projectProjectId;
 
     public UserStory() {
     }
@@ -114,6 +111,22 @@ public class UserStory implements Serializable {
         this.businessValue = businessValue;
     }
 
+    public List<Task> getTaskList() {
+        return taskList;
+    }
+
+    public void setTaskList(List<Task> taskList) {
+        this.taskList = taskList;
+    }
+
+    public List<AcceptanceTest> getAcceptanceTestList() {
+        return acceptanceTestList;
+    }
+
+    public void setAcceptanceTestList(List<AcceptanceTest> acceptanceTestList) {
+        this.acceptanceTestList = acceptanceTestList;
+    }
+
     public Sprint getSprint() {
         return sprint;
     }
@@ -122,38 +135,20 @@ public class UserStory implements Serializable {
         this.sprint = sprint;
     }
 
-    public Priority getPRIORITYpriorityid() {
-        return pRIORITYpriorityid;
+    public Priority getPriorityPriorityId() {
+        return priorityPriorityId;
     }
 
-    public void setPRIORITYpriorityid(Priority pRIORITYpriorityid) {
-        this.pRIORITYpriorityid = pRIORITYpriorityid;
+    public void setPriorityPriorityId(Priority priorityPriorityId) {
+        this.priorityPriorityId = priorityPriorityId;
     }
 
-    public Project getPROJECTprojectid() {
-        return pROJECTprojectid;
+    public Project getProjectProjectId() {
+        return projectProjectId;
     }
 
-    public void setPROJECTprojectid(Project pROJECTprojectid) {
-        this.pROJECTprojectid = pROJECTprojectid;
-    }
-
-    @XmlTransient
-    public Collection<Task> getTaskCollection() {
-        return taskCollection;
-    }
-
-    public void setTaskCollection(Collection<Task> taskCollection) {
-        this.taskCollection = taskCollection;
-    }
-
-    @XmlTransient
-    public Collection<AcceptanceTest> getAcceptanceTestCollection() {
-        return acceptanceTestCollection;
-    }
-
-    public void setAcceptanceTestCollection(Collection<AcceptanceTest> acceptanceTestCollection) {
-        this.acceptanceTestCollection = acceptanceTestCollection;
+    public void setProjectProjectId(Project projectProjectId) {
+        this.projectProjectId = projectProjectId;
     }
 
     @Override

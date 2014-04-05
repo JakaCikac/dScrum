@@ -21,19 +21,19 @@ public class CommentPK implements Serializable {
     @Column(name = "comment_id")
     private int commentId;
     @Basic(optional = false)
-    @Column(name = "DISCUSSION_discussion_id")
-    private int dISCUSSIONdiscussionid;
+    @Column(name = "discussion_discussion_id")
+    private int discussionDiscussionId;
     @Basic(optional = false)
-    @Column(name = "USER_user_id")
-    private int uSERuserid;
+    @Column(name = "user_user_id")
+    private int userUserId;
 
     public CommentPK() {
     }
 
-    public CommentPK(int commentId, int dISCUSSIONdiscussionid, int uSERuserid) {
+    public CommentPK(int commentId, int discussionDiscussionId, int userUserId) {
         this.commentId = commentId;
-        this.dISCUSSIONdiscussionid = dISCUSSIONdiscussionid;
-        this.uSERuserid = uSERuserid;
+        this.discussionDiscussionId = discussionDiscussionId;
+        this.userUserId = userUserId;
     }
 
     public int getCommentId() {
@@ -44,28 +44,28 @@ public class CommentPK implements Serializable {
         this.commentId = commentId;
     }
 
-    public int getDISCUSSIONdiscussionid() {
-        return dISCUSSIONdiscussionid;
+    public int getDiscussionDiscussionId() {
+        return discussionDiscussionId;
     }
 
-    public void setDISCUSSIONdiscussionid(int dISCUSSIONdiscussionid) {
-        this.dISCUSSIONdiscussionid = dISCUSSIONdiscussionid;
+    public void setDiscussionDiscussionId(int discussionDiscussionId) {
+        this.discussionDiscussionId = discussionDiscussionId;
     }
 
-    public int getUSERuserid() {
-        return uSERuserid;
+    public int getUserUserId() {
+        return userUserId;
     }
 
-    public void setUSERuserid(int uSERuserid) {
-        this.uSERuserid = uSERuserid;
+    public void setUserUserId(int userUserId) {
+        this.userUserId = userUserId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) commentId;
-        hash += (int) dISCUSSIONdiscussionid;
-        hash += (int) uSERuserid;
+        hash += (int) discussionDiscussionId;
+        hash += (int) userUserId;
         return hash;
     }
 
@@ -79,10 +79,10 @@ public class CommentPK implements Serializable {
         if (this.commentId != other.commentId) {
             return false;
         }
-        if (this.dISCUSSIONdiscussionid != other.dISCUSSIONdiscussionid) {
+        if (this.discussionDiscussionId != other.discussionDiscussionId) {
             return false;
         }
-        if (this.uSERuserid != other.uSERuserid) {
+        if (this.userUserId != other.userUserId) {
             return false;
         }
         return true;
@@ -90,7 +90,7 @@ public class CommentPK implements Serializable {
 
     @Override
     public String toString() {
-        return "si.fri.tpo.jpa.CommentPK[ commentId=" + commentId + ", dISCUSSIONdiscussionid=" + dISCUSSIONdiscussionid + ", uSERuserid=" + uSERuserid + " ]";
+        return "si.fri.tpo.jpa.CommentPK[ commentId=" + commentId + ", discussionDiscussionId=" + discussionDiscussionId + ", userUserId=" + userUserId + " ]";
     }
     
 }

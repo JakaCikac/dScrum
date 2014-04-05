@@ -16,7 +16,6 @@ import si.fri.tpo.jpa.Priority;
 import si.fri.tpo.jpa.Project;
 import si.fri.tpo.jpa.Task;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -41,11 +40,11 @@ public class UserStoryJpaController implements Serializable {
     }
 
     public void create(UserStory userStory) {
-        if (userStory.getTaskCollection() == null) {
-            userStory.setTaskCollection(new ArrayList<Task>());
+        if (userStory.getTaskList() == null) {
+            userStory.setTaskList(new ArrayList<Task>());
         }
-        if (userStory.getAcceptanceTestCollection() == null) {
-            userStory.setAcceptanceTestCollection(new ArrayList<AcceptanceTest>());
+        if (userStory.getAcceptanceTestList() == null) {
+            userStory.setAcceptanceTestList(new ArrayList<AcceptanceTest>());
         }
         EntityManager em = null;
         try {
@@ -56,57 +55,57 @@ public class UserStoryJpaController implements Serializable {
                 sprint = em.getReference(sprint.getClass(), sprint.getSprintPK());
                 userStory.setSprint(sprint);
             }
-            Priority PRIORITYpriorityid = userStory.getPRIORITYpriorityid();
-            if (PRIORITYpriorityid != null) {
-                PRIORITYpriorityid = em.getReference(PRIORITYpriorityid.getClass(), PRIORITYpriorityid.getPriorityId());
-                userStory.setPRIORITYpriorityid(PRIORITYpriorityid);
+            Priority priorityPriorityId = userStory.getPriorityPriorityId();
+            if (priorityPriorityId != null) {
+                priorityPriorityId = em.getReference(priorityPriorityId.getClass(), priorityPriorityId.getPriorityId());
+                userStory.setPriorityPriorityId(priorityPriorityId);
             }
-            Project PROJECTprojectid = userStory.getPROJECTprojectid();
-            if (PROJECTprojectid != null) {
-                PROJECTprojectid = em.getReference(PROJECTprojectid.getClass(), PROJECTprojectid.getProjectId());
-                userStory.setPROJECTprojectid(PROJECTprojectid);
+            Project projectProjectId = userStory.getProjectProjectId();
+            if (projectProjectId != null) {
+                projectProjectId = em.getReference(projectProjectId.getClass(), projectProjectId.getProjectId());
+                userStory.setProjectProjectId(projectProjectId);
             }
-            Collection<Task> attachedTaskCollection = new ArrayList<Task>();
-            for (Task taskCollectionTaskToAttach : userStory.getTaskCollection()) {
-                taskCollectionTaskToAttach = em.getReference(taskCollectionTaskToAttach.getClass(), taskCollectionTaskToAttach.getTaskPK());
-                attachedTaskCollection.add(taskCollectionTaskToAttach);
+            List<Task> attachedTaskList = new ArrayList<Task>();
+            for (Task taskListTaskToAttach : userStory.getTaskList()) {
+                taskListTaskToAttach = em.getReference(taskListTaskToAttach.getClass(), taskListTaskToAttach.getTaskPK());
+                attachedTaskList.add(taskListTaskToAttach);
             }
-            userStory.setTaskCollection(attachedTaskCollection);
-            Collection<AcceptanceTest> attachedAcceptanceTestCollection = new ArrayList<AcceptanceTest>();
-            for (AcceptanceTest acceptanceTestCollectionAcceptanceTestToAttach : userStory.getAcceptanceTestCollection()) {
-                acceptanceTestCollectionAcceptanceTestToAttach = em.getReference(acceptanceTestCollectionAcceptanceTestToAttach.getClass(), acceptanceTestCollectionAcceptanceTestToAttach.getAcceptanceTestId());
-                attachedAcceptanceTestCollection.add(acceptanceTestCollectionAcceptanceTestToAttach);
+            userStory.setTaskList(attachedTaskList);
+            List<AcceptanceTest> attachedAcceptanceTestList = new ArrayList<AcceptanceTest>();
+            for (AcceptanceTest acceptanceTestListAcceptanceTestToAttach : userStory.getAcceptanceTestList()) {
+                acceptanceTestListAcceptanceTestToAttach = em.getReference(acceptanceTestListAcceptanceTestToAttach.getClass(), acceptanceTestListAcceptanceTestToAttach.getAcceptanceTestId());
+                attachedAcceptanceTestList.add(acceptanceTestListAcceptanceTestToAttach);
             }
-            userStory.setAcceptanceTestCollection(attachedAcceptanceTestCollection);
+            userStory.setAcceptanceTestList(attachedAcceptanceTestList);
             em.persist(userStory);
             if (sprint != null) {
-                sprint.getUserStoryCollection().add(userStory);
+                sprint.getUserStoryList().add(userStory);
                 sprint = em.merge(sprint);
             }
-            if (PRIORITYpriorityid != null) {
-                PRIORITYpriorityid.getUserStoryCollection().add(userStory);
-                PRIORITYpriorityid = em.merge(PRIORITYpriorityid);
+            if (priorityPriorityId != null) {
+                priorityPriorityId.getUserStoryList().add(userStory);
+                priorityPriorityId = em.merge(priorityPriorityId);
             }
-            if (PROJECTprojectid != null) {
-                PROJECTprojectid.getUserStoryCollection().add(userStory);
-                PROJECTprojectid = em.merge(PROJECTprojectid);
+            if (projectProjectId != null) {
+                projectProjectId.getUserStoryList().add(userStory);
+                projectProjectId = em.merge(projectProjectId);
             }
-            for (Task taskCollectionTask : userStory.getTaskCollection()) {
-                UserStory oldUserStoryOfTaskCollectionTask = taskCollectionTask.getUserStory();
-                taskCollectionTask.setUserStory(userStory);
-                taskCollectionTask = em.merge(taskCollectionTask);
-                if (oldUserStoryOfTaskCollectionTask != null) {
-                    oldUserStoryOfTaskCollectionTask.getTaskCollection().remove(taskCollectionTask);
-                    oldUserStoryOfTaskCollectionTask = em.merge(oldUserStoryOfTaskCollectionTask);
+            for (Task taskListTask : userStory.getTaskList()) {
+                UserStory oldUserStoryOfTaskListTask = taskListTask.getUserStory();
+                taskListTask.setUserStory(userStory);
+                taskListTask = em.merge(taskListTask);
+                if (oldUserStoryOfTaskListTask != null) {
+                    oldUserStoryOfTaskListTask.getTaskList().remove(taskListTask);
+                    oldUserStoryOfTaskListTask = em.merge(oldUserStoryOfTaskListTask);
                 }
             }
-            for (AcceptanceTest acceptanceTestCollectionAcceptanceTest : userStory.getAcceptanceTestCollection()) {
-                UserStory oldUSERSTORYstoryidOfAcceptanceTestCollectionAcceptanceTest = acceptanceTestCollectionAcceptanceTest.getUSERSTORYstoryid();
-                acceptanceTestCollectionAcceptanceTest.setUSERSTORYstoryid(userStory);
-                acceptanceTestCollectionAcceptanceTest = em.merge(acceptanceTestCollectionAcceptanceTest);
-                if (oldUSERSTORYstoryidOfAcceptanceTestCollectionAcceptanceTest != null) {
-                    oldUSERSTORYstoryidOfAcceptanceTestCollectionAcceptanceTest.getAcceptanceTestCollection().remove(acceptanceTestCollectionAcceptanceTest);
-                    oldUSERSTORYstoryidOfAcceptanceTestCollectionAcceptanceTest = em.merge(oldUSERSTORYstoryidOfAcceptanceTestCollectionAcceptanceTest);
+            for (AcceptanceTest acceptanceTestListAcceptanceTest : userStory.getAcceptanceTestList()) {
+                UserStory oldUserStoryStoryIdOfAcceptanceTestListAcceptanceTest = acceptanceTestListAcceptanceTest.getUserStoryStoryId();
+                acceptanceTestListAcceptanceTest.setUserStoryStoryId(userStory);
+                acceptanceTestListAcceptanceTest = em.merge(acceptanceTestListAcceptanceTest);
+                if (oldUserStoryStoryIdOfAcceptanceTestListAcceptanceTest != null) {
+                    oldUserStoryStoryIdOfAcceptanceTestListAcceptanceTest.getAcceptanceTestList().remove(acceptanceTestListAcceptanceTest);
+                    oldUserStoryStoryIdOfAcceptanceTestListAcceptanceTest = em.merge(oldUserStoryStoryIdOfAcceptanceTestListAcceptanceTest);
                 }
             }
             em.getTransaction().commit();
@@ -125,21 +124,21 @@ public class UserStoryJpaController implements Serializable {
             UserStory persistentUserStory = em.find(UserStory.class, userStory.getStoryId());
             Sprint sprintOld = persistentUserStory.getSprint();
             Sprint sprintNew = userStory.getSprint();
-            Priority PRIORITYpriorityidOld = persistentUserStory.getPRIORITYpriorityid();
-            Priority PRIORITYpriorityidNew = userStory.getPRIORITYpriorityid();
-            Project PROJECTprojectidOld = persistentUserStory.getPROJECTprojectid();
-            Project PROJECTprojectidNew = userStory.getPROJECTprojectid();
-            Collection<Task> taskCollectionOld = persistentUserStory.getTaskCollection();
-            Collection<Task> taskCollectionNew = userStory.getTaskCollection();
-            Collection<AcceptanceTest> acceptanceTestCollectionOld = persistentUserStory.getAcceptanceTestCollection();
-            Collection<AcceptanceTest> acceptanceTestCollectionNew = userStory.getAcceptanceTestCollection();
+            Priority priorityPriorityIdOld = persistentUserStory.getPriorityPriorityId();
+            Priority priorityPriorityIdNew = userStory.getPriorityPriorityId();
+            Project projectProjectIdOld = persistentUserStory.getProjectProjectId();
+            Project projectProjectIdNew = userStory.getProjectProjectId();
+            List<Task> taskListOld = persistentUserStory.getTaskList();
+            List<Task> taskListNew = userStory.getTaskList();
+            List<AcceptanceTest> acceptanceTestListOld = persistentUserStory.getAcceptanceTestList();
+            List<AcceptanceTest> acceptanceTestListNew = userStory.getAcceptanceTestList();
             List<String> illegalOrphanMessages = null;
-            for (Task taskCollectionOldTask : taskCollectionOld) {
-                if (!taskCollectionNew.contains(taskCollectionOldTask)) {
+            for (Task taskListOldTask : taskListOld) {
+                if (!taskListNew.contains(taskListOldTask)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Task " + taskCollectionOldTask + " since its userStory field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Task " + taskListOldTask + " since its userStory field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -149,78 +148,78 @@ public class UserStoryJpaController implements Serializable {
                 sprintNew = em.getReference(sprintNew.getClass(), sprintNew.getSprintPK());
                 userStory.setSprint(sprintNew);
             }
-            if (PRIORITYpriorityidNew != null) {
-                PRIORITYpriorityidNew = em.getReference(PRIORITYpriorityidNew.getClass(), PRIORITYpriorityidNew.getPriorityId());
-                userStory.setPRIORITYpriorityid(PRIORITYpriorityidNew);
+            if (priorityPriorityIdNew != null) {
+                priorityPriorityIdNew = em.getReference(priorityPriorityIdNew.getClass(), priorityPriorityIdNew.getPriorityId());
+                userStory.setPriorityPriorityId(priorityPriorityIdNew);
             }
-            if (PROJECTprojectidNew != null) {
-                PROJECTprojectidNew = em.getReference(PROJECTprojectidNew.getClass(), PROJECTprojectidNew.getProjectId());
-                userStory.setPROJECTprojectid(PROJECTprojectidNew);
+            if (projectProjectIdNew != null) {
+                projectProjectIdNew = em.getReference(projectProjectIdNew.getClass(), projectProjectIdNew.getProjectId());
+                userStory.setProjectProjectId(projectProjectIdNew);
             }
-            Collection<Task> attachedTaskCollectionNew = new ArrayList<Task>();
-            for (Task taskCollectionNewTaskToAttach : taskCollectionNew) {
-                taskCollectionNewTaskToAttach = em.getReference(taskCollectionNewTaskToAttach.getClass(), taskCollectionNewTaskToAttach.getTaskPK());
-                attachedTaskCollectionNew.add(taskCollectionNewTaskToAttach);
+            List<Task> attachedTaskListNew = new ArrayList<Task>();
+            for (Task taskListNewTaskToAttach : taskListNew) {
+                taskListNewTaskToAttach = em.getReference(taskListNewTaskToAttach.getClass(), taskListNewTaskToAttach.getTaskPK());
+                attachedTaskListNew.add(taskListNewTaskToAttach);
             }
-            taskCollectionNew = attachedTaskCollectionNew;
-            userStory.setTaskCollection(taskCollectionNew);
-            Collection<AcceptanceTest> attachedAcceptanceTestCollectionNew = new ArrayList<AcceptanceTest>();
-            for (AcceptanceTest acceptanceTestCollectionNewAcceptanceTestToAttach : acceptanceTestCollectionNew) {
-                acceptanceTestCollectionNewAcceptanceTestToAttach = em.getReference(acceptanceTestCollectionNewAcceptanceTestToAttach.getClass(), acceptanceTestCollectionNewAcceptanceTestToAttach.getAcceptanceTestId());
-                attachedAcceptanceTestCollectionNew.add(acceptanceTestCollectionNewAcceptanceTestToAttach);
+            taskListNew = attachedTaskListNew;
+            userStory.setTaskList(taskListNew);
+            List<AcceptanceTest> attachedAcceptanceTestListNew = new ArrayList<AcceptanceTest>();
+            for (AcceptanceTest acceptanceTestListNewAcceptanceTestToAttach : acceptanceTestListNew) {
+                acceptanceTestListNewAcceptanceTestToAttach = em.getReference(acceptanceTestListNewAcceptanceTestToAttach.getClass(), acceptanceTestListNewAcceptanceTestToAttach.getAcceptanceTestId());
+                attachedAcceptanceTestListNew.add(acceptanceTestListNewAcceptanceTestToAttach);
             }
-            acceptanceTestCollectionNew = attachedAcceptanceTestCollectionNew;
-            userStory.setAcceptanceTestCollection(acceptanceTestCollectionNew);
+            acceptanceTestListNew = attachedAcceptanceTestListNew;
+            userStory.setAcceptanceTestList(acceptanceTestListNew);
             userStory = em.merge(userStory);
             if (sprintOld != null && !sprintOld.equals(sprintNew)) {
-                sprintOld.getUserStoryCollection().remove(userStory);
+                sprintOld.getUserStoryList().remove(userStory);
                 sprintOld = em.merge(sprintOld);
             }
             if (sprintNew != null && !sprintNew.equals(sprintOld)) {
-                sprintNew.getUserStoryCollection().add(userStory);
+                sprintNew.getUserStoryList().add(userStory);
                 sprintNew = em.merge(sprintNew);
             }
-            if (PRIORITYpriorityidOld != null && !PRIORITYpriorityidOld.equals(PRIORITYpriorityidNew)) {
-                PRIORITYpriorityidOld.getUserStoryCollection().remove(userStory);
-                PRIORITYpriorityidOld = em.merge(PRIORITYpriorityidOld);
+            if (priorityPriorityIdOld != null && !priorityPriorityIdOld.equals(priorityPriorityIdNew)) {
+                priorityPriorityIdOld.getUserStoryList().remove(userStory);
+                priorityPriorityIdOld = em.merge(priorityPriorityIdOld);
             }
-            if (PRIORITYpriorityidNew != null && !PRIORITYpriorityidNew.equals(PRIORITYpriorityidOld)) {
-                PRIORITYpriorityidNew.getUserStoryCollection().add(userStory);
-                PRIORITYpriorityidNew = em.merge(PRIORITYpriorityidNew);
+            if (priorityPriorityIdNew != null && !priorityPriorityIdNew.equals(priorityPriorityIdOld)) {
+                priorityPriorityIdNew.getUserStoryList().add(userStory);
+                priorityPriorityIdNew = em.merge(priorityPriorityIdNew);
             }
-            if (PROJECTprojectidOld != null && !PROJECTprojectidOld.equals(PROJECTprojectidNew)) {
-                PROJECTprojectidOld.getUserStoryCollection().remove(userStory);
-                PROJECTprojectidOld = em.merge(PROJECTprojectidOld);
+            if (projectProjectIdOld != null && !projectProjectIdOld.equals(projectProjectIdNew)) {
+                projectProjectIdOld.getUserStoryList().remove(userStory);
+                projectProjectIdOld = em.merge(projectProjectIdOld);
             }
-            if (PROJECTprojectidNew != null && !PROJECTprojectidNew.equals(PROJECTprojectidOld)) {
-                PROJECTprojectidNew.getUserStoryCollection().add(userStory);
-                PROJECTprojectidNew = em.merge(PROJECTprojectidNew);
+            if (projectProjectIdNew != null && !projectProjectIdNew.equals(projectProjectIdOld)) {
+                projectProjectIdNew.getUserStoryList().add(userStory);
+                projectProjectIdNew = em.merge(projectProjectIdNew);
             }
-            for (Task taskCollectionNewTask : taskCollectionNew) {
-                if (!taskCollectionOld.contains(taskCollectionNewTask)) {
-                    UserStory oldUserStoryOfTaskCollectionNewTask = taskCollectionNewTask.getUserStory();
-                    taskCollectionNewTask.setUserStory(userStory);
-                    taskCollectionNewTask = em.merge(taskCollectionNewTask);
-                    if (oldUserStoryOfTaskCollectionNewTask != null && !oldUserStoryOfTaskCollectionNewTask.equals(userStory)) {
-                        oldUserStoryOfTaskCollectionNewTask.getTaskCollection().remove(taskCollectionNewTask);
-                        oldUserStoryOfTaskCollectionNewTask = em.merge(oldUserStoryOfTaskCollectionNewTask);
+            for (Task taskListNewTask : taskListNew) {
+                if (!taskListOld.contains(taskListNewTask)) {
+                    UserStory oldUserStoryOfTaskListNewTask = taskListNewTask.getUserStory();
+                    taskListNewTask.setUserStory(userStory);
+                    taskListNewTask = em.merge(taskListNewTask);
+                    if (oldUserStoryOfTaskListNewTask != null && !oldUserStoryOfTaskListNewTask.equals(userStory)) {
+                        oldUserStoryOfTaskListNewTask.getTaskList().remove(taskListNewTask);
+                        oldUserStoryOfTaskListNewTask = em.merge(oldUserStoryOfTaskListNewTask);
                     }
                 }
             }
-            for (AcceptanceTest acceptanceTestCollectionOldAcceptanceTest : acceptanceTestCollectionOld) {
-                if (!acceptanceTestCollectionNew.contains(acceptanceTestCollectionOldAcceptanceTest)) {
-                    acceptanceTestCollectionOldAcceptanceTest.setUSERSTORYstoryid(null);
-                    acceptanceTestCollectionOldAcceptanceTest = em.merge(acceptanceTestCollectionOldAcceptanceTest);
+            for (AcceptanceTest acceptanceTestListOldAcceptanceTest : acceptanceTestListOld) {
+                if (!acceptanceTestListNew.contains(acceptanceTestListOldAcceptanceTest)) {
+                    acceptanceTestListOldAcceptanceTest.setUserStoryStoryId(null);
+                    acceptanceTestListOldAcceptanceTest = em.merge(acceptanceTestListOldAcceptanceTest);
                 }
             }
-            for (AcceptanceTest acceptanceTestCollectionNewAcceptanceTest : acceptanceTestCollectionNew) {
-                if (!acceptanceTestCollectionOld.contains(acceptanceTestCollectionNewAcceptanceTest)) {
-                    UserStory oldUSERSTORYstoryidOfAcceptanceTestCollectionNewAcceptanceTest = acceptanceTestCollectionNewAcceptanceTest.getUSERSTORYstoryid();
-                    acceptanceTestCollectionNewAcceptanceTest.setUSERSTORYstoryid(userStory);
-                    acceptanceTestCollectionNewAcceptanceTest = em.merge(acceptanceTestCollectionNewAcceptanceTest);
-                    if (oldUSERSTORYstoryidOfAcceptanceTestCollectionNewAcceptanceTest != null && !oldUSERSTORYstoryidOfAcceptanceTestCollectionNewAcceptanceTest.equals(userStory)) {
-                        oldUSERSTORYstoryidOfAcceptanceTestCollectionNewAcceptanceTest.getAcceptanceTestCollection().remove(acceptanceTestCollectionNewAcceptanceTest);
-                        oldUSERSTORYstoryidOfAcceptanceTestCollectionNewAcceptanceTest = em.merge(oldUSERSTORYstoryidOfAcceptanceTestCollectionNewAcceptanceTest);
+            for (AcceptanceTest acceptanceTestListNewAcceptanceTest : acceptanceTestListNew) {
+                if (!acceptanceTestListOld.contains(acceptanceTestListNewAcceptanceTest)) {
+                    UserStory oldUserStoryStoryIdOfAcceptanceTestListNewAcceptanceTest = acceptanceTestListNewAcceptanceTest.getUserStoryStoryId();
+                    acceptanceTestListNewAcceptanceTest.setUserStoryStoryId(userStory);
+                    acceptanceTestListNewAcceptanceTest = em.merge(acceptanceTestListNewAcceptanceTest);
+                    if (oldUserStoryStoryIdOfAcceptanceTestListNewAcceptanceTest != null && !oldUserStoryStoryIdOfAcceptanceTestListNewAcceptanceTest.equals(userStory)) {
+                        oldUserStoryStoryIdOfAcceptanceTestListNewAcceptanceTest.getAcceptanceTestList().remove(acceptanceTestListNewAcceptanceTest);
+                        oldUserStoryStoryIdOfAcceptanceTestListNewAcceptanceTest = em.merge(oldUserStoryStoryIdOfAcceptanceTestListNewAcceptanceTest);
                     }
                 }
             }
@@ -254,35 +253,35 @@ public class UserStoryJpaController implements Serializable {
                 throw new NonexistentEntityException("The userStory with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Task> taskCollectionOrphanCheck = userStory.getTaskCollection();
-            for (Task taskCollectionOrphanCheckTask : taskCollectionOrphanCheck) {
+            List<Task> taskListOrphanCheck = userStory.getTaskList();
+            for (Task taskListOrphanCheckTask : taskListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This UserStory (" + userStory + ") cannot be destroyed since the Task " + taskCollectionOrphanCheckTask + " in its taskCollection field has a non-nullable userStory field.");
+                illegalOrphanMessages.add("This UserStory (" + userStory + ") cannot be destroyed since the Task " + taskListOrphanCheckTask + " in its taskList field has a non-nullable userStory field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Sprint sprint = userStory.getSprint();
             if (sprint != null) {
-                sprint.getUserStoryCollection().remove(userStory);
+                sprint.getUserStoryList().remove(userStory);
                 sprint = em.merge(sprint);
             }
-            Priority PRIORITYpriorityid = userStory.getPRIORITYpriorityid();
-            if (PRIORITYpriorityid != null) {
-                PRIORITYpriorityid.getUserStoryCollection().remove(userStory);
-                PRIORITYpriorityid = em.merge(PRIORITYpriorityid);
+            Priority priorityPriorityId = userStory.getPriorityPriorityId();
+            if (priorityPriorityId != null) {
+                priorityPriorityId.getUserStoryList().remove(userStory);
+                priorityPriorityId = em.merge(priorityPriorityId);
             }
-            Project PROJECTprojectid = userStory.getPROJECTprojectid();
-            if (PROJECTprojectid != null) {
-                PROJECTprojectid.getUserStoryCollection().remove(userStory);
-                PROJECTprojectid = em.merge(PROJECTprojectid);
+            Project projectProjectId = userStory.getProjectProjectId();
+            if (projectProjectId != null) {
+                projectProjectId.getUserStoryList().remove(userStory);
+                projectProjectId = em.merge(projectProjectId);
             }
-            Collection<AcceptanceTest> acceptanceTestCollection = userStory.getAcceptanceTestCollection();
-            for (AcceptanceTest acceptanceTestCollectionAcceptanceTest : acceptanceTestCollection) {
-                acceptanceTestCollectionAcceptanceTest.setUSERSTORYstoryid(null);
-                acceptanceTestCollectionAcceptanceTest = em.merge(acceptanceTestCollectionAcceptanceTest);
+            List<AcceptanceTest> acceptanceTestList = userStory.getAcceptanceTestList();
+            for (AcceptanceTest acceptanceTestListAcceptanceTest : acceptanceTestList) {
+                acceptanceTestListAcceptanceTest.setUserStoryStoryId(null);
+                acceptanceTestListAcceptanceTest = em.merge(acceptanceTestListAcceptanceTest);
             }
             em.remove(userStory);
             em.getTransaction().commit();

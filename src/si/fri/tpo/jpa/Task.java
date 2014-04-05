@@ -7,7 +7,7 @@
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,16 +19,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Administrator
  */
 @Entity
-@Table(name = "TASK")
-@XmlRootElement
+@Table(name = "task")
 @NamedQueries({
     @NamedQuery(name = "Task.findAll", query = "SELECT t FROM Task t"),
     @NamedQuery(name = "Task.findByTaskId", query = "SELECT t FROM Task t WHERE t.taskPK.taskId = :taskId"),
@@ -36,7 +33,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Task.findByTimeRemaining", query = "SELECT t FROM Task t WHERE t.timeRemaining = :timeRemaining"),
     @NamedQuery(name = "Task.findByEstimatedTime", query = "SELECT t FROM Task t WHERE t.estimatedTime = :estimatedTime"),
     @NamedQuery(name = "Task.findByStatus", query = "SELECT t FROM Task t WHERE t.status = :status"),
-    @NamedQuery(name = "Task.findByUSERSTORYstoryid", query = "SELECT t FROM Task t WHERE t.taskPK.uSERSTORYstoryid = :uSERSTORYstoryid")})
+    @NamedQuery(name = "Task.findByUserStoryStoryId", query = "SELECT t FROM Task t WHERE t.taskPK.userStoryStoryId = :userStoryStoryId")})
 public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -53,14 +50,14 @@ public class Task implements Serializable {
     @Basic(optional = false)
     @Column(name = "status")
     private String status;
-    @JoinColumn(name = "USER_STORY_story_id", referencedColumnName = "story_id", insertable = false, updatable = false)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "task")
+    private List<Workload> workloadList;
+    @JoinColumn(name = "user_story_story_id", referencedColumnName = "story_id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private UserStory userStory;
-    @JoinColumn(name = "USER_user_id", referencedColumnName = "user_id")
+    @JoinColumn(name = "user_user_id", referencedColumnName = "user_id")
     @ManyToOne
-    private User uSERuserid;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "task")
-    private Collection<Workload> workloadCollection;
+    private User userUserId;
 
     public Task() {
     }
@@ -77,8 +74,8 @@ public class Task implements Serializable {
         this.status = status;
     }
 
-    public Task(int taskId, int uSERSTORYstoryid) {
-        this.taskPK = new TaskPK(taskId, uSERSTORYstoryid);
+    public Task(int taskId, int userStoryStoryId) {
+        this.taskPK = new TaskPK(taskId, userStoryStoryId);
     }
 
     public TaskPK getTaskPK() {
@@ -121,6 +118,14 @@ public class Task implements Serializable {
         this.status = status;
     }
 
+    public List<Workload> getWorkloadList() {
+        return workloadList;
+    }
+
+    public void setWorkloadList(List<Workload> workloadList) {
+        this.workloadList = workloadList;
+    }
+
     public UserStory getUserStory() {
         return userStory;
     }
@@ -129,21 +134,12 @@ public class Task implements Serializable {
         this.userStory = userStory;
     }
 
-    public User getUSERuserid() {
-        return uSERuserid;
+    public User getUserUserId() {
+        return userUserId;
     }
 
-    public void setUSERuserid(User uSERuserid) {
-        this.uSERuserid = uSERuserid;
-    }
-
-    @XmlTransient
-    public Collection<Workload> getWorkloadCollection() {
-        return workloadCollection;
-    }
-
-    public void setWorkloadCollection(Collection<Workload> workloadCollection) {
-        this.workloadCollection = workloadCollection;
+    public void setUserUserId(User userUserId) {
+        this.userUserId = userUserId;
     }
 
     @Override

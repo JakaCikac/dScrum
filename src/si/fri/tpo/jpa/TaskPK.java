@@ -21,15 +21,15 @@ public class TaskPK implements Serializable {
     @Column(name = "task_id")
     private int taskId;
     @Basic(optional = false)
-    @Column(name = "USER_STORY_story_id")
-    private int uSERSTORYstoryid;
+    @Column(name = "user_story_story_id")
+    private int userStoryStoryId;
 
     public TaskPK() {
     }
 
-    public TaskPK(int taskId, int uSERSTORYstoryid) {
+    public TaskPK(int taskId, int userStoryStoryId) {
         this.taskId = taskId;
-        this.uSERSTORYstoryid = uSERSTORYstoryid;
+        this.userStoryStoryId = userStoryStoryId;
     }
 
     public int getTaskId() {
@@ -40,19 +40,19 @@ public class TaskPK implements Serializable {
         this.taskId = taskId;
     }
 
-    public int getUSERSTORYstoryid() {
-        return uSERSTORYstoryid;
+    public int getUserStoryStoryId() {
+        return userStoryStoryId;
     }
 
-    public void setUSERSTORYstoryid(int uSERSTORYstoryid) {
-        this.uSERSTORYstoryid = uSERSTORYstoryid;
+    public void setUserStoryStoryId(int userStoryStoryId) {
+        this.userStoryStoryId = userStoryStoryId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) taskId;
-        hash += (int) uSERSTORYstoryid;
+        hash += (int) userStoryStoryId;
         return hash;
     }
 
@@ -66,7 +66,7 @@ public class TaskPK implements Serializable {
         if (this.taskId != other.taskId) {
             return false;
         }
-        if (this.uSERSTORYstoryid != other.uSERSTORYstoryid) {
+        if (this.userStoryStoryId != other.userStoryStoryId) {
             return false;
         }
         return true;
@@ -74,7 +74,7 @@ public class TaskPK implements Serializable {
 
     @Override
     public String toString() {
-        return "si.fri.tpo.jpa.TaskPK[ taskId=" + taskId + ", uSERSTORYstoryid=" + uSERSTORYstoryid + " ]";
+        return "si.fri.tpo.jpa.TaskPK[ taskId=" + taskId + ", userStoryStoryId=" + userStoryStoryId + " ]";
     }
     
 }

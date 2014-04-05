@@ -39,10 +39,10 @@ public class WorkblockJpaController implements Serializable {
         if (workblock.getWorkblockPK() == null) {
             workblock.setWorkblockPK(new WorkblockPK());
         }
-        workblock.getWorkblockPK().setWORKLOADTASKtaskid(workblock.getWorkload().getWorkloadPK().getTASKtaskid());
-        workblock.getWorkblockPK().setWORKLOADworkloadid(workblock.getWorkload().getWorkloadPK().getWorkloadId());
-        workblock.getWorkblockPK().setWORKLOADTASKUSERSTORYstoryid(workblock.getWorkload().getWorkloadPK().getTASKUSERSTORYstoryid());
-        workblock.getWorkblockPK().setWORKLOADUSERuserid(workblock.getWorkload().getWorkloadPK().getUSERuserid());
+        workblock.getWorkblockPK().setWorkloadTaskTaskId(workblock.getWorkload().getWorkloadPK().getTaskTaskId());
+        workblock.getWorkblockPK().setWorkloadUserUserId(workblock.getWorkload().getWorkloadPK().getUserUserId());
+        workblock.getWorkblockPK().setWorkloadTaskUserStoryStoryId(workblock.getWorkload().getWorkloadPK().getTaskUserStoryStoryId());
+        workblock.getWorkblockPK().setWorkloadWorkloadId(workblock.getWorkload().getWorkloadPK().getWorkloadId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -54,7 +54,7 @@ public class WorkblockJpaController implements Serializable {
             }
             em.persist(workblock);
             if (workload != null) {
-                workload.getWorkblockCollection().add(workblock);
+                workload.getWorkblockList().add(workblock);
                 workload = em.merge(workload);
             }
             em.getTransaction().commit();
@@ -71,10 +71,10 @@ public class WorkblockJpaController implements Serializable {
     }
 
     public void edit(Workblock workblock) throws NonexistentEntityException, Exception {
-        workblock.getWorkblockPK().setWORKLOADTASKtaskid(workblock.getWorkload().getWorkloadPK().getTASKtaskid());
-        workblock.getWorkblockPK().setWORKLOADworkloadid(workblock.getWorkload().getWorkloadPK().getWorkloadId());
-        workblock.getWorkblockPK().setWORKLOADTASKUSERSTORYstoryid(workblock.getWorkload().getWorkloadPK().getTASKUSERSTORYstoryid());
-        workblock.getWorkblockPK().setWORKLOADUSERuserid(workblock.getWorkload().getWorkloadPK().getUSERuserid());
+        workblock.getWorkblockPK().setWorkloadTaskTaskId(workblock.getWorkload().getWorkloadPK().getTaskTaskId());
+        workblock.getWorkblockPK().setWorkloadUserUserId(workblock.getWorkload().getWorkloadPK().getUserUserId());
+        workblock.getWorkblockPK().setWorkloadTaskUserStoryStoryId(workblock.getWorkload().getWorkloadPK().getTaskUserStoryStoryId());
+        workblock.getWorkblockPK().setWorkloadWorkloadId(workblock.getWorkload().getWorkloadPK().getWorkloadId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -88,11 +88,11 @@ public class WorkblockJpaController implements Serializable {
             }
             workblock = em.merge(workblock);
             if (workloadOld != null && !workloadOld.equals(workloadNew)) {
-                workloadOld.getWorkblockCollection().remove(workblock);
+                workloadOld.getWorkblockList().remove(workblock);
                 workloadOld = em.merge(workloadOld);
             }
             if (workloadNew != null && !workloadNew.equals(workloadOld)) {
-                workloadNew.getWorkblockCollection().add(workblock);
+                workloadNew.getWorkblockList().add(workblock);
                 workloadNew = em.merge(workloadNew);
             }
             em.getTransaction().commit();
@@ -126,7 +126,7 @@ public class WorkblockJpaController implements Serializable {
             }
             Workload workload = workblock.getWorkload();
             if (workload != null) {
-                workload.getWorkblockCollection().remove(workblock);
+                workload.getWorkblockList().remove(workblock);
                 workload = em.merge(workload);
             }
             em.remove(workblock);

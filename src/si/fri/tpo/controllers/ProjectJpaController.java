@@ -12,18 +12,17 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import si.fri.tpo.jpa.Team;
-import si.fri.tpo.jpa.Sprint;
+import si.fri.tpo.jpa.Discussion;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import si.fri.tpo.controllers.exceptions.IllegalOrphanException;
 import si.fri.tpo.controllers.exceptions.NonexistentEntityException;
-import si.fri.tpo.jpa.UserStory;
-import si.fri.tpo.jpa.Discussion;
 import si.fri.tpo.jpa.DailyScrumEntry;
 import si.fri.tpo.jpa.Project;
+import si.fri.tpo.jpa.Sprint;
+import si.fri.tpo.jpa.UserStory;
 
 /**
  *
@@ -41,90 +40,90 @@ public class ProjectJpaController implements Serializable {
     }
 
     public void create(Project project) {
-        if (project.getSprintCollection() == null) {
-            project.setSprintCollection(new ArrayList<Sprint>());
+        if (project.getDiscussionList() == null) {
+            project.setDiscussionList(new ArrayList<Discussion>());
         }
-        if (project.getUserStoryCollection() == null) {
-            project.setUserStoryCollection(new ArrayList<UserStory>());
+        if (project.getDailyScrumEntryList() == null) {
+            project.setDailyScrumEntryList(new ArrayList<DailyScrumEntry>());
         }
-        if (project.getDiscussionCollection() == null) {
-            project.setDiscussionCollection(new ArrayList<Discussion>());
+        if (project.getSprintList() == null) {
+            project.setSprintList(new ArrayList<Sprint>());
         }
-        if (project.getDailyScrumEntryCollection() == null) {
-            project.setDailyScrumEntryCollection(new ArrayList<DailyScrumEntry>());
+        if (project.getUserStoryList() == null) {
+            project.setUserStoryList(new ArrayList<UserStory>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Team TEAMteamid = project.getTEAMteamid();
-            if (TEAMteamid != null) {
-                TEAMteamid = em.getReference(TEAMteamid.getClass(), TEAMteamid.getTeamId());
-                project.setTEAMteamid(TEAMteamid);
+            Team teamTeamId = project.getTeamTeamId();
+            if (teamTeamId != null) {
+                teamTeamId = em.getReference(teamTeamId.getClass(), teamTeamId.getTeamId());
+                project.setTeamTeamId(teamTeamId);
             }
-            Collection<Sprint> attachedSprintCollection = new ArrayList<Sprint>();
-            for (Sprint sprintCollectionSprintToAttach : project.getSprintCollection()) {
-                sprintCollectionSprintToAttach = em.getReference(sprintCollectionSprintToAttach.getClass(), sprintCollectionSprintToAttach.getSprintPK());
-                attachedSprintCollection.add(sprintCollectionSprintToAttach);
+            List<Discussion> attachedDiscussionList = new ArrayList<Discussion>();
+            for (Discussion discussionListDiscussionToAttach : project.getDiscussionList()) {
+                discussionListDiscussionToAttach = em.getReference(discussionListDiscussionToAttach.getClass(), discussionListDiscussionToAttach.getDiscussionPK());
+                attachedDiscussionList.add(discussionListDiscussionToAttach);
             }
-            project.setSprintCollection(attachedSprintCollection);
-            Collection<UserStory> attachedUserStoryCollection = new ArrayList<UserStory>();
-            for (UserStory userStoryCollectionUserStoryToAttach : project.getUserStoryCollection()) {
-                userStoryCollectionUserStoryToAttach = em.getReference(userStoryCollectionUserStoryToAttach.getClass(), userStoryCollectionUserStoryToAttach.getStoryId());
-                attachedUserStoryCollection.add(userStoryCollectionUserStoryToAttach);
+            project.setDiscussionList(attachedDiscussionList);
+            List<DailyScrumEntry> attachedDailyScrumEntryList = new ArrayList<DailyScrumEntry>();
+            for (DailyScrumEntry dailyScrumEntryListDailyScrumEntryToAttach : project.getDailyScrumEntryList()) {
+                dailyScrumEntryListDailyScrumEntryToAttach = em.getReference(dailyScrumEntryListDailyScrumEntryToAttach.getClass(), dailyScrumEntryListDailyScrumEntryToAttach.getDailyScrumEntryPK());
+                attachedDailyScrumEntryList.add(dailyScrumEntryListDailyScrumEntryToAttach);
             }
-            project.setUserStoryCollection(attachedUserStoryCollection);
-            Collection<Discussion> attachedDiscussionCollection = new ArrayList<Discussion>();
-            for (Discussion discussionCollectionDiscussionToAttach : project.getDiscussionCollection()) {
-                discussionCollectionDiscussionToAttach = em.getReference(discussionCollectionDiscussionToAttach.getClass(), discussionCollectionDiscussionToAttach.getDiscussionPK());
-                attachedDiscussionCollection.add(discussionCollectionDiscussionToAttach);
+            project.setDailyScrumEntryList(attachedDailyScrumEntryList);
+            List<Sprint> attachedSprintList = new ArrayList<Sprint>();
+            for (Sprint sprintListSprintToAttach : project.getSprintList()) {
+                sprintListSprintToAttach = em.getReference(sprintListSprintToAttach.getClass(), sprintListSprintToAttach.getSprintPK());
+                attachedSprintList.add(sprintListSprintToAttach);
             }
-            project.setDiscussionCollection(attachedDiscussionCollection);
-            Collection<DailyScrumEntry> attachedDailyScrumEntryCollection = new ArrayList<DailyScrumEntry>();
-            for (DailyScrumEntry dailyScrumEntryCollectionDailyScrumEntryToAttach : project.getDailyScrumEntryCollection()) {
-                dailyScrumEntryCollectionDailyScrumEntryToAttach = em.getReference(dailyScrumEntryCollectionDailyScrumEntryToAttach.getClass(), dailyScrumEntryCollectionDailyScrumEntryToAttach.getDailyScrumEntryPK());
-                attachedDailyScrumEntryCollection.add(dailyScrumEntryCollectionDailyScrumEntryToAttach);
+            project.setSprintList(attachedSprintList);
+            List<UserStory> attachedUserStoryList = new ArrayList<UserStory>();
+            for (UserStory userStoryListUserStoryToAttach : project.getUserStoryList()) {
+                userStoryListUserStoryToAttach = em.getReference(userStoryListUserStoryToAttach.getClass(), userStoryListUserStoryToAttach.getStoryId());
+                attachedUserStoryList.add(userStoryListUserStoryToAttach);
             }
-            project.setDailyScrumEntryCollection(attachedDailyScrumEntryCollection);
+            project.setUserStoryList(attachedUserStoryList);
             em.persist(project);
-            if (TEAMteamid != null) {
-                TEAMteamid.getProjectCollection().add(project);
-                TEAMteamid = em.merge(TEAMteamid);
+            if (teamTeamId != null) {
+                teamTeamId.getProjectList().add(project);
+                teamTeamId = em.merge(teamTeamId);
             }
-            for (Sprint sprintCollectionSprint : project.getSprintCollection()) {
-                Project oldProjectOfSprintCollectionSprint = sprintCollectionSprint.getProject();
-                sprintCollectionSprint.setProject(project);
-                sprintCollectionSprint = em.merge(sprintCollectionSprint);
-                if (oldProjectOfSprintCollectionSprint != null) {
-                    oldProjectOfSprintCollectionSprint.getSprintCollection().remove(sprintCollectionSprint);
-                    oldProjectOfSprintCollectionSprint = em.merge(oldProjectOfSprintCollectionSprint);
+            for (Discussion discussionListDiscussion : project.getDiscussionList()) {
+                Project oldProjectOfDiscussionListDiscussion = discussionListDiscussion.getProject();
+                discussionListDiscussion.setProject(project);
+                discussionListDiscussion = em.merge(discussionListDiscussion);
+                if (oldProjectOfDiscussionListDiscussion != null) {
+                    oldProjectOfDiscussionListDiscussion.getDiscussionList().remove(discussionListDiscussion);
+                    oldProjectOfDiscussionListDiscussion = em.merge(oldProjectOfDiscussionListDiscussion);
                 }
             }
-            for (UserStory userStoryCollectionUserStory : project.getUserStoryCollection()) {
-                Project oldPROJECTprojectidOfUserStoryCollectionUserStory = userStoryCollectionUserStory.getPROJECTprojectid();
-                userStoryCollectionUserStory.setPROJECTprojectid(project);
-                userStoryCollectionUserStory = em.merge(userStoryCollectionUserStory);
-                if (oldPROJECTprojectidOfUserStoryCollectionUserStory != null) {
-                    oldPROJECTprojectidOfUserStoryCollectionUserStory.getUserStoryCollection().remove(userStoryCollectionUserStory);
-                    oldPROJECTprojectidOfUserStoryCollectionUserStory = em.merge(oldPROJECTprojectidOfUserStoryCollectionUserStory);
+            for (DailyScrumEntry dailyScrumEntryListDailyScrumEntry : project.getDailyScrumEntryList()) {
+                Project oldProjectOfDailyScrumEntryListDailyScrumEntry = dailyScrumEntryListDailyScrumEntry.getProject();
+                dailyScrumEntryListDailyScrumEntry.setProject(project);
+                dailyScrumEntryListDailyScrumEntry = em.merge(dailyScrumEntryListDailyScrumEntry);
+                if (oldProjectOfDailyScrumEntryListDailyScrumEntry != null) {
+                    oldProjectOfDailyScrumEntryListDailyScrumEntry.getDailyScrumEntryList().remove(dailyScrumEntryListDailyScrumEntry);
+                    oldProjectOfDailyScrumEntryListDailyScrumEntry = em.merge(oldProjectOfDailyScrumEntryListDailyScrumEntry);
                 }
             }
-            for (Discussion discussionCollectionDiscussion : project.getDiscussionCollection()) {
-                Project oldProjectOfDiscussionCollectionDiscussion = discussionCollectionDiscussion.getProject();
-                discussionCollectionDiscussion.setProject(project);
-                discussionCollectionDiscussion = em.merge(discussionCollectionDiscussion);
-                if (oldProjectOfDiscussionCollectionDiscussion != null) {
-                    oldProjectOfDiscussionCollectionDiscussion.getDiscussionCollection().remove(discussionCollectionDiscussion);
-                    oldProjectOfDiscussionCollectionDiscussion = em.merge(oldProjectOfDiscussionCollectionDiscussion);
+            for (Sprint sprintListSprint : project.getSprintList()) {
+                Project oldProjectOfSprintListSprint = sprintListSprint.getProject();
+                sprintListSprint.setProject(project);
+                sprintListSprint = em.merge(sprintListSprint);
+                if (oldProjectOfSprintListSprint != null) {
+                    oldProjectOfSprintListSprint.getSprintList().remove(sprintListSprint);
+                    oldProjectOfSprintListSprint = em.merge(oldProjectOfSprintListSprint);
                 }
             }
-            for (DailyScrumEntry dailyScrumEntryCollectionDailyScrumEntry : project.getDailyScrumEntryCollection()) {
-                Project oldProjectOfDailyScrumEntryCollectionDailyScrumEntry = dailyScrumEntryCollectionDailyScrumEntry.getProject();
-                dailyScrumEntryCollectionDailyScrumEntry.setProject(project);
-                dailyScrumEntryCollectionDailyScrumEntry = em.merge(dailyScrumEntryCollectionDailyScrumEntry);
-                if (oldProjectOfDailyScrumEntryCollectionDailyScrumEntry != null) {
-                    oldProjectOfDailyScrumEntryCollectionDailyScrumEntry.getDailyScrumEntryCollection().remove(dailyScrumEntryCollectionDailyScrumEntry);
-                    oldProjectOfDailyScrumEntryCollectionDailyScrumEntry = em.merge(oldProjectOfDailyScrumEntryCollectionDailyScrumEntry);
+            for (UserStory userStoryListUserStory : project.getUserStoryList()) {
+                Project oldProjectProjectIdOfUserStoryListUserStory = userStoryListUserStory.getProjectProjectId();
+                userStoryListUserStory.setProjectProjectId(project);
+                userStoryListUserStory = em.merge(userStoryListUserStory);
+                if (oldProjectProjectIdOfUserStoryListUserStory != null) {
+                    oldProjectProjectIdOfUserStoryListUserStory.getUserStoryList().remove(userStoryListUserStory);
+                    oldProjectProjectIdOfUserStoryListUserStory = em.merge(oldProjectProjectIdOfUserStoryListUserStory);
                 }
             }
             em.getTransaction().commit();
@@ -141,134 +140,134 @@ public class ProjectJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Project persistentProject = em.find(Project.class, project.getProjectId());
-            Team TEAMteamidOld = persistentProject.getTEAMteamid();
-            Team TEAMteamidNew = project.getTEAMteamid();
-            Collection<Sprint> sprintCollectionOld = persistentProject.getSprintCollection();
-            Collection<Sprint> sprintCollectionNew = project.getSprintCollection();
-            Collection<UserStory> userStoryCollectionOld = persistentProject.getUserStoryCollection();
-            Collection<UserStory> userStoryCollectionNew = project.getUserStoryCollection();
-            Collection<Discussion> discussionCollectionOld = persistentProject.getDiscussionCollection();
-            Collection<Discussion> discussionCollectionNew = project.getDiscussionCollection();
-            Collection<DailyScrumEntry> dailyScrumEntryCollectionOld = persistentProject.getDailyScrumEntryCollection();
-            Collection<DailyScrumEntry> dailyScrumEntryCollectionNew = project.getDailyScrumEntryCollection();
+            Team teamTeamIdOld = persistentProject.getTeamTeamId();
+            Team teamTeamIdNew = project.getTeamTeamId();
+            List<Discussion> discussionListOld = persistentProject.getDiscussionList();
+            List<Discussion> discussionListNew = project.getDiscussionList();
+            List<DailyScrumEntry> dailyScrumEntryListOld = persistentProject.getDailyScrumEntryList();
+            List<DailyScrumEntry> dailyScrumEntryListNew = project.getDailyScrumEntryList();
+            List<Sprint> sprintListOld = persistentProject.getSprintList();
+            List<Sprint> sprintListNew = project.getSprintList();
+            List<UserStory> userStoryListOld = persistentProject.getUserStoryList();
+            List<UserStory> userStoryListNew = project.getUserStoryList();
             List<String> illegalOrphanMessages = null;
-            for (Sprint sprintCollectionOldSprint : sprintCollectionOld) {
-                if (!sprintCollectionNew.contains(sprintCollectionOldSprint)) {
+            for (Discussion discussionListOldDiscussion : discussionListOld) {
+                if (!discussionListNew.contains(discussionListOldDiscussion)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Sprint " + sprintCollectionOldSprint + " since its project field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Discussion " + discussionListOldDiscussion + " since its project field is not nullable.");
                 }
             }
-            for (UserStory userStoryCollectionOldUserStory : userStoryCollectionOld) {
-                if (!userStoryCollectionNew.contains(userStoryCollectionOldUserStory)) {
+            for (DailyScrumEntry dailyScrumEntryListOldDailyScrumEntry : dailyScrumEntryListOld) {
+                if (!dailyScrumEntryListNew.contains(dailyScrumEntryListOldDailyScrumEntry)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain UserStory " + userStoryCollectionOldUserStory + " since its PROJECTprojectid field is not nullable.");
+                    illegalOrphanMessages.add("You must retain DailyScrumEntry " + dailyScrumEntryListOldDailyScrumEntry + " since its project field is not nullable.");
                 }
             }
-            for (Discussion discussionCollectionOldDiscussion : discussionCollectionOld) {
-                if (!discussionCollectionNew.contains(discussionCollectionOldDiscussion)) {
+            for (Sprint sprintListOldSprint : sprintListOld) {
+                if (!sprintListNew.contains(sprintListOldSprint)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Discussion " + discussionCollectionOldDiscussion + " since its project field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Sprint " + sprintListOldSprint + " since its project field is not nullable.");
                 }
             }
-            for (DailyScrumEntry dailyScrumEntryCollectionOldDailyScrumEntry : dailyScrumEntryCollectionOld) {
-                if (!dailyScrumEntryCollectionNew.contains(dailyScrumEntryCollectionOldDailyScrumEntry)) {
+            for (UserStory userStoryListOldUserStory : userStoryListOld) {
+                if (!userStoryListNew.contains(userStoryListOldUserStory)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain DailyScrumEntry " + dailyScrumEntryCollectionOldDailyScrumEntry + " since its project field is not nullable.");
+                    illegalOrphanMessages.add("You must retain UserStory " + userStoryListOldUserStory + " since its projectProjectId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (TEAMteamidNew != null) {
-                TEAMteamidNew = em.getReference(TEAMteamidNew.getClass(), TEAMteamidNew.getTeamId());
-                project.setTEAMteamid(TEAMteamidNew);
+            if (teamTeamIdNew != null) {
+                teamTeamIdNew = em.getReference(teamTeamIdNew.getClass(), teamTeamIdNew.getTeamId());
+                project.setTeamTeamId(teamTeamIdNew);
             }
-            Collection<Sprint> attachedSprintCollectionNew = new ArrayList<Sprint>();
-            for (Sprint sprintCollectionNewSprintToAttach : sprintCollectionNew) {
-                sprintCollectionNewSprintToAttach = em.getReference(sprintCollectionNewSprintToAttach.getClass(), sprintCollectionNewSprintToAttach.getSprintPK());
-                attachedSprintCollectionNew.add(sprintCollectionNewSprintToAttach);
+            List<Discussion> attachedDiscussionListNew = new ArrayList<Discussion>();
+            for (Discussion discussionListNewDiscussionToAttach : discussionListNew) {
+                discussionListNewDiscussionToAttach = em.getReference(discussionListNewDiscussionToAttach.getClass(), discussionListNewDiscussionToAttach.getDiscussionPK());
+                attachedDiscussionListNew.add(discussionListNewDiscussionToAttach);
             }
-            sprintCollectionNew = attachedSprintCollectionNew;
-            project.setSprintCollection(sprintCollectionNew);
-            Collection<UserStory> attachedUserStoryCollectionNew = new ArrayList<UserStory>();
-            for (UserStory userStoryCollectionNewUserStoryToAttach : userStoryCollectionNew) {
-                userStoryCollectionNewUserStoryToAttach = em.getReference(userStoryCollectionNewUserStoryToAttach.getClass(), userStoryCollectionNewUserStoryToAttach.getStoryId());
-                attachedUserStoryCollectionNew.add(userStoryCollectionNewUserStoryToAttach);
+            discussionListNew = attachedDiscussionListNew;
+            project.setDiscussionList(discussionListNew);
+            List<DailyScrumEntry> attachedDailyScrumEntryListNew = new ArrayList<DailyScrumEntry>();
+            for (DailyScrumEntry dailyScrumEntryListNewDailyScrumEntryToAttach : dailyScrumEntryListNew) {
+                dailyScrumEntryListNewDailyScrumEntryToAttach = em.getReference(dailyScrumEntryListNewDailyScrumEntryToAttach.getClass(), dailyScrumEntryListNewDailyScrumEntryToAttach.getDailyScrumEntryPK());
+                attachedDailyScrumEntryListNew.add(dailyScrumEntryListNewDailyScrumEntryToAttach);
             }
-            userStoryCollectionNew = attachedUserStoryCollectionNew;
-            project.setUserStoryCollection(userStoryCollectionNew);
-            Collection<Discussion> attachedDiscussionCollectionNew = new ArrayList<Discussion>();
-            for (Discussion discussionCollectionNewDiscussionToAttach : discussionCollectionNew) {
-                discussionCollectionNewDiscussionToAttach = em.getReference(discussionCollectionNewDiscussionToAttach.getClass(), discussionCollectionNewDiscussionToAttach.getDiscussionPK());
-                attachedDiscussionCollectionNew.add(discussionCollectionNewDiscussionToAttach);
+            dailyScrumEntryListNew = attachedDailyScrumEntryListNew;
+            project.setDailyScrumEntryList(dailyScrumEntryListNew);
+            List<Sprint> attachedSprintListNew = new ArrayList<Sprint>();
+            for (Sprint sprintListNewSprintToAttach : sprintListNew) {
+                sprintListNewSprintToAttach = em.getReference(sprintListNewSprintToAttach.getClass(), sprintListNewSprintToAttach.getSprintPK());
+                attachedSprintListNew.add(sprintListNewSprintToAttach);
             }
-            discussionCollectionNew = attachedDiscussionCollectionNew;
-            project.setDiscussionCollection(discussionCollectionNew);
-            Collection<DailyScrumEntry> attachedDailyScrumEntryCollectionNew = new ArrayList<DailyScrumEntry>();
-            for (DailyScrumEntry dailyScrumEntryCollectionNewDailyScrumEntryToAttach : dailyScrumEntryCollectionNew) {
-                dailyScrumEntryCollectionNewDailyScrumEntryToAttach = em.getReference(dailyScrumEntryCollectionNewDailyScrumEntryToAttach.getClass(), dailyScrumEntryCollectionNewDailyScrumEntryToAttach.getDailyScrumEntryPK());
-                attachedDailyScrumEntryCollectionNew.add(dailyScrumEntryCollectionNewDailyScrumEntryToAttach);
+            sprintListNew = attachedSprintListNew;
+            project.setSprintList(sprintListNew);
+            List<UserStory> attachedUserStoryListNew = new ArrayList<UserStory>();
+            for (UserStory userStoryListNewUserStoryToAttach : userStoryListNew) {
+                userStoryListNewUserStoryToAttach = em.getReference(userStoryListNewUserStoryToAttach.getClass(), userStoryListNewUserStoryToAttach.getStoryId());
+                attachedUserStoryListNew.add(userStoryListNewUserStoryToAttach);
             }
-            dailyScrumEntryCollectionNew = attachedDailyScrumEntryCollectionNew;
-            project.setDailyScrumEntryCollection(dailyScrumEntryCollectionNew);
+            userStoryListNew = attachedUserStoryListNew;
+            project.setUserStoryList(userStoryListNew);
             project = em.merge(project);
-            if (TEAMteamidOld != null && !TEAMteamidOld.equals(TEAMteamidNew)) {
-                TEAMteamidOld.getProjectCollection().remove(project);
-                TEAMteamidOld = em.merge(TEAMteamidOld);
+            if (teamTeamIdOld != null && !teamTeamIdOld.equals(teamTeamIdNew)) {
+                teamTeamIdOld.getProjectList().remove(project);
+                teamTeamIdOld = em.merge(teamTeamIdOld);
             }
-            if (TEAMteamidNew != null && !TEAMteamidNew.equals(TEAMteamidOld)) {
-                TEAMteamidNew.getProjectCollection().add(project);
-                TEAMteamidNew = em.merge(TEAMteamidNew);
+            if (teamTeamIdNew != null && !teamTeamIdNew.equals(teamTeamIdOld)) {
+                teamTeamIdNew.getProjectList().add(project);
+                teamTeamIdNew = em.merge(teamTeamIdNew);
             }
-            for (Sprint sprintCollectionNewSprint : sprintCollectionNew) {
-                if (!sprintCollectionOld.contains(sprintCollectionNewSprint)) {
-                    Project oldProjectOfSprintCollectionNewSprint = sprintCollectionNewSprint.getProject();
-                    sprintCollectionNewSprint.setProject(project);
-                    sprintCollectionNewSprint = em.merge(sprintCollectionNewSprint);
-                    if (oldProjectOfSprintCollectionNewSprint != null && !oldProjectOfSprintCollectionNewSprint.equals(project)) {
-                        oldProjectOfSprintCollectionNewSprint.getSprintCollection().remove(sprintCollectionNewSprint);
-                        oldProjectOfSprintCollectionNewSprint = em.merge(oldProjectOfSprintCollectionNewSprint);
+            for (Discussion discussionListNewDiscussion : discussionListNew) {
+                if (!discussionListOld.contains(discussionListNewDiscussion)) {
+                    Project oldProjectOfDiscussionListNewDiscussion = discussionListNewDiscussion.getProject();
+                    discussionListNewDiscussion.setProject(project);
+                    discussionListNewDiscussion = em.merge(discussionListNewDiscussion);
+                    if (oldProjectOfDiscussionListNewDiscussion != null && !oldProjectOfDiscussionListNewDiscussion.equals(project)) {
+                        oldProjectOfDiscussionListNewDiscussion.getDiscussionList().remove(discussionListNewDiscussion);
+                        oldProjectOfDiscussionListNewDiscussion = em.merge(oldProjectOfDiscussionListNewDiscussion);
                     }
                 }
             }
-            for (UserStory userStoryCollectionNewUserStory : userStoryCollectionNew) {
-                if (!userStoryCollectionOld.contains(userStoryCollectionNewUserStory)) {
-                    Project oldPROJECTprojectidOfUserStoryCollectionNewUserStory = userStoryCollectionNewUserStory.getPROJECTprojectid();
-                    userStoryCollectionNewUserStory.setPROJECTprojectid(project);
-                    userStoryCollectionNewUserStory = em.merge(userStoryCollectionNewUserStory);
-                    if (oldPROJECTprojectidOfUserStoryCollectionNewUserStory != null && !oldPROJECTprojectidOfUserStoryCollectionNewUserStory.equals(project)) {
-                        oldPROJECTprojectidOfUserStoryCollectionNewUserStory.getUserStoryCollection().remove(userStoryCollectionNewUserStory);
-                        oldPROJECTprojectidOfUserStoryCollectionNewUserStory = em.merge(oldPROJECTprojectidOfUserStoryCollectionNewUserStory);
+            for (DailyScrumEntry dailyScrumEntryListNewDailyScrumEntry : dailyScrumEntryListNew) {
+                if (!dailyScrumEntryListOld.contains(dailyScrumEntryListNewDailyScrumEntry)) {
+                    Project oldProjectOfDailyScrumEntryListNewDailyScrumEntry = dailyScrumEntryListNewDailyScrumEntry.getProject();
+                    dailyScrumEntryListNewDailyScrumEntry.setProject(project);
+                    dailyScrumEntryListNewDailyScrumEntry = em.merge(dailyScrumEntryListNewDailyScrumEntry);
+                    if (oldProjectOfDailyScrumEntryListNewDailyScrumEntry != null && !oldProjectOfDailyScrumEntryListNewDailyScrumEntry.equals(project)) {
+                        oldProjectOfDailyScrumEntryListNewDailyScrumEntry.getDailyScrumEntryList().remove(dailyScrumEntryListNewDailyScrumEntry);
+                        oldProjectOfDailyScrumEntryListNewDailyScrumEntry = em.merge(oldProjectOfDailyScrumEntryListNewDailyScrumEntry);
                     }
                 }
             }
-            for (Discussion discussionCollectionNewDiscussion : discussionCollectionNew) {
-                if (!discussionCollectionOld.contains(discussionCollectionNewDiscussion)) {
-                    Project oldProjectOfDiscussionCollectionNewDiscussion = discussionCollectionNewDiscussion.getProject();
-                    discussionCollectionNewDiscussion.setProject(project);
-                    discussionCollectionNewDiscussion = em.merge(discussionCollectionNewDiscussion);
-                    if (oldProjectOfDiscussionCollectionNewDiscussion != null && !oldProjectOfDiscussionCollectionNewDiscussion.equals(project)) {
-                        oldProjectOfDiscussionCollectionNewDiscussion.getDiscussionCollection().remove(discussionCollectionNewDiscussion);
-                        oldProjectOfDiscussionCollectionNewDiscussion = em.merge(oldProjectOfDiscussionCollectionNewDiscussion);
+            for (Sprint sprintListNewSprint : sprintListNew) {
+                if (!sprintListOld.contains(sprintListNewSprint)) {
+                    Project oldProjectOfSprintListNewSprint = sprintListNewSprint.getProject();
+                    sprintListNewSprint.setProject(project);
+                    sprintListNewSprint = em.merge(sprintListNewSprint);
+                    if (oldProjectOfSprintListNewSprint != null && !oldProjectOfSprintListNewSprint.equals(project)) {
+                        oldProjectOfSprintListNewSprint.getSprintList().remove(sprintListNewSprint);
+                        oldProjectOfSprintListNewSprint = em.merge(oldProjectOfSprintListNewSprint);
                     }
                 }
             }
-            for (DailyScrumEntry dailyScrumEntryCollectionNewDailyScrumEntry : dailyScrumEntryCollectionNew) {
-                if (!dailyScrumEntryCollectionOld.contains(dailyScrumEntryCollectionNewDailyScrumEntry)) {
-                    Project oldProjectOfDailyScrumEntryCollectionNewDailyScrumEntry = dailyScrumEntryCollectionNewDailyScrumEntry.getProject();
-                    dailyScrumEntryCollectionNewDailyScrumEntry.setProject(project);
-                    dailyScrumEntryCollectionNewDailyScrumEntry = em.merge(dailyScrumEntryCollectionNewDailyScrumEntry);
-                    if (oldProjectOfDailyScrumEntryCollectionNewDailyScrumEntry != null && !oldProjectOfDailyScrumEntryCollectionNewDailyScrumEntry.equals(project)) {
-                        oldProjectOfDailyScrumEntryCollectionNewDailyScrumEntry.getDailyScrumEntryCollection().remove(dailyScrumEntryCollectionNewDailyScrumEntry);
-                        oldProjectOfDailyScrumEntryCollectionNewDailyScrumEntry = em.merge(oldProjectOfDailyScrumEntryCollectionNewDailyScrumEntry);
+            for (UserStory userStoryListNewUserStory : userStoryListNew) {
+                if (!userStoryListOld.contains(userStoryListNewUserStory)) {
+                    Project oldProjectProjectIdOfUserStoryListNewUserStory = userStoryListNewUserStory.getProjectProjectId();
+                    userStoryListNewUserStory.setProjectProjectId(project);
+                    userStoryListNewUserStory = em.merge(userStoryListNewUserStory);
+                    if (oldProjectProjectIdOfUserStoryListNewUserStory != null && !oldProjectProjectIdOfUserStoryListNewUserStory.equals(project)) {
+                        oldProjectProjectIdOfUserStoryListNewUserStory.getUserStoryList().remove(userStoryListNewUserStory);
+                        oldProjectProjectIdOfUserStoryListNewUserStory = em.merge(oldProjectProjectIdOfUserStoryListNewUserStory);
                     }
                 }
             }
@@ -302,41 +301,41 @@ public class ProjectJpaController implements Serializable {
                 throw new NonexistentEntityException("The project with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Sprint> sprintCollectionOrphanCheck = project.getSprintCollection();
-            for (Sprint sprintCollectionOrphanCheckSprint : sprintCollectionOrphanCheck) {
+            List<Discussion> discussionListOrphanCheck = project.getDiscussionList();
+            for (Discussion discussionListOrphanCheckDiscussion : discussionListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Project (" + project + ") cannot be destroyed since the Sprint " + sprintCollectionOrphanCheckSprint + " in its sprintCollection field has a non-nullable project field.");
+                illegalOrphanMessages.add("This Project (" + project + ") cannot be destroyed since the Discussion " + discussionListOrphanCheckDiscussion + " in its discussionList field has a non-nullable project field.");
             }
-            Collection<UserStory> userStoryCollectionOrphanCheck = project.getUserStoryCollection();
-            for (UserStory userStoryCollectionOrphanCheckUserStory : userStoryCollectionOrphanCheck) {
+            List<DailyScrumEntry> dailyScrumEntryListOrphanCheck = project.getDailyScrumEntryList();
+            for (DailyScrumEntry dailyScrumEntryListOrphanCheckDailyScrumEntry : dailyScrumEntryListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Project (" + project + ") cannot be destroyed since the UserStory " + userStoryCollectionOrphanCheckUserStory + " in its userStoryCollection field has a non-nullable PROJECTprojectid field.");
+                illegalOrphanMessages.add("This Project (" + project + ") cannot be destroyed since the DailyScrumEntry " + dailyScrumEntryListOrphanCheckDailyScrumEntry + " in its dailyScrumEntryList field has a non-nullable project field.");
             }
-            Collection<Discussion> discussionCollectionOrphanCheck = project.getDiscussionCollection();
-            for (Discussion discussionCollectionOrphanCheckDiscussion : discussionCollectionOrphanCheck) {
+            List<Sprint> sprintListOrphanCheck = project.getSprintList();
+            for (Sprint sprintListOrphanCheckSprint : sprintListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Project (" + project + ") cannot be destroyed since the Discussion " + discussionCollectionOrphanCheckDiscussion + " in its discussionCollection field has a non-nullable project field.");
+                illegalOrphanMessages.add("This Project (" + project + ") cannot be destroyed since the Sprint " + sprintListOrphanCheckSprint + " in its sprintList field has a non-nullable project field.");
             }
-            Collection<DailyScrumEntry> dailyScrumEntryCollectionOrphanCheck = project.getDailyScrumEntryCollection();
-            for (DailyScrumEntry dailyScrumEntryCollectionOrphanCheckDailyScrumEntry : dailyScrumEntryCollectionOrphanCheck) {
+            List<UserStory> userStoryListOrphanCheck = project.getUserStoryList();
+            for (UserStory userStoryListOrphanCheckUserStory : userStoryListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Project (" + project + ") cannot be destroyed since the DailyScrumEntry " + dailyScrumEntryCollectionOrphanCheckDailyScrumEntry + " in its dailyScrumEntryCollection field has a non-nullable project field.");
+                illegalOrphanMessages.add("This Project (" + project + ") cannot be destroyed since the UserStory " + userStoryListOrphanCheckUserStory + " in its userStoryList field has a non-nullable projectProjectId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Team TEAMteamid = project.getTEAMteamid();
-            if (TEAMteamid != null) {
-                TEAMteamid.getProjectCollection().remove(project);
-                TEAMteamid = em.merge(TEAMteamid);
+            Team teamTeamId = project.getTeamTeamId();
+            if (teamTeamId != null) {
+                teamTeamId.getProjectList().remove(project);
+                teamTeamId = em.merge(teamTeamId);
             }
             em.remove(project);
             em.getTransaction().commit();

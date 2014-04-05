@@ -18,15 +18,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Administrator
  */
 @Entity
-@Table(name = "ACCEPTANCE_TEST")
-@XmlRootElement
+@Table(name = "acceptance_test")
 @NamedQueries({
     @NamedQuery(name = "AcceptanceTest.findAll", query = "SELECT a FROM AcceptanceTest a"),
     @NamedQuery(name = "AcceptanceTest.findByAcceptanceTestId", query = "SELECT a FROM AcceptanceTest a WHERE a.acceptanceTestId = :acceptanceTestId"),
@@ -41,9 +39,9 @@ public class AcceptanceTest implements Serializable {
     @Basic(optional = false)
     @Column(name = "content")
     private String content;
-    @JoinColumn(name = "USER_STORY_story_id", referencedColumnName = "story_id")
+    @JoinColumn(name = "user_story_story_id", referencedColumnName = "story_id")
     @ManyToOne
-    private UserStory uSERSTORYstoryid;
+    private UserStory userStoryStoryId;
 
     public AcceptanceTest() {
     }
@@ -73,12 +71,12 @@ public class AcceptanceTest implements Serializable {
         this.content = content;
     }
 
-    public UserStory getUSERSTORYstoryid() {
-        return uSERSTORYstoryid;
+    public UserStory getUserStoryStoryId() {
+        return userStoryStoryId;
     }
 
-    public void setUSERSTORYstoryid(UserStory uSERSTORYstoryid) {
-        this.uSERSTORYstoryid = uSERSTORYstoryid;
+    public void setUserStoryStoryId(UserStory userStoryStoryId) {
+        this.userStoryStoryId = userStoryStoryId;
     }
 
     @Override

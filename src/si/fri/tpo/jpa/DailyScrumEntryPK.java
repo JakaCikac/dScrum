@@ -21,19 +21,19 @@ public class DailyScrumEntryPK implements Serializable {
     @Column(name = "daily_scrum_id")
     private int dailyScrumId;
     @Basic(optional = false)
-    @Column(name = "USER_user_id")
-    private int uSERuserid;
+    @Column(name = "user_user_id")
+    private int userUserId;
     @Basic(optional = false)
-    @Column(name = "PROJECT_project_id")
-    private int pROJECTprojectid;
+    @Column(name = "project_project_id")
+    private int projectProjectId;
 
     public DailyScrumEntryPK() {
     }
 
-    public DailyScrumEntryPK(int dailyScrumId, int uSERuserid, int pROJECTprojectid) {
+    public DailyScrumEntryPK(int dailyScrumId, int userUserId, int projectProjectId) {
         this.dailyScrumId = dailyScrumId;
-        this.uSERuserid = uSERuserid;
-        this.pROJECTprojectid = pROJECTprojectid;
+        this.userUserId = userUserId;
+        this.projectProjectId = projectProjectId;
     }
 
     public int getDailyScrumId() {
@@ -44,28 +44,28 @@ public class DailyScrumEntryPK implements Serializable {
         this.dailyScrumId = dailyScrumId;
     }
 
-    public int getUSERuserid() {
-        return uSERuserid;
+    public int getUserUserId() {
+        return userUserId;
     }
 
-    public void setUSERuserid(int uSERuserid) {
-        this.uSERuserid = uSERuserid;
+    public void setUserUserId(int userUserId) {
+        this.userUserId = userUserId;
     }
 
-    public int getPROJECTprojectid() {
-        return pROJECTprojectid;
+    public int getProjectProjectId() {
+        return projectProjectId;
     }
 
-    public void setPROJECTprojectid(int pROJECTprojectid) {
-        this.pROJECTprojectid = pROJECTprojectid;
+    public void setProjectProjectId(int projectProjectId) {
+        this.projectProjectId = projectProjectId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) dailyScrumId;
-        hash += (int) uSERuserid;
-        hash += (int) pROJECTprojectid;
+        hash += (int) userUserId;
+        hash += (int) projectProjectId;
         return hash;
     }
 
@@ -79,10 +79,10 @@ public class DailyScrumEntryPK implements Serializable {
         if (this.dailyScrumId != other.dailyScrumId) {
             return false;
         }
-        if (this.uSERuserid != other.uSERuserid) {
+        if (this.userUserId != other.userUserId) {
             return false;
         }
-        if (this.pROJECTprojectid != other.pROJECTprojectid) {
+        if (this.projectProjectId != other.projectProjectId) {
             return false;
         }
         return true;
@@ -90,7 +90,7 @@ public class DailyScrumEntryPK implements Serializable {
 
     @Override
     public String toString() {
-        return "si.fri.tpo.jpa.DailyScrumEntryPK[ dailyScrumId=" + dailyScrumId + ", uSERuserid=" + uSERuserid + ", pROJECTprojectid=" + pROJECTprojectid + " ]";
+        return "si.fri.tpo.jpa.DailyScrumEntryPK[ dailyScrumId=" + dailyScrumId + ", userUserId=" + userUserId + ", projectProjectId=" + projectProjectId + " ]";
     }
     
 }

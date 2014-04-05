@@ -13,17 +13,16 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import si.fri.tpo.jpa.Team;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import si.fri.tpo.controllers.exceptions.IllegalOrphanException;
 import si.fri.tpo.controllers.exceptions.NonexistentEntityException;
+import si.fri.tpo.jpa.Workload;
 import si.fri.tpo.jpa.Discussion;
 import si.fri.tpo.jpa.Task;
-import si.fri.tpo.jpa.Comment;
-import si.fri.tpo.jpa.Workload;
 import si.fri.tpo.jpa.DailyScrumEntry;
+import si.fri.tpo.jpa.Comment;
 import si.fri.tpo.jpa.User;
 
 /**
@@ -42,112 +41,112 @@ public class UserJpaController implements Serializable {
     }
 
     public void create(User user) {
-        if (user.getTeamCollection() == null) {
-            user.setTeamCollection(new ArrayList<Team>());
+        if (user.getTeamList() == null) {
+            user.setTeamList(new ArrayList<Team>());
         }
-        if (user.getDiscussionCollection() == null) {
-            user.setDiscussionCollection(new ArrayList<Discussion>());
+        if (user.getWorkloadList() == null) {
+            user.setWorkloadList(new ArrayList<Workload>());
         }
-        if (user.getTaskCollection() == null) {
-            user.setTaskCollection(new ArrayList<Task>());
+        if (user.getDiscussionList() == null) {
+            user.setDiscussionList(new ArrayList<Discussion>());
         }
-        if (user.getCommentCollection() == null) {
-            user.setCommentCollection(new ArrayList<Comment>());
+        if (user.getTaskList() == null) {
+            user.setTaskList(new ArrayList<Task>());
         }
-        if (user.getWorkloadCollection() == null) {
-            user.setWorkloadCollection(new ArrayList<Workload>());
+        if (user.getDailyScrumEntryList() == null) {
+            user.setDailyScrumEntryList(new ArrayList<DailyScrumEntry>());
         }
-        if (user.getDailyScrumEntryCollection() == null) {
-            user.setDailyScrumEntryCollection(new ArrayList<DailyScrumEntry>());
+        if (user.getCommentList() == null) {
+            user.setCommentList(new ArrayList<Comment>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<Team> attachedTeamCollection = new ArrayList<Team>();
-            for (Team teamCollectionTeamToAttach : user.getTeamCollection()) {
-                teamCollectionTeamToAttach = em.getReference(teamCollectionTeamToAttach.getClass(), teamCollectionTeamToAttach.getTeamId());
-                attachedTeamCollection.add(teamCollectionTeamToAttach);
+            List<Team> attachedTeamList = new ArrayList<Team>();
+            for (Team teamListTeamToAttach : user.getTeamList()) {
+                teamListTeamToAttach = em.getReference(teamListTeamToAttach.getClass(), teamListTeamToAttach.getTeamId());
+                attachedTeamList.add(teamListTeamToAttach);
             }
-            user.setTeamCollection(attachedTeamCollection);
-            Collection<Discussion> attachedDiscussionCollection = new ArrayList<Discussion>();
-            for (Discussion discussionCollectionDiscussionToAttach : user.getDiscussionCollection()) {
-                discussionCollectionDiscussionToAttach = em.getReference(discussionCollectionDiscussionToAttach.getClass(), discussionCollectionDiscussionToAttach.getDiscussionPK());
-                attachedDiscussionCollection.add(discussionCollectionDiscussionToAttach);
+            user.setTeamList(attachedTeamList);
+            List<Workload> attachedWorkloadList = new ArrayList<Workload>();
+            for (Workload workloadListWorkloadToAttach : user.getWorkloadList()) {
+                workloadListWorkloadToAttach = em.getReference(workloadListWorkloadToAttach.getClass(), workloadListWorkloadToAttach.getWorkloadPK());
+                attachedWorkloadList.add(workloadListWorkloadToAttach);
             }
-            user.setDiscussionCollection(attachedDiscussionCollection);
-            Collection<Task> attachedTaskCollection = new ArrayList<Task>();
-            for (Task taskCollectionTaskToAttach : user.getTaskCollection()) {
-                taskCollectionTaskToAttach = em.getReference(taskCollectionTaskToAttach.getClass(), taskCollectionTaskToAttach.getTaskPK());
-                attachedTaskCollection.add(taskCollectionTaskToAttach);
+            user.setWorkloadList(attachedWorkloadList);
+            List<Discussion> attachedDiscussionList = new ArrayList<Discussion>();
+            for (Discussion discussionListDiscussionToAttach : user.getDiscussionList()) {
+                discussionListDiscussionToAttach = em.getReference(discussionListDiscussionToAttach.getClass(), discussionListDiscussionToAttach.getDiscussionPK());
+                attachedDiscussionList.add(discussionListDiscussionToAttach);
             }
-            user.setTaskCollection(attachedTaskCollection);
-            Collection<Comment> attachedCommentCollection = new ArrayList<Comment>();
-            for (Comment commentCollectionCommentToAttach : user.getCommentCollection()) {
-                commentCollectionCommentToAttach = em.getReference(commentCollectionCommentToAttach.getClass(), commentCollectionCommentToAttach.getCommentPK());
-                attachedCommentCollection.add(commentCollectionCommentToAttach);
+            user.setDiscussionList(attachedDiscussionList);
+            List<Task> attachedTaskList = new ArrayList<Task>();
+            for (Task taskListTaskToAttach : user.getTaskList()) {
+                taskListTaskToAttach = em.getReference(taskListTaskToAttach.getClass(), taskListTaskToAttach.getTaskPK());
+                attachedTaskList.add(taskListTaskToAttach);
             }
-            user.setCommentCollection(attachedCommentCollection);
-            Collection<Workload> attachedWorkloadCollection = new ArrayList<Workload>();
-            for (Workload workloadCollectionWorkloadToAttach : user.getWorkloadCollection()) {
-                workloadCollectionWorkloadToAttach = em.getReference(workloadCollectionWorkloadToAttach.getClass(), workloadCollectionWorkloadToAttach.getWorkloadPK());
-                attachedWorkloadCollection.add(workloadCollectionWorkloadToAttach);
+            user.setTaskList(attachedTaskList);
+            List<DailyScrumEntry> attachedDailyScrumEntryList = new ArrayList<DailyScrumEntry>();
+            for (DailyScrumEntry dailyScrumEntryListDailyScrumEntryToAttach : user.getDailyScrumEntryList()) {
+                dailyScrumEntryListDailyScrumEntryToAttach = em.getReference(dailyScrumEntryListDailyScrumEntryToAttach.getClass(), dailyScrumEntryListDailyScrumEntryToAttach.getDailyScrumEntryPK());
+                attachedDailyScrumEntryList.add(dailyScrumEntryListDailyScrumEntryToAttach);
             }
-            user.setWorkloadCollection(attachedWorkloadCollection);
-            Collection<DailyScrumEntry> attachedDailyScrumEntryCollection = new ArrayList<DailyScrumEntry>();
-            for (DailyScrumEntry dailyScrumEntryCollectionDailyScrumEntryToAttach : user.getDailyScrumEntryCollection()) {
-                dailyScrumEntryCollectionDailyScrumEntryToAttach = em.getReference(dailyScrumEntryCollectionDailyScrumEntryToAttach.getClass(), dailyScrumEntryCollectionDailyScrumEntryToAttach.getDailyScrumEntryPK());
-                attachedDailyScrumEntryCollection.add(dailyScrumEntryCollectionDailyScrumEntryToAttach);
+            user.setDailyScrumEntryList(attachedDailyScrumEntryList);
+            List<Comment> attachedCommentList = new ArrayList<Comment>();
+            for (Comment commentListCommentToAttach : user.getCommentList()) {
+                commentListCommentToAttach = em.getReference(commentListCommentToAttach.getClass(), commentListCommentToAttach.getCommentPK());
+                attachedCommentList.add(commentListCommentToAttach);
             }
-            user.setDailyScrumEntryCollection(attachedDailyScrumEntryCollection);
+            user.setCommentList(attachedCommentList);
             em.persist(user);
-            for (Team teamCollectionTeam : user.getTeamCollection()) {
-                teamCollectionTeam.getUserCollection().add(user);
-                teamCollectionTeam = em.merge(teamCollectionTeam);
+            for (Team teamListTeam : user.getTeamList()) {
+                teamListTeam.getUserList().add(user);
+                teamListTeam = em.merge(teamListTeam);
             }
-            for (Discussion discussionCollectionDiscussion : user.getDiscussionCollection()) {
-                User oldUserOfDiscussionCollectionDiscussion = discussionCollectionDiscussion.getUser();
-                discussionCollectionDiscussion.setUser(user);
-                discussionCollectionDiscussion = em.merge(discussionCollectionDiscussion);
-                if (oldUserOfDiscussionCollectionDiscussion != null) {
-                    oldUserOfDiscussionCollectionDiscussion.getDiscussionCollection().remove(discussionCollectionDiscussion);
-                    oldUserOfDiscussionCollectionDiscussion = em.merge(oldUserOfDiscussionCollectionDiscussion);
+            for (Workload workloadListWorkload : user.getWorkloadList()) {
+                User oldUserOfWorkloadListWorkload = workloadListWorkload.getUser();
+                workloadListWorkload.setUser(user);
+                workloadListWorkload = em.merge(workloadListWorkload);
+                if (oldUserOfWorkloadListWorkload != null) {
+                    oldUserOfWorkloadListWorkload.getWorkloadList().remove(workloadListWorkload);
+                    oldUserOfWorkloadListWorkload = em.merge(oldUserOfWorkloadListWorkload);
                 }
             }
-            for (Task taskCollectionTask : user.getTaskCollection()) {
-                User oldUSERuseridOfTaskCollectionTask = taskCollectionTask.getUSERuserid();
-                taskCollectionTask.setUSERuserid(user);
-                taskCollectionTask = em.merge(taskCollectionTask);
-                if (oldUSERuseridOfTaskCollectionTask != null) {
-                    oldUSERuseridOfTaskCollectionTask.getTaskCollection().remove(taskCollectionTask);
-                    oldUSERuseridOfTaskCollectionTask = em.merge(oldUSERuseridOfTaskCollectionTask);
+            for (Discussion discussionListDiscussion : user.getDiscussionList()) {
+                User oldUserOfDiscussionListDiscussion = discussionListDiscussion.getUser();
+                discussionListDiscussion.setUser(user);
+                discussionListDiscussion = em.merge(discussionListDiscussion);
+                if (oldUserOfDiscussionListDiscussion != null) {
+                    oldUserOfDiscussionListDiscussion.getDiscussionList().remove(discussionListDiscussion);
+                    oldUserOfDiscussionListDiscussion = em.merge(oldUserOfDiscussionListDiscussion);
                 }
             }
-            for (Comment commentCollectionComment : user.getCommentCollection()) {
-                User oldUserOfCommentCollectionComment = commentCollectionComment.getUser();
-                commentCollectionComment.setUser(user);
-                commentCollectionComment = em.merge(commentCollectionComment);
-                if (oldUserOfCommentCollectionComment != null) {
-                    oldUserOfCommentCollectionComment.getCommentCollection().remove(commentCollectionComment);
-                    oldUserOfCommentCollectionComment = em.merge(oldUserOfCommentCollectionComment);
+            for (Task taskListTask : user.getTaskList()) {
+                User oldUserUserIdOfTaskListTask = taskListTask.getUserUserId();
+                taskListTask.setUserUserId(user);
+                taskListTask = em.merge(taskListTask);
+                if (oldUserUserIdOfTaskListTask != null) {
+                    oldUserUserIdOfTaskListTask.getTaskList().remove(taskListTask);
+                    oldUserUserIdOfTaskListTask = em.merge(oldUserUserIdOfTaskListTask);
                 }
             }
-            for (Workload workloadCollectionWorkload : user.getWorkloadCollection()) {
-                User oldUserOfWorkloadCollectionWorkload = workloadCollectionWorkload.getUser();
-                workloadCollectionWorkload.setUser(user);
-                workloadCollectionWorkload = em.merge(workloadCollectionWorkload);
-                if (oldUserOfWorkloadCollectionWorkload != null) {
-                    oldUserOfWorkloadCollectionWorkload.getWorkloadCollection().remove(workloadCollectionWorkload);
-                    oldUserOfWorkloadCollectionWorkload = em.merge(oldUserOfWorkloadCollectionWorkload);
+            for (DailyScrumEntry dailyScrumEntryListDailyScrumEntry : user.getDailyScrumEntryList()) {
+                User oldUserOfDailyScrumEntryListDailyScrumEntry = dailyScrumEntryListDailyScrumEntry.getUser();
+                dailyScrumEntryListDailyScrumEntry.setUser(user);
+                dailyScrumEntryListDailyScrumEntry = em.merge(dailyScrumEntryListDailyScrumEntry);
+                if (oldUserOfDailyScrumEntryListDailyScrumEntry != null) {
+                    oldUserOfDailyScrumEntryListDailyScrumEntry.getDailyScrumEntryList().remove(dailyScrumEntryListDailyScrumEntry);
+                    oldUserOfDailyScrumEntryListDailyScrumEntry = em.merge(oldUserOfDailyScrumEntryListDailyScrumEntry);
                 }
             }
-            for (DailyScrumEntry dailyScrumEntryCollectionDailyScrumEntry : user.getDailyScrumEntryCollection()) {
-                User oldUserOfDailyScrumEntryCollectionDailyScrumEntry = dailyScrumEntryCollectionDailyScrumEntry.getUser();
-                dailyScrumEntryCollectionDailyScrumEntry.setUser(user);
-                dailyScrumEntryCollectionDailyScrumEntry = em.merge(dailyScrumEntryCollectionDailyScrumEntry);
-                if (oldUserOfDailyScrumEntryCollectionDailyScrumEntry != null) {
-                    oldUserOfDailyScrumEntryCollectionDailyScrumEntry.getDailyScrumEntryCollection().remove(dailyScrumEntryCollectionDailyScrumEntry);
-                    oldUserOfDailyScrumEntryCollectionDailyScrumEntry = em.merge(oldUserOfDailyScrumEntryCollectionDailyScrumEntry);
+            for (Comment commentListComment : user.getCommentList()) {
+                User oldUserOfCommentListComment = commentListComment.getUser();
+                commentListComment.setUser(user);
+                commentListComment = em.merge(commentListComment);
+                if (oldUserOfCommentListComment != null) {
+                    oldUserOfCommentListComment.getCommentList().remove(commentListComment);
+                    oldUserOfCommentListComment = em.merge(oldUserOfCommentListComment);
                 }
             }
             em.getTransaction().commit();
@@ -164,167 +163,167 @@ public class UserJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             User persistentUser = em.find(User.class, user.getUserId());
-            Collection<Team> teamCollectionOld = persistentUser.getTeamCollection();
-            Collection<Team> teamCollectionNew = user.getTeamCollection();
-            Collection<Discussion> discussionCollectionOld = persistentUser.getDiscussionCollection();
-            Collection<Discussion> discussionCollectionNew = user.getDiscussionCollection();
-            Collection<Task> taskCollectionOld = persistentUser.getTaskCollection();
-            Collection<Task> taskCollectionNew = user.getTaskCollection();
-            Collection<Comment> commentCollectionOld = persistentUser.getCommentCollection();
-            Collection<Comment> commentCollectionNew = user.getCommentCollection();
-            Collection<Workload> workloadCollectionOld = persistentUser.getWorkloadCollection();
-            Collection<Workload> workloadCollectionNew = user.getWorkloadCollection();
-            Collection<DailyScrumEntry> dailyScrumEntryCollectionOld = persistentUser.getDailyScrumEntryCollection();
-            Collection<DailyScrumEntry> dailyScrumEntryCollectionNew = user.getDailyScrumEntryCollection();
+            List<Team> teamListOld = persistentUser.getTeamList();
+            List<Team> teamListNew = user.getTeamList();
+            List<Workload> workloadListOld = persistentUser.getWorkloadList();
+            List<Workload> workloadListNew = user.getWorkloadList();
+            List<Discussion> discussionListOld = persistentUser.getDiscussionList();
+            List<Discussion> discussionListNew = user.getDiscussionList();
+            List<Task> taskListOld = persistentUser.getTaskList();
+            List<Task> taskListNew = user.getTaskList();
+            List<DailyScrumEntry> dailyScrumEntryListOld = persistentUser.getDailyScrumEntryList();
+            List<DailyScrumEntry> dailyScrumEntryListNew = user.getDailyScrumEntryList();
+            List<Comment> commentListOld = persistentUser.getCommentList();
+            List<Comment> commentListNew = user.getCommentList();
             List<String> illegalOrphanMessages = null;
-            for (Discussion discussionCollectionOldDiscussion : discussionCollectionOld) {
-                if (!discussionCollectionNew.contains(discussionCollectionOldDiscussion)) {
+            for (Workload workloadListOldWorkload : workloadListOld) {
+                if (!workloadListNew.contains(workloadListOldWorkload)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Discussion " + discussionCollectionOldDiscussion + " since its user field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Workload " + workloadListOldWorkload + " since its user field is not nullable.");
                 }
             }
-            for (Comment commentCollectionOldComment : commentCollectionOld) {
-                if (!commentCollectionNew.contains(commentCollectionOldComment)) {
+            for (Discussion discussionListOldDiscussion : discussionListOld) {
+                if (!discussionListNew.contains(discussionListOldDiscussion)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Comment " + commentCollectionOldComment + " since its user field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Discussion " + discussionListOldDiscussion + " since its user field is not nullable.");
                 }
             }
-            for (Workload workloadCollectionOldWorkload : workloadCollectionOld) {
-                if (!workloadCollectionNew.contains(workloadCollectionOldWorkload)) {
+            for (DailyScrumEntry dailyScrumEntryListOldDailyScrumEntry : dailyScrumEntryListOld) {
+                if (!dailyScrumEntryListNew.contains(dailyScrumEntryListOldDailyScrumEntry)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Workload " + workloadCollectionOldWorkload + " since its user field is not nullable.");
+                    illegalOrphanMessages.add("You must retain DailyScrumEntry " + dailyScrumEntryListOldDailyScrumEntry + " since its user field is not nullable.");
                 }
             }
-            for (DailyScrumEntry dailyScrumEntryCollectionOldDailyScrumEntry : dailyScrumEntryCollectionOld) {
-                if (!dailyScrumEntryCollectionNew.contains(dailyScrumEntryCollectionOldDailyScrumEntry)) {
+            for (Comment commentListOldComment : commentListOld) {
+                if (!commentListNew.contains(commentListOldComment)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain DailyScrumEntry " + dailyScrumEntryCollectionOldDailyScrumEntry + " since its user field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Comment " + commentListOldComment + " since its user field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Team> attachedTeamCollectionNew = new ArrayList<Team>();
-            for (Team teamCollectionNewTeamToAttach : teamCollectionNew) {
-                teamCollectionNewTeamToAttach = em.getReference(teamCollectionNewTeamToAttach.getClass(), teamCollectionNewTeamToAttach.getTeamId());
-                attachedTeamCollectionNew.add(teamCollectionNewTeamToAttach);
+            List<Team> attachedTeamListNew = new ArrayList<Team>();
+            for (Team teamListNewTeamToAttach : teamListNew) {
+                teamListNewTeamToAttach = em.getReference(teamListNewTeamToAttach.getClass(), teamListNewTeamToAttach.getTeamId());
+                attachedTeamListNew.add(teamListNewTeamToAttach);
             }
-            teamCollectionNew = attachedTeamCollectionNew;
-            user.setTeamCollection(teamCollectionNew);
-            Collection<Discussion> attachedDiscussionCollectionNew = new ArrayList<Discussion>();
-            for (Discussion discussionCollectionNewDiscussionToAttach : discussionCollectionNew) {
-                discussionCollectionNewDiscussionToAttach = em.getReference(discussionCollectionNewDiscussionToAttach.getClass(), discussionCollectionNewDiscussionToAttach.getDiscussionPK());
-                attachedDiscussionCollectionNew.add(discussionCollectionNewDiscussionToAttach);
+            teamListNew = attachedTeamListNew;
+            user.setTeamList(teamListNew);
+            List<Workload> attachedWorkloadListNew = new ArrayList<Workload>();
+            for (Workload workloadListNewWorkloadToAttach : workloadListNew) {
+                workloadListNewWorkloadToAttach = em.getReference(workloadListNewWorkloadToAttach.getClass(), workloadListNewWorkloadToAttach.getWorkloadPK());
+                attachedWorkloadListNew.add(workloadListNewWorkloadToAttach);
             }
-            discussionCollectionNew = attachedDiscussionCollectionNew;
-            user.setDiscussionCollection(discussionCollectionNew);
-            Collection<Task> attachedTaskCollectionNew = new ArrayList<Task>();
-            for (Task taskCollectionNewTaskToAttach : taskCollectionNew) {
-                taskCollectionNewTaskToAttach = em.getReference(taskCollectionNewTaskToAttach.getClass(), taskCollectionNewTaskToAttach.getTaskPK());
-                attachedTaskCollectionNew.add(taskCollectionNewTaskToAttach);
+            workloadListNew = attachedWorkloadListNew;
+            user.setWorkloadList(workloadListNew);
+            List<Discussion> attachedDiscussionListNew = new ArrayList<Discussion>();
+            for (Discussion discussionListNewDiscussionToAttach : discussionListNew) {
+                discussionListNewDiscussionToAttach = em.getReference(discussionListNewDiscussionToAttach.getClass(), discussionListNewDiscussionToAttach.getDiscussionPK());
+                attachedDiscussionListNew.add(discussionListNewDiscussionToAttach);
             }
-            taskCollectionNew = attachedTaskCollectionNew;
-            user.setTaskCollection(taskCollectionNew);
-            Collection<Comment> attachedCommentCollectionNew = new ArrayList<Comment>();
-            for (Comment commentCollectionNewCommentToAttach : commentCollectionNew) {
-                commentCollectionNewCommentToAttach = em.getReference(commentCollectionNewCommentToAttach.getClass(), commentCollectionNewCommentToAttach.getCommentPK());
-                attachedCommentCollectionNew.add(commentCollectionNewCommentToAttach);
+            discussionListNew = attachedDiscussionListNew;
+            user.setDiscussionList(discussionListNew);
+            List<Task> attachedTaskListNew = new ArrayList<Task>();
+            for (Task taskListNewTaskToAttach : taskListNew) {
+                taskListNewTaskToAttach = em.getReference(taskListNewTaskToAttach.getClass(), taskListNewTaskToAttach.getTaskPK());
+                attachedTaskListNew.add(taskListNewTaskToAttach);
             }
-            commentCollectionNew = attachedCommentCollectionNew;
-            user.setCommentCollection(commentCollectionNew);
-            Collection<Workload> attachedWorkloadCollectionNew = new ArrayList<Workload>();
-            for (Workload workloadCollectionNewWorkloadToAttach : workloadCollectionNew) {
-                workloadCollectionNewWorkloadToAttach = em.getReference(workloadCollectionNewWorkloadToAttach.getClass(), workloadCollectionNewWorkloadToAttach.getWorkloadPK());
-                attachedWorkloadCollectionNew.add(workloadCollectionNewWorkloadToAttach);
+            taskListNew = attachedTaskListNew;
+            user.setTaskList(taskListNew);
+            List<DailyScrumEntry> attachedDailyScrumEntryListNew = new ArrayList<DailyScrumEntry>();
+            for (DailyScrumEntry dailyScrumEntryListNewDailyScrumEntryToAttach : dailyScrumEntryListNew) {
+                dailyScrumEntryListNewDailyScrumEntryToAttach = em.getReference(dailyScrumEntryListNewDailyScrumEntryToAttach.getClass(), dailyScrumEntryListNewDailyScrumEntryToAttach.getDailyScrumEntryPK());
+                attachedDailyScrumEntryListNew.add(dailyScrumEntryListNewDailyScrumEntryToAttach);
             }
-            workloadCollectionNew = attachedWorkloadCollectionNew;
-            user.setWorkloadCollection(workloadCollectionNew);
-            Collection<DailyScrumEntry> attachedDailyScrumEntryCollectionNew = new ArrayList<DailyScrumEntry>();
-            for (DailyScrumEntry dailyScrumEntryCollectionNewDailyScrumEntryToAttach : dailyScrumEntryCollectionNew) {
-                dailyScrumEntryCollectionNewDailyScrumEntryToAttach = em.getReference(dailyScrumEntryCollectionNewDailyScrumEntryToAttach.getClass(), dailyScrumEntryCollectionNewDailyScrumEntryToAttach.getDailyScrumEntryPK());
-                attachedDailyScrumEntryCollectionNew.add(dailyScrumEntryCollectionNewDailyScrumEntryToAttach);
+            dailyScrumEntryListNew = attachedDailyScrumEntryListNew;
+            user.setDailyScrumEntryList(dailyScrumEntryListNew);
+            List<Comment> attachedCommentListNew = new ArrayList<Comment>();
+            for (Comment commentListNewCommentToAttach : commentListNew) {
+                commentListNewCommentToAttach = em.getReference(commentListNewCommentToAttach.getClass(), commentListNewCommentToAttach.getCommentPK());
+                attachedCommentListNew.add(commentListNewCommentToAttach);
             }
-            dailyScrumEntryCollectionNew = attachedDailyScrumEntryCollectionNew;
-            user.setDailyScrumEntryCollection(dailyScrumEntryCollectionNew);
+            commentListNew = attachedCommentListNew;
+            user.setCommentList(commentListNew);
             user = em.merge(user);
-            for (Team teamCollectionOldTeam : teamCollectionOld) {
-                if (!teamCollectionNew.contains(teamCollectionOldTeam)) {
-                    teamCollectionOldTeam.getUserCollection().remove(user);
-                    teamCollectionOldTeam = em.merge(teamCollectionOldTeam);
+            for (Team teamListOldTeam : teamListOld) {
+                if (!teamListNew.contains(teamListOldTeam)) {
+                    teamListOldTeam.getUserList().remove(user);
+                    teamListOldTeam = em.merge(teamListOldTeam);
                 }
             }
-            for (Team teamCollectionNewTeam : teamCollectionNew) {
-                if (!teamCollectionOld.contains(teamCollectionNewTeam)) {
-                    teamCollectionNewTeam.getUserCollection().add(user);
-                    teamCollectionNewTeam = em.merge(teamCollectionNewTeam);
+            for (Team teamListNewTeam : teamListNew) {
+                if (!teamListOld.contains(teamListNewTeam)) {
+                    teamListNewTeam.getUserList().add(user);
+                    teamListNewTeam = em.merge(teamListNewTeam);
                 }
             }
-            for (Discussion discussionCollectionNewDiscussion : discussionCollectionNew) {
-                if (!discussionCollectionOld.contains(discussionCollectionNewDiscussion)) {
-                    User oldUserOfDiscussionCollectionNewDiscussion = discussionCollectionNewDiscussion.getUser();
-                    discussionCollectionNewDiscussion.setUser(user);
-                    discussionCollectionNewDiscussion = em.merge(discussionCollectionNewDiscussion);
-                    if (oldUserOfDiscussionCollectionNewDiscussion != null && !oldUserOfDiscussionCollectionNewDiscussion.equals(user)) {
-                        oldUserOfDiscussionCollectionNewDiscussion.getDiscussionCollection().remove(discussionCollectionNewDiscussion);
-                        oldUserOfDiscussionCollectionNewDiscussion = em.merge(oldUserOfDiscussionCollectionNewDiscussion);
+            for (Workload workloadListNewWorkload : workloadListNew) {
+                if (!workloadListOld.contains(workloadListNewWorkload)) {
+                    User oldUserOfWorkloadListNewWorkload = workloadListNewWorkload.getUser();
+                    workloadListNewWorkload.setUser(user);
+                    workloadListNewWorkload = em.merge(workloadListNewWorkload);
+                    if (oldUserOfWorkloadListNewWorkload != null && !oldUserOfWorkloadListNewWorkload.equals(user)) {
+                        oldUserOfWorkloadListNewWorkload.getWorkloadList().remove(workloadListNewWorkload);
+                        oldUserOfWorkloadListNewWorkload = em.merge(oldUserOfWorkloadListNewWorkload);
                     }
                 }
             }
-            for (Task taskCollectionOldTask : taskCollectionOld) {
-                if (!taskCollectionNew.contains(taskCollectionOldTask)) {
-                    taskCollectionOldTask.setUSERuserid(null);
-                    taskCollectionOldTask = em.merge(taskCollectionOldTask);
-                }
-            }
-            for (Task taskCollectionNewTask : taskCollectionNew) {
-                if (!taskCollectionOld.contains(taskCollectionNewTask)) {
-                    User oldUSERuseridOfTaskCollectionNewTask = taskCollectionNewTask.getUSERuserid();
-                    taskCollectionNewTask.setUSERuserid(user);
-                    taskCollectionNewTask = em.merge(taskCollectionNewTask);
-                    if (oldUSERuseridOfTaskCollectionNewTask != null && !oldUSERuseridOfTaskCollectionNewTask.equals(user)) {
-                        oldUSERuseridOfTaskCollectionNewTask.getTaskCollection().remove(taskCollectionNewTask);
-                        oldUSERuseridOfTaskCollectionNewTask = em.merge(oldUSERuseridOfTaskCollectionNewTask);
+            for (Discussion discussionListNewDiscussion : discussionListNew) {
+                if (!discussionListOld.contains(discussionListNewDiscussion)) {
+                    User oldUserOfDiscussionListNewDiscussion = discussionListNewDiscussion.getUser();
+                    discussionListNewDiscussion.setUser(user);
+                    discussionListNewDiscussion = em.merge(discussionListNewDiscussion);
+                    if (oldUserOfDiscussionListNewDiscussion != null && !oldUserOfDiscussionListNewDiscussion.equals(user)) {
+                        oldUserOfDiscussionListNewDiscussion.getDiscussionList().remove(discussionListNewDiscussion);
+                        oldUserOfDiscussionListNewDiscussion = em.merge(oldUserOfDiscussionListNewDiscussion);
                     }
                 }
             }
-            for (Comment commentCollectionNewComment : commentCollectionNew) {
-                if (!commentCollectionOld.contains(commentCollectionNewComment)) {
-                    User oldUserOfCommentCollectionNewComment = commentCollectionNewComment.getUser();
-                    commentCollectionNewComment.setUser(user);
-                    commentCollectionNewComment = em.merge(commentCollectionNewComment);
-                    if (oldUserOfCommentCollectionNewComment != null && !oldUserOfCommentCollectionNewComment.equals(user)) {
-                        oldUserOfCommentCollectionNewComment.getCommentCollection().remove(commentCollectionNewComment);
-                        oldUserOfCommentCollectionNewComment = em.merge(oldUserOfCommentCollectionNewComment);
+            for (Task taskListOldTask : taskListOld) {
+                if (!taskListNew.contains(taskListOldTask)) {
+                    taskListOldTask.setUserUserId(null);
+                    taskListOldTask = em.merge(taskListOldTask);
+                }
+            }
+            for (Task taskListNewTask : taskListNew) {
+                if (!taskListOld.contains(taskListNewTask)) {
+                    User oldUserUserIdOfTaskListNewTask = taskListNewTask.getUserUserId();
+                    taskListNewTask.setUserUserId(user);
+                    taskListNewTask = em.merge(taskListNewTask);
+                    if (oldUserUserIdOfTaskListNewTask != null && !oldUserUserIdOfTaskListNewTask.equals(user)) {
+                        oldUserUserIdOfTaskListNewTask.getTaskList().remove(taskListNewTask);
+                        oldUserUserIdOfTaskListNewTask = em.merge(oldUserUserIdOfTaskListNewTask);
                     }
                 }
             }
-            for (Workload workloadCollectionNewWorkload : workloadCollectionNew) {
-                if (!workloadCollectionOld.contains(workloadCollectionNewWorkload)) {
-                    User oldUserOfWorkloadCollectionNewWorkload = workloadCollectionNewWorkload.getUser();
-                    workloadCollectionNewWorkload.setUser(user);
-                    workloadCollectionNewWorkload = em.merge(workloadCollectionNewWorkload);
-                    if (oldUserOfWorkloadCollectionNewWorkload != null && !oldUserOfWorkloadCollectionNewWorkload.equals(user)) {
-                        oldUserOfWorkloadCollectionNewWorkload.getWorkloadCollection().remove(workloadCollectionNewWorkload);
-                        oldUserOfWorkloadCollectionNewWorkload = em.merge(oldUserOfWorkloadCollectionNewWorkload);
+            for (DailyScrumEntry dailyScrumEntryListNewDailyScrumEntry : dailyScrumEntryListNew) {
+                if (!dailyScrumEntryListOld.contains(dailyScrumEntryListNewDailyScrumEntry)) {
+                    User oldUserOfDailyScrumEntryListNewDailyScrumEntry = dailyScrumEntryListNewDailyScrumEntry.getUser();
+                    dailyScrumEntryListNewDailyScrumEntry.setUser(user);
+                    dailyScrumEntryListNewDailyScrumEntry = em.merge(dailyScrumEntryListNewDailyScrumEntry);
+                    if (oldUserOfDailyScrumEntryListNewDailyScrumEntry != null && !oldUserOfDailyScrumEntryListNewDailyScrumEntry.equals(user)) {
+                        oldUserOfDailyScrumEntryListNewDailyScrumEntry.getDailyScrumEntryList().remove(dailyScrumEntryListNewDailyScrumEntry);
+                        oldUserOfDailyScrumEntryListNewDailyScrumEntry = em.merge(oldUserOfDailyScrumEntryListNewDailyScrumEntry);
                     }
                 }
             }
-            for (DailyScrumEntry dailyScrumEntryCollectionNewDailyScrumEntry : dailyScrumEntryCollectionNew) {
-                if (!dailyScrumEntryCollectionOld.contains(dailyScrumEntryCollectionNewDailyScrumEntry)) {
-                    User oldUserOfDailyScrumEntryCollectionNewDailyScrumEntry = dailyScrumEntryCollectionNewDailyScrumEntry.getUser();
-                    dailyScrumEntryCollectionNewDailyScrumEntry.setUser(user);
-                    dailyScrumEntryCollectionNewDailyScrumEntry = em.merge(dailyScrumEntryCollectionNewDailyScrumEntry);
-                    if (oldUserOfDailyScrumEntryCollectionNewDailyScrumEntry != null && !oldUserOfDailyScrumEntryCollectionNewDailyScrumEntry.equals(user)) {
-                        oldUserOfDailyScrumEntryCollectionNewDailyScrumEntry.getDailyScrumEntryCollection().remove(dailyScrumEntryCollectionNewDailyScrumEntry);
-                        oldUserOfDailyScrumEntryCollectionNewDailyScrumEntry = em.merge(oldUserOfDailyScrumEntryCollectionNewDailyScrumEntry);
+            for (Comment commentListNewComment : commentListNew) {
+                if (!commentListOld.contains(commentListNewComment)) {
+                    User oldUserOfCommentListNewComment = commentListNewComment.getUser();
+                    commentListNewComment.setUser(user);
+                    commentListNewComment = em.merge(commentListNewComment);
+                    if (oldUserOfCommentListNewComment != null && !oldUserOfCommentListNewComment.equals(user)) {
+                        oldUserOfCommentListNewComment.getCommentList().remove(commentListNewComment);
+                        oldUserOfCommentListNewComment = em.merge(oldUserOfCommentListNewComment);
                     }
                 }
             }
@@ -358,46 +357,46 @@ public class UserJpaController implements Serializable {
                 throw new NonexistentEntityException("The user with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Discussion> discussionCollectionOrphanCheck = user.getDiscussionCollection();
-            for (Discussion discussionCollectionOrphanCheckDiscussion : discussionCollectionOrphanCheck) {
+            List<Workload> workloadListOrphanCheck = user.getWorkloadList();
+            for (Workload workloadListOrphanCheckWorkload : workloadListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Discussion " + discussionCollectionOrphanCheckDiscussion + " in its discussionCollection field has a non-nullable user field.");
+                illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Workload " + workloadListOrphanCheckWorkload + " in its workloadList field has a non-nullable user field.");
             }
-            Collection<Comment> commentCollectionOrphanCheck = user.getCommentCollection();
-            for (Comment commentCollectionOrphanCheckComment : commentCollectionOrphanCheck) {
+            List<Discussion> discussionListOrphanCheck = user.getDiscussionList();
+            for (Discussion discussionListOrphanCheckDiscussion : discussionListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Comment " + commentCollectionOrphanCheckComment + " in its commentCollection field has a non-nullable user field.");
+                illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Discussion " + discussionListOrphanCheckDiscussion + " in its discussionList field has a non-nullable user field.");
             }
-            Collection<Workload> workloadCollectionOrphanCheck = user.getWorkloadCollection();
-            for (Workload workloadCollectionOrphanCheckWorkload : workloadCollectionOrphanCheck) {
+            List<DailyScrumEntry> dailyScrumEntryListOrphanCheck = user.getDailyScrumEntryList();
+            for (DailyScrumEntry dailyScrumEntryListOrphanCheckDailyScrumEntry : dailyScrumEntryListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Workload " + workloadCollectionOrphanCheckWorkload + " in its workloadCollection field has a non-nullable user field.");
+                illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the DailyScrumEntry " + dailyScrumEntryListOrphanCheckDailyScrumEntry + " in its dailyScrumEntryList field has a non-nullable user field.");
             }
-            Collection<DailyScrumEntry> dailyScrumEntryCollectionOrphanCheck = user.getDailyScrumEntryCollection();
-            for (DailyScrumEntry dailyScrumEntryCollectionOrphanCheckDailyScrumEntry : dailyScrumEntryCollectionOrphanCheck) {
+            List<Comment> commentListOrphanCheck = user.getCommentList();
+            for (Comment commentListOrphanCheckComment : commentListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the DailyScrumEntry " + dailyScrumEntryCollectionOrphanCheckDailyScrumEntry + " in its dailyScrumEntryCollection field has a non-nullable user field.");
+                illegalOrphanMessages.add("This User (" + user + ") cannot be destroyed since the Comment " + commentListOrphanCheckComment + " in its commentList field has a non-nullable user field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<Team> teamCollection = user.getTeamCollection();
-            for (Team teamCollectionTeam : teamCollection) {
-                teamCollectionTeam.getUserCollection().remove(user);
-                teamCollectionTeam = em.merge(teamCollectionTeam);
+            List<Team> teamList = user.getTeamList();
+            for (Team teamListTeam : teamList) {
+                teamListTeam.getUserList().remove(user);
+                teamListTeam = em.merge(teamListTeam);
             }
-            Collection<Task> taskCollection = user.getTaskCollection();
-            for (Task taskCollectionTask : taskCollection) {
-                taskCollectionTask.setUSERuserid(null);
-                taskCollectionTask = em.merge(taskCollectionTask);
+            List<Task> taskList = user.getTaskList();
+            for (Task taskListTask : taskList) {
+                taskListTask.setUserUserId(null);
+                taskListTask = em.merge(taskListTask);
             }
             em.remove(user);
             em.getTransaction().commit();

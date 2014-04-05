@@ -21,19 +21,19 @@ public class DiscussionPK implements Serializable {
     @Column(name = "discussion_id")
     private int discussionId;
     @Basic(optional = false)
-    @Column(name = "USER_user_id")
-    private int uSERuserid;
+    @Column(name = "user_user_id")
+    private int userUserId;
     @Basic(optional = false)
-    @Column(name = "PROJECT_project_id")
-    private int pROJECTprojectid;
+    @Column(name = "project_project_id")
+    private int projectProjectId;
 
     public DiscussionPK() {
     }
 
-    public DiscussionPK(int discussionId, int uSERuserid, int pROJECTprojectid) {
+    public DiscussionPK(int discussionId, int userUserId, int projectProjectId) {
         this.discussionId = discussionId;
-        this.uSERuserid = uSERuserid;
-        this.pROJECTprojectid = pROJECTprojectid;
+        this.userUserId = userUserId;
+        this.projectProjectId = projectProjectId;
     }
 
     public int getDiscussionId() {
@@ -44,28 +44,28 @@ public class DiscussionPK implements Serializable {
         this.discussionId = discussionId;
     }
 
-    public int getUSERuserid() {
-        return uSERuserid;
+    public int getUserUserId() {
+        return userUserId;
     }
 
-    public void setUSERuserid(int uSERuserid) {
-        this.uSERuserid = uSERuserid;
+    public void setUserUserId(int userUserId) {
+        this.userUserId = userUserId;
     }
 
-    public int getPROJECTprojectid() {
-        return pROJECTprojectid;
+    public int getProjectProjectId() {
+        return projectProjectId;
     }
 
-    public void setPROJECTprojectid(int pROJECTprojectid) {
-        this.pROJECTprojectid = pROJECTprojectid;
+    public void setProjectProjectId(int projectProjectId) {
+        this.projectProjectId = projectProjectId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) discussionId;
-        hash += (int) uSERuserid;
-        hash += (int) pROJECTprojectid;
+        hash += (int) userUserId;
+        hash += (int) projectProjectId;
         return hash;
     }
 
@@ -79,10 +79,10 @@ public class DiscussionPK implements Serializable {
         if (this.discussionId != other.discussionId) {
             return false;
         }
-        if (this.uSERuserid != other.uSERuserid) {
+        if (this.userUserId != other.userUserId) {
             return false;
         }
-        if (this.pROJECTprojectid != other.pROJECTprojectid) {
+        if (this.projectProjectId != other.projectProjectId) {
             return false;
         }
         return true;
@@ -90,7 +90,7 @@ public class DiscussionPK implements Serializable {
 
     @Override
     public String toString() {
-        return "si.fri.tpo.jpa.DiscussionPK[ discussionId=" + discussionId + ", uSERuserid=" + uSERuserid + ", pROJECTprojectid=" + pROJECTprojectid + " ]";
+        return "si.fri.tpo.jpa.DiscussionPK[ discussionId=" + discussionId + ", userUserId=" + userUserId + ", projectProjectId=" + projectProjectId + " ]";
     }
     
 }

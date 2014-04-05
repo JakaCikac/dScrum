@@ -7,7 +7,7 @@
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,16 +21,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Administrator
  */
 @Entity
-@Table(name = "PROJECT")
-@XmlRootElement
+@Table(name = "project")
 @NamedQueries({
     @NamedQuery(name = "Project.findAll", query = "SELECT p FROM Project p"),
     @NamedQuery(name = "Project.findByProjectId", query = "SELECT p FROM Project p WHERE p.projectId = :projectId"),
@@ -50,17 +47,17 @@ public class Project implements Serializable {
     private String description;
     @Column(name = "status")
     private String status;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
-    private Collection<Sprint> sprintCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pROJECTprojectid")
-    private Collection<UserStory> userStoryCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
-    private Collection<Discussion> discussionCollection;
-    @JoinColumn(name = "TEAM_team_id", referencedColumnName = "team_id")
+    @JoinColumn(name = "team_team_id", referencedColumnName = "team_id")
     @ManyToOne
-    private Team tEAMteamid;
+    private Team teamTeamId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
-    private Collection<DailyScrumEntry> dailyScrumEntryCollection;
+    private List<Discussion> discussionList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
+    private List<DailyScrumEntry> dailyScrumEntryList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
+    private List<Sprint> sprintList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projectProjectId")
+    private List<UserStory> userStoryList;
 
     public Project() {
     }
@@ -101,48 +98,44 @@ public class Project implements Serializable {
         this.status = status;
     }
 
-    @XmlTransient
-    public Collection<Sprint> getSprintCollection() {
-        return sprintCollection;
+    public Team getTeamTeamId() {
+        return teamTeamId;
     }
 
-    public void setSprintCollection(Collection<Sprint> sprintCollection) {
-        this.sprintCollection = sprintCollection;
+    public void setTeamTeamId(Team teamTeamId) {
+        this.teamTeamId = teamTeamId;
     }
 
-    @XmlTransient
-    public Collection<UserStory> getUserStoryCollection() {
-        return userStoryCollection;
+    public List<Discussion> getDiscussionList() {
+        return discussionList;
     }
 
-    public void setUserStoryCollection(Collection<UserStory> userStoryCollection) {
-        this.userStoryCollection = userStoryCollection;
+    public void setDiscussionList(List<Discussion> discussionList) {
+        this.discussionList = discussionList;
     }
 
-    @XmlTransient
-    public Collection<Discussion> getDiscussionCollection() {
-        return discussionCollection;
+    public List<DailyScrumEntry> getDailyScrumEntryList() {
+        return dailyScrumEntryList;
     }
 
-    public void setDiscussionCollection(Collection<Discussion> discussionCollection) {
-        this.discussionCollection = discussionCollection;
+    public void setDailyScrumEntryList(List<DailyScrumEntry> dailyScrumEntryList) {
+        this.dailyScrumEntryList = dailyScrumEntryList;
     }
 
-    public Team getTEAMteamid() {
-        return tEAMteamid;
+    public List<Sprint> getSprintList() {
+        return sprintList;
     }
 
-    public void setTEAMteamid(Team tEAMteamid) {
-        this.tEAMteamid = tEAMteamid;
+    public void setSprintList(List<Sprint> sprintList) {
+        this.sprintList = sprintList;
     }
 
-    @XmlTransient
-    public Collection<DailyScrumEntry> getDailyScrumEntryCollection() {
-        return dailyScrumEntryCollection;
+    public List<UserStory> getUserStoryList() {
+        return userStoryList;
     }
 
-    public void setDailyScrumEntryCollection(Collection<DailyScrumEntry> dailyScrumEntryCollection) {
-        this.dailyScrumEntryCollection = dailyScrumEntryCollection;
+    public void setUserStoryList(List<UserStory> userStoryList) {
+        this.userStoryList = userStoryList;
     }
 
     @Override

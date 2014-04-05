@@ -13,7 +13,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import si.fri.tpo.jpa.User;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,40 +36,40 @@ public class TeamJpaController implements Serializable {
     }
 
     public void create(Team team) {
-        if (team.getUserCollection() == null) {
-            team.setUserCollection(new ArrayList<User>());
+        if (team.getUserList() == null) {
+            team.setUserList(new ArrayList<User>());
         }
-        if (team.getProjectCollection() == null) {
-            team.setProjectCollection(new ArrayList<Project>());
+        if (team.getProjectList() == null) {
+            team.setProjectList(new ArrayList<Project>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<User> attachedUserCollection = new ArrayList<User>();
-            for (User userCollectionUserToAttach : team.getUserCollection()) {
-                userCollectionUserToAttach = em.getReference(userCollectionUserToAttach.getClass(), userCollectionUserToAttach.getUserId());
-                attachedUserCollection.add(userCollectionUserToAttach);
+            List<User> attachedUserList = new ArrayList<User>();
+            for (User userListUserToAttach : team.getUserList()) {
+                userListUserToAttach = em.getReference(userListUserToAttach.getClass(), userListUserToAttach.getUserId());
+                attachedUserList.add(userListUserToAttach);
             }
-            team.setUserCollection(attachedUserCollection);
-            Collection<Project> attachedProjectCollection = new ArrayList<Project>();
-            for (Project projectCollectionProjectToAttach : team.getProjectCollection()) {
-                projectCollectionProjectToAttach = em.getReference(projectCollectionProjectToAttach.getClass(), projectCollectionProjectToAttach.getProjectId());
-                attachedProjectCollection.add(projectCollectionProjectToAttach);
+            team.setUserList(attachedUserList);
+            List<Project> attachedProjectList = new ArrayList<Project>();
+            for (Project projectListProjectToAttach : team.getProjectList()) {
+                projectListProjectToAttach = em.getReference(projectListProjectToAttach.getClass(), projectListProjectToAttach.getProjectId());
+                attachedProjectList.add(projectListProjectToAttach);
             }
-            team.setProjectCollection(attachedProjectCollection);
+            team.setProjectList(attachedProjectList);
             em.persist(team);
-            for (User userCollectionUser : team.getUserCollection()) {
-                userCollectionUser.getTeamCollection().add(team);
-                userCollectionUser = em.merge(userCollectionUser);
+            for (User userListUser : team.getUserList()) {
+                userListUser.getTeamList().add(team);
+                userListUser = em.merge(userListUser);
             }
-            for (Project projectCollectionProject : team.getProjectCollection()) {
-                Team oldTEAMteamidOfProjectCollectionProject = projectCollectionProject.getTEAMteamid();
-                projectCollectionProject.setTEAMteamid(team);
-                projectCollectionProject = em.merge(projectCollectionProject);
-                if (oldTEAMteamidOfProjectCollectionProject != null) {
-                    oldTEAMteamidOfProjectCollectionProject.getProjectCollection().remove(projectCollectionProject);
-                    oldTEAMteamidOfProjectCollectionProject = em.merge(oldTEAMteamidOfProjectCollectionProject);
+            for (Project projectListProject : team.getProjectList()) {
+                Team oldTeamTeamIdOfProjectListProject = projectListProject.getTeamTeamId();
+                projectListProject.setTeamTeamId(team);
+                projectListProject = em.merge(projectListProject);
+                if (oldTeamTeamIdOfProjectListProject != null) {
+                    oldTeamTeamIdOfProjectListProject.getProjectList().remove(projectListProject);
+                    oldTeamTeamIdOfProjectListProject = em.merge(oldTeamTeamIdOfProjectListProject);
                 }
             }
             em.getTransaction().commit();
@@ -87,51 +86,51 @@ public class TeamJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Team persistentTeam = em.find(Team.class, team.getTeamId());
-            Collection<User> userCollectionOld = persistentTeam.getUserCollection();
-            Collection<User> userCollectionNew = team.getUserCollection();
-            Collection<Project> projectCollectionOld = persistentTeam.getProjectCollection();
-            Collection<Project> projectCollectionNew = team.getProjectCollection();
-            Collection<User> attachedUserCollectionNew = new ArrayList<User>();
-            for (User userCollectionNewUserToAttach : userCollectionNew) {
-                userCollectionNewUserToAttach = em.getReference(userCollectionNewUserToAttach.getClass(), userCollectionNewUserToAttach.getUserId());
-                attachedUserCollectionNew.add(userCollectionNewUserToAttach);
+            List<User> userListOld = persistentTeam.getUserList();
+            List<User> userListNew = team.getUserList();
+            List<Project> projectListOld = persistentTeam.getProjectList();
+            List<Project> projectListNew = team.getProjectList();
+            List<User> attachedUserListNew = new ArrayList<User>();
+            for (User userListNewUserToAttach : userListNew) {
+                userListNewUserToAttach = em.getReference(userListNewUserToAttach.getClass(), userListNewUserToAttach.getUserId());
+                attachedUserListNew.add(userListNewUserToAttach);
             }
-            userCollectionNew = attachedUserCollectionNew;
-            team.setUserCollection(userCollectionNew);
-            Collection<Project> attachedProjectCollectionNew = new ArrayList<Project>();
-            for (Project projectCollectionNewProjectToAttach : projectCollectionNew) {
-                projectCollectionNewProjectToAttach = em.getReference(projectCollectionNewProjectToAttach.getClass(), projectCollectionNewProjectToAttach.getProjectId());
-                attachedProjectCollectionNew.add(projectCollectionNewProjectToAttach);
+            userListNew = attachedUserListNew;
+            team.setUserList(userListNew);
+            List<Project> attachedProjectListNew = new ArrayList<Project>();
+            for (Project projectListNewProjectToAttach : projectListNew) {
+                projectListNewProjectToAttach = em.getReference(projectListNewProjectToAttach.getClass(), projectListNewProjectToAttach.getProjectId());
+                attachedProjectListNew.add(projectListNewProjectToAttach);
             }
-            projectCollectionNew = attachedProjectCollectionNew;
-            team.setProjectCollection(projectCollectionNew);
+            projectListNew = attachedProjectListNew;
+            team.setProjectList(projectListNew);
             team = em.merge(team);
-            for (User userCollectionOldUser : userCollectionOld) {
-                if (!userCollectionNew.contains(userCollectionOldUser)) {
-                    userCollectionOldUser.getTeamCollection().remove(team);
-                    userCollectionOldUser = em.merge(userCollectionOldUser);
+            for (User userListOldUser : userListOld) {
+                if (!userListNew.contains(userListOldUser)) {
+                    userListOldUser.getTeamList().remove(team);
+                    userListOldUser = em.merge(userListOldUser);
                 }
             }
-            for (User userCollectionNewUser : userCollectionNew) {
-                if (!userCollectionOld.contains(userCollectionNewUser)) {
-                    userCollectionNewUser.getTeamCollection().add(team);
-                    userCollectionNewUser = em.merge(userCollectionNewUser);
+            for (User userListNewUser : userListNew) {
+                if (!userListOld.contains(userListNewUser)) {
+                    userListNewUser.getTeamList().add(team);
+                    userListNewUser = em.merge(userListNewUser);
                 }
             }
-            for (Project projectCollectionOldProject : projectCollectionOld) {
-                if (!projectCollectionNew.contains(projectCollectionOldProject)) {
-                    projectCollectionOldProject.setTEAMteamid(null);
-                    projectCollectionOldProject = em.merge(projectCollectionOldProject);
+            for (Project projectListOldProject : projectListOld) {
+                if (!projectListNew.contains(projectListOldProject)) {
+                    projectListOldProject.setTeamTeamId(null);
+                    projectListOldProject = em.merge(projectListOldProject);
                 }
             }
-            for (Project projectCollectionNewProject : projectCollectionNew) {
-                if (!projectCollectionOld.contains(projectCollectionNewProject)) {
-                    Team oldTEAMteamidOfProjectCollectionNewProject = projectCollectionNewProject.getTEAMteamid();
-                    projectCollectionNewProject.setTEAMteamid(team);
-                    projectCollectionNewProject = em.merge(projectCollectionNewProject);
-                    if (oldTEAMteamidOfProjectCollectionNewProject != null && !oldTEAMteamidOfProjectCollectionNewProject.equals(team)) {
-                        oldTEAMteamidOfProjectCollectionNewProject.getProjectCollection().remove(projectCollectionNewProject);
-                        oldTEAMteamidOfProjectCollectionNewProject = em.merge(oldTEAMteamidOfProjectCollectionNewProject);
+            for (Project projectListNewProject : projectListNew) {
+                if (!projectListOld.contains(projectListNewProject)) {
+                    Team oldTeamTeamIdOfProjectListNewProject = projectListNewProject.getTeamTeamId();
+                    projectListNewProject.setTeamTeamId(team);
+                    projectListNewProject = em.merge(projectListNewProject);
+                    if (oldTeamTeamIdOfProjectListNewProject != null && !oldTeamTeamIdOfProjectListNewProject.equals(team)) {
+                        oldTeamTeamIdOfProjectListNewProject.getProjectList().remove(projectListNewProject);
+                        oldTeamTeamIdOfProjectListNewProject = em.merge(oldTeamTeamIdOfProjectListNewProject);
                     }
                 }
             }
@@ -164,15 +163,15 @@ public class TeamJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The team with id " + id + " no longer exists.", enfe);
             }
-            Collection<User> userCollection = team.getUserCollection();
-            for (User userCollectionUser : userCollection) {
-                userCollectionUser.getTeamCollection().remove(team);
-                userCollectionUser = em.merge(userCollectionUser);
+            List<User> userList = team.getUserList();
+            for (User userListUser : userList) {
+                userListUser.getTeamList().remove(team);
+                userListUser = em.merge(userListUser);
             }
-            Collection<Project> projectCollection = team.getProjectCollection();
-            for (Project projectCollectionProject : projectCollection) {
-                projectCollectionProject.setTEAMteamid(null);
-                projectCollectionProject = em.merge(projectCollectionProject);
+            List<Project> projectList = team.getProjectList();
+            for (Project projectListProject : projectList) {
+                projectListProject.setTeamTeamId(null);
+                projectListProject = em.merge(projectListProject);
             }
             em.remove(team);
             em.getTransaction().commit();

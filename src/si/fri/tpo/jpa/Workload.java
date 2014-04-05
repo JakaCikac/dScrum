@@ -7,7 +7,7 @@
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -20,22 +20,19 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Administrator
  */
 @Entity
-@Table(name = "WORKLOAD")
-@XmlRootElement
+@Table(name = "workload")
 @NamedQueries({
     @NamedQuery(name = "Workload.findAll", query = "SELECT w FROM Workload w"),
     @NamedQuery(name = "Workload.findByWorkloadId", query = "SELECT w FROM Workload w WHERE w.workloadPK.workloadId = :workloadId"),
-    @NamedQuery(name = "Workload.findByTASKtaskid", query = "SELECT w FROM Workload w WHERE w.workloadPK.tASKtaskid = :tASKtaskid"),
-    @NamedQuery(name = "Workload.findByTASKUSERSTORYstoryid", query = "SELECT w FROM Workload w WHERE w.workloadPK.tASKUSERSTORYstoryid = :tASKUSERSTORYstoryid"),
-    @NamedQuery(name = "Workload.findByUSERuserid", query = "SELECT w FROM Workload w WHERE w.workloadPK.uSERuserid = :uSERuserid")})
+    @NamedQuery(name = "Workload.findByTaskTaskId", query = "SELECT w FROM Workload w WHERE w.workloadPK.taskTaskId = :taskTaskId"),
+    @NamedQuery(name = "Workload.findByTaskUserStoryStoryId", query = "SELECT w FROM Workload w WHERE w.workloadPK.taskUserStoryStoryId = :taskUserStoryStoryId"),
+    @NamedQuery(name = "Workload.findByUserUserId", query = "SELECT w FROM Workload w WHERE w.workloadPK.userUserId = :userUserId")})
 public class Workload implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -43,16 +40,16 @@ public class Workload implements Serializable {
     @Lob
     @Column(name = "time_spent")
     private String timeSpent;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workload")
-    private Collection<Workblock> workblockCollection;
-    @JoinColumn(name = "USER_user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private User user;
     @JoinColumns({
-        @JoinColumn(name = "TASK_task_id", referencedColumnName = "task_id", insertable = false, updatable = false),
-        @JoinColumn(name = "TASK_USER_STORY_story_id", referencedColumnName = "USER_STORY_story_id", insertable = false, updatable = false)})
+        @JoinColumn(name = "task_task_id", referencedColumnName = "task_id", insertable = false, updatable = false),
+        @JoinColumn(name = "task_user_story_story_id", referencedColumnName = "user_story_story_id", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Task task;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "workload")
+    private List<Workblock> workblockList;
 
     public Workload() {
     }
@@ -61,8 +58,8 @@ public class Workload implements Serializable {
         this.workloadPK = workloadPK;
     }
 
-    public Workload(int workloadId, int tASKtaskid, int tASKUSERSTORYstoryid, int uSERuserid) {
-        this.workloadPK = new WorkloadPK(workloadId, tASKtaskid, tASKUSERSTORYstoryid, uSERuserid);
+    public Workload(int workloadId, int taskTaskId, int taskUserStoryStoryId, int userUserId) {
+        this.workloadPK = new WorkloadPK(workloadId, taskTaskId, taskUserStoryStoryId, userUserId);
     }
 
     public WorkloadPK getWorkloadPK() {
@@ -81,15 +78,6 @@ public class Workload implements Serializable {
         this.timeSpent = timeSpent;
     }
 
-    @XmlTransient
-    public Collection<Workblock> getWorkblockCollection() {
-        return workblockCollection;
-    }
-
-    public void setWorkblockCollection(Collection<Workblock> workblockCollection) {
-        this.workblockCollection = workblockCollection;
-    }
-
     public User getUser() {
         return user;
     }
@@ -104,6 +92,14 @@ public class Workload implements Serializable {
 
     public void setTask(Task task) {
         this.task = task;
+    }
+
+    public List<Workblock> getWorkblockList() {
+        return workblockList;
+    }
+
+    public void setWorkblockList(List<Workblock> workblockList) {
+        this.workblockList = workblockList;
     }
 
     @Override

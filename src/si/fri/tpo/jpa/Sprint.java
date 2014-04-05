@@ -7,8 +7,8 @@
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -21,16 +21,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Administrator
  */
 @Entity
-@Table(name = "SPRINT")
-@XmlRootElement
+@Table(name = "sprint")
 @NamedQueries({
     @NamedQuery(name = "Sprint.findAll", query = "SELECT s FROM Sprint s"),
     @NamedQuery(name = "Sprint.findBySprintId", query = "SELECT s FROM Sprint s WHERE s.sprintPK.sprintId = :sprintId"),
@@ -39,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Sprint.findByEndDate", query = "SELECT s FROM Sprint s WHERE s.endDate = :endDate"),
     @NamedQuery(name = "Sprint.findByVelocity", query = "SELECT s FROM Sprint s WHERE s.velocity = :velocity"),
     @NamedQuery(name = "Sprint.findByStatus", query = "SELECT s FROM Sprint s WHERE s.status = :status"),
-    @NamedQuery(name = "Sprint.findByPROJECTprojectid", query = "SELECT s FROM Sprint s WHERE s.sprintPK.pROJECTprojectid = :pROJECTprojectid")})
+    @NamedQuery(name = "Sprint.findByProjectProjectId", query = "SELECT s FROM Sprint s WHERE s.sprintPK.projectProjectId = :projectProjectId")})
 public class Sprint implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -58,11 +55,11 @@ public class Sprint implements Serializable {
     private Integer velocity;
     @Column(name = "status")
     private String status;
-    @JoinColumn(name = "PROJECT_project_id", referencedColumnName = "project_id", insertable = false, updatable = false)
+    @JoinColumn(name = "project_project_id", referencedColumnName = "project_id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Project project;
     @OneToMany(mappedBy = "sprint")
-    private Collection<UserStory> userStoryCollection;
+    private List<UserStory> userStoryList;
 
     public Sprint() {
     }
@@ -77,8 +74,8 @@ public class Sprint implements Serializable {
         this.endDate = endDate;
     }
 
-    public Sprint(int sprintId, int pROJECTprojectid) {
-        this.sprintPK = new SprintPK(sprintId, pROJECTprojectid);
+    public Sprint(int sprintId, int projectProjectId) {
+        this.sprintPK = new SprintPK(sprintId, projectProjectId);
     }
 
     public SprintPK getSprintPK() {
@@ -137,13 +134,12 @@ public class Sprint implements Serializable {
         this.project = project;
     }
 
-    @XmlTransient
-    public Collection<UserStory> getUserStoryCollection() {
-        return userStoryCollection;
+    public List<UserStory> getUserStoryList() {
+        return userStoryList;
     }
 
-    public void setUserStoryCollection(Collection<UserStory> userStoryCollection) {
-        this.userStoryCollection = userStoryCollection;
+    public void setUserStoryList(List<UserStory> userStoryList) {
+        this.userStoryList = userStoryList;
     }
 
     @Override

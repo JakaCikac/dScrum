@@ -40,8 +40,8 @@ public class DailyScrumEntryJpaController implements Serializable {
         if (dailyScrumEntry.getDailyScrumEntryPK() == null) {
             dailyScrumEntry.setDailyScrumEntryPK(new DailyScrumEntryPK());
         }
-        dailyScrumEntry.getDailyScrumEntryPK().setPROJECTprojectid(dailyScrumEntry.getProject().getProjectId());
-        dailyScrumEntry.getDailyScrumEntryPK().setUSERuserid(dailyScrumEntry.getUser().getUserId());
+        dailyScrumEntry.getDailyScrumEntryPK().setProjectProjectId(dailyScrumEntry.getProject().getProjectId());
+        dailyScrumEntry.getDailyScrumEntryPK().setUserUserId(dailyScrumEntry.getUser().getUserId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -58,11 +58,11 @@ public class DailyScrumEntryJpaController implements Serializable {
             }
             em.persist(dailyScrumEntry);
             if (project != null) {
-                project.getDailyScrumEntryCollection().add(dailyScrumEntry);
+                project.getDailyScrumEntryList().add(dailyScrumEntry);
                 project = em.merge(project);
             }
             if (user != null) {
-                user.getDailyScrumEntryCollection().add(dailyScrumEntry);
+                user.getDailyScrumEntryList().add(dailyScrumEntry);
                 user = em.merge(user);
             }
             em.getTransaction().commit();
@@ -79,8 +79,8 @@ public class DailyScrumEntryJpaController implements Serializable {
     }
 
     public void edit(DailyScrumEntry dailyScrumEntry) throws NonexistentEntityException, Exception {
-        dailyScrumEntry.getDailyScrumEntryPK().setPROJECTprojectid(dailyScrumEntry.getProject().getProjectId());
-        dailyScrumEntry.getDailyScrumEntryPK().setUSERuserid(dailyScrumEntry.getUser().getUserId());
+        dailyScrumEntry.getDailyScrumEntryPK().setProjectProjectId(dailyScrumEntry.getProject().getProjectId());
+        dailyScrumEntry.getDailyScrumEntryPK().setUserUserId(dailyScrumEntry.getUser().getUserId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -100,19 +100,19 @@ public class DailyScrumEntryJpaController implements Serializable {
             }
             dailyScrumEntry = em.merge(dailyScrumEntry);
             if (projectOld != null && !projectOld.equals(projectNew)) {
-                projectOld.getDailyScrumEntryCollection().remove(dailyScrumEntry);
+                projectOld.getDailyScrumEntryList().remove(dailyScrumEntry);
                 projectOld = em.merge(projectOld);
             }
             if (projectNew != null && !projectNew.equals(projectOld)) {
-                projectNew.getDailyScrumEntryCollection().add(dailyScrumEntry);
+                projectNew.getDailyScrumEntryList().add(dailyScrumEntry);
                 projectNew = em.merge(projectNew);
             }
             if (userOld != null && !userOld.equals(userNew)) {
-                userOld.getDailyScrumEntryCollection().remove(dailyScrumEntry);
+                userOld.getDailyScrumEntryList().remove(dailyScrumEntry);
                 userOld = em.merge(userOld);
             }
             if (userNew != null && !userNew.equals(userOld)) {
-                userNew.getDailyScrumEntryCollection().add(dailyScrumEntry);
+                userNew.getDailyScrumEntryList().add(dailyScrumEntry);
                 userNew = em.merge(userNew);
             }
             em.getTransaction().commit();
@@ -146,12 +146,12 @@ public class DailyScrumEntryJpaController implements Serializable {
             }
             Project project = dailyScrumEntry.getProject();
             if (project != null) {
-                project.getDailyScrumEntryCollection().remove(dailyScrumEntry);
+                project.getDailyScrumEntryList().remove(dailyScrumEntry);
                 project = em.merge(project);
             }
             User user = dailyScrumEntry.getUser();
             if (user != null) {
-                user.getDailyScrumEntryCollection().remove(dailyScrumEntry);
+                user.getDailyScrumEntryList().remove(dailyScrumEntry);
                 user = em.merge(user);
             }
             em.remove(dailyScrumEntry);

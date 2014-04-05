@@ -15,7 +15,6 @@ import si.fri.tpo.jpa.Project;
 import si.fri.tpo.jpa.User;
 import si.fri.tpo.jpa.Comment;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -44,11 +43,11 @@ public class DiscussionJpaController implements Serializable {
         if (discussion.getDiscussionPK() == null) {
             discussion.setDiscussionPK(new DiscussionPK());
         }
-        if (discussion.getCommentCollection() == null) {
-            discussion.setCommentCollection(new ArrayList<Comment>());
+        if (discussion.getCommentList() == null) {
+            discussion.setCommentList(new ArrayList<Comment>());
         }
-        discussion.getDiscussionPK().setPROJECTprojectid(discussion.getProject().getProjectId());
-        discussion.getDiscussionPK().setUSERuserid(discussion.getUser().getUserId());
+        discussion.getDiscussionPK().setUserUserId(discussion.getUser().getUserId());
+        discussion.getDiscussionPK().setProjectProjectId(discussion.getProject().getProjectId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -63,28 +62,28 @@ public class DiscussionJpaController implements Serializable {
                 user = em.getReference(user.getClass(), user.getUserId());
                 discussion.setUser(user);
             }
-            Collection<Comment> attachedCommentCollection = new ArrayList<Comment>();
-            for (Comment commentCollectionCommentToAttach : discussion.getCommentCollection()) {
-                commentCollectionCommentToAttach = em.getReference(commentCollectionCommentToAttach.getClass(), commentCollectionCommentToAttach.getCommentPK());
-                attachedCommentCollection.add(commentCollectionCommentToAttach);
+            List<Comment> attachedCommentList = new ArrayList<Comment>();
+            for (Comment commentListCommentToAttach : discussion.getCommentList()) {
+                commentListCommentToAttach = em.getReference(commentListCommentToAttach.getClass(), commentListCommentToAttach.getCommentPK());
+                attachedCommentList.add(commentListCommentToAttach);
             }
-            discussion.setCommentCollection(attachedCommentCollection);
+            discussion.setCommentList(attachedCommentList);
             em.persist(discussion);
             if (project != null) {
-                project.getDiscussionCollection().add(discussion);
+                project.getDiscussionList().add(discussion);
                 project = em.merge(project);
             }
             if (user != null) {
-                user.getDiscussionCollection().add(discussion);
+                user.getDiscussionList().add(discussion);
                 user = em.merge(user);
             }
-            for (Comment commentCollectionComment : discussion.getCommentCollection()) {
-                Discussion oldDiscussionOfCommentCollectionComment = commentCollectionComment.getDiscussion();
-                commentCollectionComment.setDiscussion(discussion);
-                commentCollectionComment = em.merge(commentCollectionComment);
-                if (oldDiscussionOfCommentCollectionComment != null) {
-                    oldDiscussionOfCommentCollectionComment.getCommentCollection().remove(commentCollectionComment);
-                    oldDiscussionOfCommentCollectionComment = em.merge(oldDiscussionOfCommentCollectionComment);
+            for (Comment commentListComment : discussion.getCommentList()) {
+                Discussion oldDiscussionOfCommentListComment = commentListComment.getDiscussion();
+                commentListComment.setDiscussion(discussion);
+                commentListComment = em.merge(commentListComment);
+                if (oldDiscussionOfCommentListComment != null) {
+                    oldDiscussionOfCommentListComment.getCommentList().remove(commentListComment);
+                    oldDiscussionOfCommentListComment = em.merge(oldDiscussionOfCommentListComment);
                 }
             }
             em.getTransaction().commit();
@@ -101,8 +100,8 @@ public class DiscussionJpaController implements Serializable {
     }
 
     public void edit(Discussion discussion) throws IllegalOrphanException, NonexistentEntityException, Exception {
-        discussion.getDiscussionPK().setPROJECTprojectid(discussion.getProject().getProjectId());
-        discussion.getDiscussionPK().setUSERuserid(discussion.getUser().getUserId());
+        discussion.getDiscussionPK().setUserUserId(discussion.getUser().getUserId());
+        discussion.getDiscussionPK().setProjectProjectId(discussion.getProject().getProjectId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -112,15 +111,15 @@ public class DiscussionJpaController implements Serializable {
             Project projectNew = discussion.getProject();
             User userOld = persistentDiscussion.getUser();
             User userNew = discussion.getUser();
-            Collection<Comment> commentCollectionOld = persistentDiscussion.getCommentCollection();
-            Collection<Comment> commentCollectionNew = discussion.getCommentCollection();
+            List<Comment> commentListOld = persistentDiscussion.getCommentList();
+            List<Comment> commentListNew = discussion.getCommentList();
             List<String> illegalOrphanMessages = null;
-            for (Comment commentCollectionOldComment : commentCollectionOld) {
-                if (!commentCollectionNew.contains(commentCollectionOldComment)) {
+            for (Comment commentListOldComment : commentListOld) {
+                if (!commentListNew.contains(commentListOldComment)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Comment " + commentCollectionOldComment + " since its discussion field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Comment " + commentListOldComment + " since its discussion field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -134,38 +133,38 @@ public class DiscussionJpaController implements Serializable {
                 userNew = em.getReference(userNew.getClass(), userNew.getUserId());
                 discussion.setUser(userNew);
             }
-            Collection<Comment> attachedCommentCollectionNew = new ArrayList<Comment>();
-            for (Comment commentCollectionNewCommentToAttach : commentCollectionNew) {
-                commentCollectionNewCommentToAttach = em.getReference(commentCollectionNewCommentToAttach.getClass(), commentCollectionNewCommentToAttach.getCommentPK());
-                attachedCommentCollectionNew.add(commentCollectionNewCommentToAttach);
+            List<Comment> attachedCommentListNew = new ArrayList<Comment>();
+            for (Comment commentListNewCommentToAttach : commentListNew) {
+                commentListNewCommentToAttach = em.getReference(commentListNewCommentToAttach.getClass(), commentListNewCommentToAttach.getCommentPK());
+                attachedCommentListNew.add(commentListNewCommentToAttach);
             }
-            commentCollectionNew = attachedCommentCollectionNew;
-            discussion.setCommentCollection(commentCollectionNew);
+            commentListNew = attachedCommentListNew;
+            discussion.setCommentList(commentListNew);
             discussion = em.merge(discussion);
             if (projectOld != null && !projectOld.equals(projectNew)) {
-                projectOld.getDiscussionCollection().remove(discussion);
+                projectOld.getDiscussionList().remove(discussion);
                 projectOld = em.merge(projectOld);
             }
             if (projectNew != null && !projectNew.equals(projectOld)) {
-                projectNew.getDiscussionCollection().add(discussion);
+                projectNew.getDiscussionList().add(discussion);
                 projectNew = em.merge(projectNew);
             }
             if (userOld != null && !userOld.equals(userNew)) {
-                userOld.getDiscussionCollection().remove(discussion);
+                userOld.getDiscussionList().remove(discussion);
                 userOld = em.merge(userOld);
             }
             if (userNew != null && !userNew.equals(userOld)) {
-                userNew.getDiscussionCollection().add(discussion);
+                userNew.getDiscussionList().add(discussion);
                 userNew = em.merge(userNew);
             }
-            for (Comment commentCollectionNewComment : commentCollectionNew) {
-                if (!commentCollectionOld.contains(commentCollectionNewComment)) {
-                    Discussion oldDiscussionOfCommentCollectionNewComment = commentCollectionNewComment.getDiscussion();
-                    commentCollectionNewComment.setDiscussion(discussion);
-                    commentCollectionNewComment = em.merge(commentCollectionNewComment);
-                    if (oldDiscussionOfCommentCollectionNewComment != null && !oldDiscussionOfCommentCollectionNewComment.equals(discussion)) {
-                        oldDiscussionOfCommentCollectionNewComment.getCommentCollection().remove(commentCollectionNewComment);
-                        oldDiscussionOfCommentCollectionNewComment = em.merge(oldDiscussionOfCommentCollectionNewComment);
+            for (Comment commentListNewComment : commentListNew) {
+                if (!commentListOld.contains(commentListNewComment)) {
+                    Discussion oldDiscussionOfCommentListNewComment = commentListNewComment.getDiscussion();
+                    commentListNewComment.setDiscussion(discussion);
+                    commentListNewComment = em.merge(commentListNewComment);
+                    if (oldDiscussionOfCommentListNewComment != null && !oldDiscussionOfCommentListNewComment.equals(discussion)) {
+                        oldDiscussionOfCommentListNewComment.getCommentList().remove(commentListNewComment);
+                        oldDiscussionOfCommentListNewComment = em.merge(oldDiscussionOfCommentListNewComment);
                     }
                 }
             }
@@ -199,24 +198,24 @@ public class DiscussionJpaController implements Serializable {
                 throw new NonexistentEntityException("The discussion with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Comment> commentCollectionOrphanCheck = discussion.getCommentCollection();
-            for (Comment commentCollectionOrphanCheckComment : commentCollectionOrphanCheck) {
+            List<Comment> commentListOrphanCheck = discussion.getCommentList();
+            for (Comment commentListOrphanCheckComment : commentListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Discussion (" + discussion + ") cannot be destroyed since the Comment " + commentCollectionOrphanCheckComment + " in its commentCollection field has a non-nullable discussion field.");
+                illegalOrphanMessages.add("This Discussion (" + discussion + ") cannot be destroyed since the Comment " + commentListOrphanCheckComment + " in its commentList field has a non-nullable discussion field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Project project = discussion.getProject();
             if (project != null) {
-                project.getDiscussionCollection().remove(discussion);
+                project.getDiscussionList().remove(discussion);
                 project = em.merge(project);
             }
             User user = discussion.getUser();
             if (user != null) {
-                user.getDiscussionCollection().remove(discussion);
+                user.getDiscussionList().remove(discussion);
                 user = em.merge(user);
             }
             em.remove(discussion);

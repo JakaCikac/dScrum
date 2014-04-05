@@ -20,24 +20,22 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Administrator
  */
 @Entity
-@Table(name = "WORKBLOCK")
-@XmlRootElement
+@Table(name = "workblock")
 @NamedQueries({
     @NamedQuery(name = "Workblock.findAll", query = "SELECT w FROM Workblock w"),
     @NamedQuery(name = "Workblock.findByWorkblockId", query = "SELECT w FROM Workblock w WHERE w.workblockPK.workblockId = :workblockId"),
     @NamedQuery(name = "Workblock.findByTimeStart", query = "SELECT w FROM Workblock w WHERE w.timeStart = :timeStart"),
     @NamedQuery(name = "Workblock.findByTimeStop", query = "SELECT w FROM Workblock w WHERE w.timeStop = :timeStop"),
-    @NamedQuery(name = "Workblock.findByWORKLOADworkloadid", query = "SELECT w FROM Workblock w WHERE w.workblockPK.wORKLOADworkloadid = :wORKLOADworkloadid"),
-    @NamedQuery(name = "Workblock.findByWORKLOADTASKtaskid", query = "SELECT w FROM Workblock w WHERE w.workblockPK.wORKLOADTASKtaskid = :wORKLOADTASKtaskid"),
-    @NamedQuery(name = "Workblock.findByWORKLOADTASKUSERSTORYstoryid", query = "SELECT w FROM Workblock w WHERE w.workblockPK.wORKLOADTASKUSERSTORYstoryid = :wORKLOADTASKUSERSTORYstoryid"),
-    @NamedQuery(name = "Workblock.findByWORKLOADUSERuserid", query = "SELECT w FROM Workblock w WHERE w.workblockPK.wORKLOADUSERuserid = :wORKLOADUSERuserid")})
+    @NamedQuery(name = "Workblock.findByWorkloadWorkloadId", query = "SELECT w FROM Workblock w WHERE w.workblockPK.workloadWorkloadId = :workloadWorkloadId"),
+    @NamedQuery(name = "Workblock.findByWorkloadTaskTaskId", query = "SELECT w FROM Workblock w WHERE w.workblockPK.workloadTaskTaskId = :workloadTaskTaskId"),
+    @NamedQuery(name = "Workblock.findByWorkloadTaskUserStoryStoryId", query = "SELECT w FROM Workblock w WHERE w.workblockPK.workloadTaskUserStoryStoryId = :workloadTaskUserStoryStoryId"),
+    @NamedQuery(name = "Workblock.findByWorkloadUserUserId", query = "SELECT w FROM Workblock w WHERE w.workblockPK.workloadUserUserId = :workloadUserUserId")})
 public class Workblock implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -51,10 +49,10 @@ public class Workblock implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeStop;
     @JoinColumns({
-        @JoinColumn(name = "WORKLOAD_workload_id", referencedColumnName = "workload_id", insertable = false, updatable = false),
-        @JoinColumn(name = "WORKLOAD_TASK_task_id", referencedColumnName = "TASK_task_id", insertable = false, updatable = false),
-        @JoinColumn(name = "WORKLOAD_TASK_USER_STORY_story_id", referencedColumnName = "TASK_USER_STORY_story_id", insertable = false, updatable = false),
-        @JoinColumn(name = "WORKLOAD_USER_user_id", referencedColumnName = "USER_user_id", insertable = false, updatable = false)})
+        @JoinColumn(name = "workload_workload_id", referencedColumnName = "workload_id", insertable = false, updatable = false),
+        @JoinColumn(name = "workload_task_task_id", referencedColumnName = "task_task_id", insertable = false, updatable = false),
+        @JoinColumn(name = "workload_task_user_story_story_id", referencedColumnName = "task_user_story_story_id", insertable = false, updatable = false),
+        @JoinColumn(name = "workload_user_user_id", referencedColumnName = "user_user_id", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Workload workload;
 
@@ -71,8 +69,8 @@ public class Workblock implements Serializable {
         this.timeStop = timeStop;
     }
 
-    public Workblock(int workblockId, int wORKLOADworkloadid, int wORKLOADTASKtaskid, int wORKLOADTASKUSERSTORYstoryid, int wORKLOADUSERuserid) {
-        this.workblockPK = new WorkblockPK(workblockId, wORKLOADworkloadid, wORKLOADTASKtaskid, wORKLOADTASKUSERSTORYstoryid, wORKLOADUSERuserid);
+    public Workblock(int workblockId, int workloadWorkloadId, int workloadTaskTaskId, int workloadTaskUserStoryStoryId, int workloadUserUserId) {
+        this.workblockPK = new WorkblockPK(workblockId, workloadWorkloadId, workloadTaskTaskId, workloadTaskUserStoryStoryId, workloadUserUserId);
     }
 
     public WorkblockPK getWorkblockPK() {

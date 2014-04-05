@@ -21,27 +21,27 @@ public class WorkblockPK implements Serializable {
     @Column(name = "workblock_id")
     private int workblockId;
     @Basic(optional = false)
-    @Column(name = "WORKLOAD_workload_id")
-    private int wORKLOADworkloadid;
+    @Column(name = "workload_workload_id")
+    private int workloadWorkloadId;
     @Basic(optional = false)
-    @Column(name = "WORKLOAD_TASK_task_id")
-    private int wORKLOADTASKtaskid;
+    @Column(name = "workload_task_task_id")
+    private int workloadTaskTaskId;
     @Basic(optional = false)
-    @Column(name = "WORKLOAD_TASK_USER_STORY_story_id")
-    private int wORKLOADTASKUSERSTORYstoryid;
+    @Column(name = "workload_task_user_story_story_id")
+    private int workloadTaskUserStoryStoryId;
     @Basic(optional = false)
-    @Column(name = "WORKLOAD_USER_user_id")
-    private int wORKLOADUSERuserid;
+    @Column(name = "workload_user_user_id")
+    private int workloadUserUserId;
 
     public WorkblockPK() {
     }
 
-    public WorkblockPK(int workblockId, int wORKLOADworkloadid, int wORKLOADTASKtaskid, int wORKLOADTASKUSERSTORYstoryid, int wORKLOADUSERuserid) {
+    public WorkblockPK(int workblockId, int workloadWorkloadId, int workloadTaskTaskId, int workloadTaskUserStoryStoryId, int workloadUserUserId) {
         this.workblockId = workblockId;
-        this.wORKLOADworkloadid = wORKLOADworkloadid;
-        this.wORKLOADTASKtaskid = wORKLOADTASKtaskid;
-        this.wORKLOADTASKUSERSTORYstoryid = wORKLOADTASKUSERSTORYstoryid;
-        this.wORKLOADUSERuserid = wORKLOADUSERuserid;
+        this.workloadWorkloadId = workloadWorkloadId;
+        this.workloadTaskTaskId = workloadTaskTaskId;
+        this.workloadTaskUserStoryStoryId = workloadTaskUserStoryStoryId;
+        this.workloadUserUserId = workloadUserUserId;
     }
 
     public int getWorkblockId() {
@@ -52,46 +52,46 @@ public class WorkblockPK implements Serializable {
         this.workblockId = workblockId;
     }
 
-    public int getWORKLOADworkloadid() {
-        return wORKLOADworkloadid;
+    public int getWorkloadWorkloadId() {
+        return workloadWorkloadId;
     }
 
-    public void setWORKLOADworkloadid(int wORKLOADworkloadid) {
-        this.wORKLOADworkloadid = wORKLOADworkloadid;
+    public void setWorkloadWorkloadId(int workloadWorkloadId) {
+        this.workloadWorkloadId = workloadWorkloadId;
     }
 
-    public int getWORKLOADTASKtaskid() {
-        return wORKLOADTASKtaskid;
+    public int getWorkloadTaskTaskId() {
+        return workloadTaskTaskId;
     }
 
-    public void setWORKLOADTASKtaskid(int wORKLOADTASKtaskid) {
-        this.wORKLOADTASKtaskid = wORKLOADTASKtaskid;
+    public void setWorkloadTaskTaskId(int workloadTaskTaskId) {
+        this.workloadTaskTaskId = workloadTaskTaskId;
     }
 
-    public int getWORKLOADTASKUSERSTORYstoryid() {
-        return wORKLOADTASKUSERSTORYstoryid;
+    public int getWorkloadTaskUserStoryStoryId() {
+        return workloadTaskUserStoryStoryId;
     }
 
-    public void setWORKLOADTASKUSERSTORYstoryid(int wORKLOADTASKUSERSTORYstoryid) {
-        this.wORKLOADTASKUSERSTORYstoryid = wORKLOADTASKUSERSTORYstoryid;
+    public void setWorkloadTaskUserStoryStoryId(int workloadTaskUserStoryStoryId) {
+        this.workloadTaskUserStoryStoryId = workloadTaskUserStoryStoryId;
     }
 
-    public int getWORKLOADUSERuserid() {
-        return wORKLOADUSERuserid;
+    public int getWorkloadUserUserId() {
+        return workloadUserUserId;
     }
 
-    public void setWORKLOADUSERuserid(int wORKLOADUSERuserid) {
-        this.wORKLOADUSERuserid = wORKLOADUSERuserid;
+    public void setWorkloadUserUserId(int workloadUserUserId) {
+        this.workloadUserUserId = workloadUserUserId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) workblockId;
-        hash += (int) wORKLOADworkloadid;
-        hash += (int) wORKLOADTASKtaskid;
-        hash += (int) wORKLOADTASKUSERSTORYstoryid;
-        hash += (int) wORKLOADUSERuserid;
+        hash += (int) workloadWorkloadId;
+        hash += (int) workloadTaskTaskId;
+        hash += (int) workloadTaskUserStoryStoryId;
+        hash += (int) workloadUserUserId;
         return hash;
     }
 
@@ -105,16 +105,16 @@ public class WorkblockPK implements Serializable {
         if (this.workblockId != other.workblockId) {
             return false;
         }
-        if (this.wORKLOADworkloadid != other.wORKLOADworkloadid) {
+        if (this.workloadWorkloadId != other.workloadWorkloadId) {
             return false;
         }
-        if (this.wORKLOADTASKtaskid != other.wORKLOADTASKtaskid) {
+        if (this.workloadTaskTaskId != other.workloadTaskTaskId) {
             return false;
         }
-        if (this.wORKLOADTASKUSERSTORYstoryid != other.wORKLOADTASKUSERSTORYstoryid) {
+        if (this.workloadTaskUserStoryStoryId != other.workloadTaskUserStoryStoryId) {
             return false;
         }
-        if (this.wORKLOADUSERuserid != other.wORKLOADUSERuserid) {
+        if (this.workloadUserUserId != other.workloadUserUserId) {
             return false;
         }
         return true;
@@ -122,7 +122,7 @@ public class WorkblockPK implements Serializable {
 
     @Override
     public String toString() {
-        return "si.fri.tpo.jpa.WorkblockPK[ workblockId=" + workblockId + ", wORKLOADworkloadid=" + wORKLOADworkloadid + ", wORKLOADTASKtaskid=" + wORKLOADTASKtaskid + ", wORKLOADTASKUSERSTORYstoryid=" + wORKLOADTASKUSERSTORYstoryid + ", wORKLOADUSERuserid=" + wORKLOADUSERuserid + " ]";
+        return "si.fri.tpo.jpa.WorkblockPK[ workblockId=" + workblockId + ", workloadWorkloadId=" + workloadWorkloadId + ", workloadTaskTaskId=" + workloadTaskTaskId + ", workloadTaskUserStoryStoryId=" + workloadTaskUserStoryStoryId + ", workloadUserUserId=" + workloadUserUserId + " ]";
     }
     
 }

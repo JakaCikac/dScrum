@@ -7,7 +7,7 @@
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,16 +19,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Administrator
  */
 @Entity
-@Table(name = "PRIORITY")
-@XmlRootElement
+@Table(name = "priority")
 @NamedQueries({
     @NamedQuery(name = "Priority.findAll", query = "SELECT p FROM Priority p"),
     @NamedQuery(name = "Priority.findByPriorityId", query = "SELECT p FROM Priority p WHERE p.priorityId = :priorityId"),
@@ -43,8 +40,8 @@ public class Priority implements Serializable {
     @Basic(optional = false)
     @Column(name = "name")
     private String name;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pRIORITYpriorityid")
-    private Collection<UserStory> userStoryCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "priorityPriorityId")
+    private List<UserStory> userStoryList;
 
     public Priority() {
     }
@@ -74,13 +71,12 @@ public class Priority implements Serializable {
         this.name = name;
     }
 
-    @XmlTransient
-    public Collection<UserStory> getUserStoryCollection() {
-        return userStoryCollection;
+    public List<UserStory> getUserStoryList() {
+        return userStoryList;
     }
 
-    public void setUserStoryCollection(Collection<UserStory> userStoryCollection) {
-        this.userStoryCollection = userStoryCollection;
+    public void setUserStoryList(List<UserStory> userStoryList) {
+        this.userStoryList = userStoryList;
     }
 
     @Override

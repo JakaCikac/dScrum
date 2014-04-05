@@ -19,15 +19,13 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Administrator
  */
 @Entity
-@Table(name = "DAILY_SCRUM_ENTRY")
-@XmlRootElement
+@Table(name = "daily_scrum_entry")
 @NamedQueries({
     @NamedQuery(name = "DailyScrumEntry.findAll", query = "SELECT d FROM DailyScrumEntry d"),
     @NamedQuery(name = "DailyScrumEntry.findByDailyScrumId", query = "SELECT d FROM DailyScrumEntry d WHERE d.dailyScrumEntryPK.dailyScrumId = :dailyScrumId"),
@@ -35,8 +33,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "DailyScrumEntry.findByPastWork", query = "SELECT d FROM DailyScrumEntry d WHERE d.pastWork = :pastWork"),
     @NamedQuery(name = "DailyScrumEntry.findByFutureWork", query = "SELECT d FROM DailyScrumEntry d WHERE d.futureWork = :futureWork"),
     @NamedQuery(name = "DailyScrumEntry.findByProblemsAndIssues", query = "SELECT d FROM DailyScrumEntry d WHERE d.problemsAndIssues = :problemsAndIssues"),
-    @NamedQuery(name = "DailyScrumEntry.findByUSERuserid", query = "SELECT d FROM DailyScrumEntry d WHERE d.dailyScrumEntryPK.uSERuserid = :uSERuserid"),
-    @NamedQuery(name = "DailyScrumEntry.findByPROJECTprojectid", query = "SELECT d FROM DailyScrumEntry d WHERE d.dailyScrumEntryPK.pROJECTprojectid = :pROJECTprojectid")})
+    @NamedQuery(name = "DailyScrumEntry.findByUserUserId", query = "SELECT d FROM DailyScrumEntry d WHERE d.dailyScrumEntryPK.userUserId = :userUserId"),
+    @NamedQuery(name = "DailyScrumEntry.findByProjectProjectId", query = "SELECT d FROM DailyScrumEntry d WHERE d.dailyScrumEntryPK.projectProjectId = :projectProjectId")})
 public class DailyScrumEntry implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -54,10 +52,10 @@ public class DailyScrumEntry implements Serializable {
     @Basic(optional = false)
     @Column(name = "problems_and_issues")
     private String problemsAndIssues;
-    @JoinColumn(name = "PROJECT_project_id", referencedColumnName = "project_id", insertable = false, updatable = false)
+    @JoinColumn(name = "project_project_id", referencedColumnName = "project_id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Project project;
-    @JoinColumn(name = "USER_user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private User user;
 
@@ -76,8 +74,8 @@ public class DailyScrumEntry implements Serializable {
         this.problemsAndIssues = problemsAndIssues;
     }
 
-    public DailyScrumEntry(int dailyScrumId, int uSERuserid, int pROJECTprojectid) {
-        this.dailyScrumEntryPK = new DailyScrumEntryPK(dailyScrumId, uSERuserid, pROJECTprojectid);
+    public DailyScrumEntry(int dailyScrumId, int userUserId, int projectProjectId) {
+        this.dailyScrumEntryPK = new DailyScrumEntryPK(dailyScrumId, userUserId, projectProjectId);
     }
 
     public DailyScrumEntryPK getDailyScrumEntryPK() {

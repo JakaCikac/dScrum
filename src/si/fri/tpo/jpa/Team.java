@@ -7,7 +7,7 @@
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,16 +21,13 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Administrator
  */
 @Entity
-@Table(name = "TEAM")
-@XmlRootElement
+@Table(name = "team")
 @NamedQueries({
     @NamedQuery(name = "Team.findAll", query = "SELECT t FROM Team t"),
     @NamedQuery(name = "Team.findByTeamId", query = "SELECT t FROM Team t WHERE t.teamId = :teamId"),
@@ -49,13 +46,13 @@ public class Team implements Serializable {
     @Basic(optional = false)
     @Column(name = "product_owner_id")
     private int productOwnerId;
-    @JoinTable(name = "TEAM_has_USER", joinColumns = {
-        @JoinColumn(name = "TEAM_team_id", referencedColumnName = "team_id")}, inverseJoinColumns = {
-        @JoinColumn(name = "USER_user_id", referencedColumnName = "user_id")})
+    @JoinTable(name = "team_has_user", joinColumns = {
+        @JoinColumn(name = "team_team_id", referencedColumnName = "team_id")}, inverseJoinColumns = {
+        @JoinColumn(name = "user_user_id", referencedColumnName = "user_id")})
     @ManyToMany
-    private Collection<User> userCollection;
-    @OneToMany(mappedBy = "tEAMteamid")
-    private Collection<Project> projectCollection;
+    private List<User> userList;
+    @OneToMany(mappedBy = "teamTeamId")
+    private List<Project> projectList;
 
     public Team() {
     }
@@ -94,22 +91,20 @@ public class Team implements Serializable {
         this.productOwnerId = productOwnerId;
     }
 
-    @XmlTransient
-    public Collection<User> getUserCollection() {
-        return userCollection;
+    public List<User> getUserList() {
+        return userList;
     }
 
-    public void setUserCollection(Collection<User> userCollection) {
-        this.userCollection = userCollection;
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
     }
 
-    @XmlTransient
-    public Collection<Project> getProjectCollection() {
-        return projectCollection;
+    public List<Project> getProjectList() {
+        return projectList;
     }
 
-    public void setProjectCollection(Collection<Project> projectCollection) {
-        this.projectCollection = projectCollection;
+    public void setProjectList(List<Project> projectList) {
+        this.projectList = projectList;
     }
 
     @Override

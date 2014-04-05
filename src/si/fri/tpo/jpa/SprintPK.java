@@ -21,15 +21,15 @@ public class SprintPK implements Serializable {
     @Column(name = "sprint_id")
     private int sprintId;
     @Basic(optional = false)
-    @Column(name = "PROJECT_project_id")
-    private int pROJECTprojectid;
+    @Column(name = "project_project_id")
+    private int projectProjectId;
 
     public SprintPK() {
     }
 
-    public SprintPK(int sprintId, int pROJECTprojectid) {
+    public SprintPK(int sprintId, int projectProjectId) {
         this.sprintId = sprintId;
-        this.pROJECTprojectid = pROJECTprojectid;
+        this.projectProjectId = projectProjectId;
     }
 
     public int getSprintId() {
@@ -40,19 +40,19 @@ public class SprintPK implements Serializable {
         this.sprintId = sprintId;
     }
 
-    public int getPROJECTprojectid() {
-        return pROJECTprojectid;
+    public int getProjectProjectId() {
+        return projectProjectId;
     }
 
-    public void setPROJECTprojectid(int pROJECTprojectid) {
-        this.pROJECTprojectid = pROJECTprojectid;
+    public void setProjectProjectId(int projectProjectId) {
+        this.projectProjectId = projectProjectId;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
         hash += (int) sprintId;
-        hash += (int) pROJECTprojectid;
+        hash += (int) projectProjectId;
         return hash;
     }
 
@@ -66,7 +66,7 @@ public class SprintPK implements Serializable {
         if (this.sprintId != other.sprintId) {
             return false;
         }
-        if (this.pROJECTprojectid != other.pROJECTprojectid) {
+        if (this.projectProjectId != other.projectProjectId) {
             return false;
         }
         return true;
@@ -74,7 +74,7 @@ public class SprintPK implements Serializable {
 
     @Override
     public String toString() {
-        return "si.fri.tpo.jpa.SprintPK[ sprintId=" + sprintId + ", pROJECTprojectid=" + pROJECTprojectid + " ]";
+        return "si.fri.tpo.jpa.SprintPK[ sprintId=" + sprintId + ", projectProjectId=" + projectProjectId + " ]";
     }
     
 }

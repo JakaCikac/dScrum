@@ -14,7 +14,6 @@ import javax.persistence.criteria.Root;
 import si.fri.tpo.jpa.Project;
 import si.fri.tpo.jpa.UserStory;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -42,10 +41,10 @@ public class SprintJpaController implements Serializable {
         if (sprint.getSprintPK() == null) {
             sprint.setSprintPK(new SprintPK());
         }
-        if (sprint.getUserStoryCollection() == null) {
-            sprint.setUserStoryCollection(new ArrayList<UserStory>());
+        if (sprint.getUserStoryList() == null) {
+            sprint.setUserStoryList(new ArrayList<UserStory>());
         }
-        sprint.getSprintPK().setPROJECTprojectid(sprint.getProject().getProjectId());
+        sprint.getSprintPK().setProjectProjectId(sprint.getProject().getProjectId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -55,24 +54,24 @@ public class SprintJpaController implements Serializable {
                 project = em.getReference(project.getClass(), project.getProjectId());
                 sprint.setProject(project);
             }
-            Collection<UserStory> attachedUserStoryCollection = new ArrayList<UserStory>();
-            for (UserStory userStoryCollectionUserStoryToAttach : sprint.getUserStoryCollection()) {
-                userStoryCollectionUserStoryToAttach = em.getReference(userStoryCollectionUserStoryToAttach.getClass(), userStoryCollectionUserStoryToAttach.getStoryId());
-                attachedUserStoryCollection.add(userStoryCollectionUserStoryToAttach);
+            List<UserStory> attachedUserStoryList = new ArrayList<UserStory>();
+            for (UserStory userStoryListUserStoryToAttach : sprint.getUserStoryList()) {
+                userStoryListUserStoryToAttach = em.getReference(userStoryListUserStoryToAttach.getClass(), userStoryListUserStoryToAttach.getStoryId());
+                attachedUserStoryList.add(userStoryListUserStoryToAttach);
             }
-            sprint.setUserStoryCollection(attachedUserStoryCollection);
+            sprint.setUserStoryList(attachedUserStoryList);
             em.persist(sprint);
             if (project != null) {
-                project.getSprintCollection().add(sprint);
+                project.getSprintList().add(sprint);
                 project = em.merge(project);
             }
-            for (UserStory userStoryCollectionUserStory : sprint.getUserStoryCollection()) {
-                Sprint oldSprintOfUserStoryCollectionUserStory = userStoryCollectionUserStory.getSprint();
-                userStoryCollectionUserStory.setSprint(sprint);
-                userStoryCollectionUserStory = em.merge(userStoryCollectionUserStory);
-                if (oldSprintOfUserStoryCollectionUserStory != null) {
-                    oldSprintOfUserStoryCollectionUserStory.getUserStoryCollection().remove(userStoryCollectionUserStory);
-                    oldSprintOfUserStoryCollectionUserStory = em.merge(oldSprintOfUserStoryCollectionUserStory);
+            for (UserStory userStoryListUserStory : sprint.getUserStoryList()) {
+                Sprint oldSprintOfUserStoryListUserStory = userStoryListUserStory.getSprint();
+                userStoryListUserStory.setSprint(sprint);
+                userStoryListUserStory = em.merge(userStoryListUserStory);
+                if (oldSprintOfUserStoryListUserStory != null) {
+                    oldSprintOfUserStoryListUserStory.getUserStoryList().remove(userStoryListUserStory);
+                    oldSprintOfUserStoryListUserStory = em.merge(oldSprintOfUserStoryListUserStory);
                 }
             }
             em.getTransaction().commit();
@@ -89,7 +88,7 @@ public class SprintJpaController implements Serializable {
     }
 
     public void edit(Sprint sprint) throws NonexistentEntityException, Exception {
-        sprint.getSprintPK().setPROJECTprojectid(sprint.getProject().getProjectId());
+        sprint.getSprintPK().setProjectProjectId(sprint.getProject().getProjectId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -97,42 +96,42 @@ public class SprintJpaController implements Serializable {
             Sprint persistentSprint = em.find(Sprint.class, sprint.getSprintPK());
             Project projectOld = persistentSprint.getProject();
             Project projectNew = sprint.getProject();
-            Collection<UserStory> userStoryCollectionOld = persistentSprint.getUserStoryCollection();
-            Collection<UserStory> userStoryCollectionNew = sprint.getUserStoryCollection();
+            List<UserStory> userStoryListOld = persistentSprint.getUserStoryList();
+            List<UserStory> userStoryListNew = sprint.getUserStoryList();
             if (projectNew != null) {
                 projectNew = em.getReference(projectNew.getClass(), projectNew.getProjectId());
                 sprint.setProject(projectNew);
             }
-            Collection<UserStory> attachedUserStoryCollectionNew = new ArrayList<UserStory>();
-            for (UserStory userStoryCollectionNewUserStoryToAttach : userStoryCollectionNew) {
-                userStoryCollectionNewUserStoryToAttach = em.getReference(userStoryCollectionNewUserStoryToAttach.getClass(), userStoryCollectionNewUserStoryToAttach.getStoryId());
-                attachedUserStoryCollectionNew.add(userStoryCollectionNewUserStoryToAttach);
+            List<UserStory> attachedUserStoryListNew = new ArrayList<UserStory>();
+            for (UserStory userStoryListNewUserStoryToAttach : userStoryListNew) {
+                userStoryListNewUserStoryToAttach = em.getReference(userStoryListNewUserStoryToAttach.getClass(), userStoryListNewUserStoryToAttach.getStoryId());
+                attachedUserStoryListNew.add(userStoryListNewUserStoryToAttach);
             }
-            userStoryCollectionNew = attachedUserStoryCollectionNew;
-            sprint.setUserStoryCollection(userStoryCollectionNew);
+            userStoryListNew = attachedUserStoryListNew;
+            sprint.setUserStoryList(userStoryListNew);
             sprint = em.merge(sprint);
             if (projectOld != null && !projectOld.equals(projectNew)) {
-                projectOld.getSprintCollection().remove(sprint);
+                projectOld.getSprintList().remove(sprint);
                 projectOld = em.merge(projectOld);
             }
             if (projectNew != null && !projectNew.equals(projectOld)) {
-                projectNew.getSprintCollection().add(sprint);
+                projectNew.getSprintList().add(sprint);
                 projectNew = em.merge(projectNew);
             }
-            for (UserStory userStoryCollectionOldUserStory : userStoryCollectionOld) {
-                if (!userStoryCollectionNew.contains(userStoryCollectionOldUserStory)) {
-                    userStoryCollectionOldUserStory.setSprint(null);
-                    userStoryCollectionOldUserStory = em.merge(userStoryCollectionOldUserStory);
+            for (UserStory userStoryListOldUserStory : userStoryListOld) {
+                if (!userStoryListNew.contains(userStoryListOldUserStory)) {
+                    userStoryListOldUserStory.setSprint(null);
+                    userStoryListOldUserStory = em.merge(userStoryListOldUserStory);
                 }
             }
-            for (UserStory userStoryCollectionNewUserStory : userStoryCollectionNew) {
-                if (!userStoryCollectionOld.contains(userStoryCollectionNewUserStory)) {
-                    Sprint oldSprintOfUserStoryCollectionNewUserStory = userStoryCollectionNewUserStory.getSprint();
-                    userStoryCollectionNewUserStory.setSprint(sprint);
-                    userStoryCollectionNewUserStory = em.merge(userStoryCollectionNewUserStory);
-                    if (oldSprintOfUserStoryCollectionNewUserStory != null && !oldSprintOfUserStoryCollectionNewUserStory.equals(sprint)) {
-                        oldSprintOfUserStoryCollectionNewUserStory.getUserStoryCollection().remove(userStoryCollectionNewUserStory);
-                        oldSprintOfUserStoryCollectionNewUserStory = em.merge(oldSprintOfUserStoryCollectionNewUserStory);
+            for (UserStory userStoryListNewUserStory : userStoryListNew) {
+                if (!userStoryListOld.contains(userStoryListNewUserStory)) {
+                    Sprint oldSprintOfUserStoryListNewUserStory = userStoryListNewUserStory.getSprint();
+                    userStoryListNewUserStory.setSprint(sprint);
+                    userStoryListNewUserStory = em.merge(userStoryListNewUserStory);
+                    if (oldSprintOfUserStoryListNewUserStory != null && !oldSprintOfUserStoryListNewUserStory.equals(sprint)) {
+                        oldSprintOfUserStoryListNewUserStory.getUserStoryList().remove(userStoryListNewUserStory);
+                        oldSprintOfUserStoryListNewUserStory = em.merge(oldSprintOfUserStoryListNewUserStory);
                     }
                 }
             }
@@ -167,13 +166,13 @@ public class SprintJpaController implements Serializable {
             }
             Project project = sprint.getProject();
             if (project != null) {
-                project.getSprintCollection().remove(sprint);
+                project.getSprintList().remove(sprint);
                 project = em.merge(project);
             }
-            Collection<UserStory> userStoryCollection = sprint.getUserStoryCollection();
-            for (UserStory userStoryCollectionUserStory : userStoryCollection) {
-                userStoryCollectionUserStory.setSprint(null);
-                userStoryCollectionUserStory = em.merge(userStoryCollectionUserStory);
+            List<UserStory> userStoryList = sprint.getUserStoryList();
+            for (UserStory userStoryListUserStory : userStoryList) {
+                userStoryListUserStory.setSprint(null);
+                userStoryListUserStory = em.merge(userStoryListUserStory);
             }
             em.remove(sprint);
             em.getTransaction().commit();

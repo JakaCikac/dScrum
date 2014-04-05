@@ -19,22 +19,20 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author Administrator
  */
 @Entity
-@Table(name = "COMMENT")
-@XmlRootElement
+@Table(name = "comment")
 @NamedQueries({
     @NamedQuery(name = "Comment.findAll", query = "SELECT c FROM Comment c"),
     @NamedQuery(name = "Comment.findByCommentId", query = "SELECT c FROM Comment c WHERE c.commentPK.commentId = :commentId"),
     @NamedQuery(name = "Comment.findByContent", query = "SELECT c FROM Comment c WHERE c.content = :content"),
     @NamedQuery(name = "Comment.findByCreatetime", query = "SELECT c FROM Comment c WHERE c.createtime = :createtime"),
-    @NamedQuery(name = "Comment.findByDISCUSSIONdiscussionid", query = "SELECT c FROM Comment c WHERE c.commentPK.dISCUSSIONdiscussionid = :dISCUSSIONdiscussionid"),
-    @NamedQuery(name = "Comment.findByUSERuserid", query = "SELECT c FROM Comment c WHERE c.commentPK.uSERuserid = :uSERuserid")})
+    @NamedQuery(name = "Comment.findByDiscussionDiscussionId", query = "SELECT c FROM Comment c WHERE c.commentPK.discussionDiscussionId = :discussionDiscussionId"),
+    @NamedQuery(name = "Comment.findByUserUserId", query = "SELECT c FROM Comment c WHERE c.commentPK.userUserId = :userUserId")})
 public class Comment implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -46,10 +44,10 @@ public class Comment implements Serializable {
     @Column(name = "createtime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createtime;
-    @JoinColumn(name = "USER_user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private User user;
-    @JoinColumn(name = "DISCUSSION_discussion_id", referencedColumnName = "discussion_id", insertable = false, updatable = false)
+    @JoinColumn(name = "discussion_discussion_id", referencedColumnName = "discussion_id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Discussion discussion;
 
@@ -66,8 +64,8 @@ public class Comment implements Serializable {
         this.createtime = createtime;
     }
 
-    public Comment(int commentId, int dISCUSSIONdiscussionid, int uSERuserid) {
-        this.commentPK = new CommentPK(commentId, dISCUSSIONdiscussionid, uSERuserid);
+    public Comment(int commentId, int discussionDiscussionId, int userUserId) {
+        this.commentPK = new CommentPK(commentId, discussionDiscussionId, userUserId);
     }
 
     public CommentPK getCommentPK() {

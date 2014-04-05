@@ -40,8 +40,8 @@ public class CommentJpaController implements Serializable {
         if (comment.getCommentPK() == null) {
             comment.setCommentPK(new CommentPK());
         }
-        comment.getCommentPK().setUSERuserid(comment.getUser().getUserId());
-        comment.getCommentPK().setDISCUSSIONdiscussionid(comment.getDiscussion().getDiscussionPK().getDiscussionId());
+        comment.getCommentPK().setDiscussionDiscussionId(comment.getDiscussion().getDiscussionPK().getDiscussionId());
+        comment.getCommentPK().setUserUserId(comment.getUser().getUserId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -58,11 +58,11 @@ public class CommentJpaController implements Serializable {
             }
             em.persist(comment);
             if (user != null) {
-                user.getCommentCollection().add(comment);
+                user.getCommentList().add(comment);
                 user = em.merge(user);
             }
             if (discussion != null) {
-                discussion.getCommentCollection().add(comment);
+                discussion.getCommentList().add(comment);
                 discussion = em.merge(discussion);
             }
             em.getTransaction().commit();
@@ -79,8 +79,8 @@ public class CommentJpaController implements Serializable {
     }
 
     public void edit(Comment comment) throws NonexistentEntityException, Exception {
-        comment.getCommentPK().setUSERuserid(comment.getUser().getUserId());
-        comment.getCommentPK().setDISCUSSIONdiscussionid(comment.getDiscussion().getDiscussionPK().getDiscussionId());
+        comment.getCommentPK().setDiscussionDiscussionId(comment.getDiscussion().getDiscussionPK().getDiscussionId());
+        comment.getCommentPK().setUserUserId(comment.getUser().getUserId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -100,19 +100,19 @@ public class CommentJpaController implements Serializable {
             }
             comment = em.merge(comment);
             if (userOld != null && !userOld.equals(userNew)) {
-                userOld.getCommentCollection().remove(comment);
+                userOld.getCommentList().remove(comment);
                 userOld = em.merge(userOld);
             }
             if (userNew != null && !userNew.equals(userOld)) {
-                userNew.getCommentCollection().add(comment);
+                userNew.getCommentList().add(comment);
                 userNew = em.merge(userNew);
             }
             if (discussionOld != null && !discussionOld.equals(discussionNew)) {
-                discussionOld.getCommentCollection().remove(comment);
+                discussionOld.getCommentList().remove(comment);
                 discussionOld = em.merge(discussionOld);
             }
             if (discussionNew != null && !discussionNew.equals(discussionOld)) {
-                discussionNew.getCommentCollection().add(comment);
+                discussionNew.getCommentList().add(comment);
                 discussionNew = em.merge(discussionNew);
             }
             em.getTransaction().commit();
@@ -146,12 +146,12 @@ public class CommentJpaController implements Serializable {
             }
             User user = comment.getUser();
             if (user != null) {
-                user.getCommentCollection().remove(comment);
+                user.getCommentList().remove(comment);
                 user = em.merge(user);
             }
             Discussion discussion = comment.getDiscussion();
             if (discussion != null) {
-                discussion.getCommentCollection().remove(comment);
+                discussion.getCommentList().remove(comment);
                 discussion = em.merge(discussion);
             }
             em.remove(comment);

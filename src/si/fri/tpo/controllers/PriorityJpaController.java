@@ -13,7 +13,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import si.fri.tpo.jpa.UserStory;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,27 +36,27 @@ public class PriorityJpaController implements Serializable {
     }
 
     public void create(Priority priority) {
-        if (priority.getUserStoryCollection() == null) {
-            priority.setUserStoryCollection(new ArrayList<UserStory>());
+        if (priority.getUserStoryList() == null) {
+            priority.setUserStoryList(new ArrayList<UserStory>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Collection<UserStory> attachedUserStoryCollection = new ArrayList<UserStory>();
-            for (UserStory userStoryCollectionUserStoryToAttach : priority.getUserStoryCollection()) {
-                userStoryCollectionUserStoryToAttach = em.getReference(userStoryCollectionUserStoryToAttach.getClass(), userStoryCollectionUserStoryToAttach.getStoryId());
-                attachedUserStoryCollection.add(userStoryCollectionUserStoryToAttach);
+            List<UserStory> attachedUserStoryList = new ArrayList<UserStory>();
+            for (UserStory userStoryListUserStoryToAttach : priority.getUserStoryList()) {
+                userStoryListUserStoryToAttach = em.getReference(userStoryListUserStoryToAttach.getClass(), userStoryListUserStoryToAttach.getStoryId());
+                attachedUserStoryList.add(userStoryListUserStoryToAttach);
             }
-            priority.setUserStoryCollection(attachedUserStoryCollection);
+            priority.setUserStoryList(attachedUserStoryList);
             em.persist(priority);
-            for (UserStory userStoryCollectionUserStory : priority.getUserStoryCollection()) {
-                Priority oldPRIORITYpriorityidOfUserStoryCollectionUserStory = userStoryCollectionUserStory.getPRIORITYpriorityid();
-                userStoryCollectionUserStory.setPRIORITYpriorityid(priority);
-                userStoryCollectionUserStory = em.merge(userStoryCollectionUserStory);
-                if (oldPRIORITYpriorityidOfUserStoryCollectionUserStory != null) {
-                    oldPRIORITYpriorityidOfUserStoryCollectionUserStory.getUserStoryCollection().remove(userStoryCollectionUserStory);
-                    oldPRIORITYpriorityidOfUserStoryCollectionUserStory = em.merge(oldPRIORITYpriorityidOfUserStoryCollectionUserStory);
+            for (UserStory userStoryListUserStory : priority.getUserStoryList()) {
+                Priority oldPriorityPriorityIdOfUserStoryListUserStory = userStoryListUserStory.getPriorityPriorityId();
+                userStoryListUserStory.setPriorityPriorityId(priority);
+                userStoryListUserStory = em.merge(userStoryListUserStory);
+                if (oldPriorityPriorityIdOfUserStoryListUserStory != null) {
+                    oldPriorityPriorityIdOfUserStoryListUserStory.getUserStoryList().remove(userStoryListUserStory);
+                    oldPriorityPriorityIdOfUserStoryListUserStory = em.merge(oldPriorityPriorityIdOfUserStoryListUserStory);
                 }
             }
             em.getTransaction().commit();
@@ -74,36 +73,36 @@ public class PriorityJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Priority persistentPriority = em.find(Priority.class, priority.getPriorityId());
-            Collection<UserStory> userStoryCollectionOld = persistentPriority.getUserStoryCollection();
-            Collection<UserStory> userStoryCollectionNew = priority.getUserStoryCollection();
+            List<UserStory> userStoryListOld = persistentPriority.getUserStoryList();
+            List<UserStory> userStoryListNew = priority.getUserStoryList();
             List<String> illegalOrphanMessages = null;
-            for (UserStory userStoryCollectionOldUserStory : userStoryCollectionOld) {
-                if (!userStoryCollectionNew.contains(userStoryCollectionOldUserStory)) {
+            for (UserStory userStoryListOldUserStory : userStoryListOld) {
+                if (!userStoryListNew.contains(userStoryListOldUserStory)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain UserStory " + userStoryCollectionOldUserStory + " since its PRIORITYpriorityid field is not nullable.");
+                    illegalOrphanMessages.add("You must retain UserStory " + userStoryListOldUserStory + " since its priorityPriorityId field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Collection<UserStory> attachedUserStoryCollectionNew = new ArrayList<UserStory>();
-            for (UserStory userStoryCollectionNewUserStoryToAttach : userStoryCollectionNew) {
-                userStoryCollectionNewUserStoryToAttach = em.getReference(userStoryCollectionNewUserStoryToAttach.getClass(), userStoryCollectionNewUserStoryToAttach.getStoryId());
-                attachedUserStoryCollectionNew.add(userStoryCollectionNewUserStoryToAttach);
+            List<UserStory> attachedUserStoryListNew = new ArrayList<UserStory>();
+            for (UserStory userStoryListNewUserStoryToAttach : userStoryListNew) {
+                userStoryListNewUserStoryToAttach = em.getReference(userStoryListNewUserStoryToAttach.getClass(), userStoryListNewUserStoryToAttach.getStoryId());
+                attachedUserStoryListNew.add(userStoryListNewUserStoryToAttach);
             }
-            userStoryCollectionNew = attachedUserStoryCollectionNew;
-            priority.setUserStoryCollection(userStoryCollectionNew);
+            userStoryListNew = attachedUserStoryListNew;
+            priority.setUserStoryList(userStoryListNew);
             priority = em.merge(priority);
-            for (UserStory userStoryCollectionNewUserStory : userStoryCollectionNew) {
-                if (!userStoryCollectionOld.contains(userStoryCollectionNewUserStory)) {
-                    Priority oldPRIORITYpriorityidOfUserStoryCollectionNewUserStory = userStoryCollectionNewUserStory.getPRIORITYpriorityid();
-                    userStoryCollectionNewUserStory.setPRIORITYpriorityid(priority);
-                    userStoryCollectionNewUserStory = em.merge(userStoryCollectionNewUserStory);
-                    if (oldPRIORITYpriorityidOfUserStoryCollectionNewUserStory != null && !oldPRIORITYpriorityidOfUserStoryCollectionNewUserStory.equals(priority)) {
-                        oldPRIORITYpriorityidOfUserStoryCollectionNewUserStory.getUserStoryCollection().remove(userStoryCollectionNewUserStory);
-                        oldPRIORITYpriorityidOfUserStoryCollectionNewUserStory = em.merge(oldPRIORITYpriorityidOfUserStoryCollectionNewUserStory);
+            for (UserStory userStoryListNewUserStory : userStoryListNew) {
+                if (!userStoryListOld.contains(userStoryListNewUserStory)) {
+                    Priority oldPriorityPriorityIdOfUserStoryListNewUserStory = userStoryListNewUserStory.getPriorityPriorityId();
+                    userStoryListNewUserStory.setPriorityPriorityId(priority);
+                    userStoryListNewUserStory = em.merge(userStoryListNewUserStory);
+                    if (oldPriorityPriorityIdOfUserStoryListNewUserStory != null && !oldPriorityPriorityIdOfUserStoryListNewUserStory.equals(priority)) {
+                        oldPriorityPriorityIdOfUserStoryListNewUserStory.getUserStoryList().remove(userStoryListNewUserStory);
+                        oldPriorityPriorityIdOfUserStoryListNewUserStory = em.merge(oldPriorityPriorityIdOfUserStoryListNewUserStory);
                     }
                 }
             }
@@ -137,12 +136,12 @@ public class PriorityJpaController implements Serializable {
                 throw new NonexistentEntityException("The priority with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<UserStory> userStoryCollectionOrphanCheck = priority.getUserStoryCollection();
-            for (UserStory userStoryCollectionOrphanCheckUserStory : userStoryCollectionOrphanCheck) {
+            List<UserStory> userStoryListOrphanCheck = priority.getUserStoryList();
+            for (UserStory userStoryListOrphanCheckUserStory : userStoryListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Priority (" + priority + ") cannot be destroyed since the UserStory " + userStoryCollectionOrphanCheckUserStory + " in its userStoryCollection field has a non-nullable PRIORITYpriorityid field.");
+                illegalOrphanMessages.add("This Priority (" + priority + ") cannot be destroyed since the UserStory " + userStoryListOrphanCheckUserStory + " in its userStoryList field has a non-nullable priorityPriorityId field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

@@ -38,15 +38,15 @@ public class AcceptanceTestJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            UserStory USERSTORYstoryid = acceptanceTest.getUSERSTORYstoryid();
-            if (USERSTORYstoryid != null) {
-                USERSTORYstoryid = em.getReference(USERSTORYstoryid.getClass(), USERSTORYstoryid.getStoryId());
-                acceptanceTest.setUSERSTORYstoryid(USERSTORYstoryid);
+            UserStory userStoryStoryId = acceptanceTest.getUserStoryStoryId();
+            if (userStoryStoryId != null) {
+                userStoryStoryId = em.getReference(userStoryStoryId.getClass(), userStoryStoryId.getStoryId());
+                acceptanceTest.setUserStoryStoryId(userStoryStoryId);
             }
             em.persist(acceptanceTest);
-            if (USERSTORYstoryid != null) {
-                USERSTORYstoryid.getAcceptanceTestCollection().add(acceptanceTest);
-                USERSTORYstoryid = em.merge(USERSTORYstoryid);
+            if (userStoryStoryId != null) {
+                userStoryStoryId.getAcceptanceTestList().add(acceptanceTest);
+                userStoryStoryId = em.merge(userStoryStoryId);
             }
             em.getTransaction().commit();
         } finally {
@@ -62,20 +62,20 @@ public class AcceptanceTestJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             AcceptanceTest persistentAcceptanceTest = em.find(AcceptanceTest.class, acceptanceTest.getAcceptanceTestId());
-            UserStory USERSTORYstoryidOld = persistentAcceptanceTest.getUSERSTORYstoryid();
-            UserStory USERSTORYstoryidNew = acceptanceTest.getUSERSTORYstoryid();
-            if (USERSTORYstoryidNew != null) {
-                USERSTORYstoryidNew = em.getReference(USERSTORYstoryidNew.getClass(), USERSTORYstoryidNew.getStoryId());
-                acceptanceTest.setUSERSTORYstoryid(USERSTORYstoryidNew);
+            UserStory userStoryStoryIdOld = persistentAcceptanceTest.getUserStoryStoryId();
+            UserStory userStoryStoryIdNew = acceptanceTest.getUserStoryStoryId();
+            if (userStoryStoryIdNew != null) {
+                userStoryStoryIdNew = em.getReference(userStoryStoryIdNew.getClass(), userStoryStoryIdNew.getStoryId());
+                acceptanceTest.setUserStoryStoryId(userStoryStoryIdNew);
             }
             acceptanceTest = em.merge(acceptanceTest);
-            if (USERSTORYstoryidOld != null && !USERSTORYstoryidOld.equals(USERSTORYstoryidNew)) {
-                USERSTORYstoryidOld.getAcceptanceTestCollection().remove(acceptanceTest);
-                USERSTORYstoryidOld = em.merge(USERSTORYstoryidOld);
+            if (userStoryStoryIdOld != null && !userStoryStoryIdOld.equals(userStoryStoryIdNew)) {
+                userStoryStoryIdOld.getAcceptanceTestList().remove(acceptanceTest);
+                userStoryStoryIdOld = em.merge(userStoryStoryIdOld);
             }
-            if (USERSTORYstoryidNew != null && !USERSTORYstoryidNew.equals(USERSTORYstoryidOld)) {
-                USERSTORYstoryidNew.getAcceptanceTestCollection().add(acceptanceTest);
-                USERSTORYstoryidNew = em.merge(USERSTORYstoryidNew);
+            if (userStoryStoryIdNew != null && !userStoryStoryIdNew.equals(userStoryStoryIdOld)) {
+                userStoryStoryIdNew.getAcceptanceTestList().add(acceptanceTest);
+                userStoryStoryIdNew = em.merge(userStoryStoryIdNew);
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -106,10 +106,10 @@ public class AcceptanceTestJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The acceptanceTest with id " + id + " no longer exists.", enfe);
             }
-            UserStory USERSTORYstoryid = acceptanceTest.getUSERSTORYstoryid();
-            if (USERSTORYstoryid != null) {
-                USERSTORYstoryid.getAcceptanceTestCollection().remove(acceptanceTest);
-                USERSTORYstoryid = em.merge(USERSTORYstoryid);
+            UserStory userStoryStoryId = acceptanceTest.getUserStoryStoryId();
+            if (userStoryStoryId != null) {
+                userStoryStoryId.getAcceptanceTestList().remove(acceptanceTest);
+                userStoryStoryId = em.merge(userStoryStoryId);
             }
             em.remove(acceptanceTest);
             em.getTransaction().commit();

@@ -7,8 +7,8 @@
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,16 +23,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Administrator
  */
 @Entity
-@Table(name = "USER")
-@XmlRootElement
+@Table(name = "user")
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
     @NamedQuery(name = "User.findByUserId", query = "SELECT u FROM User u WHERE u.userId = :userId"),
@@ -78,18 +75,18 @@ public class User implements Serializable {
     @Column(name = "time_created")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeCreated;
-    @ManyToMany(mappedBy = "userCollection")
-    private Collection<Team> teamCollection;
+    @ManyToMany(mappedBy = "userList")
+    private List<Team> teamList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Collection<Discussion> discussionCollection;
-    @OneToMany(mappedBy = "uSERuserid")
-    private Collection<Task> taskCollection;
+    private List<Workload> workloadList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Collection<Comment> commentCollection;
+    private List<Discussion> discussionList;
+    @OneToMany(mappedBy = "userUserId")
+    private List<Task> taskList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Collection<Workload> workloadCollection;
+    private List<DailyScrumEntry> dailyScrumEntryList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Collection<DailyScrumEntry> dailyScrumEntryCollection;
+    private List<Comment> commentList;
 
     public User() {
     }
@@ -189,58 +186,52 @@ public class User implements Serializable {
         this.timeCreated = timeCreated;
     }
 
-    @XmlTransient
-    public Collection<Team> getTeamCollection() {
-        return teamCollection;
+    public List<Team> getTeamList() {
+        return teamList;
     }
 
-    public void setTeamCollection(Collection<Team> teamCollection) {
-        this.teamCollection = teamCollection;
+    public void setTeamList(List<Team> teamList) {
+        this.teamList = teamList;
     }
 
-    @XmlTransient
-    public Collection<Discussion> getDiscussionCollection() {
-        return discussionCollection;
+    public List<Workload> getWorkloadList() {
+        return workloadList;
     }
 
-    public void setDiscussionCollection(Collection<Discussion> discussionCollection) {
-        this.discussionCollection = discussionCollection;
+    public void setWorkloadList(List<Workload> workloadList) {
+        this.workloadList = workloadList;
     }
 
-    @XmlTransient
-    public Collection<Task> getTaskCollection() {
-        return taskCollection;
+    public List<Discussion> getDiscussionList() {
+        return discussionList;
     }
 
-    public void setTaskCollection(Collection<Task> taskCollection) {
-        this.taskCollection = taskCollection;
+    public void setDiscussionList(List<Discussion> discussionList) {
+        this.discussionList = discussionList;
     }
 
-    @XmlTransient
-    public Collection<Comment> getCommentCollection() {
-        return commentCollection;
+    public List<Task> getTaskList() {
+        return taskList;
     }
 
-    public void setCommentCollection(Collection<Comment> commentCollection) {
-        this.commentCollection = commentCollection;
+    public void setTaskList(List<Task> taskList) {
+        this.taskList = taskList;
     }
 
-    @XmlTransient
-    public Collection<Workload> getWorkloadCollection() {
-        return workloadCollection;
+    public List<DailyScrumEntry> getDailyScrumEntryList() {
+        return dailyScrumEntryList;
     }
 
-    public void setWorkloadCollection(Collection<Workload> workloadCollection) {
-        this.workloadCollection = workloadCollection;
+    public void setDailyScrumEntryList(List<DailyScrumEntry> dailyScrumEntryList) {
+        this.dailyScrumEntryList = dailyScrumEntryList;
     }
 
-    @XmlTransient
-    public Collection<DailyScrumEntry> getDailyScrumEntryCollection() {
-        return dailyScrumEntryCollection;
+    public List<Comment> getCommentList() {
+        return commentList;
     }
 
-    public void setDailyScrumEntryCollection(Collection<DailyScrumEntry> dailyScrumEntryCollection) {
-        this.dailyScrumEntryCollection = dailyScrumEntryCollection;
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 
     @Override

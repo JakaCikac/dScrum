@@ -15,7 +15,6 @@ import si.fri.tpo.jpa.UserStory;
 import si.fri.tpo.jpa.User;
 import si.fri.tpo.jpa.Workload;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -44,10 +43,10 @@ public class TaskJpaController implements Serializable {
         if (task.getTaskPK() == null) {
             task.setTaskPK(new TaskPK());
         }
-        if (task.getWorkloadCollection() == null) {
-            task.setWorkloadCollection(new ArrayList<Workload>());
+        if (task.getWorkloadList() == null) {
+            task.setWorkloadList(new ArrayList<Workload>());
         }
-        task.getTaskPK().setUSERSTORYstoryid(task.getUserStory().getStoryId());
+        task.getTaskPK().setUserStoryStoryId(task.getUserStory().getStoryId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -57,33 +56,33 @@ public class TaskJpaController implements Serializable {
                 userStory = em.getReference(userStory.getClass(), userStory.getStoryId());
                 task.setUserStory(userStory);
             }
-            User USERuserid = task.getUSERuserid();
-            if (USERuserid != null) {
-                USERuserid = em.getReference(USERuserid.getClass(), USERuserid.getUserId());
-                task.setUSERuserid(USERuserid);
+            User userUserId = task.getUserUserId();
+            if (userUserId != null) {
+                userUserId = em.getReference(userUserId.getClass(), userUserId.getUserId());
+                task.setUserUserId(userUserId);
             }
-            Collection<Workload> attachedWorkloadCollection = new ArrayList<Workload>();
-            for (Workload workloadCollectionWorkloadToAttach : task.getWorkloadCollection()) {
-                workloadCollectionWorkloadToAttach = em.getReference(workloadCollectionWorkloadToAttach.getClass(), workloadCollectionWorkloadToAttach.getWorkloadPK());
-                attachedWorkloadCollection.add(workloadCollectionWorkloadToAttach);
+            List<Workload> attachedWorkloadList = new ArrayList<Workload>();
+            for (Workload workloadListWorkloadToAttach : task.getWorkloadList()) {
+                workloadListWorkloadToAttach = em.getReference(workloadListWorkloadToAttach.getClass(), workloadListWorkloadToAttach.getWorkloadPK());
+                attachedWorkloadList.add(workloadListWorkloadToAttach);
             }
-            task.setWorkloadCollection(attachedWorkloadCollection);
+            task.setWorkloadList(attachedWorkloadList);
             em.persist(task);
             if (userStory != null) {
-                userStory.getTaskCollection().add(task);
+                userStory.getTaskList().add(task);
                 userStory = em.merge(userStory);
             }
-            if (USERuserid != null) {
-                USERuserid.getTaskCollection().add(task);
-                USERuserid = em.merge(USERuserid);
+            if (userUserId != null) {
+                userUserId.getTaskList().add(task);
+                userUserId = em.merge(userUserId);
             }
-            for (Workload workloadCollectionWorkload : task.getWorkloadCollection()) {
-                Task oldTaskOfWorkloadCollectionWorkload = workloadCollectionWorkload.getTask();
-                workloadCollectionWorkload.setTask(task);
-                workloadCollectionWorkload = em.merge(workloadCollectionWorkload);
-                if (oldTaskOfWorkloadCollectionWorkload != null) {
-                    oldTaskOfWorkloadCollectionWorkload.getWorkloadCollection().remove(workloadCollectionWorkload);
-                    oldTaskOfWorkloadCollectionWorkload = em.merge(oldTaskOfWorkloadCollectionWorkload);
+            for (Workload workloadListWorkload : task.getWorkloadList()) {
+                Task oldTaskOfWorkloadListWorkload = workloadListWorkload.getTask();
+                workloadListWorkload.setTask(task);
+                workloadListWorkload = em.merge(workloadListWorkload);
+                if (oldTaskOfWorkloadListWorkload != null) {
+                    oldTaskOfWorkloadListWorkload.getWorkloadList().remove(workloadListWorkload);
+                    oldTaskOfWorkloadListWorkload = em.merge(oldTaskOfWorkloadListWorkload);
                 }
             }
             em.getTransaction().commit();
@@ -100,7 +99,7 @@ public class TaskJpaController implements Serializable {
     }
 
     public void edit(Task task) throws IllegalOrphanException, NonexistentEntityException, Exception {
-        task.getTaskPK().setUSERSTORYstoryid(task.getUserStory().getStoryId());
+        task.getTaskPK().setUserStoryStoryId(task.getUserStory().getStoryId());
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -108,17 +107,17 @@ public class TaskJpaController implements Serializable {
             Task persistentTask = em.find(Task.class, task.getTaskPK());
             UserStory userStoryOld = persistentTask.getUserStory();
             UserStory userStoryNew = task.getUserStory();
-            User USERuseridOld = persistentTask.getUSERuserid();
-            User USERuseridNew = task.getUSERuserid();
-            Collection<Workload> workloadCollectionOld = persistentTask.getWorkloadCollection();
-            Collection<Workload> workloadCollectionNew = task.getWorkloadCollection();
+            User userUserIdOld = persistentTask.getUserUserId();
+            User userUserIdNew = task.getUserUserId();
+            List<Workload> workloadListOld = persistentTask.getWorkloadList();
+            List<Workload> workloadListNew = task.getWorkloadList();
             List<String> illegalOrphanMessages = null;
-            for (Workload workloadCollectionOldWorkload : workloadCollectionOld) {
-                if (!workloadCollectionNew.contains(workloadCollectionOldWorkload)) {
+            for (Workload workloadListOldWorkload : workloadListOld) {
+                if (!workloadListNew.contains(workloadListOldWorkload)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Workload " + workloadCollectionOldWorkload + " since its task field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Workload " + workloadListOldWorkload + " since its task field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -128,42 +127,42 @@ public class TaskJpaController implements Serializable {
                 userStoryNew = em.getReference(userStoryNew.getClass(), userStoryNew.getStoryId());
                 task.setUserStory(userStoryNew);
             }
-            if (USERuseridNew != null) {
-                USERuseridNew = em.getReference(USERuseridNew.getClass(), USERuseridNew.getUserId());
-                task.setUSERuserid(USERuseridNew);
+            if (userUserIdNew != null) {
+                userUserIdNew = em.getReference(userUserIdNew.getClass(), userUserIdNew.getUserId());
+                task.setUserUserId(userUserIdNew);
             }
-            Collection<Workload> attachedWorkloadCollectionNew = new ArrayList<Workload>();
-            for (Workload workloadCollectionNewWorkloadToAttach : workloadCollectionNew) {
-                workloadCollectionNewWorkloadToAttach = em.getReference(workloadCollectionNewWorkloadToAttach.getClass(), workloadCollectionNewWorkloadToAttach.getWorkloadPK());
-                attachedWorkloadCollectionNew.add(workloadCollectionNewWorkloadToAttach);
+            List<Workload> attachedWorkloadListNew = new ArrayList<Workload>();
+            for (Workload workloadListNewWorkloadToAttach : workloadListNew) {
+                workloadListNewWorkloadToAttach = em.getReference(workloadListNewWorkloadToAttach.getClass(), workloadListNewWorkloadToAttach.getWorkloadPK());
+                attachedWorkloadListNew.add(workloadListNewWorkloadToAttach);
             }
-            workloadCollectionNew = attachedWorkloadCollectionNew;
-            task.setWorkloadCollection(workloadCollectionNew);
+            workloadListNew = attachedWorkloadListNew;
+            task.setWorkloadList(workloadListNew);
             task = em.merge(task);
             if (userStoryOld != null && !userStoryOld.equals(userStoryNew)) {
-                userStoryOld.getTaskCollection().remove(task);
+                userStoryOld.getTaskList().remove(task);
                 userStoryOld = em.merge(userStoryOld);
             }
             if (userStoryNew != null && !userStoryNew.equals(userStoryOld)) {
-                userStoryNew.getTaskCollection().add(task);
+                userStoryNew.getTaskList().add(task);
                 userStoryNew = em.merge(userStoryNew);
             }
-            if (USERuseridOld != null && !USERuseridOld.equals(USERuseridNew)) {
-                USERuseridOld.getTaskCollection().remove(task);
-                USERuseridOld = em.merge(USERuseridOld);
+            if (userUserIdOld != null && !userUserIdOld.equals(userUserIdNew)) {
+                userUserIdOld.getTaskList().remove(task);
+                userUserIdOld = em.merge(userUserIdOld);
             }
-            if (USERuseridNew != null && !USERuseridNew.equals(USERuseridOld)) {
-                USERuseridNew.getTaskCollection().add(task);
-                USERuseridNew = em.merge(USERuseridNew);
+            if (userUserIdNew != null && !userUserIdNew.equals(userUserIdOld)) {
+                userUserIdNew.getTaskList().add(task);
+                userUserIdNew = em.merge(userUserIdNew);
             }
-            for (Workload workloadCollectionNewWorkload : workloadCollectionNew) {
-                if (!workloadCollectionOld.contains(workloadCollectionNewWorkload)) {
-                    Task oldTaskOfWorkloadCollectionNewWorkload = workloadCollectionNewWorkload.getTask();
-                    workloadCollectionNewWorkload.setTask(task);
-                    workloadCollectionNewWorkload = em.merge(workloadCollectionNewWorkload);
-                    if (oldTaskOfWorkloadCollectionNewWorkload != null && !oldTaskOfWorkloadCollectionNewWorkload.equals(task)) {
-                        oldTaskOfWorkloadCollectionNewWorkload.getWorkloadCollection().remove(workloadCollectionNewWorkload);
-                        oldTaskOfWorkloadCollectionNewWorkload = em.merge(oldTaskOfWorkloadCollectionNewWorkload);
+            for (Workload workloadListNewWorkload : workloadListNew) {
+                if (!workloadListOld.contains(workloadListNewWorkload)) {
+                    Task oldTaskOfWorkloadListNewWorkload = workloadListNewWorkload.getTask();
+                    workloadListNewWorkload.setTask(task);
+                    workloadListNewWorkload = em.merge(workloadListNewWorkload);
+                    if (oldTaskOfWorkloadListNewWorkload != null && !oldTaskOfWorkloadListNewWorkload.equals(task)) {
+                        oldTaskOfWorkloadListNewWorkload.getWorkloadList().remove(workloadListNewWorkload);
+                        oldTaskOfWorkloadListNewWorkload = em.merge(oldTaskOfWorkloadListNewWorkload);
                     }
                 }
             }
@@ -197,25 +196,25 @@ public class TaskJpaController implements Serializable {
                 throw new NonexistentEntityException("The task with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            Collection<Workload> workloadCollectionOrphanCheck = task.getWorkloadCollection();
-            for (Workload workloadCollectionOrphanCheckWorkload : workloadCollectionOrphanCheck) {
+            List<Workload> workloadListOrphanCheck = task.getWorkloadList();
+            for (Workload workloadListOrphanCheckWorkload : workloadListOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Task (" + task + ") cannot be destroyed since the Workload " + workloadCollectionOrphanCheckWorkload + " in its workloadCollection field has a non-nullable task field.");
+                illegalOrphanMessages.add("This Task (" + task + ") cannot be destroyed since the Workload " + workloadListOrphanCheckWorkload + " in its workloadList field has a non-nullable task field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             UserStory userStory = task.getUserStory();
             if (userStory != null) {
-                userStory.getTaskCollection().remove(task);
+                userStory.getTaskList().remove(task);
                 userStory = em.merge(userStory);
             }
-            User USERuserid = task.getUSERuserid();
-            if (USERuserid != null) {
-                USERuserid.getTaskCollection().remove(task);
-                USERuserid = em.merge(USERuserid);
+            User userUserId = task.getUserUserId();
+            if (userUserId != null) {
+                userUserId.getTaskList().remove(task);
+                userUserId = em.merge(userUserId);
             }
             em.remove(task);
             em.getTransaction().commit();

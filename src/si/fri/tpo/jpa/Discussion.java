@@ -7,8 +7,8 @@
 package si.fri.tpo.jpa;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,23 +22,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Administrator
  */
 @Entity
-@Table(name = "DISCUSSION")
-@XmlRootElement
+@Table(name = "discussion")
 @NamedQueries({
     @NamedQuery(name = "Discussion.findAll", query = "SELECT d FROM Discussion d"),
     @NamedQuery(name = "Discussion.findByDiscussionId", query = "SELECT d FROM Discussion d WHERE d.discussionPK.discussionId = :discussionId"),
     @NamedQuery(name = "Discussion.findByContent", query = "SELECT d FROM Discussion d WHERE d.content = :content"),
     @NamedQuery(name = "Discussion.findByCreatetime", query = "SELECT d FROM Discussion d WHERE d.createtime = :createtime"),
-    @NamedQuery(name = "Discussion.findByUSERuserid", query = "SELECT d FROM Discussion d WHERE d.discussionPK.uSERuserid = :uSERuserid"),
-    @NamedQuery(name = "Discussion.findByPROJECTprojectid", query = "SELECT d FROM Discussion d WHERE d.discussionPK.pROJECTprojectid = :pROJECTprojectid")})
+    @NamedQuery(name = "Discussion.findByUserUserId", query = "SELECT d FROM Discussion d WHERE d.discussionPK.userUserId = :userUserId"),
+    @NamedQuery(name = "Discussion.findByProjectProjectId", query = "SELECT d FROM Discussion d WHERE d.discussionPK.projectProjectId = :projectProjectId")})
 public class Discussion implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -49,14 +46,14 @@ public class Discussion implements Serializable {
     @Column(name = "createtime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createtime;
-    @JoinColumn(name = "PROJECT_project_id", referencedColumnName = "project_id", insertable = false, updatable = false)
+    @JoinColumn(name = "project_project_id", referencedColumnName = "project_id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Project project;
-    @JoinColumn(name = "USER_user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private User user;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "discussion")
-    private Collection<Comment> commentCollection;
+    private List<Comment> commentList;
 
     public Discussion() {
     }
@@ -70,8 +67,8 @@ public class Discussion implements Serializable {
         this.createtime = createtime;
     }
 
-    public Discussion(int discussionId, int uSERuserid, int pROJECTprojectid) {
-        this.discussionPK = new DiscussionPK(discussionId, uSERuserid, pROJECTprojectid);
+    public Discussion(int discussionId, int userUserId, int projectProjectId) {
+        this.discussionPK = new DiscussionPK(discussionId, userUserId, projectProjectId);
     }
 
     public DiscussionPK getDiscussionPK() {
@@ -114,13 +111,12 @@ public class Discussion implements Serializable {
         this.user = user;
     }
 
-    @XmlTransient
-    public Collection<Comment> getCommentCollection() {
-        return commentCollection;
+    public List<Comment> getCommentList() {
+        return commentList;
     }
 
-    public void setCommentCollection(Collection<Comment> commentCollection) {
-        this.commentCollection = commentCollection;
+    public void setCommentList(List<Comment> commentList) {
+        this.commentList = commentList;
     }
 
     @Override
