@@ -1,8 +1,6 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import si.fri.tpo.gwt.server.jpa.WorkblockPK;
-import si.fri.tpo.gwt.server.jpa.Workload;
 
 import java.util.Date;
 
@@ -19,11 +17,11 @@ public class WorkblockDTO extends BaseModelData {
     public WorkblockDTO() {
     }
 
-    public WorkblockPK getWorkblockPK() {
+    public WorkblockPKDTO getWorkblockPK() {
         return get("workblockPK");
     }
 
-    public void setWorkblockPK(WorkblockPK workblockPK) {
+    public void setWorkblockPK(WorkblockPKDTO workblockPK) {
         set("workblockPK", workblockPK);
     }
 
@@ -43,11 +41,11 @@ public class WorkblockDTO extends BaseModelData {
         set("timeStop", timeStop);
     }
 
-    public Workload getWorkload() {
+    public WorkloadDTO getWorkload() {
         return get("workload");
     }
 
-    public void setWorkload(Workload workload) {
+    public void setWorkload(WorkloadDTO workload) {
         set("workload", workload);
     }
 }

@@ -1,7 +1,6 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import si.fri.tpo.gwt.server.jpa.*;
 
 import java.util.List;
 
@@ -71,27 +70,27 @@ public class UserStoryDTO extends BaseModelData {
         set("acceptanceTestList", acceptanceTestList);
     }
 
-    public Sprint getSprint() {
+    public SprintDTO getSprint() {
         return get("sprint");
     }
 
-    public void setSprint(Sprint sprint) {
+    public void setSprint(SprintDTO sprint) {
         set("sprint", sprint);
     }
 
-    public Priority getPriorityPriorityId() {
+    public PriorityDTO getPriorityPriorityId() {
         return get("priorityPriorityId");
     }
 
-    public void setPriorityPriorityId(Priority priorityPriorityId) {
+    public void setPriorityPriorityId(PriorityDTO priorityPriorityId) {
         set("priorityPriorityId", priorityPriorityId);
     }
 
-    public Project getProjectProjectId() {
+    public ProjectDTO getProjectProjectId() {
         return get("projectProjectId");
     }
 
-    public void setProjectProjectId(Project projectProjectId) {
+    public void setProjectProjectId(ProjectDTO projectProjectId) {
         set("projectProjectId", projectProjectId);
     }
 }

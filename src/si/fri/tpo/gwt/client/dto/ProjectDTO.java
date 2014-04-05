@@ -1,7 +1,6 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import si.fri.tpo.gwt.server.jpa.Team;
 
 import java.util.List;
 
@@ -55,11 +54,11 @@ public class ProjectDTO extends BaseModelData{
         set("status", status);
     }
 
-    public Team getTeamTeamId() {
+    public TeamDTO getTeamTeamId() {
         return get("teamTeamId");
     }
 
-    public void setTeamTeamId(Team teamTeamId) {
+    public void setTeamTeamId(TeamDTO teamTeamId) {
        set("teamTeamId", teamTeamId);
     }
 

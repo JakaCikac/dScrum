@@ -1,9 +1,6 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import si.fri.tpo.gwt.server.jpa.CommentPK;
-import si.fri.tpo.gwt.server.jpa.Discussion;
-import si.fri.tpo.gwt.server.jpa.User;
 
 import java.util.Date;
 
@@ -21,11 +18,11 @@ public class CommentDTO extends BaseModelData {
     public CommentDTO() {
     }
 
-    public CommentPK getCommentPK() {
+    public CommentPKDTO getCommentPK() {
         return get("commentPK");
     }
 
-    public void setCommentPK(CommentPK commentPK) {
+    public void setCommentPK(CommentPKDTO commentPK) {
         set("commentPK", commentPK);
     }
 
@@ -45,19 +42,19 @@ public class CommentDTO extends BaseModelData {
         set("createtime", createtime);
     }
 
-    public User getUser() {
+    public UserDTO getUser() {
         return get("user");
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         set("user", user);
     }
 
-    public Discussion getDiscussion() {
+    public DiscussionDTO getDiscussion() {
         return get("discussion");
     }
 
-    public void setDiscussion(Discussion discussion) {
+    public void setDiscussion(DiscussionDTO discussion) {
         set("discussion", discussion);
     }
 }

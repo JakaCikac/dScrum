@@ -1,9 +1,6 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import si.fri.tpo.gwt.server.jpa.TaskPK;
-import si.fri.tpo.gwt.server.jpa.User;
-import si.fri.tpo.gwt.server.jpa.UserStory;
 
 import java.util.List;
 
@@ -24,11 +21,11 @@ public class TaskDTO extends BaseModelData {
     public TaskDTO() {
     }
 
-    public TaskPK getTaskPK() {
+    public TaskPKDTO getTaskPK() {
         return get("taskPK");
     }
 
-    public void setTaskPK(TaskPK taskPK) {
+    public void setTaskPK(TaskPKDTO taskPK) {
         set("taskPK", taskPK);
     }
 
@@ -72,19 +69,19 @@ public class TaskDTO extends BaseModelData {
         set("workloadList", workloadList);
     }
 
-    public UserStory getUserStory() {
+    public UserStoryDTO getUserStory() {
         return get("userStory");
     }
 
-    public void setUserStory(UserStory userStory) {
+    public void setUserStory(UserStoryDTO userStory) {
         set("userStory", userStory);
     }
 
-    public User getUserUserId() {
+    public UserDTO getUserUserId() {
         return get("userUserId");
     }
 
-    public void setUserUserId(User userUserId) {
+    public void setUserUserId(UserDTO userUserId) {
         set("userUserId", userUserId);
     }
 }

@@ -1,9 +1,6 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import si.fri.tpo.gwt.server.jpa.DailyScrumEntryPK;
-import si.fri.tpo.gwt.server.jpa.Project;
-import si.fri.tpo.gwt.server.jpa.User;
 
 import java.util.Date;
 
@@ -23,11 +20,11 @@ public class DailyScrumEntryDTO extends BaseModelData {
     public DailyScrumEntryDTO() {
     }
 
-    public DailyScrumEntryPK getDailyScrumEntryPK() {
+    public DailyScrumEntryPKDTO getDailyScrumEntryPK() {
         return get("dailyScrumEntryPK");
     }
 
-    public void setDailyScrumEntryPK(DailyScrumEntryPK dailyScrumEntryPK) {
+    public void setDailyScrumEntryPK(DailyScrumEntryPKDTO dailyScrumEntryPK) {
         set("dailyScrumEntryPK", dailyScrumEntryPK);
     }
 
@@ -63,19 +60,19 @@ public class DailyScrumEntryDTO extends BaseModelData {
         set("problemsAndIssues", problemsAndIssues);
     }
 
-    public Project getProject() {
+    public ProjectDTO getProject() {
         return get("project");
     }
 
-    public void setProject(Project project) {
+    public void setProject(ProjectDTO project) {
         set("project", project);
     }
 
-    public User getUser() {
+    public UserDTO getUser() {
         return get("user");
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         set("user", user);
     }
 }

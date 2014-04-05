@@ -1,7 +1,6 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import si.fri.tpo.gwt.server.jpa.UserStory;
 
 /**
  * Created by t13db on 4.4.2014.
@@ -31,11 +30,11 @@ public class AcceptanceTestDTO extends BaseModelData {
         set("content", content);
     }
 
-    public UserStory getUserStoryStoryId() {
+    public UserStoryDTO getUserStoryStoryId() {
         return get("userStoryStoryId");
     }
 
-    public void setUserStoryStoryId(UserStory userStoryStoryId) {
+    public void setUserStoryStoryId(UserStoryDTO userStoryStoryId) {
         set("userStoryStoryId", userStoryStoryId);
     }
 }

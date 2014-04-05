@@ -1,9 +1,6 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import si.fri.tpo.gwt.server.jpa.Task;
-import si.fri.tpo.gwt.server.jpa.User;
-import si.fri.tpo.gwt.server.jpa.WorkloadPK;
 
 import java.util.List;
 
@@ -21,11 +18,11 @@ public class WorkloadDTO extends BaseModelData {
     public WorkloadDTO() {
     }
 
-    public WorkloadPK getWorkloadPK() {
+    public WorkloadPKDTO getWorkloadPK() {
         return get("workloadPK");
     }
 
-    public void setWorkloadPK(WorkloadPK workloadPK) {
+    public void setWorkloadPK(WorkloadPKDTO workloadPK) {
         set("workloadPK", workloadPK);
     }
 
@@ -37,19 +34,19 @@ public class WorkloadDTO extends BaseModelData {
         set("timeSpent", timeSpent);
     }
 
-    public User getUser() {
+    public UserDTO getUser() {
         return get("user");
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         set("user", user);
     }
 
-    public Task getTask() {
+    public TaskDTO getTask() {
         return get("task");
     }
 
-    public void setTask(Task task) {
+    public void setTask(TaskDTO task) {
         set("task", task);
     }
 

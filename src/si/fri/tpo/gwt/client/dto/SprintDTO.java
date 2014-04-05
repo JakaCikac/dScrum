@@ -1,8 +1,6 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.extjs.gxt.ui.client.data.BaseModelData;
-import si.fri.tpo.gwt.server.jpa.Project;
-import si.fri.tpo.gwt.server.jpa.SprintPK;
 
 import java.util.Date;
 import java.util.List;
@@ -24,11 +22,11 @@ public class SprintDTO extends BaseModelData {
     public SprintDTO() {
     }
 
-    public SprintPK getSprintPK() {
+    public SprintPKDTO getSprintPK() {
         return get("sprintPK");
     }
 
-    public void setSprintPK(SprintPK sprintPK) {
+    public void setSprintPK(SprintPKDTO sprintPK) {
         set("sprintPK", sprintPK);
     }
 
@@ -72,11 +70,11 @@ public class SprintDTO extends BaseModelData {
         set("status", status);
     }
 
-    public Project getProject() {
+    public ProjectDTO getProject() {
         return get("project");
     }
 
-    public void setProject(Project project) {
+    public void setProject(ProjectDTO project) {
         set("project", project);
     }
 
