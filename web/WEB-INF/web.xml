@@ -13,4 +13,7 @@
         <servlet-name>si.fri.tpo.gwt.DScrum DScrumService</servlet-name>
         <url-pattern>/si.fri.tpo.gwt.DScrum/dscrum</url-pattern>
     </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>DScrum.html</welcome-file>
+    </welcome-file-list>
 </web-app>
