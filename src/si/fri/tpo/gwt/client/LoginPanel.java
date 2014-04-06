@@ -65,16 +65,11 @@ public class LoginPanel extends FormPanel {
             @Override
             public void onSuccess(Pair<UserDTO, String> result) {
                 if (result.getFirst() != null) {
-                    System.out.println(result.getFirst().getUserId());
-                    System.out.println(result.getFirst().getFirstName());
-                    System.out.println(result.getFirst().getPassword());
-                    System.out.println(result.getFirst().getUsername());
-                    System.out.println(result.getFirst().isAdmin());
-
+                    // open the navigation for resulted User
                     openNavigationContainer(result.getFirst());
                 }
                 else
-                    MessageBox.alert("Wrong login credentials", result.getSecond(), null);
+                    MessageBox.alert("Wrong login credentials!", result.getSecond(), null);
             }
 
             @Override
@@ -87,27 +82,18 @@ public class LoginPanel extends FormPanel {
     }
 
      private void openNavigationContainer(UserDTO userDTO) {
-        System.out.println("Opening navigation container.");
         mainContainer.remove(this);
-        System.out.println("Removing this from main container.");
-        //navigationContainer.remove(0);
-        System.out.println("Removing 0 from navigation container.");
-         // check if user is admin and open appropriate navigation
-        System.out.println("Check user role.");
-        System.out.println("User is admin open navi? "  + userDTO.getFirstName());
+        // navigationContainer.remove(0);
+        // check if user is admin and open appropriate navigation
         checkUserRole(userDTO.isAdmin(), userDTO);
     }
 
     private void checkUserRole(boolean isAdmin, UserDTO userDTO) {
-        System.out.println("Inside check user role method..");
         SessionInfo.userDTO = userDTO;
-        System.out.println("Is admin? " + userDTO.isAdmin() + " with username: " + userDTO.getFirstName());
         // Check if user is administrator and display appropriate message
         if (isAdmin) {
-            System.out.println("I know the user is admin, now trying to get his name.");
             String message = "Welcome to dScrum admin " +
                     userDTO.getFirstName() + " " + userDTO.getLastName();
-
 
             // open appropriate navigation panel and main form
             fillNavigationMainAndHeader(new AdminNavPanel(mainContainer, service),
