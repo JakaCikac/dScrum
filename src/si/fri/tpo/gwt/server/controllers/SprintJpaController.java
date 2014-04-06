@@ -33,6 +33,9 @@ public class SprintJpaController implements Serializable {
     }
     private EntityManagerFactory emf = null;
 
+    public SprintJpaController() {
+    }
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }

@@ -28,6 +28,7 @@ import si.fri.tpo.gwt.server.jpa.Discussion;
 public class CommentJpaController implements Serializable {
 
 
+    public CommentJpaController() {}
 
     public CommentJpaController(EntityManagerFactory emf) {
         this.emf = emf;

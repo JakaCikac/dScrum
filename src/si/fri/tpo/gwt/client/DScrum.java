@@ -5,6 +5,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
+import si.fri.tpo.gwt.client.dto.*;
 import si.fri.tpo.gwt.client.resources.MyResources;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
@@ -81,5 +82,53 @@ public class DScrum implements EntryPoint {
 
             }
         };
+        service.dummyCharacterTrigger(new Character('B'), callback);
+
+        AsyncCallback<SprintDTO> callback2 = new AsyncCallback<SprintDTO>() {
+
+            @Override
+            public void onSuccess(SprintDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+
+            }
+        };
+        service.dummySprintTrigger(new SprintDTO(), callback2);
+
+        AsyncCallback<UserDTO> callback3 = new AsyncCallback<UserDTO>() {
+
+            @Override
+            public void onSuccess(UserDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+
+            }
+        };
+        service.dummyUserTrigger(new UserDTO(), callback3);
+
+        AsyncCallback<DiscussionDTO> callback4 = new AsyncCallback<DiscussionDTO>() {
+
+            @Override
+            public void onSuccess(DiscussionDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+
+            }
+        };
+        service.dummyDiscussionTrigger(new DiscussionDTO(), callback4);
+
     }
+
 }

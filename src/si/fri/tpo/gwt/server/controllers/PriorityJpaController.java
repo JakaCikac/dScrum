@@ -31,6 +31,9 @@ public class PriorityJpaController implements Serializable {
     }
     private EntityManagerFactory emf = null;
 
+    public PriorityJpaController() {
+    }
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }

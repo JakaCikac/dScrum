@@ -36,6 +36,9 @@ public class UserJpaController implements Serializable {
     }
     private EntityManagerFactory emf = null;
 
+    public UserJpaController() {
+    }
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }

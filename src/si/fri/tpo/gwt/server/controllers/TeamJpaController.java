@@ -31,6 +31,9 @@ public class TeamJpaController implements Serializable {
     }
     private EntityManagerFactory emf = null;
 
+    public TeamJpaController() {
+    }
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }

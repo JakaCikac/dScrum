@@ -32,6 +32,9 @@ public class DailyScrumEntryJpaController implements Serializable {
     }
     private EntityManagerFactory emf = null;
 
+    public DailyScrumEntryJpaController() {
+    }
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }

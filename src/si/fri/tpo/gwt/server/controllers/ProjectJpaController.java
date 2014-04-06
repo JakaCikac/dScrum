@@ -35,6 +35,9 @@ public class ProjectJpaController implements Serializable {
     }
     private EntityManagerFactory emf = null;
 
+    public ProjectJpaController() {
+    }
+
     public EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
