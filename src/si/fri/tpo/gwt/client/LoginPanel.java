@@ -62,8 +62,15 @@ public class LoginPanel extends FormPanel {
 
             @Override
             public void onSuccess(Pair<UserDTO, String> result) {
-                if (result.getFirst() != null)
+                if (result.getFirst() != null) {
+                    System.out.println(result.getFirst().getUserId());
+                    System.out.println(result.getFirst().getFirstName());
+                    System.out.println(result.getFirst().getPassword());
+                    System.out.println(result.getFirst().getUsername());
+                    System.out.println(result.getFirst().isAdmin());
+
                     openNavigationContainer(result.getFirst());
+                }
                 else
                     MessageBox.alert("Wrong login credentials", result.getSecond(), null);
             }
@@ -85,10 +92,12 @@ public class LoginPanel extends FormPanel {
         System.out.println("Removing 0 from navigation container.");
          // check if user is admin and open appropriate navigation
         System.out.println("Check user role.");
+        System.out.println("User is admin open navi? "  + userDTO.getFirstName());
         checkUserRole(userDTO.isAdmin(), userDTO);
     }
 
     private void checkUserRole(boolean isAdmin, UserDTO userDTO) {
+        System.out.println("Inside check user role method..");
         SessionInfo.userDTO = userDTO;
         System.out.println("Is admin? " + userDTO.isAdmin() + " with username: " + userDTO.getFirstName());
         // Check if user is administrator and display appropriate message
