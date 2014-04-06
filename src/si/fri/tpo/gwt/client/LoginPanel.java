@@ -51,7 +51,7 @@ public class LoginPanel extends FormPanel {
                 final String passwordHash = PassHash.getMD5Password(passwordTB.getText());
                 validateResult(usernameTB.getText(), passwordHash);
 
-                System.out.println("plain: " + plainPassword + " hashed: " + passwordHash);
+                //System.out.println("plain: " + plainPassword + " hashed: " + passwordHash);
             }
         });
     }
