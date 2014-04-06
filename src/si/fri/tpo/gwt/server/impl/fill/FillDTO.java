@@ -11,26 +11,58 @@ import java.util.List;
  */
 public class FillDTO {
 
-    public static AcceptanceTestDTO fillAcceptanceTestDTO(AcceptanceTest acceptanceTest) {
+   /* public static AcceptanceTestDTO fillAcceptanceTestDTO(AcceptanceTest acceptanceTest) {
         AcceptanceTestDTO acceptanceTestDTO = new AcceptanceTestDTO();
+
         acceptanceTestDTO.setAcceptanceTestId(acceptanceTest.getAcceptanceTestId());
         acceptanceTestDTO.setContent(acceptanceTest.getContent());
         acceptanceTestDTO.setUserStoryStoryId(acceptanceTest.getUserStoryStoryId());
+
         return acceptanceTestDTO;
     }
     /* -------------------------------------------------------------------------------------------------------------- */
-    public static CommentDTO fillCommentDTO(Comment comment) {
+   /* public static CommentDTO fillCommentDTO(Comment comment) {
+
         CommentDTO commentDTO = new CommentDTO();
-        commentDTO.setCommentPK(commentDTO.getCommentPK());
-        commentDTO.setContent(commentDTO.getContent());
-        commentDTO.setCreatetime(commentDTO.getCreatetime());
-        commentDTO.setUser(commentDTO.getUser());
-        commentDTO.setDiscussion(commentDTO.getDiscussion());
+        commentDTO.setCommentPK(comment.getCommentPK());
+        commentDTO.setContent(comment.getContent());
+        commentDTO.setCreatetime(comment.getCreatetime());
+        commentDTO.setUser(comment.getUser());
+        commentDTO.setDiscussion(comment.getDiscussion());
+
         return commentDTO;
     }
     /* -------------------------------------------------------------------------------------------------------------- */
-    public static ProjectDTO fillProjectData(Project project) {
+   /* private static DailyScrumEntryDTO fillDailyScrumEntryDTO(DailyScrumEntry dailyScrumEntry) {
+        DailyScrumEntryDTO dailyScrumEntryDTO = new DailyScrumEntryDTO();
+
+        dailyScrumEntryDTO.setDailyScrumEntryPK(dailyScrumEntry.getDailyScrumEntryPK());
+        dailyScrumEntryDTO.setDate(dailyScrumEntry.getDate());
+        dailyScrumEntryDTO.setPastWork(dailyScrumEntry.getPastWork());
+        dailyScrumEntryDTO.setFutureWork(dailyScrumEntry.getFutureWork());
+        dailyScrumEntryDTO.setProblemsAndIssues(dailyScrumEntry.getProblemsAndIssues());
+        dailyScrumEntryDTO.setProject(dailyScrumEntry.getProject());
+        dailyScrumEntryDTO.setUser(dailyScrumEntry.getUser());
+
+        return dailyScrumEntryDTO;
+    }
+    /* -------------------------------------------------------------------------------------------------------------- */
+   /* private static DiscussionDTO fillDiscussionDTO(Discussion discussion) {
+        DiscussionDTO discussionDTO = new DiscussionDTO();
+
+        discussionDTO.setDiscussionPK(discussion.getDiscussionPK());
+        discussionDTO.setContent(discussion.getContent());
+        discussionDTO.setCreatetime(discussion.getCreatetime());
+        discussionDTO.setProject(discussion.getProject());
+        discussionDTO.setUser(discussion.getUser());
+        discussionDTO.setCommentList(discussion.getCommentList());
+
+        return discussionDTO;
+    }
+    /* -------------------------------------------------------------------------------------------------------------- */
+    /*public static ProjectDTO fillProjectData(Project project) {
         ProjectDTO projectDTO = new ProjectDTO();
+
         projectDTO.setProjectId(project.getProjectId());
         projectDTO.setName(project.getName());
         projectDTO.setDescription(project.getDescription());
@@ -40,21 +72,52 @@ public class FillDTO {
         projectDTO.setDailyScrumEntryList(project.getDailyScrumEntryList());
         projectDTO.setSprintList(project.getSprintList());
         projectDTO.setUserStoryList(project.getUserStoryList());
+
         return projectDTO;
     }
     /* -------------------------------------------------------------------------------------------------------------- */
-    public static TeamDTO fillTeamData(Team team) {
+    /*private static TaskDTO fillTaskDTO(Task task) {
+        TaskDTO taskDTO = new TaskDTO();
+
+        taskDTO.setTaskPK(task.getTaskPK());
+        taskDTO.setDescription(task.getDescription());
+        taskDTO.setTimeRemaining(task.getTimeRemaining());
+        taskDTO.setEstimatedTime(task.getEstimatedTime());
+        taskDTO.setStatus(task.getStatus());
+        taskDTO.setWorkloadList(task.getWorkloadList());
+        taskDTO.setUserStory(task.getUserStory());
+        taskDTO.setUserUserId(task.getUserUserId());
+
+        return taskDTO;
+    }
+    /* -------------------------------------------------------------------------------------------------------------- */
+    /*public static TeamDTO fillTeamData(Team team) {
         TeamDTO teamDTO = new TeamDTO();
+
         teamDTO.setTeamId(team.getTeamId());
         teamDTO.setScrumMasterId(team.getScrumMasterId());
         teamDTO.setProductOwnerId(team.getProductOwnerId());
         teamDTO.setUserList(team.getUserList());
         teamDTO.setProjectList(team.getProjectList());
+
+        return teamDTO;
+    }
+    /* -------------------------------------------------------------------------------------------------------------- */
+   /* public static TeamDTO fillTeamDTO(Team team) {
+        TeamDTO teamDTO = new TeamDTO();
+
+        teamDTO.setTeamId(team.getTeamId());
+        teamDTO.setScrumMasterId(team.getScrumMasterId());
+        teamDTO.setProductOwnerId(team.getProductOwnerId());
+        teamDTO.setUserList(team.getUserList());
+        teamDTO.setProjectList(team.getProjectList());
+
         return teamDTO;
     }
     /* -------------------------------------------------------------------------------------------------------------- */
     public static UserDTO fillUserData(User user) {
         UserDTO userDTO = new UserDTO();
+
         userDTO.setUserId(user.getUserId());
         userDTO.setUsername(user.getUsername());
         userDTO.setPassword(user.getPassword());
@@ -65,61 +128,81 @@ public class FillDTO {
         userDTO.setSalt(user.getSalt());
         userDTO.setActive(user.isActive());
         userDTO.setTimeCreated(user.getTimeCreated());
-        userDTO.setTeamList(user.getTeamList());
-        userDTO.setWorkloadList(user.getWorkloadList());
-        userDTO.setDiscussionList(user.getDiscussionList());
-        userDTO.setTaskList(user.getTaskList());
-        userDTO.setDailyScrumEntryList(user.getDailyScrumEntryList());
-        userDTO.setCommentList(user.getCommentList());
+
+        /* if (user.getTeamList() != null && user.getTeamList().size() > 0)
+            userDTO.setTeamList(fillTeamDTOs(user.getTeamList()));
+
+        if (user.getWorkloadList() != null && user.getWorkloadList().size() > 0)
+            userDTO.setWorkloadList(fillWorkloadListDTOs(user.getWorkloadList()));
+
+        if (user.getDiscussionList() != null && user.getDiscussionList().size() > 0)
+            userDTO.setDiscussionList(fillDiscussionListDTOs(user.getDiscussionList()));
+
+        if (user.getTaskList() != null && user.getTaskList().size() > 0)
+            userDTO.setTaskList(fillTaskListDTOs(user.getTaskList()));
+
+        if (user.getDailyScrumEntryList() != null && user.getDailyScrumEntryList().size() > 0)
+            userDTO.setDailyScrumEntryList(fillDailyScrumEntryDTOs(user.getDailyScrumEntryList()));
+
+        if (user.getCommentList() != null && user.getCommentList().size() > 0)
+            userDTO.setCommentList(fillCommentListDTOs(user.getCommentList()));*/
+
         return userDTO;
     }
 
-    private static List<TeamDTO> fillTeamDTOs(List<TeamDTO> teams) {
-        List<TeamDTO> teamDTOs = new ArrayList<TeamDTO>();
+   /*  private static List<CommentDTO> fillCommentListDTOs(List<Comment> commentList) {
+        return null;
+    }
+
+    private static List<DailyScrumEntryDTO> fillDailyScrumEntryDTOs(List<DailyScrumEntry> dailyScrumEntryList) {
+        List<DailyScrumEntryDTO> dailyScrumEntryListDTOs = new ArrayList<DailyScrumEntryDTO>();
+        for (DailyScrumEntry dailyScrumEntry : dailyScrumEntryList)
+            dailyScrumEntryListDTOs.add(fillDailyScrumEntryDTO(dailyScrumEntry));
+
+        return dailyScrumEntryListDTOs;
+    }
+
+    private static List<TaskDTO> fillTaskListDTOs(List<Task> taskList) {
+        List<TaskDTO> taskListDTOs = new ArrayList<TaskDTO>();
+        for (Task task : taskList)
+            taskListDTOs.add(fillTaskDTO(task));
+
+        return taskListDTOs;
+    }
+
+    private static List<DiscussionDTO> fillDiscussionListDTOs(List<Discussion> discussionList) {
+        List<DiscussionDTO> discussionDTOs = new ArrayList<DiscussionDTO>();
+        for (Discussion discussion : discussionList)
+            discussionDTOs.add(fillDiscussionDTO(discussion));
+
+        return discussionDTOs;
+    }
+
+    private static List<WorkloadDTO> fillWorkloadListDTOs(List<Workload> workloadList) {
+        List<WorkloadDTO> workloadDTOs = new ArrayList<WorkloadDTO>();
+        for (Workload workload : workloadList)
+            workloadDTOs.add(fillWorkloadDTO(workload));
+
+        return workloadDTOs;
+    }
+
+    private static List<TeamDTO> fillTeamDTOs(List<Team> teams) {
+        List<TeamDTO> teamsDTOs = new ArrayList<TeamDTO>();
         for (Team team : teams)
-            teamDTOs.add(fillTeamDTO(team));
+            teamsDTOs.add(fillTeamDTO(team));
 
-        return teamDTOs;
-    }
-
-    public static EnrollmentStudentDTO fillEnrollmentStudentDTO(EnrollmentStudent es) {
-        EnrollmentDTO dto = new EnrollmentStudentDTO();
-        return dto;
-    }
-
-    public static EnrollmentStudentDTO fillEnrollmentStudentDTO(EnrollmentStudent es) {
-        EnrollmentStudentDTO dto = new EnrollmentStudentDTO();
-        dto.setId(es.getId());
-
-        if (es.getStudentSpecialNeeds() != null)
-            dto.setStudentSpecialNeedsType(es.getStudentSpecialNeeds().getType());
-
-        dto.setStudyMode(es.isStudyMode());
-        dto.setCourseList(fillCourseDTOs(es.getCourse()));
-
-        dto.setEnrollmentRemoteDTO(fillEnrollmentRemoteDTO(es.getEnrollmentRemote()));
-
-        dto.setEnrollmentTypeDTO(fillEnrollmentTypeDTO(es.getEnrollmentType()));
-        dto.setStudyCurriculumDTO(fillStudyCurriculumDTO(es.getStudyCurriculum()));
-        dto.setStudyLevelDTO(fillStudyLevelDTO(es.getStudyLevel()));
-        if (dto.getStudyCurriculumDTO() != null)
-            dto.setStudyWayDTO(dto.getStudyCurriculumDTO().getStudyProgramDTO());   //to je isto kot StudyProgramDTO
-        if (es.getSchoolYear() != null && es.getSchoolYear().getYear() != null)
-            dto.setYear(Integer.valueOf(es.getSchoolYear().getYear().split("/")[0]));
-
-        if (es.getSignInExam() != null)
-            dto.setSignInExamDTOs(fillSignInExamDTOs(es.getSignInExam()));
-
-        //dto.setPersonDTO();   //TODO if needed ; probably cycle !!!
-        long personId = es.getStudent().getPerson().getId();
-        dto.setPersonDTO(DTOfiller.fillPersonDTO(ProxyManager.getPersonProxy().findPerson(personId), false));
-
-        dto.setDisplay(es.getSchoolYear().getYear() + ", " +
-                es.getStudyCurriculum().getStudyGrade().getDescription() + ", " +
-                es.getStudyCurriculum().getStudyProgram().getName() + ", " +
-                es.getEnrollmentType().getType() + " (" +
-                es.getEnrollmentType().getDescription() + ")");
-        return dto;
-    }
+        return teamsDTOs;
+    } */
     /* -------------------------------------------------------------------------------------------------------------- */
+   /* private static WorkloadDTO fillWorkloadDTO(Workload workload) {
+        WorkloadDTO workloadDTO = new WorkloadDTO();
+
+        workloadDTO.setWorkloadPK(workload.getWorkloadPK());
+        workloadDTO.setTimeSpent(workload.getTimeSpent());
+        workloadDTO.setUser(workload.getUser());
+        workloadDTO.setTask(workload.getTask());
+        workloadDTO.setWorkblockList(workload.getWorkblockList());
+
+        return workloadDTO;
+    } */
 }
