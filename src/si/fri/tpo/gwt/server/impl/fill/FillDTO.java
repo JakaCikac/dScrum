@@ -124,9 +124,9 @@ public class FillDTO {
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());
         userDTO.setEmail(user.getEmail());
-        userDTO.setAdmin(user.isAdmin());
+        userDTO.setAdmin(user.getIsAdmin());
         userDTO.setSalt(user.getSalt());
-        userDTO.setActive(user.isActive());
+        userDTO.setActive(user.getIsActive());
         userDTO.setTimeCreated(user.getTimeCreated());
 
         /* if (user.getTeamList() != null && user.getTeamList().size() > 0)
