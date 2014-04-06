@@ -20,6 +20,7 @@ import si.fri.tpo.gwt.client.form.*;
 
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
+//TODO: merge cnavpanel into admin nav panel!
 public class AdminNavPanel extends LayoutContainer {
     private RootPanel mainContainer;
     private DScrumServiceAsync service;

@@ -23,6 +23,10 @@ public interface DScrumService extends RemoteService {
 
     public UserDTO dummyUserTrigger(UserDTO userDTO);
 
+    public Pair<Boolean , String> validateUserData(String emailValue);
+
+    public Pair<Boolean, String>  saveUser(UserDTO userDTO, Boolean isNew);
+
     //public DiscussionDTO dummyDiscussionTrigger(DiscussionDTO discussionDTO);
 
 }

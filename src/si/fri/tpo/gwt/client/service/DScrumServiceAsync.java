@@ -19,6 +19,10 @@ public interface DScrumServiceAsync {
 
     void dummyUserTrigger(UserDTO userDTO, AsyncCallback<UserDTO> callback3);
 
+    void validateUserData(String emailValue, AsyncCallback<Pair<Boolean, String>> validationCallback);
+
+    void saveUser(UserDTO userDTO, Boolean value, AsyncCallback<Pair<Boolean, String>> saveUser);
+
     //void dummyDiscussionTrigger(DiscussionDTO discussionDTO, AsyncCallback<DiscussionDTO> callback4);
 }
 

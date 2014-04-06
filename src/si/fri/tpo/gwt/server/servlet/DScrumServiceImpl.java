@@ -7,6 +7,7 @@ import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.server.impl.login.LoginServiceImpl;
+import si.fri.tpo.gwt.server.impl.registration.UserRegistrationServiceImpl;
 
 /**
  * Created by nanorax on 04/04/14.
@@ -31,6 +32,22 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     @Override
     public UserDTO dummyUserTrigger(UserDTO userDTO) {
         return new UserDTO();
+    }
+
+    @Override
+    public Pair<Boolean, String> validateUserData(String emailValue) {
+
+        //if (!Validate.isEmail(emailValue)) {
+            // getEmail().focus();
+        //    return Pair.of(false, "Email not valid!");
+        //}
+
+        return Pair.of(true, "");
+    }
+
+    @Override
+    public Pair<Boolean, String> saveUser(UserDTO userDTO, Boolean isNew) {
+        return UserRegistrationServiceImpl.saveUser(UserDTO userDTO, Boolean isNew);
     }
 
     //@Override
