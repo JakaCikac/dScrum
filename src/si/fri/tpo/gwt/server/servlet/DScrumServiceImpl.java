@@ -47,7 +47,7 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
 
     @Override
     public Pair<Boolean, String> saveUser(UserDTO userDTO, Boolean isNew) {
-        return UserRegistrationServiceImpl.saveUser(UserDTO userDTO, Boolean isNew);
+        return UserRegistrationServiceImpl.saveUser(userDTO, isNew);
     }
 
     //@Override

@@ -3,6 +3,7 @@ package si.fri.tpo.gwt.server.impl.registration;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.server.impl.fill.FillDTO;
+import si.fri.tpo.gwt.server.impl.user.UserImpl;
 import si.fri.tpo.gwt.server.jpa.User;
 import si.fri.tpo.gwt.server.proxy.ProxyManager;
 
@@ -31,12 +32,15 @@ public class UserRegistrationServiceImpl {
         if (aBoolean.getFirst())
             alsoAddedNewUser = true;
 
-        return saveOnlyUser(userDTO, alsoAddedNewUser);
+        final String userID = String.valueOf(userDTO.getUserId());
+        return Pair.of(true, alsoAddedNewUser ? "The user " + userID + " was successfully inserted to the system!"
+                : "Creating new user " + userID + " was successfully added to the system!");
+        //return saveOnlyUser(userDTO, alsoAddedNewUser);
     }
 
     private static Pair<Boolean, String> duplicateCheck(UserDTO esDTO) {
         if (esDTO.getUserId() != null) {
-            List<UserDTO> userDTOs = UserImpl.getAllUsers(esDTO.getUserId());
+            List<UserDTO> userDTOs = UserImpl.getAllUsers();
             for (UserDTO dto : userDTOs) {
                 //TODO: in case required, check for more equals with &&
                 if (dto.getUsername().equals(esDTO.getUsername()))
@@ -46,7 +50,7 @@ public class UserRegistrationServiceImpl {
         return Pair.of(true, "all good :)");
     }
 
-    private static Pair<Boolean, String> saveOnlyUser(UserDTO userDTO, Boolean alsoAddedNewUser) {
+    /* private static Pair<Boolean, String> saveOnlyUser(UserDTO userDTO, Boolean alsoAddedNewUser) {
         try {
             //TODO: fill entity
             User user = FillEntity.fillUserData(userDTO);
@@ -61,5 +65,5 @@ public class UserRegistrationServiceImpl {
         final String userID = String.valueOf(userDTO.getUserId());
         return Pair.of(true, alsoAddedNewUser ? "The user " + userID + " was successfully inserted to the system!"
                 : "Creating new user " + userID + " was successfully added to the system!");
-    }
+    } */
 }

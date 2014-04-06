@@ -6,6 +6,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import si.fri.tpo.gwt.server.jpa.User;
 
+import java.util.List;
+
 /**
  * Created by nanorax on 05/04/14.
  */
@@ -15,6 +17,8 @@ public class UserProxy extends UserJpaController {
         super(emf);
 
     }
+
+    public UserProxy() {}
 
     public User findUserByUsername(String username) {
         EntityManager em = null;
@@ -31,5 +35,9 @@ public class UserProxy extends UserJpaController {
         } finally {
             em.close();
         }
+    }
+
+    public List<User> getUsersList() {
+        return findUserEntities();
     }
 }
