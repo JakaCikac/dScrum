@@ -146,7 +146,7 @@ public class LoginPanel extends FormPanel {
         grid.setWidget(0, 0, lblNewLabel);
 
         usernameTB = new TextBox();
-        usernameTB.setText("t13as");
+        usernameTB.setText("Holden");
         grid.setWidget(0, 1, usernameTB);
         usernameTB.setWidth("100%");
 
@@ -154,7 +154,7 @@ public class LoginPanel extends FormPanel {
         grid.setWidget(1, 0, lblNewLabel_1);
 
         passwordTB = new PasswordTextBox();
-        passwordTB.setText("password");
+        passwordTB.setText("vili");
         grid.setWidget(1, 1, passwordTB);
         passwordTB.setWidth("100%");
         grid.getCellFormatter().setVerticalAlignment(2, 2,

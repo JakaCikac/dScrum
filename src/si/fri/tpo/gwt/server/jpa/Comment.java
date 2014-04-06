@@ -37,10 +37,10 @@ public class Comment implements Serializable {
     @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private User user;
-    @JoinColumns({
+    @JoinColumns(value = {
             @JoinColumn(name = "discussion_discussion_id", referencedColumnName = "discussion_id", insertable = false, updatable = false),
-            @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", insertable = false, updatable = false),
-            @JoinColumn(name = "project_project_id", referencedColumnName = "project_id", insertable = false, updatable = false)})
+            @JoinColumn(name = "user_user_id", referencedColumnName = "user_user_id", insertable = false, updatable = false),
+            @JoinColumn(name = "project_project_id", referencedColumnName = "project_project_id", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Discussion discussion;
 
