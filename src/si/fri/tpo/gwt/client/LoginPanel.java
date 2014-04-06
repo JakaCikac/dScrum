@@ -78,19 +78,25 @@ public class LoginPanel extends FormPanel {
     }
 
      private void openNavigationContainer(UserDTO userDTO) {
+        System.out.println("Opening navigation container.");
         mainContainer.remove(this);
-        navigationContainer.remove(0);
+        System.out.println("Removing this from main container.");
+        //navigationContainer.remove(0);
+        System.out.println("Removing 0 from navigation container.");
          // check if user is admin and open appropriate navigation
+        System.out.println("Check user role.");
         checkUserRole(userDTO.isAdmin(), userDTO);
     }
 
     private void checkUserRole(boolean isAdmin, UserDTO userDTO) {
         SessionInfo.userDTO = userDTO;
+        System.out.println("Is admin? " + userDTO.isAdmin() + " with username: " + userDTO.getFirstName());
         // Check if user is administrator and display appropriate message
         if (isAdmin) {
-
+            System.out.println("I know the user is admin, now trying to get his name.");
             String message = "Welcome to dScrum admin " +
                     userDTO.getFirstName() + " " + userDTO.getLastName();
+
 
             // open appropriate navigation panel and main form
             fillNavigationMainAndHeader(new AdminNavPanel(mainContainer, service),
@@ -100,6 +106,10 @@ public class LoginPanel extends FormPanel {
 
             String message = "Welcome to dScrum user " +
                     userDTO.getFirstName() + " " + userDTO.getLastName();
+
+            // open appropriate navigation panel and main form
+            /* fillNavigationMainAndHeader(new StudentNavigationPanel(mainContainer, service),
+                    new StudentGradeRecordForm(service), headerMessage); */
 
         }
     }
