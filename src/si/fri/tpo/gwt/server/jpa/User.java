@@ -258,5 +258,5 @@ public class User implements Serializable {
     public String toString() {
         return "si.fri.tpo.gwt.server.jpa.User[ userId=" + userId + " ]";
     }
-    
+
 }
