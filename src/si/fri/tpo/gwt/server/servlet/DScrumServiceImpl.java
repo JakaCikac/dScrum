@@ -23,19 +23,19 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
         return new Character('A');
     }
 
-    @Override
-    public SprintDTO dummySprintTrigger(SprintDTO sprintDTO) {
-        return new SprintDTO();
-    }
+    //@Override
+    //public SprintDTO dummySprintTrigger(SprintDTO sprintDTO) {
+    //    return new SprintDTO();
+    //}
 
     @Override
     public UserDTO dummyUserTrigger(UserDTO userDTO) {
         return new UserDTO();
     }
 
-    @Override
-    public DiscussionDTO dummyDiscussionTrigger(DiscussionDTO discussionDTO) {
-        return new DiscussionDTO();
-    }
+    //@Override
+    //public DiscussionDTO dummyDiscussionTrigger(DiscussionDTO discussionDTO) {
+    //    return new DiscussionDTO();
+    //}
 
 }

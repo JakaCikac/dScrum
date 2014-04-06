@@ -8,17 +8,7 @@ package si.fri.tpo.gwt.server.jpa;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 /**
  *
@@ -47,7 +37,10 @@ public class Comment implements Serializable {
     @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private User user;
-    @JoinColumn(name = "discussion_discussion_id", referencedColumnName = "discussion_id", insertable = false, updatable = false)
+    @JoinColumns({
+            @JoinColumn(name = "discussion_discussion_id", referencedColumnName = "discussion_id", insertable = false, updatable = false),
+            @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", insertable = false, updatable = false),
+            @JoinColumn(name = "project_project_id", referencedColumnName = "project_id", insertable = false, updatable = false)})
     @ManyToOne(optional = false)
     private Discussion discussion;
 

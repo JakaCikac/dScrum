@@ -19,10 +19,10 @@ public interface DScrumService extends RemoteService {
 
     public Character dummyCharacterTrigger(Character b);
 
-    public SprintDTO dummySprintTrigger(SprintDTO sprintDTO);
+    //public SprintDTO dummySprintTrigger(SprintDTO sprintDTO);
 
     public UserDTO dummyUserTrigger(UserDTO userDTO);
 
-    public DiscussionDTO dummyDiscussionTrigger(DiscussionDTO discussionDTO);
+    //public DiscussionDTO dummyDiscussionTrigger(DiscussionDTO discussionDTO);
 
 }

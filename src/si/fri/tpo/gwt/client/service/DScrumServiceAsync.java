@@ -15,10 +15,10 @@ public interface DScrumServiceAsync {
 
     void dummyCharacterTrigger(Character b, AsyncCallback<Character> callback);
 
-    void dummySprintTrigger(SprintDTO sprintDTO, AsyncCallback<SprintDTO> callback2);
+    //void dummySprintTrigger(SprintDTO sprintDTO, AsyncCallback<SprintDTO> callback2);
 
     void dummyUserTrigger(UserDTO userDTO, AsyncCallback<UserDTO> callback3);
 
-    void dummyDiscussionTrigger(DiscussionDTO discussionDTO, AsyncCallback<DiscussionDTO> callback4);
+    //void dummyDiscussionTrigger(DiscussionDTO discussionDTO, AsyncCallback<DiscussionDTO> callback4);
 }
 

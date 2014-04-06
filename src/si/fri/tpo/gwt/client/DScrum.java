@@ -97,7 +97,7 @@ public class DScrum implements EntryPoint {
 
             }
         };
-        service.dummySprintTrigger(new SprintDTO(), callback2);
+        //service.dummySprintTrigger(new SprintDTO(), callback2);
 
         AsyncCallback<UserDTO> callback3 = new AsyncCallback<UserDTO>() {
 
@@ -127,7 +127,7 @@ public class DScrum implements EntryPoint {
 
             }
         };
-        service.dummyDiscussionTrigger(new DiscussionDTO(), callback4);
+        //service.dummyDiscussionTrigger(new DiscussionDTO(), callback4);
 
     }
 
