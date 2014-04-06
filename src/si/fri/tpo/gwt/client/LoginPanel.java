@@ -11,7 +11,9 @@ import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
+import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.search.UserSearchForm;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 import si.fri.tpo.gwt.client.verification.PassHash;
@@ -117,8 +119,8 @@ public class LoginPanel extends FormPanel {
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
             // open appropriate navigation panel and main form
-            /* fillNavigationMainAndHeader(new StudentNavigationPanel(mainContainer, service),
-                    new StudentGradeRecordForm(service), headerMessage); */
+             /* fillNavigationMainAndHeader(new UserNavPanel(mainContainer, service),
+                    new UserHomeForm(service), message); */
 
         }
     }

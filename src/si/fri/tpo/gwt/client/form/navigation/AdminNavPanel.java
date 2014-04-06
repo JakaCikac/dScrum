@@ -15,6 +15,7 @@ import com.extjs.gxt.ui.client.widget.layout.AccordionLayout;
 import com.extjs.gxt.ui.client.widget.layout.FlowLayout;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
+import si.fri.tpo.gwt.client.form.*;
 
 
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
@@ -34,7 +35,7 @@ public class AdminNavPanel extends LayoutContainer {
         setLayout(new FlowLayout(10));
 
         final ContentPanel panel = new ContentPanel();
-        panel.setHeading("Meni skrbnika");
+        panel.setHeading("Admin menu");
         panel.setBodyBorder(false);
         panel.setLayout(new AccordionLayout());
 
@@ -44,24 +45,24 @@ public class AdminNavPanel extends LayoutContainer {
         cp.setExpanded(true);
         cp.setBodyStyleName("pad-text");
 
-        Button sifranti = new Button("Urejanje šifrantov", new SelectionListener<ButtonEvent>() {
+        Button users = new Button("User management", new SelectionListener<ButtonEvent>() {
             public void componentSelected(ButtonEvent ce) {
                 mainContainer.clear();
-                //mainContainer.add(new MainEditCodeRegisterForm(mainContainer, service));
+                //mainContainer.add(new someForm(service));
             }
         });
-        sifranti.setWidth("100%");
-        cp.add(sifranti);
+        users.setWidth("100%");
+        cp.add(users);
 
-        Button urejanjePredmetov = new Button("Vzdrževanje predmetnika in izvajalcev", new SelectionListener<ButtonEvent>() {
+        Button projectManagement = new Button("Project Management", new SelectionListener<ButtonEvent>() {
             @Override
             public void componentSelected(ButtonEvent ce) {
                 mainContainer.clear();
-                //mainContainer.add(new CourseListForm(service));
+                //mainContainer.add(new someForm(service));
             }
         });
-        urejanjePredmetov.setWidth("100%");
-        cp.add(urejanjePredmetov);
+        projectManagement.setWidth("100%");
+        cp.add(projectManagement);
 
         cp.setAutoHeight(true);
         cp.setAutoWidth(true);

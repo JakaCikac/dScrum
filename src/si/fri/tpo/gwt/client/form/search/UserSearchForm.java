@@ -35,13 +35,13 @@ public class UserSearchForm extends VerticalPanel {
         private ColumnModel cm;
         private ContentPanel cp;
         private Grid<UserDTO> grid;
-        //private EditorGrid<PersonDTO> grid;
+        //private EditorGrid<UserDTO> grid;
         private DScrumServiceAsync service;
         private FormData formData;
         ListStore<UserDTO> listStore = new ListStore<UserDTO>();
         private List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
         private TextField<String> name;
-        NumberField enrolmentNumber;
+        NumberField numberExample;
 
         private TextField<String> surname;
 
@@ -61,23 +61,25 @@ public class UserSearchForm extends VerticalPanel {
             formData = new FormData("-20");
 
             name = new TextField<String>();
-            name.setFieldLabel("Ime");
+            name.setFieldLabel("Name");
             name.setAllowBlank(true);
             fieldSet.add(name, formData);
 
             surname = new TextField<String>();
-            surname.setFieldLabel("Priimek");
+            surname.setFieldLabel("Surname");
             surname.setAllowBlank(true);
             fieldSet.add(surname, formData);
 
-            enrolmentNumber = new NumberField();
-            enrolmentNumber.setPropertyEditorType(Integer.class);
-            enrolmentNumber.setFieldLabel("Vpisna številka");
-            enrolmentNumber.setAllowBlank(true);
+            /* number example
+            number = new NumberField();
+            number.setPropertyEditorType(Integer.class);
+            number.setFieldLabel("Field name");
+            number.setAllowBlank(true);
             fieldSet.add(enrolmentNumber, formData);
+            */
 
             FormPanel simple = new FormPanel();
-            simple.setHeading("Iskalni parametri");
+            simple.setHeading("Search parameters");
             simple.setBorders(false);
             simple.setFrame(true);
             simple.setWidth(438);
@@ -94,13 +96,13 @@ public class UserSearchForm extends VerticalPanel {
             cm = new ColumnModel(configs);
             cp = new ContentPanel();
             cp.setBodyBorder(true);
-            cp.setHeading("Seznam najdenih študentov");
+            cp.setHeading("List of found users");
             cp.setButtonAlign(Style.HorizontalAlignment.CENTER);
             cp.setLayout(new FitLayout());
             cp.setSize(438, 300);
             cp.setExpanded(true);
             grid = new Grid<UserDTO>(listStore, cm);
-            //grid = new EditorGrid<PersonDTO>(listStore, cm);
+            //grid = new EditorGrid<UserDTO>(listStore, cm);
             grid.setStyleAttribute("borderTop", "none");
             grid.setBorders(true);
             grid.setStripeRows(true);
@@ -131,7 +133,7 @@ public class UserSearchForm extends VerticalPanel {
                     Window.alert(caught.getMessage());
                 }
             };
-            //service.findStudentByNameSurnameEnrolment(enrolmentNumber.getValue() != null ? enrolmentNumber.getValue().intValue() : null, name.getValue(), surname.getValue(), callback);
+            //service.findUserByFirstAndLastName(name.getValue(), surname.getValue(), callback);
         }
 
 
@@ -140,49 +142,41 @@ public class UserSearchForm extends VerticalPanel {
             configs.add(numberer);
 
             ColumnConfig column = new ColumnConfig();
-            column.setId("studentDTO.enrolmentnumber");
+            column.setId("userDTO.user_id");
             column.setAlignment(Style.HorizontalAlignment.LEFT);
-            column.setHeader("Vpisna številka");
+            column.setHeader("User ID");
             column.setWidth(70);
             configs.add(column);
 
             column = new ColumnConfig();
-            column.setId("studentDTO.enrolmentyear");
+            column.setId("userDTO.username");
             column.setAlignment(Style.HorizontalAlignment.LEFT);
-            column.setHeader("Leto vpisa");
-            column.setWidth(45);
+            column.setHeader("Username");
+            column.setWidth(80);
             column.setRowHeader(true);
             configs.add(column);
 
             column = new ColumnConfig();
             column.setId("name");
             column.setAlignment(Style.HorizontalAlignment.LEFT);
-            column.setHeader("Ime");
-            column.setWidth(60);
+            column.setHeader("Name");
+            column.setWidth(80);
             column.setRowHeader(true);
             configs.add(column);
 
             column = new ColumnConfig();
             column.setId("surname");
             column.setAlignment(Style.HorizontalAlignment.LEFT);
-            column.setHeader("Priimek");
-            column.setWidth(70);
+            column.setHeader("Surname");
+            column.setWidth(80);
             column.setRowHeader(true);
             configs.add(column);
 
             column = new ColumnConfig();
-            column.setId("surname2");
+            column.setId("isAdmin");
             column.setAlignment(Style.HorizontalAlignment.LEFT);
-            column.setHeader("Dekliški priimek");
-            column.setWidth(70);
-            column.setRowHeader(true);
-            configs.add(column);
-
-            column = new ColumnConfig();
-            column.setId("emso");
-            column.setAlignment(Style.HorizontalAlignment.LEFT);
-            column.setHeader("EMŠO");
-            column.setWidth(90);
+            column.setHeader("Is Admin?");
+            column.setWidth(20);
             column.setRowHeader(true);
             configs.add(column);
         }
