@@ -23,11 +23,14 @@ public class UserImpl {
             // Additional duplication control
             if (newStudent) {
                 // check for such username in database
+                System.out.println("Username to check in base: " + dto.getUsername());
                 User existingUser = ProxyManager.getUserProxy().findUserByUsername(dto.getUsername());
+                System.out.println("Existing user UN: " + existingUser.getUsername());
 
                 if (existingUser != null) {
+                    System.out.println("Existing user exists!");
                     return Pair.of(false, "User with this username already exists!");
-                }
+                } else System.out.println("User check passed, no existing user");
 
                 User u = new User();
                 System.out.println("DTO username = " + dto.getUsername());
@@ -40,9 +43,16 @@ public class UserImpl {
                 u.setIsActive(dto.isActive());
                 u.setIsAdmin(dto.isAdmin());
                 u.setPassword(dto.getPassword());
+                try {
+                    if (u == null)
+                        return Pair.of(false, "Data error!");
 
-                ProxyManager.getUserProxy().create(u);
+                    ProxyManager.getUserProxy().create(u);
 
+                } catch (Exception e) {
+                    System.err.println("Error: " + e.getMessage());
+                    return Pair.of(false, e.getMessage());
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

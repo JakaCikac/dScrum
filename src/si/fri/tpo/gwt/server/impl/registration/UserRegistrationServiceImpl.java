@@ -18,7 +18,7 @@ public class UserRegistrationServiceImpl {
         boolean alsoAddedNewUser = false;
 
         // check for duplicates!
-        if (!newUser) {
+        if (newUser) {
             Pair<Boolean, String> duplPair = duplicateCheck(userDTO);
 
             if (duplPair == null || !duplPair.getFirst().booleanValue())
@@ -34,35 +34,21 @@ public class UserRegistrationServiceImpl {
         final String userID = userDTO.getUsername();
         return Pair.of(true, alsoAddedNewUser ? "The user " + userID + " was successfully inserted to the system!"
                 : "Creating new user " + userID + " was successfully added to the system!");
-        //return saveOnlyUser(userDTO, alsoAddedNewUser);
     }
 
     private static Pair<Boolean, String> duplicateCheck(UserDTO esDTO) {
-        if (esDTO.getUserId() != null) {
+
             List<UserDTO> userDTOs = UserImpl.getAllUsers();
+            if(userDTOs != null) {
+                System.out.println("Retrieved All users list.");
+            }
             for (UserDTO dto : userDTOs) {
                 //TODO: in case required, check for more equals with &&
-                if (dto.getUsername().equals(esDTO.getUsername()))
+                if (dto.getUsername().equals(esDTO.getUsername())) {
+                    System.out.println("Can't add: existing user!");
                     return Pair.of(false, "Can't add: existing user!");
+                }
             }
-        }
         return Pair.of(true, "all good :)");
     }
-
-    /* private static Pair<Boolean, String> saveOnlyUser(UserDTO userDTO, Boolean alsoAddedNewUser) {
-        try {
-            //TODO: fill entity
-            User user = FillEntity.fillUserData(userDTO);
-            if (user == null)
-                return Pair.of(false, "Data error!");
-            ProxyManager.getUserProxy().create(user);
-
-        } catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
-            return Pair.of(false, e.getMessage());
-        }
-        final String userID = String.valueOf(userDTO.getUserId());
-        return Pair.of(true, alsoAddedNewUser ? "The user " + userID + " was successfully inserted to the system!"
-                : "Creating new user " + userID + " was successfully added to the system!");
-    } */
 }

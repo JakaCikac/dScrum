@@ -58,7 +58,6 @@ public class UserRegistrationForm extends AbstractRegistrationForm {
                     if (result.getFirst()) {
                         final UserDTO userDTO = new UserDTO();
                         userDTO.setUsername(getUsername().getValue());
-                        System.out.println("UserDTO username = " + userDTO.getUsername());
                         userDTO.setEmail(getEmail().getValue());
                         userDTO.setAdmin(getNewAdminRB().getValue());
                         userDTO.setFirstName(getFirstName().getValue());
@@ -108,7 +107,8 @@ public class UserRegistrationForm extends AbstractRegistrationForm {
                     Window.alert(caught.getMessage());
                 }
             };
-            getService().saveUser(userDTO, getNewUserRB().getValue(), saveUser);
+            // TODO: true, ker vedno dodamo novega userja..
+            getService().saveUser(userDTO, true, saveUser);
     }
 
     @Override
