@@ -1,5 +1,7 @@
 package si.fri.tpo.gwt.client.form.navigation;
 
+import com.extjs.gxt.ui.client.data.BaseModelData;
+import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
@@ -9,6 +11,8 @@ import com.extjs.gxt.ui.client.widget.layout.AccordionLayout;
 import com.extjs.gxt.ui.client.widget.layout.FlowLayout;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
+import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
+import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 /**
@@ -39,14 +43,30 @@ public class UserNavPanel extends LayoutContainer {
         cp.setExpanded(true);
         cp.setBodyStyleName("pad-text");
 
+        /* Button projectManagement = new Button("User Data Management", new SelectionListener<ButtonEvent>() {
+            @Override
+            public void componentSelected(ButtonEvent ce) {
+                mainContainer.clear();
+                mainContainer.add(new UserDataEditForm(service));
+            }
+        });
+        projectManagement.setWidth("100%");
+        cp.add(projectManagement); */
+
         cp.setAutoHeight(true);
         cp.setAutoWidth(true);
         panel.add(cp);
 
         panel.setWidth(270);
         panel.setAutoHeight(true);
-        this.add(panel);
 
-        //TODO: Implement user nav panel
+        this.add(panel);
+    }
+
+    private ModelData newItem(String text, String iconStyle) {
+        ModelData m = new BaseModelData();
+        m.set("name", text);
+        m.set("icon", iconStyle);
+        return m;
     }
 }

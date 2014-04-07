@@ -2,9 +2,7 @@ package si.fri.tpo.gwt.client.form.registration;
 
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
-import com.extjs.gxt.ui.client.widget.Label;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.SimplePanel;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.form.search.UserSearchCallback;

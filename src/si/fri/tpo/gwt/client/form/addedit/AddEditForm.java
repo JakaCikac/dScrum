@@ -15,7 +15,7 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
  */
 public class AddEditForm extends FormPanel {
     private DScrumServiceAsync service;
-    private SimpleComboBox<String> codeRegisterCB;
+    private SimpleComboBox<String> entriesCB;
 
     public AddEditForm(RootPanel mainContainer, DScrumServiceAsync service) {
         this.service = service;
@@ -29,24 +29,24 @@ public class AddEditForm extends FormPanel {
     }
 
     private void initCodeRegisterComboBox() {
-        codeRegisterCB = new SimpleComboBox<String>();
-        codeRegisterCB.add("Users");
+        entriesCB = new SimpleComboBox<String>();
+        entriesCB.add("Users");
 
-        codeRegisterCB.setEmptyText("Choose category...");
-        codeRegisterCB.setTypeAhead(true);
-        codeRegisterCB.setForceSelection(true);
-        codeRegisterCB.setWidth(200);
-        codeRegisterCB.setTriggerAction(SimpleComboBox.TriggerAction.ALL);
-        codeRegisterCB.setFieldLabel("Categories");
+        entriesCB.setEmptyText("Choose category...");
+        entriesCB.setTypeAhead(true);
+        entriesCB.setForceSelection(true);
+        entriesCB.setWidth(200);
+        entriesCB.setTriggerAction(SimpleComboBox.TriggerAction.ALL);
+        entriesCB.setFieldLabel("Categories");
 
-        add(codeRegisterCB);
+        add(entriesCB);
     }
 
     private void initComboBoxListeners() {
-        codeRegisterCB.addListener(Events.Change, new Listener<FieldEvent>() {
+        entriesCB.addListener(Events.Change, new Listener<FieldEvent>() {
             @Override
             public void handleEvent(FieldEvent be) {
-                openCRForm(codeRegisterCB.getSimpleValue());
+                openCRForm(entriesCB.getSimpleValue());
             }
         });
 

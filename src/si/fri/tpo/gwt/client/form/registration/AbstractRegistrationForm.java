@@ -12,9 +12,9 @@ import com.extjs.gxt.ui.client.widget.form.*;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.google.gwt.user.client.Element;
+import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
-import javax.xml.soap.Text;
 
 
 /**
@@ -151,9 +151,7 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
         getVp().add(getSimple());
     }
 
-    protected void initComponentsDataFill() {
-
-    }
+    protected void initComponentsDataFill() {}
 
     public VerticalPanel getVp() {
         return vp;
