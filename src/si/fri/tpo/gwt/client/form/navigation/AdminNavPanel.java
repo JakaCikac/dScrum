@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import si.fri.tpo.gwt.client.form.registration.ProjectRegistrationForm;
 
 
+import si.fri.tpo.gwt.client.form.registration.SprintRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
