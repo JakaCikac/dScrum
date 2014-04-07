@@ -24,7 +24,7 @@ import si.fri.tpo.gwt.server.jpa.Priority;
  *
  * @author Administrator
  */
-public class PriorityJpaController implements Serializable {
+public class PriorityJpaController implements Serializable  {
 
     public PriorityJpaController(EntityManagerFactory emf) {
         this.emf = emf;

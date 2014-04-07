@@ -25,7 +25,7 @@ import si.fri.tpo.gwt.server.jpa.Discussion;
  *
  * @author Administrator
  */
-public class CommentJpaController implements Serializable {
+public class CommentJpaController implements Serializable  {
 
 
     public CommentJpaController() {}

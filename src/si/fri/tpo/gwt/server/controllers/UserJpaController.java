@@ -7,15 +7,13 @@
 package si.fri.tpo.gwt.server.controllers;
 
 import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import si.fri.tpo.gwt.server.jpa.Team;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+
 import si.fri.tpo.gwt.server.controllers.exceptions.IllegalOrphanException;
 import si.fri.tpo.gwt.server.controllers.exceptions.NonexistentEntityException;
 import si.fri.tpo.gwt.server.jpa.Workload;
@@ -29,11 +27,12 @@ import si.fri.tpo.gwt.server.jpa.User;
  *
  * @author Administrator
  */
-public class UserJpaController  {
+public class UserJpaController implements Serializable  {
 
     public UserJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
+
     private EntityManagerFactory emf = null;
 
     public UserJpaController() {

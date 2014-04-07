@@ -13,6 +13,9 @@ import java.util.List;
  */
 public class UserProxy extends UserJpaController {
 
+
+    //private static final long serialVersionUID = -2306268549496326663L;
+
     public UserProxy(EntityManagerFactory emf) {
         super(emf);
 

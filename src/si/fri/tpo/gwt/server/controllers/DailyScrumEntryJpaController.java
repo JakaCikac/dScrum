@@ -25,7 +25,7 @@ import si.fri.tpo.gwt.server.jpa.User;
  *
  * @author Administrator
  */
-public class DailyScrumEntryJpaController implements Serializable {
+public class DailyScrumEntryJpaController implements Serializable  {
 
     public DailyScrumEntryJpaController(EntityManagerFactory emf) {
         this.emf = emf;

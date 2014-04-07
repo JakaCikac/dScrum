@@ -28,7 +28,7 @@ import si.fri.tpo.gwt.server.jpa.DiscussionPK;
  *
  * @author Administrator
  */
-public class DiscussionJpaController implements Serializable {
+public class DiscussionJpaController implements Serializable  {
 
     public DiscussionJpaController(EntityManagerFactory emf) {
         this.emf = emf;

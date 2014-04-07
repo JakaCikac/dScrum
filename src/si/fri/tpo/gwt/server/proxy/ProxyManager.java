@@ -8,6 +8,8 @@ import javax.persistence.Persistence;
  */
 public class ProxyManager {
 
+
+
     private static EntityManagerFactory emf = null;
     private static UserProxy userProxy = null;
 

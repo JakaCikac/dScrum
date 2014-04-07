@@ -12,6 +12,7 @@
     <entry-point class='si.fri.tpo.gwt.client.DScrum'/>
 
     <source path='client'/>
-    <source path='server'/>
+    <source path='shared'/>
+
 
 </module>
