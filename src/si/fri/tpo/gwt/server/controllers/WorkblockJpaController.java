@@ -24,7 +24,7 @@ import si.fri.tpo.gwt.server.jpa.Workload;
  *
  * @author Administrator
  */
-public class WorkblockJpaController implements Serializable {
+public class WorkblockJpaController  {
 
     public WorkblockJpaController(EntityManagerFactory emf) {
         this.emf = emf;

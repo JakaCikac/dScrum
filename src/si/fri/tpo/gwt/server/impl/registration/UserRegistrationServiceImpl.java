@@ -25,14 +25,13 @@ public class UserRegistrationServiceImpl {
                 return duplPair;
         }
 
-        //TODO: UserImpl
         Pair<Boolean, String> aBoolean = UserImpl.saveNewUser(newUser, userDTO);
         if (aBoolean == null)
             return Pair.of(false, "User DB insertion failed!");
         if (aBoolean.getFirst())
             alsoAddedNewUser = true;
 
-        final String userID = String.valueOf(userDTO.getUserId());
+        final String userID = userDTO.getUsername();
         return Pair.of(true, alsoAddedNewUser ? "The user " + userID + " was successfully inserted to the system!"
                 : "Creating new user " + userID + " was successfully added to the system!");
         //return saveOnlyUser(userDTO, alsoAddedNewUser);

@@ -29,7 +29,7 @@ import si.fri.tpo.gwt.server.jpa.User;
  *
  * @author Administrator
  */
-public class UserJpaController implements Serializable {
+public class UserJpaController  {
 
     public UserJpaController(EntityManagerFactory emf) {
         this.emf = emf;

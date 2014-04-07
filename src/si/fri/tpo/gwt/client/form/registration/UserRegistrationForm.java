@@ -8,8 +8,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
-import si.fri.tpo.gwt.client.form.search.UserSearchCallback;
-import si.fri.tpo.gwt.client.form.search.UserSearchDialog;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.verification.PassHash;
 
@@ -20,13 +18,13 @@ public class UserRegistrationForm extends AbstractRegistrationForm {
 
     public UserRegistrationForm(DScrumServiceAsync service) {
         super(service);
-        getUserSearchButton().addSelectionListener(userSearchListener);
+        //getUserSearchButton().addSelectionListener(userSearchListener);
         getSubmitButton().addSelectionListener(submitListener);
     }
 
     private UserDTO dto;
 
-    private SelectionListener userSearchListener = new SelectionListener<ButtonEvent>() {
+   /* private SelectionListener userSearchListener = new SelectionListener<ButtonEvent>() {
         @Override
         public void componentSelected(ButtonEvent ce) {
             new UserSearchDialog(getService(), new UserSearchCallback() {
@@ -39,7 +37,7 @@ public class UserRegistrationForm extends AbstractRegistrationForm {
                 }
             });
         }
-    };
+    }; */
 
     private void setDTO(UserDTO dto) {
         this.dto = dto;
@@ -59,17 +57,21 @@ public class UserRegistrationForm extends AbstractRegistrationForm {
                 public void onSuccess(Pair<Boolean, String> result) {
                     if (result.getFirst()) {
                         final UserDTO userDTO = new UserDTO();
+                        userDTO.setUsername(getUsername().getValue());
+                        System.out.println("UserDTO username = " + userDTO.getUsername());
                         userDTO.setEmail(getEmail().getValue());
+                        userDTO.setAdmin(getNewAdminRB().getValue());
                         userDTO.setFirstName(getFirstName().getValue());
                         userDTO.setLastName(getLastName().getValue());
+                        userDTO.setActive(true);
+                        userDTO.setSalt("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+                        // create time created = now()
+                        java.util.Date utilDate = new java.util.Date();
+                        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+                        userDTO.setTimeCreated(sqlDate);
 
-                        //TODO: zakaj se da notri kar password?
-                        userDTO.setPassword(PassHash.getMD5Password("password"));
-                        //TODO: zamenjaj username z username
-                        userDTO.setUsername("username");
-
-                        //TODO: nekako je treba dolocit se user id!
-                        // userDTO.getUserId() ???
+                        // hash retrieved password and set it
+                        userDTO.setPassword(PassHash.getMD5Password(getPassword().getValue()));
 
                         // Save user
                         performSaveUser(userDTO);

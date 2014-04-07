@@ -30,10 +30,16 @@ public class UserImpl {
                 }
 
                 User u = new User();
+                System.out.println("DTO username = " + dto.getUsername());
                 u.setLastName(dto.getLastName());
                 u.setFirstName(dto.getFirstName());
                 u.setEmail(dto.getEmail());
-                //TODO: finnish filling user from DTO and create in database
+                u.setTimeCreated(dto.getTimeCreated());
+                u.setUsername(dto.getUsername());
+                u.setSalt(dto.getSalt());
+                u.setIsActive(dto.isActive());
+                u.setIsAdmin(dto.isAdmin());
+                u.setPassword(dto.getPassword());
 
                 ProxyManager.getUserProxy().create(u);
 

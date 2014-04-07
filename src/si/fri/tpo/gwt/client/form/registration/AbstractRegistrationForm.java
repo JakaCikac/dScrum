@@ -14,6 +14,8 @@ import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.google.gwt.user.client.Element;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
+import javax.xml.soap.Text;
+
 
 /**
  * Created by nanorax on 06/04/14.
@@ -27,6 +29,7 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
     private TextField<String> searchedUserTF = new TextField<String>();
     private FormPanel simple = new FormPanel();
     private Radio newUserRB = new Radio();
+    private Radio newAdminRB = new Radio();
 
     // Basic info components
     private CheckBox checkbox = new CheckBox();
@@ -37,16 +40,17 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
     private Radio item2 = new Radio();
 
     // textfeilds
+    private TextField<String> username = new TextField<String>();
     private TextField<String> email = new TextField<String>();
     private TextField<String> lastName = new TextField<String>();
     private TextField<String> firstName = new TextField<String>();
+    private TextField<String> password = new TextField<String>();
 
     // fieldsets
     private FieldSet setBasicData = new FieldSet();
 
     // buttons
     private Button submitButton = new Button("Register");
-    private Button userSearchButton = new Button("Search Users");
 
     public AbstractRegistrationForm(DScrumServiceAsync service) {
         this.service = service;
@@ -67,17 +71,21 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
         newUserRB.setValue(true);
         newUserRB.setBoxLabel("New user");
 
+        newAdminRB.setName("new admin");
+        newAdminRB.setValue(false);
+        newAdminRB.setBoxLabel("New Admin");
+
         typeOfUserRG.setFieldLabel("User type");
         typeOfUserRG.setAutoWidth(true);
         typeOfUserRG.add(newUserRB);
-        //typeOfUserRG.add(existingUserRB);
+        typeOfUserRG.add(newAdminRB);
         typeOfUserRG.addListener(Events.Change, new Listener<FieldEvent>() {
             @Override
             public void handleEvent(FieldEvent fe) {
                 if (newUserRB.getValue()) {
-                    getUserSearchButton().setEnabled(false);
                     clearAllData();
                 }
+
             }
         });
         simple.add(typeOfUserRG);
@@ -110,12 +118,21 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
         setBasicData.setLayout(layout);
 
         firstName.setFieldLabel("Name");
-        firstName.setAllowBlank(false);
+        firstName.setAllowBlank(true);
         setBasicData.add(firstName, getFormData());
 
         lastName.setFieldLabel("Surname");
-        lastName.setAllowBlank(false);
+        lastName.setAllowBlank(true);
         setBasicData.add(lastName, getFormData());
+
+        username.setFieldLabel("Username");
+        username.setAllowBlank(false);
+        setBasicData.add(username, getFormData());
+
+        password.setMinLength(4);
+        password.setPassword(true);
+        password.setFieldLabel("Password");
+        setBasicData.add(password, getFormData());
 
         getSimple().add(setBasicData);
 
@@ -158,20 +175,20 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
         return submitButton;
     }
 
-    public TextField<String> getSearchedUserTF() {
-        return searchedUserTF;
-    }
-
-    public Button getUserSearchButton() {
-        return userSearchButton;
-    }
-
     public TextField<String> getLastName() {
         return lastName;
     }
 
     public TextField<String> getFirstName() {
         return firstName;
+    }
+
+    public TextField<String> getUsername() {
+        return username;
+    }
+
+    public TextField<String> getPassword() {
+        return password;
     }
 
     public TextField<String> getEmail() {
@@ -184,6 +201,10 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
 
     public Radio getNewUserRB() {
         return newUserRB;
+    }
+
+    public Radio getNewAdminRB() {
+        return newAdminRB;
     }
 
 }
