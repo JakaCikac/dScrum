@@ -24,8 +24,7 @@ public class UserImpl {
             if (newStudent) {
                 // check for such username in database
                 System.out.println("Username to check in base: " + dto.getUsername());
-                User existingUser = ProxyManager.getUserProxy().findUserByUsername(dto.getUsername());
-                System.out.println("Existing user UN: " + existingUser.getUsername());
+                User existingUser = ProxyManager.getUserProxy().findUserByUsername(dto.getUsername());;
 
                 if (existingUser != null) {
                     System.out.println("Existing user exists!");
