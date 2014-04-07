@@ -17,11 +17,11 @@ import java.util.List;
 public class UserImpl {
 
 
-    public static Pair<Boolean, String> saveNewUser(Boolean newStudent, UserDTO dto) {
+    public static Pair<Boolean, String> saveNewUser(Boolean newUser, UserDTO dto) {
         try {
 
             // Additional duplication control
-            if (newStudent) {
+            if (newUser) {
                 // check for such username in database
                 System.out.println("Username to check in base: " + dto.getUsername());
                 User existingUser = ProxyManager.getUserProxy().findUserByUsername(dto.getUsername());;

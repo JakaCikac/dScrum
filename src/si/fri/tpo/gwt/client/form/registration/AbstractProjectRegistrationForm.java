@@ -5,6 +5,7 @@ import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FieldEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.widget.Component;
+import com.extjs.gxt.ui.client.widget.Label;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
@@ -35,12 +36,8 @@ public abstract class AbstractProjectRegistrationForm extends LayoutContainer {
     private Radio item1 = new Radio();
     private Radio item2 = new Radio();
 
-    // textfeilds
+    // textfields
     private TextField<String> projectName = new TextField<String>();
-    //private TextField<String> email = new TextField<String>();
-    //private TextField<String> lastName = new TextField<String>();
-    //private TextField<String> firstName = new TextField<String>();
-    //private TextField<String> password = new TextField<String>();
 
     // fieldsets
     private FieldSet setBasicData = new FieldSet();
@@ -48,6 +45,13 @@ public abstract class AbstractProjectRegistrationForm extends LayoutContainer {
     // buttons
     private Button submitButton = new Button("Create");
     private Button userSearchButton = new Button("Select User");
+    private Button addTeamMember = new Button("Add member");
+    private Button selectScrumMasterB = new Button("Select SM");
+    private Button selectProductOwnerB = new Button("Select PO");
+
+    Label selectProductOwnerLabel = new Label("Select Product Owner:");
+    Label selectScrumMasterLabel = new Label("Select Scrum Master:");
+
 
     public AbstractProjectRegistrationForm(DScrumServiceAsync service) {
         this.service = service;
@@ -82,6 +86,10 @@ public abstract class AbstractProjectRegistrationForm extends LayoutContainer {
         });
         simple.add(typeOfProjectRG);
 
+        //simple.add(searchedUserTF, getFormData());
+        //userSearchButton.setEnabled(false);
+        //simple.add(userSearchButton);
+
     }
 
     protected void clearAllData() {
@@ -98,6 +106,8 @@ public abstract class AbstractProjectRegistrationForm extends LayoutContainer {
     }
 
     protected void initNewRegistrationForm() {
+
+        // Title of the form
         getSimple().setHeading("Project Creation Form");
         getSimple().setFrame(true);
 
@@ -113,6 +123,13 @@ public abstract class AbstractProjectRegistrationForm extends LayoutContainer {
         projectName.setAllowBlank(false);
         setBasicData.add(projectName, getFormData());
 
+        // Product owner field
+        setBasicData.add(selectProductOwnerLabel);
+        setBasicData.add(selectProductOwnerB);
+        // Scrum master field
+        setBasicData.add(selectScrumMasterLabel);
+        setBasicData.add(selectScrumMasterB);
+
 
         getSimple().add(setBasicData);
 
@@ -126,9 +143,7 @@ public abstract class AbstractProjectRegistrationForm extends LayoutContainer {
         getVp().add(getSimple());
     }
 
-    protected void initComponentsDataFill() {
-
-    }
+    protected void initComponentsDataFill() { }
 
     public VerticalPanel getVp() {
         return vp;
@@ -154,6 +169,14 @@ public abstract class AbstractProjectRegistrationForm extends LayoutContainer {
         return userSearchButton;
     }
 
+    public Button getSelectProductOwnerB() {
+        return selectProductOwnerB;
+    }
+
+    public Button getSelectScrumMasterB() {
+        return selectScrumMasterB;
+    }
+
     public TextField<String> getProjectName() {
         return projectName;
     }
@@ -169,5 +192,7 @@ public abstract class AbstractProjectRegistrationForm extends LayoutContainer {
     public Radio getNewUserRB() {
         return newProjectRB;
     }
+
+
 
 }

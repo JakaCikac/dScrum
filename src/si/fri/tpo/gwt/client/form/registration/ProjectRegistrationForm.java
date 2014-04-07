@@ -17,6 +17,8 @@ public class ProjectRegistrationForm extends AbstractProjectRegistrationForm {
 
     public ProjectRegistrationForm(DScrumServiceAsync service) {
         super(service);
+        getSelectProductOwnerB().addSelectionListener(poSelectionListener);
+        getSelectScrumMasterB().addSelectionListener(smSelectionListener);
         getUserSearchButton().addSelectionListener(userSearchListener);
         getSubmitButton().addSelectionListener(submitListener);
     }
@@ -24,6 +26,36 @@ public class ProjectRegistrationForm extends AbstractProjectRegistrationForm {
     private UserDTO dto;
 
     private SelectionListener userSearchListener = new SelectionListener<ButtonEvent>() {
+        @Override
+        public void componentSelected(ButtonEvent ce) {
+            new UserSearchDialog(getService(), new UserSearchCallback() {
+                @Override
+                public void userSearchCallback(UserDTO dto) {
+                    getSearchedUserTF().setValue(dto.getFirstName() + " " + dto.getLastName());
+                    //TODO: get index
+
+                    setDTO(dto);
+                }
+            });
+        }
+    };
+
+    private SelectionListener poSelectionListener = new SelectionListener<ButtonEvent>() {
+        @Override
+        public void componentSelected(ButtonEvent ce) {
+            new UserSearchDialog(getService(), new UserSearchCallback() {
+                @Override
+                public void userSearchCallback(UserDTO dto) {
+                    getSearchedUserTF().setValue(dto.getFirstName() + " " + dto.getLastName());
+                    //TODO: get index
+
+                    setDTO(dto);
+                }
+            });
+        }
+    };
+
+    private SelectionListener smSelectionListener = new SelectionListener<ButtonEvent>() {
         @Override
         public void componentSelected(ButtonEvent ce) {
             new UserSearchDialog(getService(), new UserSearchCallback() {
