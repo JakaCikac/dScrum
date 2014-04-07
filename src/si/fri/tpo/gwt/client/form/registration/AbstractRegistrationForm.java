@@ -131,6 +131,7 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
 
         password.setMinLength(4);
         password.setPassword(true);
+        password.setAllowBlank(false);
         password.setFieldLabel("Password");
         setBasicData.add(password, getFormData());
 
