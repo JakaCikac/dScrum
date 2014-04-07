@@ -4,7 +4,6 @@ import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FieldEvent;
 import com.extjs.gxt.ui.client.event.Listener;
-import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.Component;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
@@ -13,12 +12,8 @@ import com.extjs.gxt.ui.client.widget.form.*;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by nanorax on 06/04/14.
@@ -32,7 +27,6 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
     private TextField<String> searchedUserTF = new TextField<String>();
     private FormPanel simple = new FormPanel();
     private Radio newUserRB = new Radio();
-    private Radio existingUserRB = new Radio();
 
     // Basic info components
     private CheckBox checkbox = new CheckBox();
@@ -65,7 +59,6 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
         vp = new VerticalPanel();
         vp.setSpacing(10);
         initMainRegistrationForm();
-        initExistingUserForm();
         add(vp);
     }
 
@@ -74,42 +67,21 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
         newUserRB.setValue(true);
         newUserRB.setBoxLabel("New user");
 
-        existingUserRB.setName("existing_user");
-        existingUserRB.setBoxLabel("Existing user");
-
         typeOfUserRG.setFieldLabel("User type");
         typeOfUserRG.setAutoWidth(true);
         typeOfUserRG.add(newUserRB);
-        typeOfUserRG.add(existingUserRB);
+        //typeOfUserRG.add(existingUserRB);
         typeOfUserRG.addListener(Events.Change, new Listener<FieldEvent>() {
             @Override
             public void handleEvent(FieldEvent fe) {
                 if (newUserRB.getValue()) {
                     getUserSearchButton().setEnabled(false);
                     clearAllData();
-
-                } else if (existingUserRB.getValue()) {
-                    getUserSearchButton().setEnabled(true);
                 }
-                searchedUserTF.setValue("");
             }
         });
         simple.add(typeOfUserRG);
 
-        simple.add(searchedUserTF, getFormData());
-        userSearchButton.setEnabled(false);
-        simple.add(userSearchButton);
-
-        /*
-        fillDummyData.addSelectionListener(new SelectionListener<ButtonEvent>() {
-            @Override
-            public void componentSelected(ButtonEvent ce) {
-                initDummyData();
-            }
-        });
-         */
-
-        //simple.add(fillDummyData);
     }
 
     protected void clearAllData() {
@@ -137,13 +109,13 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
         layout.setLabelWidth(100);
         setBasicData.setLayout(layout);
 
-        lastName.setFieldLabel("surname");
-        lastName.setAllowBlank(false);
-        setBasicData.add(lastName, getFormData());
-
         firstName.setFieldLabel("Name");
         firstName.setAllowBlank(false);
         setBasicData.add(firstName, getFormData());
+
+        lastName.setFieldLabel("Surname");
+        lastName.setAllowBlank(false);
+        setBasicData.add(lastName, getFormData());
 
         getSimple().add(setBasicData);
 
@@ -160,12 +132,6 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
         binding.addButton(submitButton);
 
         getVp().add(getSimple());
-    }
-
-    protected void initExistingUserForm() {
-        searchedUserTF.setWidth(100);
-        searchedUserTF.setEnabled(false);
-        searchedUserTF.setFieldLabel("Searched user");
     }
 
     protected void initComponentsDataFill() {
@@ -218,17 +184,6 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
 
     public Radio getNewUserRB() {
         return newUserRB;
-    }
-
-    public Radio getExistingUserRB() {
-        return existingUserRB;
-    }
-
-    @Deprecated
-    private void initDummyData() {
-        getFirstName().setValue("Denis");
-        getLastName().setValue("Bozo");
-        getEmail().setValue("denis@bozo.com");
     }
 
 }

@@ -34,7 +34,7 @@ public class UserRegistrationForm extends AbstractRegistrationForm {
                 public void userSearchCallback(UserDTO dto) {
                     getSearchedUserTF().setValue(dto.getFirstName() + " " + dto.getLastName());
                     //TODO: get index
-                    fillExistingUserData(dto);
+                    //fillExistingUserData(dto);
                     setDTO(dto);
                 }
             });
@@ -45,11 +45,11 @@ public class UserRegistrationForm extends AbstractRegistrationForm {
         this.dto = dto;
     }
 
-    private void fillExistingUserData(UserDTO dto) {
+   /* private void fillExistingUserData(UserDTO dto) {
         getFirstName().setValue(dto.getFirstName());
         getLastName().setValue(dto.getLastName());
         getEmail().setValue(dto.getEmail());
-    }
+    } */
 
     private SelectionListener submitListener = new SelectionListener<ButtonEvent>() {
         @Override

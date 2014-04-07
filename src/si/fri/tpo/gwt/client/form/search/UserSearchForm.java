@@ -181,6 +181,8 @@ public class UserSearchForm extends VerticalPanel {
             configs.add(column);
         }
 
+
+
         public Grid<UserDTO> getGrid() {
             return grid;
         }

@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import si.fri.tpo.gwt.client.form.*;
 
 
+import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 //TODO: merge cnavpanel into admin nav panel!
@@ -36,7 +37,7 @@ public class AdminNavPanel extends LayoutContainer {
         setLayout(new FlowLayout(10));
 
         final ContentPanel panel = new ContentPanel();
-        panel.setHeading("Admin menu");
+        panel.setHeading("Administrator menu");
         panel.setBodyBorder(false);
         panel.setLayout(new AccordionLayout());
 
@@ -49,7 +50,8 @@ public class AdminNavPanel extends LayoutContainer {
         Button users = new Button("User management", new SelectionListener<ButtonEvent>() {
             public void componentSelected(ButtonEvent ce) {
                 mainContainer.clear();
-                //mainContainer.add(new someForm(service));
+                mainContainer.add(new UserRegistrationForm(service));
+
             }
         });
         users.setWidth("100%");
@@ -73,6 +75,7 @@ public class AdminNavPanel extends LayoutContainer {
         panel.setAutoHeight(true);
         this.add(panel);
     }
+
 
     private ModelData newItem(String text, String iconStyle) {
         ModelData m = new BaseModelData();
