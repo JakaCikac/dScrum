@@ -14,22 +14,18 @@ import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.google.gwt.user.client.Element;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
-import javax.xml.soap.Text;
-
-
 /**
- * Created by nanorax on 06/04/14.
+ * Created by nanorax on 07/04/14.
  */
-public abstract class AbstractRegistrationForm extends LayoutContainer {
+public abstract class AbstractProjectRegistrationForm extends LayoutContainer {
 
     private DScrumServiceAsync service;
     private VerticalPanel vp;
     private FormData formData;
-    private RadioGroup typeOfUserRG = new RadioGroup();
+    private RadioGroup typeOfProjectRG = new RadioGroup();
     private TextField<String> searchedUserTF = new TextField<String>();
     private FormPanel simple = new FormPanel();
-    private Radio newUserRB = new Radio();
-    private Radio newAdminRB = new Radio();
+    private Radio newProjectRB = new Radio();
 
     // Basic info components
     private CheckBox checkbox = new CheckBox();
@@ -40,19 +36,20 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
     private Radio item2 = new Radio();
 
     // textfeilds
-    private TextField<String> username = new TextField<String>();
-    private TextField<String> email = new TextField<String>();
-    private TextField<String> lastName = new TextField<String>();
-    private TextField<String> firstName = new TextField<String>();
-    private TextField<String> password = new TextField<String>();
+    private TextField<String> projectName = new TextField<String>();
+    //private TextField<String> email = new TextField<String>();
+    //private TextField<String> lastName = new TextField<String>();
+    //private TextField<String> firstName = new TextField<String>();
+    //private TextField<String> password = new TextField<String>();
 
     // fieldsets
     private FieldSet setBasicData = new FieldSet();
 
     // buttons
-    private Button submitButton = new Button("Register");
+    private Button submitButton = new Button("Create");
+    private Button userSearchButton = new Button("Select User");
 
-    public AbstractRegistrationForm(DScrumServiceAsync service) {
+    public AbstractProjectRegistrationForm(DScrumServiceAsync service) {
         this.service = service;
     }
 
@@ -67,27 +64,23 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
     }
 
     private void initMainRegistrationForm() {
-        newUserRB.setName("new_user");
-        newUserRB.setValue(true);
-        newUserRB.setBoxLabel("New user");
+        newProjectRB.setName("new_project");
+        newProjectRB.setValue(true);
+        newProjectRB.setBoxLabel("New Project");
 
-        newAdminRB.setName("new admin");
-        newAdminRB.setValue(false);
-        newAdminRB.setBoxLabel("New Admin");
-
-        typeOfUserRG.setFieldLabel("User type");
-        typeOfUserRG.setAutoWidth(true);
-        typeOfUserRG.add(newUserRB);
-        typeOfUserRG.add(newAdminRB);
-        typeOfUserRG.addListener(Events.Change, new Listener<FieldEvent>() {
+        typeOfProjectRG.setFieldLabel("Project type");
+        typeOfProjectRG.setAutoWidth(true);
+        typeOfProjectRG.add(newProjectRB);
+        typeOfProjectRG.addListener(Events.Change, new Listener<FieldEvent>() {
             @Override
             public void handleEvent(FieldEvent fe) {
-                if (newUserRB.getValue()) {
+                if (newProjectRB.getValue()) {
                     clearAllData();
                 }
+
             }
         });
-        simple.add(typeOfUserRG);
+        simple.add(typeOfProjectRG);
 
     }
 
@@ -105,41 +98,23 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
     }
 
     protected void initNewRegistrationForm() {
-        getSimple().setHeading("Registration form");
+        getSimple().setHeading("Project Creation Form");
         getSimple().setFrame(true);
 
         FormLayout layout = new FormLayout();
 
         getSimple().setButtonAlign(Style.HorizontalAlignment.CENTER);
 
-        setBasicData.setHeading("User information");
+        setBasicData.setHeading("Project information");
         layout.setLabelWidth(100);
         setBasicData.setLayout(layout);
 
-        firstName.setFieldLabel("Name");
-        firstName.setAllowBlank(true);
-        setBasicData.add(firstName, getFormData());
+        projectName.setFieldLabel("Project Name");
+        projectName.setAllowBlank(false);
+        setBasicData.add(projectName, getFormData());
 
-        lastName.setFieldLabel("Surname");
-        lastName.setAllowBlank(true);
-        setBasicData.add(lastName, getFormData());
-
-        username.setFieldLabel("Username");
-        username.setAllowBlank(false);
-        setBasicData.add(username, getFormData());
-
-        password.setMinLength(4);
-        password.setPassword(true);
-        password.setAllowBlank(false);
-        password.setFieldLabel("Password");
-        setBasicData.add(password, getFormData());
 
         getSimple().add(setBasicData);
-
-
-        email.setFieldLabel("Email address");
-        email.setAllowBlank(false);
-        setBasicData.add(email, getFormData());
 
         submitButton.setEnabled(true);
         getSimple().addButton(submitButton);
@@ -175,36 +150,24 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
         return submitButton;
     }
 
-    public TextField<String> getLastName() {
-        return lastName;
+    public Button getUserSearchButton() {
+        return userSearchButton;
     }
 
-    public TextField<String> getFirstName() {
-        return firstName;
-    }
-
-    public TextField<String> getUsername() {
-        return username;
-    }
-
-    public TextField<String> getPassword() {
-        return password;
-    }
-
-    public TextField<String> getEmail() {
-        return email;
+    public TextField<String> getProjectName() {
+        return projectName;
     }
 
     public FieldSet getSetBasicData() {
         return setBasicData;
     }
 
-    public Radio getNewUserRB() {
-        return newUserRB;
+    public TextField<String> getSearchedUserTF() {
+        return searchedUserTF;
     }
 
-    public Radio getNewAdminRB() {
-        return newAdminRB;
+    public Radio getNewUserRB() {
+        return newProjectRB;
     }
 
 }

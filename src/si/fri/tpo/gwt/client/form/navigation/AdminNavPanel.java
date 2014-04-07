@@ -15,7 +15,7 @@ import com.extjs.gxt.ui.client.widget.layout.AccordionLayout;
 import com.extjs.gxt.ui.client.widget.layout.FlowLayout;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
-import si.fri.tpo.gwt.client.form.*;
+import si.fri.tpo.gwt.client.form.registration.ProjectRegistrationForm;
 
 
 import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
@@ -61,7 +61,7 @@ public class AdminNavPanel extends LayoutContainer {
             @Override
             public void componentSelected(ButtonEvent ce) {
                 mainContainer.clear();
-                //mainContainer.add(new someForm(service));
+                mainContainer.add(new ProjectRegistrationForm(service));
             }
         });
         projectManagement.setWidth("100%");
