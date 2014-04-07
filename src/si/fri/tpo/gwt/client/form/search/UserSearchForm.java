@@ -40,10 +40,8 @@ public class UserSearchForm extends VerticalPanel {
         private FormData formData;
         ListStore<UserDTO> listStore = new ListStore<UserDTO>();
         private List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
-        private TextField<String> name;
+        private TextField<String> username;
         NumberField numberExample;
-
-        private TextField<String> surname;
 
         public UserSearchForm(DScrumServiceAsync service) {
             this.service = service;
@@ -60,21 +58,17 @@ public class UserSearchForm extends VerticalPanel {
             fieldSet.setLayout(layout);
             formData = new FormData("-20");
 
-            name = new TextField<String>();
-            name.setFieldLabel("Name");
-            name.setAllowBlank(true);
-            fieldSet.add(name, formData);
+            username = new TextField<String>();
+            username.setFieldLabel("Username");
+            username.setAllowBlank(true);
+            fieldSet.add(username, formData);
 
-            surname = new TextField<String>();
-            surname.setFieldLabel("Surname");
-            surname.setAllowBlank(true);
-            fieldSet.add(surname, formData);
 
             /* number example
-            number = new NumberField();
-            number.setPropertyEditorType(Integer.class);
-            number.setFieldLabel("Field name");
-            number.setAllowBlank(true);
+            user_id = new NumberField();
+            user_id.setPropertyEditorType(Integer.class);
+            user_id.setFieldLabel("Field name");
+            user_id.setAllowBlank(true);
             fieldSet.add(enrolmentNumber, formData);
             */
 
@@ -119,10 +113,10 @@ public class UserSearchForm extends VerticalPanel {
         public void reconfigureData() {
             listStore.removeAll();
 
-            AsyncCallback<List<UserDTO>> callback = new AsyncCallback<List<UserDTO>>() {
+            AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
 
                 @Override
-                public void onSuccess(List<UserDTO> result) {
+                public void onSuccess(UserDTO result) {
                     listStore.add(result);
                     listStore.sort("surname", Style.SortDir.ASC);
                     grid.reconfigure(listStore, cm);
@@ -133,7 +127,7 @@ public class UserSearchForm extends VerticalPanel {
                     Window.alert(caught.getMessage());
                 }
             };
-            //service.findUserByFirstAndLastName(name.getValue(), surname.getValue(), callback);
+            service.findUserByUsername(username.getValue(), callback);
         }
 
 
@@ -142,14 +136,14 @@ public class UserSearchForm extends VerticalPanel {
             configs.add(numberer);
 
             ColumnConfig column = new ColumnConfig();
-            column.setId("userDTO.user_id");
+            column.setId("user_id");
             column.setAlignment(Style.HorizontalAlignment.LEFT);
             column.setHeader("User ID");
             column.setWidth(70);
             configs.add(column);
 
             column = new ColumnConfig();
-            column.setId("userDTO.username");
+            column.setId("username");
             column.setAlignment(Style.HorizontalAlignment.LEFT);
             column.setHeader("Username");
             column.setWidth(80);
@@ -157,7 +151,7 @@ public class UserSearchForm extends VerticalPanel {
             configs.add(column);
 
             column = new ColumnConfig();
-            column.setId("name");
+            column.setId("firstName");
             column.setAlignment(Style.HorizontalAlignment.LEFT);
             column.setHeader("Name");
             column.setWidth(80);
@@ -165,7 +159,7 @@ public class UserSearchForm extends VerticalPanel {
             configs.add(column);
 
             column = new ColumnConfig();
-            column.setId("surname");
+            column.setId("lastNurname");
             column.setAlignment(Style.HorizontalAlignment.LEFT);
             column.setHeader("Surname");
             column.setWidth(80);

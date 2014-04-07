@@ -73,8 +73,13 @@ public class UserImpl {
             userDTO = FillDTO.fillUserData(u);
             resList.add(userDTO);
         }
-        // TODO: Check if this returns the right stuff :)
         return resList;
     }
 
+    public static UserDTO findUserByUsername(String username) {
+        User user;
+        user = ProxyManager.getUserProxy().findUserByUsername(username);
+        UserDTO userDTO = FillDTO.fillUserData(user);
+        return userDTO;
+    }
 }

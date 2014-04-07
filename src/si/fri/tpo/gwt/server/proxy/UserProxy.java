@@ -1,6 +1,7 @@
 package si.fri.tpo.gwt.server.proxy;
 
 
+import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.server.controllers.UserJpaController;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -43,4 +44,5 @@ public class UserProxy extends UserJpaController {
     public List<User> getUsersList() {
         return findUserEntities();
     }
+
 }

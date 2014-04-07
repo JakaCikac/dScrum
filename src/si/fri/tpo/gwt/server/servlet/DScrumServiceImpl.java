@@ -8,6 +8,9 @@ import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.server.impl.login.LoginServiceImpl;
 import si.fri.tpo.gwt.server.impl.registration.UserRegistrationServiceImpl;
+import si.fri.tpo.gwt.server.impl.user.UserImpl;
+
+import java.util.List;
 
 /**
  * Created by nanorax on 04/04/14.
@@ -23,11 +26,6 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     public Character dummyCharacterTrigger(Character b) {
         return new Character('A');
     }
-
-    //@Override
-    //public SprintDTO dummySprintTrigger(SprintDTO sprintDTO) {
-    //    return new SprintDTO();
-    //}
 
     @Override
     public UserDTO dummyUserTrigger(UserDTO userDTO) {
@@ -50,9 +48,9 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
         return UserRegistrationServiceImpl.saveUser(userDTO, isNew);
     }
 
-    //@Override
-    //public DiscussionDTO dummyDiscussionTrigger(DiscussionDTO discussionDTO) {
-    //    return new DiscussionDTO();
-    //}
+    @Override
+    public UserDTO findUserByUsername(String username) {
+        return UserImpl.findUserByUsername(username);
+    }
 
 }

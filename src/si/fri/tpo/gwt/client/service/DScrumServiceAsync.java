@@ -6,6 +6,8 @@ import si.fri.tpo.gwt.client.dto.DiscussionDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 
+import java.util.List;
+
 /**
  * Created by nanorax on 04/04/14.
  */
@@ -15,14 +17,12 @@ public interface DScrumServiceAsync {
 
     void dummyCharacterTrigger(Character b, AsyncCallback<Character> callback);
 
-    //void dummySprintTrigger(SprintDTO sprintDTO, AsyncCallback<SprintDTO> callback2);
-
     void dummyUserTrigger(UserDTO userDTO, AsyncCallback<UserDTO> callback3);
 
     void validateUserData(String emailValue, AsyncCallback<Pair<Boolean, String>> validationCallback);
 
     void saveUser(UserDTO userDTO, Boolean value, AsyncCallback<Pair<Boolean, String>> saveUser);
 
-    //void dummyDiscussionTrigger(DiscussionDTO discussionDTO, AsyncCallback<DiscussionDTO> callback4);
+    void findUserByUsername(String username, AsyncCallback<UserDTO> callback);
 }
 

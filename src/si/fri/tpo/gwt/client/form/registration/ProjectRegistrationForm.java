@@ -31,9 +31,9 @@ public class ProjectRegistrationForm extends AbstractProjectRegistrationForm {
             new UserSearchDialog(getService(), new UserSearchCallback() {
                 @Override
                 public void userSearchCallback(UserDTO dto) {
-                    getSearchedUserTF().setValue(dto.getFirstName() + " " + dto.getLastName());
+                    //getSearchedUserTF().setValue(dto.getFirstName() + " " + dto.getLastName());
                     //TODO: get index
-
+                    getSelectedScrumMasterUserLabel().setText(dto.getUsername());
                     setDTO(dto);
                 }
             });
@@ -46,7 +46,9 @@ public class ProjectRegistrationForm extends AbstractProjectRegistrationForm {
             new UserSearchDialog(getService(), new UserSearchCallback() {
                 @Override
                 public void userSearchCallback(UserDTO dto) {
-                    getSearchedUserTF().setValue(dto.getFirstName() + " " + dto.getLastName());
+                    //getSearchedUserTF().setValue(dto.getFirstName() + " " + dto.getLastName());
+                    getSelectedProductOwnerUserLabel().setText(dto.getUsername());
+
                     //TODO: get index
 
                     setDTO(dto);
@@ -61,7 +63,7 @@ public class ProjectRegistrationForm extends AbstractProjectRegistrationForm {
             new UserSearchDialog(getService(), new UserSearchCallback() {
                 @Override
                 public void userSearchCallback(UserDTO dto) {
-                    getSearchedUserTF().setValue(dto.getFirstName() + " " + dto.getLastName());
+                    getSelectedScrumMasterUserLabel().setText(dto.getUsername());
                     //TODO: get index
 
                     setDTO(dto);

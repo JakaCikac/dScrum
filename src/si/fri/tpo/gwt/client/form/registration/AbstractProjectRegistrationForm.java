@@ -49,8 +49,12 @@ public abstract class AbstractProjectRegistrationForm extends LayoutContainer {
     private Button selectScrumMasterB = new Button("Select SM");
     private Button selectProductOwnerB = new Button("Select PO");
 
-    Label selectProductOwnerLabel = new Label("Select Product Owner:");
-    Label selectScrumMasterLabel = new Label("Select Scrum Master:");
+    private Label selectProductOwnerLabel = new Label("Select Product Owner: ");
+    private Label selectScrumMasterLabel = new Label("Select Scrum Master: ");
+    private Label selectedScrumMasterLabel = new Label("Selected Scrum Master: ");
+    private Label selectedProductOwnerLabel = new Label("Selected Product Owner: ");
+    private Label selectedScrumMasterUserLabel = new Label("SM not selected.");
+    private Label selectedProductOwnerUserLabel = new Label("PO not selected.");
 
 
     public AbstractProjectRegistrationForm(DScrumServiceAsync service) {
@@ -129,6 +133,12 @@ public abstract class AbstractProjectRegistrationForm extends LayoutContainer {
         // Scrum master field
         setBasicData.add(selectScrumMasterLabel);
         setBasicData.add(selectScrumMasterB);
+        // SM and PO label field
+        setBasicData.add(selectedScrumMasterLabel);
+        setBasicData.add(selectProductOwnerLabel);
+        // SM and PO user label field
+        setBasicData.add(selectedScrumMasterUserLabel);
+        setBasicData.add(selectedProductOwnerUserLabel);
 
 
         getSimple().add(setBasicData);
@@ -192,6 +202,31 @@ public abstract class AbstractProjectRegistrationForm extends LayoutContainer {
     public Radio getNewUserRB() {
         return newProjectRB;
     }
+
+    public Label getSelectedScrumMasterLabel() {
+        return selectedScrumMasterLabel;
+    }
+
+    public Label getSelectedProductOwnerLabel() {
+        return selectedProductOwnerLabel;
+    }
+
+    public Label getSelectedProductOwnerUserLabel() {
+        return selectedProductOwnerUserLabel;
+    }
+
+    public void setSelectedProductOwnerUserLabel(Label selectedProductOwnerUserLabel) {
+        this.selectedProductOwnerUserLabel = selectedProductOwnerUserLabel;
+    }
+
+    public Label getSelectedScrumMasterUserLabel() {
+        return selectedScrumMasterUserLabel;
+    }
+
+    public void setSelectedScrumMasterUserLabel(Label selectedScrumMasterUserLabel) {
+        this.selectedScrumMasterUserLabel = selectedScrumMasterUserLabel;
+    }
+
 
 
 
