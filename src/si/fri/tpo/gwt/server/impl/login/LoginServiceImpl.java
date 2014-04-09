@@ -23,7 +23,7 @@ public class LoginServiceImpl {
         if (!attempt)
             return Pair.of(null, "Wrong password!");
 
-        return Pair.of(FillDTO.fillUserData(user), "success");
+        return Pair.of(FillDTO.fillUserDTO(user), "success");
     }
 
 }

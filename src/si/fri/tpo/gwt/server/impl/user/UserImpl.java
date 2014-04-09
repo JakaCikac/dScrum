@@ -7,8 +7,6 @@ import si.fri.tpo.gwt.server.jpa.User;
 import si.fri.tpo.gwt.server.proxy.ProxyManager;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -70,7 +68,7 @@ public class UserImpl {
         UserDTO userDTO;
         for (User u : userList) {
             userDTO = new UserDTO();
-            userDTO = FillDTO.fillUserData(u);
+            userDTO = FillDTO.fillUserDTO(u);
             resList.add(userDTO);
         }
         return resList;
@@ -79,7 +77,7 @@ public class UserImpl {
     public static UserDTO findUserByUsername(String username) {
         User user;
         user = ProxyManager.getUserProxy().findUserByUsername(username);
-        UserDTO userDTO = FillDTO.fillUserData(user);
+        UserDTO userDTO = FillDTO.fillUserDTO(user);
         return userDTO;
     }
 }

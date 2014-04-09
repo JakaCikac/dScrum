@@ -115,7 +115,7 @@ public class FillDTO {
         return teamDTO;
     }
     /* -------------------------------------------------------------------------------------------------------------- */
-    public static UserDTO fillUserData(User user) {
+    public static UserDTO fillUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
 
         userDTO.setUserId(user.getUserId());

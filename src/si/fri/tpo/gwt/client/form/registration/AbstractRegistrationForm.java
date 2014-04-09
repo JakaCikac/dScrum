@@ -45,6 +45,7 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
     private TextField<String> lastName = new TextField<String>();
     private TextField<String> firstName = new TextField<String>();
     private TextField<String> password = new TextField<String>();
+    private TextField<String> repassword = new TextField<String>();
 
     // fieldsets
     private FieldSet setBasicData = new FieldSet();
