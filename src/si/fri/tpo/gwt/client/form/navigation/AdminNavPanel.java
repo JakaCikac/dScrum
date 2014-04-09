@@ -9,18 +9,8 @@ import com.sencha.gxt.legacy.client.data.ModelData;
 import com.sencha.gxt.legacy.client.data.BaseModelData;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.ContentPanel;
-/* import com.extjs.gxt.ui.client.data.ModelData;
-import com.extjs.gxt.ui.client.event.ButtonEvent;
-import com.extjs.gxt.ui.client.event.SelectionListener;
-import com.extjs.gxt.ui.client.widget.ContentPanel;
-import com.extjs.gxt.ui.client.widget.LayoutContainer;
-import com.extjs.gxt.ui.client.widget.button.Button;
-import com.extjs.gxt.ui.client.widget.layout.AccordionLayout;
-import com.extjs.gxt.ui.client.widget.layout.FlowLayout;
-*/
-import com.google.gwt.user.client.Element;
 import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
-import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.form.registration.ProjectRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
@@ -33,6 +23,7 @@ public class AdminNavPanel extends AccordionLayoutContainer implements IsWidget 
     public AdminNavPanel(RootPanel mainContainer, DScrumServiceAsync service) {
         this.mainContainer = mainContainer;
         this.service = service;
+        RootPanel.get().add(asWidget());
     }
 
     private ContentPanel panel;
@@ -56,39 +47,25 @@ public class AdminNavPanel extends AccordionLayoutContainer implements IsWidget 
         cp.setBodyStyleName("pad-text");
 
         final TextButton users = new TextButton("User Management");
-        //users.addSelectHandler()
-
-        /* TextButton users = new TextButton("User management", new SelectionListener<ButtonEvent>() {
-            public void componentSelected(ButtonEvent ce) {
-                mainContainer.clear();
-                mainContainer.add(new UserRegistrationForm(service));
-            }
-        });
-        users.setWidth("100%");
-        final ToggleButton b1 = new ToggleButton("Toggle Size");
-        b1.addSelectHandler(new SelectHandler() {
-
+        users.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                if (b1.getValue()) {
-                    con.setPixelSize(600, 400);
-                } else {
-                    con.setPixelSize(400, 300);
-                }
-
+                mainContainer.clear();
+                System.out.println("Registered click on user management");
+                UserRegistrationForm rgf = new UserRegistrationForm(service);
+                RootPanel.get().add(rgf);
             }
         });
         cp.add(users);
 
-        TextButton projectManagement = new TextButton("Project Management", new CustomEventHandler() {
+        /* final TextButton projectManagement = new TextButton("Project Management");
+        projectManagement.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
-            public void componentSelected(ButtonEvent ce) {
+            public void onSelect(SelectEvent event) {
                 mainContainer.clear();
-                //mainContainer.add(new AddEditForm(mainContainer,service));
                 mainContainer.add(new ProjectRegistrationForm(service));
             }
         });
-        projectManagement.setWidth("100%");
         cp.add(projectManagement); */
 
 
@@ -96,7 +73,6 @@ public class AdminNavPanel extends AccordionLayoutContainer implements IsWidget 
         panel.setWidth(270);
 
     }
-
 
     private ModelData newItem(String text, String iconStyle) {
         ModelData m = new BaseModelData();

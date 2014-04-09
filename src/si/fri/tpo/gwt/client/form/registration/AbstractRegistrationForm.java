@@ -1,18 +1,15 @@
 package si.fri.tpo.gwt.client.form.registration;
 
-/* import com.extjs.gxt.ui.client.Style;
-import com.extjs.gxt.ui.client.event.Events;
-import com.extjs.gxt.ui.client.event.FieldEvent;
-import com.extjs.gxt.ui.client.event.Listener;
-import com.extjs.gxt.ui.client.widget.Component;
-import com.extjs.gxt.ui.client.widget.LayoutContainer;
-import com.extjs.gxt.ui.client.widget.VerticalPanel;
-import com.extjs.gxt.ui.client.widget.button.Button;
-import com.extjs.gxt.ui.client.widget.form.*;
-import com.extjs.gxt.ui.client.widget.layout.FormData;
-import com.extjs.gxt.ui.client.widget.layout.FormLayout;
-*/
+
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.CheckBox;
+import com.sencha.gxt.core.client.util.ToggleGroup;
+import com.sencha.gxt.widget.core.client.Component;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.form.*;
+import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.form.FormPanel;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 
@@ -20,54 +17,52 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 /**
  * Created by nanorax on 06/04/14.
  */
-public abstract class AbstractRegistrationForm {// extends LayoutContainer {
+public abstract class AbstractRegistrationForm implements IsWidget {
 
-    /* private DScrumServiceAsync service;
+    private DScrumServiceAsync service;
     private VerticalPanel vp;
-    private FormData formData;
-    private RadioGroup typeOfUserRG = new RadioGroup();
-    private TextField<String> searchedUserTF = new TextField<String>();
-    private FormPanel simple = new FormPanel();
+    private ToggleGroup typeOfUserRG = new ToggleGroup();
+    private TextField searchedUserTF = new TextField();
     private Radio newUserRB = new Radio();
     private Radio newAdminRB = new Radio();
 
     // Basic info components
     private CheckBox checkbox = new CheckBox();
-    private TextField<String> textField = new TextField<String>();
-    private NumberField number = new NumberField();
-    private RadioGroup group = new RadioGroup();
+    private TextField textField = new TextField();
+    private ToggleGroup group = new ToggleGroup();
     private Radio item1 = new Radio();
     private Radio item2 = new Radio();
 
     // textfeilds
-    private TextField<String> username = new TextField<String>();
-    private TextField<String> email = new TextField<String>();
-    private TextField<String> lastName = new TextField<String>();
-    private TextField<String> firstName = new TextField<String>();
-    private TextField<String> password = new TextField<String>();
-    private TextField<String> repassword = new TextField<String>();
+    private TextField username = new TextField();
+    private TextField email = new TextField();
+    private TextField lastName = new TextField();
+    private TextField firstName = new TextField();
+    private TextField password = new TextField();
+    private TextField repassword = new TextField();
 
     // fieldsets
     private FieldSet setBasicData = new FieldSet();
 
     // buttons
-    private Button submitButton = new Button("Register");
+    private TextButton submitButton = new TextButton("Register");
 
     public AbstractRegistrationForm(DScrumServiceAsync service) {
         this.service = service;
+        RootPanel.get().add(asWidget());
     }
 
-    @Override
-    protected void onRender(Element parent, int index) {
-        super.onRender(parent, index);
-        formData = new FormData("-20");
+
+    public Widget asWidget() {
         vp = new VerticalPanel();
         vp.setSpacing(10);
         initMainRegistrationForm();
-        add(vp);
+        return vp;
     }
 
+    // TODO: zakaj se to ne klicari?
     private void initMainRegistrationForm() {
+        System.out.println("New main reg form");
         newUserRB.setName("new_user");
         newUserRB.setValue(true);
         newUserRB.setBoxLabel("New user");
@@ -76,26 +71,23 @@ public abstract class AbstractRegistrationForm {// extends LayoutContainer {
         newAdminRB.setValue(false);
         newAdminRB.setBoxLabel("New Admin");
 
-        typeOfUserRG.setFieldLabel("User type");
-        typeOfUserRG.setAutoWidth(true);
+
+        HorizontalPanel hp = new HorizontalPanel();
+        hp.add(newUserRB);
+        hp.add(newAdminRB);
+        vp.add(new FieldLabel(hp, "User type"));
+
         typeOfUserRG.add(newUserRB);
         typeOfUserRG.add(newAdminRB);
-        typeOfUserRG.addListener(Events.Change, new Listener<FieldEvent>() {
+        /* typeOfUserRG.addListener(Events.Change, new Listener<FieldEvent>() {
             @Override
             public void handleEvent(FieldEvent fe) {
                 if (newUserRB.getValue()) {
                     clearAllData();
                 }
             }
-        });
-        simple.add(typeOfUserRG);
+        }); */
 
-    }
-
-    protected void clearAllData() {
-        for (Component component : setBasicData.getItems()) {
-            disableSingleComponent(component);
-        }
     }
 
     private void disableSingleComponent(Component component) {
@@ -106,10 +98,12 @@ public abstract class AbstractRegistrationForm {// extends LayoutContainer {
     }
 
     protected void initNewRegistrationForm() {
-        getSimple().setHeading("Registration form");
-        getSimple().setFrame(true);
+        System.out.println("New reg form lalala");
+        username.setText("lala");
+        vp.add(username);
 
-        FormLayout layout = new FormLayout();
+       /* getSimple().setHeading("Registration form");
+        getSimple().setFrame(true);
 
         getSimple().setButtonAlign(Style.HorizontalAlignment.CENTER);
 
@@ -149,7 +143,7 @@ public abstract class AbstractRegistrationForm {// extends LayoutContainer {
         FormButtonBinding binding = new FormButtonBinding(getSimple());
         binding.addButton(submitButton);
 
-        getVp().add(getSimple());
+        getVp().add(getSimple()); */
     }
 
     protected void initComponentsDataFill() {}
@@ -158,39 +152,31 @@ public abstract class AbstractRegistrationForm {// extends LayoutContainer {
         return vp;
     }
 
-    public FormData getFormData() {
-        return formData;
-    }
-
     public DScrumServiceAsync getService() {
         return service;
     }
 
-    public FormPanel getSimple() {
-        return simple;
-    }
-
-    public Button getSubmitButton() {
+    public TextButton getSubmitButton() {
         return submitButton;
     }
 
-    public TextField<String> getLastName() {
+    public TextField getLastName() {
         return lastName;
     }
 
-    public TextField<String> getFirstName() {
+    public TextField getFirstName() {
         return firstName;
     }
 
-    public TextField<String> getUsername() {
+    public TextField getUsername() {
         return username;
     }
 
-    public TextField<String> getPassword() {
+    public TextField getPassword() {
         return password;
     }
 
-    public TextField<String> getEmail() {
+    public TextField getEmail() {
         return email;
     }
 
@@ -205,6 +191,6 @@ public abstract class AbstractRegistrationForm {// extends LayoutContainer {
     public Radio getNewAdminRB() {
         return newAdminRB;
     }
-    */
+
 
 }
