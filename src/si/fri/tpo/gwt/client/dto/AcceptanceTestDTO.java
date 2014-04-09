@@ -1,6 +1,6 @@
 package si.fri.tpo.gwt.client.dto;
 
-import com.extjs.gxt.ui.client.data.BaseModelData;
+import com.sencha.gxt.legacy.client.data.BaseModelData;
 
 /**
  * Created by t13db on 4.4.2014.

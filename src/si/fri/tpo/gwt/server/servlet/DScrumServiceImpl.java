@@ -2,15 +2,11 @@ package si.fri.tpo.gwt.server.servlet;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.dto.DiscussionDTO;
-import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.server.impl.login.LoginServiceImpl;
 import si.fri.tpo.gwt.server.impl.registration.UserRegistrationServiceImpl;
 import si.fri.tpo.gwt.server.impl.user.UserImpl;
-
-import java.util.List;
 
 /**
  * Created by nanorax on 04/04/14.

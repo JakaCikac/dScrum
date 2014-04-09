@@ -1,6 +1,6 @@
 package si.fri.tpo.gwt.client.form.registration;
 
-import com.extjs.gxt.ui.client.Style;
+/* import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FieldEvent;
 import com.extjs.gxt.ui.client.event.Listener;
@@ -11,8 +11,8 @@ import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.*;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
+*/
 import com.google.gwt.user.client.Element;
-import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 
@@ -20,9 +20,9 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 /**
  * Created by nanorax on 06/04/14.
  */
-public abstract class AbstractRegistrationForm extends LayoutContainer {
+public abstract class AbstractRegistrationForm {// extends LayoutContainer {
 
-    private DScrumServiceAsync service;
+    /* private DScrumServiceAsync service;
     private VerticalPanel vp;
     private FormData formData;
     private RadioGroup typeOfUserRG = new RadioGroup();
@@ -205,5 +205,6 @@ public abstract class AbstractRegistrationForm extends LayoutContainer {
     public Radio getNewAdminRB() {
         return newAdminRB;
     }
+    */
 
 }

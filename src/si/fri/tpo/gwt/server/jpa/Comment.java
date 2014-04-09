@@ -6,9 +6,9 @@
 
 package si.fri.tpo.gwt.server.jpa;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 /**
  *

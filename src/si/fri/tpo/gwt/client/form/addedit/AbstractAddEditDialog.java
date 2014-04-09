@@ -1,22 +1,17 @@
 package si.fri.tpo.gwt.client.form.addedit;
 
-import com.extjs.gxt.ui.client.Style;
-import com.extjs.gxt.ui.client.widget.Dialog;
-import com.extjs.gxt.ui.client.widget.button.Button;
-import com.extjs.gxt.ui.client.widget.form.Field;
-import com.extjs.gxt.ui.client.widget.form.FieldSet;
-import com.extjs.gxt.ui.client.widget.form.TextArea;
-import com.extjs.gxt.ui.client.widget.layout.FormData;
-import com.extjs.gxt.ui.client.widget.layout.FormLayout;
-import si.fri.tpo.gwt.client.form.addedit.AbstractAddEditForm;
+import com.sencha.gxt.widget.core.client.Dialog;
+import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.form.Field;
+import com.sencha.gxt.widget.core.client.form.FieldSet;
+import com.sencha.gxt.widget.core.client.form.TextArea;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 /**
  * Created by nanorax on 07/04/14.
  */
 public abstract class AbstractAddEditDialog<X> extends Dialog {
-    private FormData formData;
-    private DScrumServiceAsync service;
+/*    private DScrumServiceAsync service;
     private boolean addMode;
     private FieldSet fieldSet;
     private long dtoID = -1;
@@ -42,7 +37,7 @@ public abstract class AbstractAddEditDialog<X> extends Dialog {
     }
 
     @Override
-    protected void onButtonPressed(Button button) {
+    protected void onButtonPressed(TextButton button) {
         if (button.getItemId().equals("yes")) {
             fillSaveData();
         }
@@ -50,12 +45,9 @@ public abstract class AbstractAddEditDialog<X> extends Dialog {
     }
 
     protected void initComponents(Field... textFields) {
-        FormLayout layout = new FormLayout();
         int textAreaLength = 0;
         fieldSet = new FieldSet();
         fieldSet.setBorders(false);
-        layout.setLabelWidth(100);
-        fieldSet.setLayout(layout);
 
         for (Field field : textFields) {
 
@@ -65,12 +57,11 @@ public abstract class AbstractAddEditDialog<X> extends Dialog {
             } else {
                 field.setSize("100px", "20px");
             }
-            fieldSet.add(field, formData);
+            fieldSet.add(field);
         }
 
         setSize("350px", ((textFields.length - textAreaLength) * 25 + 120) + (textAreaLength * 200) + "px");
         add(fieldSet);
-        layout();
     }
 
     public DScrumServiceAsync getService() {
@@ -97,5 +88,5 @@ public abstract class AbstractAddEditDialog<X> extends Dialog {
         this.dtoID = dtoID;
     }
 
-    protected abstract void fillSaveData();
+    protected abstract void fillSaveData(); */
 }

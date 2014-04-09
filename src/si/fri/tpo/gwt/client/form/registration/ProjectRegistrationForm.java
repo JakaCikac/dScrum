@@ -1,7 +1,6 @@
 package si.fri.tpo.gwt.client.form.registration;
 
-import com.extjs.gxt.ui.client.event.ButtonEvent;
-import com.extjs.gxt.ui.client.event.SelectionListener;
+
 import com.google.gwt.user.client.Element;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
@@ -13,9 +12,9 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 /**
  * Created by nanorax on 07/04/14.
  */
-public class ProjectRegistrationForm extends AbstractProjectRegistrationForm {
+public class ProjectRegistrationForm { // extends AbstractProjectRegistrationForm {
 
-    public ProjectRegistrationForm(DScrumServiceAsync service) {
+    /* public ProjectRegistrationForm(DScrumServiceAsync service) {
         super(service);
         getSelectProductOwnerB().addSelectionListener(poSelectionListener);
         getSelectScrumMasterB().addSelectionListener(smSelectionListener);
@@ -80,7 +79,7 @@ public class ProjectRegistrationForm extends AbstractProjectRegistrationForm {
     };
 
     private void performSaveProject(ProjectDTO projectDTO) {
-            System.out.println(getUsersArrayList().size());
+        System.out.println(getUsersArrayList().size());
     }
 
     @Override
@@ -89,4 +88,5 @@ public class ProjectRegistrationForm extends AbstractProjectRegistrationForm {
         initNewRegistrationForm();
         initComponentsDataFill();
     }
+    */
 }

@@ -1,12 +1,11 @@
 package si.fri.tpo.gwt.server.proxy;
 
 
-import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.server.controllers.UserJpaController;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import si.fri.tpo.gwt.server.jpa.User;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 /**

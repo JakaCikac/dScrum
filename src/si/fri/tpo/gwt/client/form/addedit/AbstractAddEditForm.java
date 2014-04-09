@@ -1,6 +1,6 @@
 package si.fri.tpo.gwt.client.form.addedit;
 
-import com.extjs.gxt.ui.client.Style;
+/* import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.data.BaseModelData;
 import com.extjs.gxt.ui.client.event.*;
 import com.extjs.gxt.ui.client.store.ListStore;
@@ -13,11 +13,12 @@ import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.Grid;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
-import com.extjs.gxt.ui.client.widget.tips.QuickTip;
+import com.extjs.gxt.ui.client.widget.tips.QuickTip; */
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
+import com.sencha.gxt.legacy.client.data.BaseModelData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +26,8 @@ import java.util.List;
 /**
  * Created by nanorax on 07/04/14.
  */
-public abstract class AbstractAddEditForm<X extends BaseModelData> extends LayoutContainer {
-    private DScrumServiceAsync service;
+public abstract class AbstractAddEditForm<X extends BaseModelData> {// extends LayoutContainer {
+/*    private DScrumServiceAsync service;
     ListStore<X> listStore = new ListStore<X>();
     private List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
     private ColumnModel cm;
@@ -211,4 +212,5 @@ public abstract class AbstractAddEditForm<X extends BaseModelData> extends Layou
     protected abstract void setEditEntryAction();
 
     protected abstract void setAddEntryAction();
+    */
 }

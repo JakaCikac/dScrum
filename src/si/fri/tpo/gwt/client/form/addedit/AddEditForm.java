@@ -1,10 +1,10 @@
 package si.fri.tpo.gwt.client.form.addedit;
 
-import com.extjs.gxt.ui.client.event.Events;
+/* import com.extjs.gxt.ui.client.event.Events;
 import com.extjs.gxt.ui.client.event.FieldEvent;
 import com.extjs.gxt.ui.client.event.Listener;
 import com.extjs.gxt.ui.client.widget.form.FormPanel;
-import com.extjs.gxt.ui.client.widget.form.SimpleComboBox;
+import com.extjs.gxt.ui.client.widget.form.SimpleComboBox; */
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import si.fri.tpo.gwt.client.DScrum;
@@ -13,8 +13,8 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 /**
  * Created by nanorax on 07/04/14.
  */
-public class AddEditForm extends FormPanel {
-    private DScrumServiceAsync service;
+public class AddEditForm { //extends FormPanel {
+ /*   private DScrumServiceAsync service;
     private SimpleComboBox<String> entriesCB;
 
     public AddEditForm(RootPanel mainContainer, DScrumServiceAsync service) {
@@ -62,5 +62,5 @@ public class AddEditForm extends FormPanel {
             add(new Label("Display category form.."));
         }
         this.layout();
-    }
+    } */
 }

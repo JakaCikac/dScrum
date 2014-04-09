@@ -1,6 +1,6 @@
 package si.fri.tpo.gwt.client.dto;
 
-import com.extjs.gxt.ui.client.data.BaseModelData;
+import com.sencha.gxt.legacy.client.data.BaseModelData;
 
 import java.util.Date;
 

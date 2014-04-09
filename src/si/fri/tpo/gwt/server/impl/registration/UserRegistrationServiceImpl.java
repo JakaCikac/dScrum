@@ -2,10 +2,7 @@ package si.fri.tpo.gwt.server.impl.registration;
 
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
-import si.fri.tpo.gwt.server.impl.fill.FillDTO;
 import si.fri.tpo.gwt.server.impl.user.UserImpl;
-import si.fri.tpo.gwt.server.jpa.User;
-import si.fri.tpo.gwt.server.proxy.ProxyManager;
 
 import java.util.List;
 

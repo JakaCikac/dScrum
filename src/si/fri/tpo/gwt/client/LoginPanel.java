@@ -1,23 +1,27 @@
 package si.fri.tpo.gwt.client;
 
-import com.extjs.gxt.ui.client.widget.MessageBox;
+
+import com.sencha.gxt.core.client.util.Format;
+import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
-import com.extjs.gxt.ui.client.event.ButtonEvent;
-import com.extjs.gxt.ui.client.event.SelectionListener;
-import com.extjs.gxt.ui.client.widget.LayoutContainer;
+import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
-import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
-import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.search.UserSearchForm;
+import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 import si.fri.tpo.gwt.client.verification.PassHash;
-import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
+import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
+import com.sencha.gxt.widget.core.client.event.DialogHideEvent.DialogHideHandler;
 
 /**
  * Created by nanorax on 4/4/14.
@@ -59,6 +63,13 @@ public class LoginPanel extends FormPanel {
     }
 
       private void validateResult(String username, String passwordHash) {
+          final DialogHideHandler hideHandler = new DialogHideHandler() {
+              @Override
+              public void onDialogHide(DialogHideEvent event) {
+                  String msg = Format.substitute("The '{0}' button was pressed", event.getHideButton());
+                  Info.display("MessageBox", msg);
+              }
+          };
         //todo verify username & password in database
         AsyncCallback<Pair<UserDTO, String>> callback = new AsyncCallback<Pair<UserDTO, String>>() {
 
@@ -68,8 +79,11 @@ public class LoginPanel extends FormPanel {
                     // open the navigation for resulted User
                     openNavigationContainer(result.getFirst());
                 }
-                else
-                    MessageBox.alert("Wrong login credentials!", result.getSecond(), null);
+                else {
+                    AlertMessageBox d = new AlertMessageBox("Wrong login credentials!", result.getSecond());
+                    d.addDialogHideHandler(hideHandler);
+                    d.show();
+                }
             }
 
             @Override
@@ -96,8 +110,7 @@ public class LoginPanel extends FormPanel {
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
             // open appropriate navigation panel and main form
-            fillNavigationMainAndHeader(new AdminNavPanel(mainContainer, service),
-                    new UserSearchForm(service), message);
+            fillNavigationMainAndHeader(new AdminNavPanel(mainContainer, service), null, message);//new UserSearchForm(service), message);
         } else {
             // if user is not an admin, display user message
 
@@ -111,14 +124,16 @@ public class LoginPanel extends FormPanel {
         }
     }
 
-    private void fillNavigationMainAndHeader(LayoutContainer navigationPanel1, Widget mainContainer1, String headerMessage) {
+    private void fillNavigationMainAndHeader(AccordionLayoutContainer navigationPanel1, Widget mainContainer1, String headerMessage) {
         navigationContainer.add(navigationPanel1, -1, -1);
         mainContainer.add(mainContainer1);
         headerContainer.clear();
         headerContainer.add(new Label(headerMessage));
 
-        headerContainer.add(new com.extjs.gxt.ui.client.widget.button.Button("Logout", new SelectionListener<ButtonEvent>() {
-            public void componentSelected(ButtonEvent ce) {
+        TextButton logoutButton = new TextButton("Logout");
+        logoutButton.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
                 navigationContainer.clear();
                 headerContainer.clear();
                 mainContainer.clear();
@@ -127,7 +142,8 @@ public class LoginPanel extends FormPanel {
                 headerContainer = dscrum.initHeaderContainer();
                 mainContainer = dscrum.initMainContainer(navigationContainer, headerContainer);
             }
-        }));
+        });
+        headerContainer.add(logoutButton);
 
     }
 

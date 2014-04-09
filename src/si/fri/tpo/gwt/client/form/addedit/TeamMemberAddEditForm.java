@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class TeamMemberAddEditForm extends AbstractAddEditForm<UserDTO> {
 
-    public TeamMemberAddEditForm(DScrumServiceAsync service) {
+  /*  public TeamMemberAddEditForm(DScrumServiceAsync service) {
         super(service);
     }
 
@@ -48,5 +48,5 @@ public class TeamMemberAddEditForm extends AbstractAddEditForm<UserDTO> {
     @Override
     protected void setAddEntryAction() {
 
-    }
+    } */
 }

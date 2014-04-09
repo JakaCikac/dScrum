@@ -1,36 +1,28 @@
 package si.fri.tpo.gwt.client.form.registration;
 
-import com.extjs.gxt.ui.client.Style;
-import com.extjs.gxt.ui.client.data.BaseModelData;
+/* import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.event.*;
-import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.widget.*;
 import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.form.*;
-import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
-import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
-import com.extjs.gxt.ui.client.widget.grid.Grid;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
+*/
 import com.google.gwt.user.client.Element;
-
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.RootPanel;
 import si.fri.tpo.gwt.client.dto.UserDTO;
-import si.fri.tpo.gwt.client.form.addedit.TeamMemberAddEditForm;
 import si.fri.tpo.gwt.client.form.search.UserSearchCallback;
 import si.fri.tpo.gwt.client.form.search.UserSearchDialog;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by nanorax on 07/04/14.
  */
-public abstract class AbstractProjectRegistrationForm extends LayoutContainer {
+public abstract class AbstractProjectRegistrationForm {// extends LayoutContainer {
 
-    private DScrumServiceAsync service;
+    /* private DScrumServiceAsync service;
     private VerticalPanel vp;
     private VerticalPanel vp2;
     private FormData formData;
@@ -261,5 +253,7 @@ public abstract class AbstractProjectRegistrationForm extends LayoutContainer {
     public void setSelectedScrumMasterUserLabel(Label selectedScrumMasterUserLabel) {
         this.selectedScrumMasterUserLabel = selectedScrumMasterUserLabel;
     }
+
+    */
 
 }

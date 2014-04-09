@@ -6,19 +6,20 @@
 
 package si.fri.tpo.gwt.server.controllers;
 
-import java.io.Serializable;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import si.fri.tpo.gwt.server.controllers.exceptions.NonexistentEntityException;
 import si.fri.tpo.gwt.server.controllers.exceptions.PreexistingEntityException;
 import si.fri.tpo.gwt.server.jpa.Workblock;
 import si.fri.tpo.gwt.server.jpa.WorkblockPK;
 import si.fri.tpo.gwt.server.jpa.Workload;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  *

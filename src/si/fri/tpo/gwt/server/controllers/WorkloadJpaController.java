@@ -6,23 +6,20 @@
 
 package si.fri.tpo.gwt.server.controllers;
 
-import java.io.Serializable;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import si.fri.tpo.gwt.server.jpa.User;
-import si.fri.tpo.gwt.server.jpa.Task;
-import si.fri.tpo.gwt.server.jpa.Workblock;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import si.fri.tpo.gwt.server.controllers.exceptions.IllegalOrphanException;
 import si.fri.tpo.gwt.server.controllers.exceptions.NonexistentEntityException;
 import si.fri.tpo.gwt.server.controllers.exceptions.PreexistingEntityException;
-import si.fri.tpo.gwt.server.jpa.Workload;
-import si.fri.tpo.gwt.server.jpa.WorkloadPK;
+import si.fri.tpo.gwt.server.jpa.*;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

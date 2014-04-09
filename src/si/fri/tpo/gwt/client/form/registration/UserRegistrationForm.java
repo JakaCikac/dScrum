@@ -1,6 +1,6 @@
 package si.fri.tpo.gwt.client.form.registration;
 
-import com.extjs.gxt.ui.client.event.ButtonEvent;
+/* import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.MessageBox;
 import com.google.gwt.user.client.Element;
@@ -9,14 +9,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
-import si.fri.tpo.gwt.client.verification.PassHash;
+import si.fri.tpo.gwt.client.verification.PassHash; */
 
 /**
  * Created by nanorax on 06/04/14.
  */
-public class UserRegistrationForm extends AbstractRegistrationForm {
+public class UserRegistrationForm {//extends AbstractRegistrationForm {
 
-    public UserRegistrationForm(DScrumServiceAsync service) {
+    /* public UserRegistrationForm(DScrumServiceAsync service) {
         super(service);
         //getUserSearchButton().addSelectionListener(userSearchListener);
         getSubmitButton().addSelectionListener(submitListener);
@@ -39,15 +39,16 @@ public class UserRegistrationForm extends AbstractRegistrationForm {
         }
     }; */
 
-    private void setDTO(UserDTO dto) {
+    // TODO: uncomment!
+    /*private void setDTO(UserDTO dto) {
         this.dto = dto;
-    }
+    } */
 
    /* private void fillExistingUserData(UserDTO dto) {
         getFirstName().setValue(dto.getFirstName());
         getLastName().setValue(dto.getLastName());
         getEmail().setValue(dto.getEmail());
-    } */
+    }
 
     private SelectionListener submitListener = new SelectionListener<ButtonEvent>() {
         @Override
@@ -117,4 +118,5 @@ public class UserRegistrationForm extends AbstractRegistrationForm {
         initNewRegistrationForm();
         initComponentsDataFill();
     }
+    */
 }

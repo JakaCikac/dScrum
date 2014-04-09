@@ -1,25 +1,21 @@
 package si.fri.tpo.gwt.client.form.navigation;
 
-import com.extjs.gxt.ui.client.data.BaseModelData;
+/* import com.extjs.gxt.ui.client.data.BaseModelData;
 import com.extjs.gxt.ui.client.data.ModelData;
-import com.extjs.gxt.ui.client.event.ButtonEvent;
-import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.LayoutContainer;
-import com.extjs.gxt.ui.client.widget.button.Button;
 import com.extjs.gxt.ui.client.widget.layout.AccordionLayout;
 import com.extjs.gxt.ui.client.widget.layout.FlowLayout;
+*/
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.RootPanel;
-import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
-import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 /**
  * Created by nanorax on 06/04/14.
  */
-public class UserNavPanel extends LayoutContainer {
-    private RootPanel mainContainer;
+public class UserNavPanel { //extends LayoutContainer {
+    /* private RootPanel mainContainer;
     private DScrumServiceAsync service;
 
     public UserNavPanel(RootPanel mainContainer, DScrumServiceAsync service) {
@@ -51,7 +47,7 @@ public class UserNavPanel extends LayoutContainer {
             }
         });
         projectManagement.setWidth("100%");
-        cp.add(projectManagement); */
+        cp.add(projectManagement);
 
         cp.setAutoHeight(true);
         cp.setAutoWidth(true);
@@ -69,4 +65,5 @@ public class UserNavPanel extends LayoutContainer {
         m.set("icon", iconStyle);
         return m;
     }
+    */
 }

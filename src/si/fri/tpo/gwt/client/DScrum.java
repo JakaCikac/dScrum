@@ -4,8 +4,13 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.*;
-import si.fri.tpo.gwt.client.dto.*;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
+import si.fri.tpo.gwt.client.dto.DiscussionDTO;
+import si.fri.tpo.gwt.client.dto.SprintDTO;
+import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.resources.MyResources;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
@@ -13,31 +18,16 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 /**
  * Created by nanorax on 2/4/14.
  */
-public class DScrum implements EntryPoint {
+public class DScrum implements IsWidget, EntryPoint {
     private DScrumServiceAsync service = GWT.create(DScrumService.class);
     public static int HEIGHT_NO_SCROLL;
     public static int WIDTH_NO_SCROLL;
 
+    @Override
     public void onModuleLoad() {
-
+        // Call dummy calls to trick the system about serialization
         startupConnectCallback();
-
-        // NAVIGATION CONTAINER
-        RootPanel navigationContainer = initNavigationContainer();
-
-        //HEADER CONTAINER
-        RootPanel headerContainer = initHeaderContainer();
-        headerContainer.getElement().getStyle().setBackgroundColor("#E0E0E0");
-        headerContainer.add(new Label("DScrum orodje"));
-
-        // MAIN CONTAINER
-        RootPanel mainContainer = initMainContainer(navigationContainer, headerContainer);
-
-        // FOOTER CONTAINER
-        RootPanel footerContainer = RootPanel.get("footerContainer");
-        footerContainer.getElement().getStyle().setBackgroundColor("#E0E0E0");
-        footerContainer.add(new Label("Avtorji: Anže, Denis, Jaka, Matej"));
-        footerContainer.add(new Label("Skupina: TPO13, 2014"));
+        RootPanel.get().add(asWidget());
     }
 
     protected RootPanel initMainContainer(RootPanel navigationContainer, RootPanel headerContainer) {
@@ -62,8 +52,6 @@ public class DScrum implements EntryPoint {
         MyResources myResources = GWT.create(MyResources.class);
         RootPanel navigationContainer = RootPanel.get("navigationContainer");
         navigationContainer.getElement().getStyle().setBackgroundColor("#FFF");
-        //Image myImage = new Image(myResources.logoFri());
-        //navigationContainer.add(myImage);
         return navigationContainer;
     }
 
@@ -131,4 +119,26 @@ public class DScrum implements EntryPoint {
 
     }
 
+    @Override
+    public Widget asWidget() {
+
+        // NAVIGATION CONTAINER
+        RootPanel navigationContainer = initNavigationContainer();
+
+        //HEADER CONTAINER
+        RootPanel headerContainer = initHeaderContainer();
+        headerContainer.getElement().getStyle().setBackgroundColor("#E0E0E0");
+        headerContainer.add(new Label("DScrum orodje"));
+
+        // MAIN CONTAINER
+        RootPanel mainContainer = initMainContainer(navigationContainer, headerContainer);
+
+        // FOOTER CONTAINER
+        RootPanel footerContainer = RootPanel.get("footerContainer");
+        footerContainer.getElement().getStyle().setBackgroundColor("#E0E0E0");
+        footerContainer.add(new Label("Avtorji: Anže, Denis, Jaka, Matej"));
+        footerContainer.add(new Label("Skupina: TPO13, 2014"));
+
+        return mainContainer;
+    }
 }

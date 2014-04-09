@@ -6,10 +6,10 @@
 
 package si.fri.tpo.gwt.server.jpa;
 
-import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 /**
  *

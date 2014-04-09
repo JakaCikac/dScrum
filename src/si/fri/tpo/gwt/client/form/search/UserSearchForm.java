@@ -1,6 +1,6 @@
 package si.fri.tpo.gwt.client.form.search;
 
-import com.extjs.gxt.ui.client.Style;
+/* import com.extjs.gxt.ui.client.Style;
 import com.extjs.gxt.ui.client.event.ButtonEvent;
 import com.extjs.gxt.ui.client.event.SelectionListener;
 import com.extjs.gxt.ui.client.store.ListStore;
@@ -19,6 +19,7 @@ import com.extjs.gxt.ui.client.widget.layout.FitLayout;
 import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 import com.extjs.gxt.ui.client.widget.tips.QuickTip;
+import com.sencha.gxt.*; */
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import si.fri.tpo.gwt.client.dto.UserDTO;
@@ -30,23 +31,25 @@ import java.util.List;
 /**
  * Created by nanorax on 04/04/14.
  */
-public class UserSearchForm extends VerticalPanel {
+public class UserSearchForm {//extends VerticalPanel {
 
-        private ColumnModel cm;
+
+    private DScrumServiceAsync service;
+
+        public UserSearchForm(DScrumServiceAsync service) {
+            this.service = service;
+           // initComponents();
+        }
+            /* private ColumnModel cm;
         private ContentPanel cp;
         private Grid<UserDTO> grid;
         //private EditorGrid<UserDTO> grid;
-        private DScrumServiceAsync service;
+
         private FormData formData;
         ListStore<UserDTO> listStore = new ListStore<UserDTO>();
         private List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
         private TextField<String> username;
         NumberField numberExample;
-
-        public UserSearchForm(DScrumServiceAsync service) {
-            this.service = service;
-            initComponents();
-        }
 
         private void initComponents() {
 
@@ -70,7 +73,7 @@ public class UserSearchForm extends VerticalPanel {
             user_id.setFieldLabel("Field name");
             user_id.setAllowBlank(true);
             fieldSet.add(enrolmentNumber, formData);
-            */
+
 
             FormPanel simple = new FormPanel();
             simple.setHeading("Search parameters");
@@ -180,4 +183,5 @@ public class UserSearchForm extends VerticalPanel {
         public Grid<UserDTO> getGrid() {
             return grid;
         }
+        */
 }

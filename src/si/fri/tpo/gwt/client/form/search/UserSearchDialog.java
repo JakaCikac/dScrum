@@ -1,17 +1,17 @@
 package si.fri.tpo.gwt.client.form.search;
 
-import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
+/* import com.extjs.gxt.ui.client.event.SelectionChangedEvent;
 import com.extjs.gxt.ui.client.event.SelectionChangedListener;
 import com.extjs.gxt.ui.client.widget.Dialog;
-import com.extjs.gxt.ui.client.widget.button.Button;
+import com.extjs.gxt.ui.client.widget.button.Button; */
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 /**
  * Created by nanorax on 06/04/14.
  */
-public class UserSearchDialog extends Dialog {
-    private UserSearchForm userSearch;
+public class UserSearchDialog {// extends Dialog {
+    /* private UserSearchForm userSearch;
     private UserSearchCallback callback;
 
     public UserSearchDialog(DScrumServiceAsync service, UserSearchCallback callback) {
@@ -44,5 +44,5 @@ public class UserSearchDialog extends Dialog {
         }
         super.onButtonPressed(button);
         hide();
-    }
+    } */
 }
