@@ -9,32 +9,48 @@ import com.extjs.gxt.ui.client.widget.layout.FormData;
 import com.extjs.gxt.ui.client.widget.layout.FormLayout;
 */
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.*;
+import com.sencha.gxt.core.client.Style;
+import com.sencha.gxt.core.client.util.ToggleGroup;
+import com.sencha.gxt.widget.core.client.Component;
+import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.form.ComboBox;
+import com.sencha.gxt.widget.core.client.form.FieldSet;
+import com.sencha.gxt.widget.core.client.form.Radio;
+import com.sencha.gxt.widget.core.client.form.TextField;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.form.search.UserSearchCallback;
 import si.fri.tpo.gwt.client.form.search.UserSearchDialog;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
+import si.fri.tpo.gwt.client.verification.PassHash;
 
 import java.util.ArrayList;
 
 /**
  * Created by nanorax on 07/04/14.
  */
-public abstract class AbstractProjectRegistrationForm {// extends LayoutContainer {
+public abstract class AbstractProjectRegistrationForm implements IsWidget {// extends LayoutContainer {
 
-    /* private DScrumServiceAsync service;
+    private DScrumServiceAsync service;
+
+    private Widget asWidget() {
+
+        return null;
+    }
+
     private VerticalPanel vp;
     private VerticalPanel vp2;
-    private FormData formData;
-    private RadioGroup typeOfProjectRG = new RadioGroup();
-    private TextField<String> searchedUserTF = new TextField<String>();
+    private ToggleGroup typeOfProjectRG = new ToggleGroup();
+    private TextField searchedUserTF = new TextField();
     private FormPanel simple = new FormPanel();
     private Radio newProjectRB = new Radio();
     private UserDTO dto = new UserDTO();
     private ListBox lb;
     private ArrayList<UserDTO> al;
+
     // textfields
-    private TextField<String> projectName = new TextField<String>();
+    private TextField projectName = new TextField();
 
     // fieldsets
     private FieldSet setBasicData = new FieldSet();
@@ -109,12 +125,9 @@ public abstract class AbstractProjectRegistrationForm {// extends LayoutContaine
         getSimple().setHeading("Project Creation Form");
         getSimple().setFrame(true);
 
-        FormLayout layout = new FormLayout();
-
         getSimple().setButtonAlign(Style.HorizontalAlignment.CENTER);
 
         setBasicData.setHeading("Project information");
-        layout.setLabelWidth(100);
         setBasicData.setLayout(layout);
 
         projectName.setFieldLabel("Project Name");
@@ -134,27 +147,26 @@ public abstract class AbstractProjectRegistrationForm {// extends LayoutContaine
         setBasicData.add(selectedScrumMasterUserLabel);
         setBasicData.add(selectedProductOwnerUserLabel);
 
-        ;
+
         lb = new ListBox();
         setBasicData.add(lb);
         al = new ArrayList<UserDTO>();
 
-        Button addItem = new Button("Add Member", new SelectionListener<ButtonEvent>() {
+        final TextButton addItem = new TextButton("Add Member");
+        addItem.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
-            public void componentSelected(ButtonEvent ce) {
-                new UserSearchDialog(getService(), new UserSearchCallback() {
+            public void onSelect(SelectEvent event) {
+               /* new UserSearchDialog(getService(), new UserSearchCallback() {
                     @Override
-                public void userSearchCallback (UserDTO dto){
-                    // return selected user and change label to his username
-                    setDTO(dto);
-                    al.add(dto);
-                    System.out.println("Adding to listbox: " + dto.getUsername());
-                    lb.addItem(dto.getUsername());
-                    }
-                });
-            }
+                    public void userSearchCallback (UserDTO dto){
+                        // return selected user and change label to his username
+                        setDTO(dto);
+                        al.add(dto);
+                        System.out.println("Adding to listbox: " + dto.getUsername());
+                        lb.addItem(dto.getUsername());
+            } */
         });
-
+        addItem.addButton(loginButton);
         setBasicData.add(addItem);
         getSimple().add(setBasicData);
 
@@ -176,10 +188,6 @@ public abstract class AbstractProjectRegistrationForm {// extends LayoutContaine
 
     public VerticalPanel getVp() {
         return vp;
-    }
-
-    public FormData getFormData() {
-        return formData;
     }
 
     public DScrumServiceAsync getService() {
@@ -210,7 +218,7 @@ public abstract class AbstractProjectRegistrationForm {// extends LayoutContaine
         return addTeamMemberB;
     }
 
-    public TextField<String> getProjectName() {
+    public TextField getProjectName() {
         return projectName;
     }
 
@@ -218,7 +226,7 @@ public abstract class AbstractProjectRegistrationForm {// extends LayoutContaine
         return setBasicData;
     }
 
-    public TextField<String> getSearchedUserTF() {
+    public TextField getSearchedUserTF() {
         return searchedUserTF;
     }
 
@@ -253,7 +261,4 @@ public abstract class AbstractProjectRegistrationForm {// extends LayoutContaine
     public void setSelectedScrumMasterUserLabel(Label selectedScrumMasterUserLabel) {
         this.selectedScrumMasterUserLabel = selectedScrumMasterUserLabel;
     }
-
-    */
-
 }

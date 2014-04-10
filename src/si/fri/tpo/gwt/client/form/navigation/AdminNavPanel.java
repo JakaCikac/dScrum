@@ -20,10 +20,9 @@ public class AdminNavPanel extends AccordionLayoutContainer implements IsWidget 
     private RootPanel mainContainer;
     private DScrumServiceAsync service;
 
-    public AdminNavPanel(RootPanel mainContainer, DScrumServiceAsync service) {
+    public AdminNavPanel(DScrumServiceAsync service) {
         this.mainContainer = mainContainer;
         this.service = service;
-        RootPanel.get().add(asWidget());
     }
 
     private ContentPanel panel;
