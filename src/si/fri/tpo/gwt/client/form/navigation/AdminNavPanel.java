@@ -11,18 +11,17 @@ import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
-import si.fri.tpo.gwt.client.form.registration.ProjectRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 //TODO: merge cnavpanel into admin nav panel!
-public class AdminNavPanel extends AccordionLayoutContainer implements IsWidget {
-    private RootPanel mainContainer;
+public class AdminNavPanel implements IsWidget {
     private DScrumServiceAsync service;
+    private ContentPanel center;
 
-    public AdminNavPanel(DScrumServiceAsync service) {
-        this.mainContainer = mainContainer;
+    public AdminNavPanel(ContentPanel center, DScrumServiceAsync service) {
         this.service = service;
+        this.center = center;
     }
 
     private ContentPanel panel;
@@ -49,10 +48,10 @@ public class AdminNavPanel extends AccordionLayoutContainer implements IsWidget 
         users.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                mainContainer.clear();
-                System.out.println("Registered click on user management");
+                // TODO: Append registration form to center panel
                 UserRegistrationForm rgf = new UserRegistrationForm(service);
-                RootPanel.get().add(rgf);
+                center.clear();
+                center.add(rgf.asWidget());
             }
         });
         cp.add(users);

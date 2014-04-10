@@ -39,11 +39,16 @@ public class LoginPanel  extends FormPanel implements IsWidget {
     private ContentPanel north;
     private ContentPanel east;
     private ContentPanel west;
+    private ContentPanel center;
 
-    public LoginPanel(DScrum dscrum, ContentPanel north, ContentPanel south, ContentPanel east, ContentPanel west, DScrumServiceAsync service) {
+    public LoginPanel(DScrum dscrum, ContentPanel center, ContentPanel north, ContentPanel south, ContentPanel east, ContentPanel west, DScrumServiceAsync service) {
         this.dscrum = dscrum;
         this.service = service;
         this.south = south;
+        this.east = east;
+        this.west = west;
+        this.north = north;
+        this.center = center;
     }
 
     public Widget asWidget() {
@@ -138,7 +143,7 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
             // open appropriate navigation panel and main form
-            AdminNavPanel adminNav = new AdminNavPanel(service);
+            AdminNavPanel adminNav = new AdminNavPanel(center, service);
 
             fillNavigationMainAndHeader(adminNav.asWidget(), null);//new UserSearchForm(service), message);
         } else {
@@ -167,8 +172,9 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                 vp.clear();
                 south.clear();
                 east.clear();
+                center.clear();
                 // display new login panel
-                vp.add(new LoginPanel(dscrum, north, south, east, west, service).asWidget());
+                vp.add(new LoginPanel(dscrum, center, north, south, east, west, service).asWidget());
             }
         });
         // TODO: Add logout button :(
