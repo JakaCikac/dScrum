@@ -34,10 +34,10 @@ public abstract class AbstractProjectRegistrationForm implements IsWidget {// ex
 
     private DScrumServiceAsync service;
 
-    private Widget asWidget() {
+    /*private Widget asWidget() {
 
         return null;
-    }
+    } */
 
     private VerticalPanel vp;
     private VerticalPanel vp2;
@@ -49,7 +49,7 @@ public abstract class AbstractProjectRegistrationForm implements IsWidget {// ex
     private ListBox lb;
     private ArrayList<UserDTO> al;
 
-    // textfields
+ /*   // textfields
     private TextField projectName = new TextField();
 
     // fieldsets
@@ -164,7 +164,7 @@ public abstract class AbstractProjectRegistrationForm implements IsWidget {// ex
                         al.add(dto);
                         System.out.println("Adding to listbox: " + dto.getUsername());
                         lb.addItem(dto.getUsername());
-            } */
+            }
         });
         addItem.addButton(loginButton);
         setBasicData.add(addItem);
@@ -260,5 +260,5 @@ public abstract class AbstractProjectRegistrationForm implements IsWidget {// ex
 
     public void setSelectedScrumMasterUserLabel(Label selectedScrumMasterUserLabel) {
         this.selectedScrumMasterUserLabel = selectedScrumMasterUserLabel;
-    }
+    } */
 }
