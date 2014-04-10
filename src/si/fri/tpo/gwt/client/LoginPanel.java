@@ -2,6 +2,7 @@ package si.fri.tpo.gwt.client;
 
 
 import com.sencha.gxt.core.client.util.Format;
+import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -11,7 +12,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.MarginData;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.FieldSet;
+import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
@@ -26,11 +32,8 @@ import com.sencha.gxt.widget.core.client.event.DialogHideEvent.DialogHideHandler
 /**
  * Created by nanorax on 4/4/14.
  */
-public class LoginPanel extends FormPanel {
+public class LoginPanel  extends FormPanel implements IsWidget {
 
-    private RootPanel mainContainer;
-    private RootPanel navigationContainer;
-    private RootPanel headerContainer;
     private Grid grid;
     private Button loginButton;
     private PasswordTextBox passwordTB;
@@ -38,14 +41,56 @@ public class LoginPanel extends FormPanel {
     private DScrum dscrum;
     private DScrumServiceAsync service;
 
-    public LoginPanel(DScrum dscrum, RootPanel navigationContainer, RootPanel mainContainer, RootPanel headerContainer, DScrumServiceAsync service) {
+    public LoginPanel(DScrum dscrum, DScrumServiceAsync service) {
         this.dscrum = dscrum;
-        this.navigationContainer = navigationContainer;
-        this.mainContainer = mainContainer;
-        this.headerContainer = headerContainer;
         this.service = service;
+    }
 
-        initComponents();
+    public Widget asWidget() {
+        if (vp == null) {
+            vp = new VerticalPanel();
+            vp.setSpacing(10);
+            createForm2();
+        }
+        return vp;
+    }
+
+    private VerticalPanel vp;
+
+    private void createForm2() {
+        FramedPanel form2 = new FramedPanel();
+        form2.setHeadingText("Simple Form with FieldSets");
+        form2.setWidth(350);
+
+        FieldSet fieldSet = new FieldSet();
+        fieldSet.setHeadingText("User Information");
+        fieldSet.setCollapsible(true);
+        form2.add(fieldSet, new MarginData(10));
+
+        VerticalLayoutContainer p = new VerticalLayoutContainer();
+        fieldSet.add(p);
+
+        TextField firstName = new TextField();
+        firstName.setAllowBlank(false);
+        p.add(new FieldLabel(firstName, "First Name"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+
+        TextField lastName = new TextField();
+        lastName.setAllowBlank(false);
+        p.add(new FieldLabel(lastName, "Last Name"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+
+        TextField email = new TextField();
+        email.setAllowBlank(false);
+        p.add(new FieldLabel(email, "Email"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+
+        form2.addButton(new TextButton("Save"));
+        form2.addButton(new TextButton("Cancel"));
+
+        vp.add(form2);
+    }
+}
+
+
+      /*  initComponents();
 
         loginButton.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
@@ -119,7 +164,7 @@ public class LoginPanel extends FormPanel {
 
             // open appropriate navigation panel and main form
              /* fillNavigationMainAndHeader(new UserNavPanel(mainContainer, service),
-                    new UserHomeForm(service), message); */
+                    new UserHomeForm(service), message);
 
         }
     }
@@ -181,7 +226,4 @@ public class LoginPanel extends FormPanel {
         grid.setWidget(2, 1, loginButton);
         grid.getCellFormatter().setHorizontalAlignment(2, 1,
                 HasHorizontalAlignment.ALIGN_LEFT);
-
-    }
-
-}
+*/
