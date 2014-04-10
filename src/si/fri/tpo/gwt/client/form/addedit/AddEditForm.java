@@ -14,7 +14,7 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
  * Created by nanorax on 07/04/14.
  */
 public class AddEditForm { //extends FormPanel {
- /*   private DScrumServiceAsync service;
+   /* private DScrumServiceAsync service;
     private SimpleComboBox<String> entriesCB;
 
     public AddEditForm(RootPanel mainContainer, DScrumServiceAsync service) {
@@ -62,5 +62,5 @@ public class AddEditForm { //extends FormPanel {
             add(new Label("Display category form.."));
         }
         this.layout();
-    } */
+    }*/
 }

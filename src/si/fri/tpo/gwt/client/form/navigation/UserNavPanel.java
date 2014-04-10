@@ -1,37 +1,40 @@
 package si.fri.tpo.gwt.client.form.navigation;
 
-/* import com.extjs.gxt.ui.client.data.BaseModelData;
-import com.extjs.gxt.ui.client.data.ModelData;
-import com.extjs.gxt.ui.client.widget.ContentPanel;
-import com.extjs.gxt.ui.client.widget.LayoutContainer;
-import com.extjs.gxt.ui.client.widget.layout.AccordionLayout;
-import com.extjs.gxt.ui.client.widget.layout.FlowLayout;
-*/
-import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.legacy.client.data.BaseModelData;
+import com.sencha.gxt.legacy.client.data.ModelData;
+import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 /**
  * Created by nanorax on 06/04/14.
+ * Modified by t13as
  */
-public class UserNavPanel { //extends LayoutContainer {
-    /* private RootPanel mainContainer;
+public class UserNavPanel implements IsWidget{
     private DScrumServiceAsync service;
 
-    public UserNavPanel(RootPanel mainContainer, DScrumServiceAsync service) {
-        this.mainContainer = mainContainer;
+    public UserNavPanel(DScrumServiceAsync service) {
         this.service = service;
     }
 
-    @Override
-    protected void onRender(Element parent, int index) {
-        super.onRender(parent, index);
-        setLayout(new FlowLayout(10));
-
-        final ContentPanel panel = new ContentPanel();
-        panel.setHeading("User menu");
+    private ContentPanel panel;
+    public Widget asWidget() {
+        panel = new ContentPanel();
+        AccordionLayoutContainer con = new AccordionLayoutContainer();
+        con.setExpandMode(AccordionLayoutContainer.ExpandMode.SINGLE_FILL);
+        panel.add(con);
+        panel.setHeadingText("User menu");
         panel.setBodyBorder(false);
-        panel.setLayout(new AccordionLayout());
+        createUserNavPanel();
+        return panel;
+    }
+
+    private void createUserNavPanel() {
 
         ContentPanel cp = new ContentPanel();
         cp.setHeaderVisible(false);
@@ -39,24 +42,20 @@ public class UserNavPanel { //extends LayoutContainer {
         cp.setExpanded(true);
         cp.setBodyStyleName("pad-text");
 
-        /* Button projectManagement = new Button("User Data Management", new SelectionListener<ButtonEvent>() {
+        TextButton userDataEditB = new TextButton("Edit user");
+        userDataEditB.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
-            public void componentSelected(ButtonEvent ce) {
-                mainContainer.clear();
-                mainContainer.add(new UserDataEditForm(service));
+            public void onSelect(SelectEvent event) {
+                System.out.println("Registered click on edit profile");
+                //UserDataEditForm udef = new UserDataEditForm(service);
+                //RootPanel.get().add(udef);
             }
         });
-        projectManagement.setWidth("100%");
-        cp.add(projectManagement);
+        cp.add(userDataEditB);
 
-        cp.setAutoHeight(true);
-        cp.setAutoWidth(true);
         panel.add(cp);
-
         panel.setWidth(270);
-        panel.setAutoHeight(true);
 
-        this.add(panel);
     }
 
     private ModelData newItem(String text, String iconStyle) {
@@ -65,5 +64,5 @@ public class UserNavPanel { //extends LayoutContainer {
         m.set("icon", iconStyle);
         return m;
     }
-    */
+
 }

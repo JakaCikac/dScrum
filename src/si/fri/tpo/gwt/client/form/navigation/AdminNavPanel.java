@@ -81,5 +81,3 @@ public class AdminNavPanel extends AccordionLayoutContainer implements IsWidget 
     }
 
 }
-
-

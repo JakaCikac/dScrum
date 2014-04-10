@@ -19,6 +19,7 @@ import com.sencha.gxt.widget.core.client.form.TextField;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
+import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 import si.fri.tpo.gwt.client.verification.PassHash;
@@ -44,6 +45,9 @@ public class LoginPanel  extends FormPanel implements IsWidget {
         this.dscrum = dscrum;
         this.service = service;
         this.south = south;
+        this.east = east;
+        this.west = west;
+        this.north = north;
     }
 
     public Widget asWidget() {
@@ -148,8 +152,9 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
             // open appropriate navigation panel and main form
-             /* fillNavigationMainAndHeader(new UserNavPanel(mainContainer, service),
-                    new UserHomeForm(service), message); */
+              UserNavPanel userNavPanel = new UserNavPanel(service);
+              fillNavigationMainAndHeader(userNavPanel.asWidget(), null); // TODO: dodaj se main form
+
 
         }
     }

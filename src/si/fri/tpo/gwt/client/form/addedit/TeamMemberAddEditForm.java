@@ -10,8 +10,8 @@ import java.util.List;
  * Created by nanorax on 07/04/14.
  */
 public class TeamMemberAddEditForm extends AbstractAddEditForm<UserDTO> {
-
-  /*  public TeamMemberAddEditForm(DScrumServiceAsync service) {
+/*
+    public TeamMemberAddEditForm(DScrumServiceAsync service) {
         super(service);
     }
 
@@ -48,5 +48,5 @@ public class TeamMemberAddEditForm extends AbstractAddEditForm<UserDTO> {
     @Override
     protected void setAddEntryAction() {
 
-    } */
+    }*/
 }

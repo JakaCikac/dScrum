@@ -11,7 +11,7 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
  */
 
 public class TeamMemberAddEditDialog extends AbstractAddEditDialog<UserDTO> {
- /*   public TeamMemberAddEditDialog(boolean addMode, AbstractAddEditForm parentForm, DScrumServiceAsync service, UserDTO dto) {
+   /* public TeamMemberAddEditDialog(boolean addMode, AbstractAddEditForm parentForm, DScrumServiceAsync service, UserDTO dto) {
         super(addMode, service, parentForm);
 
         TextField<String> codeTF = new TextField<String>();
@@ -41,5 +41,5 @@ public class TeamMemberAddEditDialog extends AbstractAddEditDialog<UserDTO> {
 
        // getService().addOrEditTeamMembersDto(userDTO, isAddMode(), callback);
 
-    } */
+    }*/
 }

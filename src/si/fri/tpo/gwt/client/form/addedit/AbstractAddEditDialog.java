@@ -11,7 +11,7 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
  * Created by nanorax on 07/04/14.
  */
 public abstract class AbstractAddEditDialog<X> extends Dialog {
-/*    private DScrumServiceAsync service;
+   /* private DScrumServiceAsync service;
     private boolean addMode;
     private FieldSet fieldSet;
     private long dtoID = -1;
@@ -88,5 +88,5 @@ public abstract class AbstractAddEditDialog<X> extends Dialog {
         this.dtoID = dtoID;
     }
 
-    protected abstract void fillSaveData(); */
+    protected abstract void fillSaveData();*/
 }
