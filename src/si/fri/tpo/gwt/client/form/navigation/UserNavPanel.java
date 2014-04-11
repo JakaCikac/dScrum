@@ -9,6 +9,7 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 /**
@@ -17,8 +18,10 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
  */
 public class UserNavPanel implements IsWidget{
     private DScrumServiceAsync service;
+    private ContentPanel center;
 
-    public UserNavPanel(DScrumServiceAsync service) {
+    public UserNavPanel(DScrumServiceAsync service, ContentPanel center) {
+        this.center = center;
         this.service = service;
     }
 
@@ -47,8 +50,9 @@ public class UserNavPanel implements IsWidget{
             @Override
             public void onSelect(SelectEvent event) {
                 System.out.println("Registered click on edit profile");
-                //UserDataEditForm udef = new UserDataEditForm(service);
-                //RootPanel.get().add(udef);
+                UserDataEditForm udef = new UserDataEditForm(service);
+                center.clear();
+                center.add(udef.asWidget());
             }
         });
         cp.add(userDataEditB);

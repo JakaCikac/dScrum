@@ -40,14 +40,16 @@ public class LoginPanel  extends FormPanel implements IsWidget {
     private ContentPanel north;
     private ContentPanel east;
     private ContentPanel west;
+    private ContentPanel center;
 
-    public LoginPanel(DScrum dscrum, ContentPanel north, ContentPanel south, ContentPanel east, ContentPanel west, DScrumServiceAsync service) {
+    public LoginPanel(DScrum dscrum, ContentPanel center, ContentPanel north, ContentPanel south, ContentPanel east, ContentPanel west, DScrumServiceAsync service) {
         this.dscrum = dscrum;
         this.service = service;
         this.south = south;
         this.east = east;
         this.west = west;
         this.north = north;
+        this.center = center;
     }
 
     public Widget asWidget() {
@@ -148,11 +150,11 @@ public class LoginPanel  extends FormPanel implements IsWidget {
         } else {
             // if user is not an admin, display user message
 
-            String message = "Welcome to dScrum user " +
+            String message = "Welcome to dScrum  user " +
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
             // open appropriate navigation panel and main form
-              UserNavPanel userNavPanel = new UserNavPanel(service);
+              UserNavPanel userNavPanel = new UserNavPanel(service, center);
               fillNavigationMainAndHeader(userNavPanel.asWidget(), null); // TODO: dodaj se main form
 
 
@@ -173,10 +175,9 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                 south.clear();
                 east.clear();
                 // display new login panel
-                vp.add(new LoginPanel(dscrum, north, south, east, west, service).asWidget());
+                vp.add(new LoginPanel(dscrum, center, north, south, east, west, service).asWidget());
             }
         });
-        // TODO: Add logout button :(
         south.add(logoutButton);
     }
 }
