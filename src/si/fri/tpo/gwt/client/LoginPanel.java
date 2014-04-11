@@ -178,7 +178,6 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                 center.add(vp);
             }
         });
-        // TODO: Add logout button :(
         south.add(logoutButton);
     }
 }
