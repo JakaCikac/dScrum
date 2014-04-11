@@ -51,9 +51,9 @@ public class ProjectRegistrationForm implements IsWidget {
     private TextButton userSearchButton;
 
     // TODO: Add team members
-    private Button addTeamMemberB = new Button("Add member");
-    private Button selectScrumMasterB = new Button("Select SM");
-    private Button selectProductOwnerB = new Button("Select PO");
+    private Button addTeamMemberB;
+    private Button selectScrumMasterB;
+    private Button selectProductOwnerB;
 
      public Widget asWidget() {
          if (vp == null) {
@@ -91,7 +91,7 @@ public class ProjectRegistrationForm implements IsWidget {
         p.add(new FieldLabel(description, "Description"), new VerticalLayoutContainer.VerticalLayoutData(1, 100));
 
 
-        HorizontalPanel hp;
+        VerticalPanel rbp;
 
         assigned = new Radio();
         assigned.setBoxLabel("Assigned");
@@ -103,12 +103,12 @@ public class ProjectRegistrationForm implements IsWidget {
         waiting = new Radio();
         waiting.setBoxLabel("Waiting");
 
-        hp = new HorizontalPanel();
-        hp.add(assigned);
-        hp.add(completed);
-        hp.add(waiting);
+        rbp = new VerticalPanel();
+        rbp.add(assigned);
+        //rbp.add(completed);
+        //rbp.add(waiting);
 
-        p.add(new FieldLabel(hp, "Project status"));
+        p.add(new FieldLabel(rbp, "Project status"));
 
         // we can set name on radios or use toggle group
         ToggleGroup toggle = new ToggleGroup();
