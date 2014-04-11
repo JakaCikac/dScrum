@@ -175,6 +175,7 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                 center.clear();
                 // display new login panel
                 vp.add(new LoginPanel(dscrum, center, north, south, east, west, service).asWidget());
+                center.add(vp);
             }
         });
         // TODO: Add logout button :(
