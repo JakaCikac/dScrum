@@ -96,6 +96,7 @@ public class UserRegistrationForm implements IsWidget {
         password = new PasswordField();
         p.add(new FieldLabel(password, "Password"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
         repassword = new PasswordField();
+        repassword.setAllowBlank(false);
         p.add(new FieldLabel(repassword, "Confirm Password"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
 

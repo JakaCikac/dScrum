@@ -51,9 +51,9 @@ public class ProjectRegistrationForm implements IsWidget {
     private TextButton userSearchButton;
 
     // TODO: Add team members
-    private Button addTeamMemberB;
-    private Button selectScrumMasterB;
-    private Button selectProductOwnerB;
+    private TextButton addTeamMemberB;
+    private TextButton selectScrumMasterB;
+    private TextButton selectProductOwnerB;
 
      public Widget asWidget() {
          if (vp == null) {
@@ -110,6 +110,15 @@ public class ProjectRegistrationForm implements IsWidget {
 
         p.add(new FieldLabel(rbp, "Project status"));
 
+        VerticalPanel userSelectionPanel = new VerticalPanel();
+        addTeamMemberB = new TextButton("Add Team");
+        selectScrumMasterB = new TextButton("Select SM");
+        selectProductOwnerB = new TextButton("SelectPO");
+        userSelectionPanel.add(addTeamMemberB);
+        userSelectionPanel.add(selectProductOwnerB);
+        userSelectionPanel.add(selectScrumMasterB);
+        p.add(userSelectionPanel);
+
         // we can set name on radios or use toggle group
         ToggleGroup toggle = new ToggleGroup();
         toggle.add(assigned);
@@ -122,6 +131,16 @@ public class ProjectRegistrationForm implements IsWidget {
                 Radio assigned = (Radio) group.getValue();
             }
         });
+
+        submitButton = new TextButton("Submit");
+        submitButton.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                // TODO: add project to database
+            }
+        });
+        panel.addButton(submitButton);
+
 
         vp.add(panel);
     }
