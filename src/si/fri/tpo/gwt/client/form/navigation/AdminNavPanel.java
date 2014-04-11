@@ -10,7 +10,9 @@ import com.sencha.gxt.legacy.client.data.BaseModelData;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import si.fri.tpo.gwt.client.form.registration.ProjectRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
@@ -18,6 +20,7 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 public class AdminNavPanel implements IsWidget {
     private DScrumServiceAsync service;
     private ContentPanel center;
+    private FlowLayoutContainer con;
 
     public AdminNavPanel(ContentPanel center, DScrumServiceAsync service) {
         this.service = service;
@@ -27,8 +30,7 @@ public class AdminNavPanel implements IsWidget {
     private ContentPanel panel;
     public Widget asWidget() {
         panel = new ContentPanel();
-        AccordionLayoutContainer con = new AccordionLayoutContainer();
-        con.setExpandMode(AccordionLayoutContainer.ExpandMode.SINGLE_FILL);
+        con = new FlowLayoutContainer();
         panel.add(con);
         panel.setHeadingText("Administrator menu");
         panel.setBodyBorder(false);
@@ -39,9 +41,9 @@ public class AdminNavPanel implements IsWidget {
     private void createAdminNavPanel() {
 
         ContentPanel cp = new ContentPanel();
+
         cp.setHeaderVisible(false);
         cp.setAnimCollapse(false);
-        cp.setExpanded(true);
         cp.setBodyStyleName("pad-text");
 
         final TextButton users = new TextButton("User Management");
@@ -55,20 +57,26 @@ public class AdminNavPanel implements IsWidget {
             }
         });
         cp.add(users);
+        con.add(cp);
 
-        /* final TextButton projectManagement = new TextButton("Project Management");
+        cp = new ContentPanel();
+        cp.setHeaderVisible(false);
+        cp.setAnimCollapse(false);
+        cp.setBodyStyleName("pad-text");
+
+         final TextButton projectManagement = new TextButton("Project Management");
         projectManagement.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                mainContainer.clear();
-                mainContainer.add(new ProjectRegistrationForm(service));
+                ProjectRegistrationForm pgf = new ProjectRegistrationForm(service);
+                center.clear();
+                center.add(pgf.asWidget());
             }
         });
-        cp.add(projectManagement); */
+        cp.add(projectManagement);
+        con.add(cp);
 
-
-        panel.add(cp);
-        panel.setWidth(270);
+        panel.setWidth(160);
 
     }
 
@@ -78,7 +86,4 @@ public class AdminNavPanel implements IsWidget {
         m.set("icon", iconStyle);
         return m;
     }
-
 }
-
-
