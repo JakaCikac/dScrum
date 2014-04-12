@@ -44,4 +44,20 @@ public class UserProxy extends UserJpaController {
         return findUserEntities();
     }
 
+    public User findUserById(Integer userId) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            User u;
+            try {
+                u = em.createNamedQuery("User.findByUserId", User.class).setParameter("userId", userId).getSingleResult();
+                return u;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                return null;
+            }
+        } finally {
+            em.close();
+        }
+    }
 }

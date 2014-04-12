@@ -24,5 +24,7 @@ public interface DScrumServiceAsync {
     void findUserByUsername(String username, AsyncCallback<UserDTO> callback);
 
     void findAllUsers(AsyncCallback<List<UserDTO>> callback);
+
+    void updateUser(UserDTO userDTO, boolean b, AsyncCallback<Pair<Boolean, String>> updateUser);
 }
 
