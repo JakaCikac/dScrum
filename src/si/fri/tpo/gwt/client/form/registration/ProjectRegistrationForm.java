@@ -3,30 +3,18 @@ package si.fri.tpo.gwt.client.form.registration;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.user.client.ui.CheckBox;
-import com.google.gwt.user.client.ui.FormPanel;
 import com.sencha.gxt.core.client.util.ToggleGroup;
 import com.sencha.gxt.widget.core.client.FramedPanel;
-import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
-import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.*;
 import com.sencha.gxt.widget.core.client.form.TextArea;
 import com.sencha.gxt.widget.core.client.form.validator.MinLengthValidator;
-import com.sencha.gxt.widget.core.client.info.Info;
-import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
-import si.fri.tpo.gwt.client.form.search.UserSearchCallback;
-import si.fri.tpo.gwt.client.form.search.UserSearchDialog;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
-import si.fri.tpo.gwt.client.verification.PassHash;
 
 import java.util.ArrayList;
 

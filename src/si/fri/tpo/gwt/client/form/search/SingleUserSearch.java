@@ -44,6 +44,8 @@ public class SingleUserSearch implements IsWidget {
     private ListStore<UserDTO> store;
     private UserDTO userDTO;
     private Grid<UserDTO> grid;
+    private ColumnModel<UserDTO> cm;
+    private TextField searchField;
 
     public SingleUserSearch(DScrumServiceAsync service) {
         this.service = service;
@@ -61,16 +63,39 @@ public class SingleUserSearch implements IsWidget {
             HorizontalPanel hp = new HorizontalPanel();
             ContentPanel panel;
 
-            TextField searchField = new TextField();
+            
+
+            searchField = new TextField();
             panel = new ContentPanel();
             panel.setHeaderVisible(false);
             panel.add(searchField);
             hp.add(panel);
 
             TextButton searchButton = new TextButton("Search");
+            searchButton.addSelectHandler(new SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+                    reconfigureData();
+                }
+            });
+
             panel = new ContentPanel();
             panel.setHeaderVisible(false);
             panel.add(searchButton);
+            hp.add(panel);
+
+            TextButton displayAll = new TextButton("All users");
+            displayAll.addSelectHandler(new SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+                    searchField.setText("");
+                    searchField.setEmptyText("Search for user ..");
+                    displayAllUsers();
+                }
+            });
+            panel = new ContentPanel();
+            panel.setHeaderVisible(false);
+            panel.add(displayAll);
             hp.add(panel);
 
             p.add(hp);
@@ -98,7 +123,7 @@ public class SingleUserSearch implements IsWidget {
             l.add(firstNameCol);
             l.add(lastNameCol);
             l.add(isAdminCol);
-            ColumnModel<UserDTO> cm = new ColumnModel<UserDTO>(l);
+            cm = new ColumnModel<UserDTO>(l);
 
             // initialize list store with model key provider (username)
             store = new ListStore<UserDTO>(getModelKeyProvider());
@@ -133,6 +158,32 @@ public class SingleUserSearch implements IsWidget {
     public UserDTO getDTO() {
         setDTO(grid.getSelectionModel().getSelectedItem());
         return this.userDTO;
+    }
+
+    public ListStore<UserDTO> getListStore() {
+        return store;
+    }
+
+    public void reconfigureData() {
+        AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
+            @Override
+            public void onSuccess(UserDTO result) {
+                store.clear();
+                store.add(result);
+                grid.reconfigure(store, cm);
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.findUserByUsername(searchField.getValue(), callback);
+    }
+
+    public void displayAllUsers() {
+        store.clear();
+        getUserList();
+        grid.reconfigure(store, cm);
     }
 
     private void getUserList() {
