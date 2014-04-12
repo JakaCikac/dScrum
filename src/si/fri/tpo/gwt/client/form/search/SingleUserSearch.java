@@ -5,13 +5,16 @@ package si.fri.tpo.gwt.client.form.search;
  */
 
 import java.util.*;
+import java.util.List;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.ValueProvider;
@@ -20,8 +23,10 @@ import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer.BoxLayoutPack;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
@@ -35,9 +40,10 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 public class SingleUserSearch implements IsWidget {
 
     private DScrumServiceAsync service;
-    private ContentPanel panel;
+    private VerticalPanel verticalPanel;
     private ListStore<UserDTO> store;
     private UserDTO userDTO;
+    private Grid<UserDTO> grid;
 
     public SingleUserSearch(DScrumServiceAsync service) {
         this.service = service;
@@ -45,15 +51,38 @@ public class SingleUserSearch implements IsWidget {
 
     @Override
     public Widget asWidget() {
-        if (panel == null) {
+        if (verticalPanel == null) {
+            verticalPanel = new VerticalPanel();
+
+            VerticalLayoutContainer p = new VerticalLayoutContainer();
+            verticalPanel.add(p);
+
+            // Create search by username
+            HorizontalPanel hp = new HorizontalPanel();
+            ContentPanel panel;
+
+            TextField searchField = new TextField();
+            panel = new ContentPanel();
+            panel.setHeaderVisible(false);
+            panel.add(searchField);
+            hp.add(panel);
+
+            TextButton searchButton = new TextButton("Search");
+            panel = new ContentPanel();
+            panel.setHeaderVisible(false);
+            panel.add(searchButton);
+            hp.add(panel);
+
+            p.add(hp);
+
             // TODO: add search button and field
             final NumberFormat number = NumberFormat.getFormat("0.00");
 
             RowNumberer<UserDTO> numberer = new RowNumberer<UserDTO>();
-            ColumnConfig<UserDTO, String> usernameCol = new ColumnConfig<UserDTO, String>(getUsernameValue(), 150, "Username");
-            ColumnConfig<UserDTO, String> firstNameCol = new ColumnConfig<UserDTO, String>(getFirstNameValue(), 150, "First Name");
-            ColumnConfig<UserDTO, String> lastNameCol = new ColumnConfig<UserDTO, String>(getLastNameValue(), 150, "Last Name");
-            ColumnConfig<UserDTO, Boolean> isAdminCol = new ColumnConfig<UserDTO, Boolean>(getIsAdminValue(), 50, "Is Admin?");
+            ColumnConfig<UserDTO, String> usernameCol = new ColumnConfig<UserDTO, String>(getUsernameValue(), 100, "Username");
+            ColumnConfig<UserDTO, String> firstNameCol = new ColumnConfig<UserDTO, String>(getFirstNameValue(), 100, "First Name");
+            ColumnConfig<UserDTO, String> lastNameCol = new ColumnConfig<UserDTO, String>(getLastNameValue(), 100, "Last Name");
+            ColumnConfig<UserDTO, Boolean> isAdminCol = new ColumnConfig<UserDTO, Boolean>(getIsAdminValue(), 80, "Is Admin?");
             isAdminCol.setCell(new AbstractCell<Boolean>() {
 
                 @Override
@@ -76,7 +105,7 @@ public class SingleUserSearch implements IsWidget {
             // retrieve user List and add data to list store
             getUserList();
 
-            final Grid<UserDTO> grid = new Grid<UserDTO>(store, cm);
+            grid = new Grid<UserDTO>(store, cm);
             grid.getView().setAutoExpandColumn(usernameCol);
             grid.setBorders(false);
             grid.getView().setStripeRows(true);
@@ -90,30 +119,11 @@ public class SingleUserSearch implements IsWidget {
             panel.setPixelSize(600, 320);
             panel.addStyleName("margin-10");
 
-            panel.setButtonAlign(BoxLayoutPack.END);
-            final TextButton selectButton = new TextButton("Select user");
-            selectButton.setEnabled(false);
-            SelectHandler selectButtonHandler = new SelectHandler() {
-                @Override
-                public void onSelect(SelectEvent event) {
-                    setDTO(grid.getSelectionModel().getSelectedItem());
-                    selectButton.setEnabled(false);
-                }
-            };
-            selectButton.addSelectHandler(selectButtonHandler);
-
-            grid.getSelectionModel().addSelectionChangedHandler(new SelectionChangedHandler<UserDTO>() {
-                @Override
-                public void onSelectionChanged(SelectionChangedEvent<UserDTO> event) {
-                    selectButton.setEnabled( ! event.getSelection().isEmpty());
-                }
-            });
-            panel.addButton(selectButton);
-
             panel.setWidget(grid);
+            p.add(panel);
         }
 
-        return panel;
+        return verticalPanel;
     }
 
     private void setDTO(UserDTO userDTO) {
@@ -121,6 +131,7 @@ public class SingleUserSearch implements IsWidget {
     }
 
     public UserDTO getDTO() {
+        setDTO(grid.getSelectionModel().getSelectedItem());
         return this.userDTO;
     }
 
