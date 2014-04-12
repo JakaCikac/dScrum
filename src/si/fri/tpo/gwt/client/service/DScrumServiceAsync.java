@@ -4,6 +4,8 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 
+import java.util.List;
+
 /**
  * Created by nanorax on 04/04/14.
  */
@@ -20,5 +22,7 @@ public interface DScrumServiceAsync {
     void saveUser(UserDTO userDTO, Boolean value, AsyncCallback<Pair<Boolean, String>> saveUser);
 
     void findUserByUsername(String username, AsyncCallback<UserDTO> callback);
+
+    void findAllUsers(AsyncCallback<List<UserDTO>> callback);
 }
 

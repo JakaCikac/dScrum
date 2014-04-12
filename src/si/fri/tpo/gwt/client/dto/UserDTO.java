@@ -30,6 +30,15 @@ public class UserDTO extends BaseModelData{
     public UserDTO() {
     }
 
+    /*public UserDTO(String username, String firstName, String lastName, String email, boolean isAdmin, boolean isActive ) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.isAdmin = isAdmin;
+        this.isActive = isActive;
+    } */
+
     public Integer getUserId() {
         return get("userId");
     }

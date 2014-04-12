@@ -8,6 +8,8 @@ import si.fri.tpo.gwt.server.impl.login.LoginServiceImpl;
 import si.fri.tpo.gwt.server.impl.registration.UserRegistrationServiceImpl;
 import si.fri.tpo.gwt.server.impl.user.UserImpl;
 
+import java.util.List;
+
 /**
  * Created by nanorax on 04/04/14.
  */
@@ -47,6 +49,11 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     @Override
     public UserDTO findUserByUsername(String username) {
         return UserImpl.findUserByUsername(username);
+    }
+
+    @Override
+    public List<UserDTO> findAllUsers() {
+        return UserImpl.getAllUsers();
     }
 
 }

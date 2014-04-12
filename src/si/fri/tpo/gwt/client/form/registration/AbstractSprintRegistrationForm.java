@@ -17,7 +17,7 @@ public abstract class AbstractSprintRegistrationForm {//extends LayoutContainer{
 
     /*private DScrumServiceAsync service;
     private VerticalPanel vp;
-    private FormData formData;
+    private FormData formData ;
     private RadioGroup typeSprintRG = new RadioGroup();
     private FormPanel simple = new FormPanel();
     private Radio newSprintRB = new Radio();

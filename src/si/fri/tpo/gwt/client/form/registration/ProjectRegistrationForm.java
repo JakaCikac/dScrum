@@ -144,6 +144,10 @@ public class ProjectRegistrationForm implements IsWidget {
 
         vp.add(panel);
     }
+
+    private void setDTO(ProjectDTO dto) {
+        this.dto = dto;
+    }
 }
 
 
@@ -189,10 +193,6 @@ public class ProjectRegistrationForm implements IsWidget {
         }
     };
 
-    private void setDTO(UserDTO dto) {
-        this.dto = dto;
-    }
-
 
     private SelectionListener submitListener = new SelectionListener<ButtonEvent>() {
         @Override
@@ -205,50 +205,12 @@ public class ProjectRegistrationForm implements IsWidget {
         System.out.println(getUsersArrayList().size());
     }
 
-    @Override
-    protected void onRender(Element parent, int index) {
-        super.onRender(parent, index);
-        initNewRegistrationForm();
-        initComponentsDataFill();
-    }
-
 }
 */
 
 /*
 
-    protected void initNewRegistrationForm() {
 
-        // Title of the form
-        getSimple().setHeading("Project Creation Form");
-        getSimple().setFrame(true);
-
-        getSimple().setButtonAlign(Style.HorizontalAlignment.CENTER);
-
-        setBasicData.setHeading("Project information");
-        setBasicData.setLayout(layout);
-
-        projectName.setFieldLabel("Project Name");
-        projectName.setAllowBlank(false);
-        setBasicData.add(projectName, getFormData());
-
-        // Product owner field
-        setBasicData.add(selectProductOwnerLabel);
-        setBasicData.add(selectProductOwnerB);
-        // Scrum master field
-        setBasicData.add(selectScrumMasterLabel);
-        setBasicData.add(selectScrumMasterB);
-        // SM and PO label field
-        setBasicData.add(selectedScrumMasterLabel);
-        setBasicData.add(selectProductOwnerLabel);
-        // SM and PO user label field
-        setBasicData.add(selectedScrumMasterUserLabel);
-        setBasicData.add(selectedProductOwnerUserLabel);
-
-
-        lb = new ListBox();
-        setBasicData.add(lb);
-        al = new ArrayList<UserDTO>();
 
         final TextButton addItem = new TextButton("Add Member");
         addItem.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -265,21 +227,7 @@ public class ProjectRegistrationForm implements IsWidget {
             }
         });
         addItem.addButton(loginButton);
-        setBasicData.add(addItem);
-        getSimple().add(setBasicData);
 
-        submitButton.setEnabled(true);
-        getSimple().addButton(submitButton);
-        getSimple().addButton(new Button("Reset form"));
 
-        FormButtonBinding binding = new FormButtonBinding(getSimple());
-        binding.addButton(submitButton);
-
-        getVp().add(getSimple());
-    }
-
-    private void setDTO(UserDTO dto) {
-        this.dto = dto;
-    }
 
 } */

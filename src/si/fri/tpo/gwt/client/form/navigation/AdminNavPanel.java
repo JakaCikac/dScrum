@@ -14,6 +14,8 @@ import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.form.registration.ProjectRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
+import si.fri.tpo.gwt.client.form.search.SingleUserSearch;
+import si.fri.tpo.gwt.client.form.search.SingleUserSearchDialog;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 //TODO: merge cnavpanel into admin nav panel!
@@ -68,9 +70,13 @@ public class AdminNavPanel implements IsWidget {
         projectManagement.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                ProjectRegistrationForm pgf = new ProjectRegistrationForm(service);
+                //ProjectRegistrationForm pgf = new ProjectRegistrationForm(service);
+                //center.clear();
+                //center.add(pgf.asWidget());
+                //TODO: only testing, remove
+                SingleUserSearchDialog sus = new SingleUserSearchDialog(service);
                 center.clear();
-                center.add(pgf.asWidget());
+                sus.show();
             }
         });
         cp.add(projectManagement);
