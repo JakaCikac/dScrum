@@ -1,18 +1,6 @@
 package si.fri.tpo.gwt.client.form.registration;
 
-import com.extjs.gxt.ui.client.Style;
-import com.extjs.gxt.ui.client.event.Events;
-import com.extjs.gxt.ui.client.event.FieldEvent;
-import com.extjs.gxt.ui.client.event.Listener;
-import com.extjs.gxt.ui.client.widget.Component;
-//import com.extjs.gxt.ui.client.widget.DatePicker;
-import com.extjs.gxt.ui.client.widget.Label;
-import com.extjs.gxt.ui.client.widget.LayoutContainer;
-import com.extjs.gxt.ui.client.widget.VerticalPanel;
-import com.extjs.gxt.ui.client.widget.button.Button;
-import com.extjs.gxt.ui.client.widget.form.*;
-import com.extjs.gxt.ui.client.widget.layout.FormData;
-import com.extjs.gxt.ui.client.widget.layout.FormLayout;
+
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -25,9 +13,9 @@ import java.util.Date;
 /**
  * Created by t13as on 07-Apr-14.
  */
-public abstract class AbstractSprintRegistrationForm extends LayoutContainer{
+public abstract class AbstractSprintRegistrationForm {//extends LayoutContainer{
 
-    private DScrumServiceAsync service;
+    /*private DScrumServiceAsync service;
     private VerticalPanel vp;
     private FormData formData;
     private RadioGroup typeSprintRG = new RadioGroup();
@@ -182,5 +170,5 @@ public abstract class AbstractSprintRegistrationForm extends LayoutContainer{
 
     public Radio getNewSprintRB() {
         return newSprintRB;
-    }
+    }*/
 }
