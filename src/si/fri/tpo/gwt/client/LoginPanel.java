@@ -144,11 +144,12 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
             // open appropriate navigation panel and main form
-            AdminNavPanel adminNav = new AdminNavPanel(service);
+            AdminNavPanel adminNav = new AdminNavPanel(center, service);
 
             fillNavigationMainAndHeader(adminNav.asWidget(), null);//new UserSearchForm(service), message);
         } else {
             // if user is not an admin, display user message
+
 
             String message = "Welcome to dScrum  user " +
                     userDTO.getFirstName() + " " + userDTO.getLastName();
@@ -174,9 +175,9 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                 vp.clear();
                 south.clear();
                 east.clear();
+                center.clear();
                 // display new login panel
-                vp.add(new LoginPanel(dscrum, center, north, south, east, west, service).asWidget());
-            }
+                vp.add(new LoginPanel(dscrum, north, south, east, west, service).asWidget());            }
         });
         south.add(logoutButton);
     }
