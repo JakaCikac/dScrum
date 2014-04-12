@@ -5,6 +5,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.FramedPanel;
+import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.PasswordField;
@@ -65,13 +66,20 @@ public class UserDataEditForm implements IsWidget{
         p.add(new FieldLabel(email, "E-mail"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         password = new PasswordField();
-        password.setAllowBlank(false);
-        p.add(new FieldLabel(password, "Password"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        password.setAllowBlank(true);
+        p.add(new FieldLabel(password, "Change Password"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         repassword = new PasswordField();
-        repassword.setAllowBlank(false);
-        p.add(new FieldLabel(repassword, "Confirm Password"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        /*if(password.getValue().length()==0) {
+            repassword.setAllowBlank(true);
+        }else{
+            repassword.setAllowBlank(false);
+        }*/
+        p.add(new FieldLabel(repassword, "Repeat Password"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
+        final TextButton saveButton = new TextButton("Save changes");
+
+        panel.addButton(saveButton);
         vp.add(panel);
     }
 
