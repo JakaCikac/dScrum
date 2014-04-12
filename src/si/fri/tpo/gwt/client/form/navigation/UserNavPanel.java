@@ -8,8 +8,10 @@ import com.sencha.gxt.legacy.client.data.ModelData;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
+import si.fri.tpo.gwt.client.form.registration.SprintRegistrationForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 /**
@@ -19,6 +21,7 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 public class UserNavPanel implements IsWidget{
     private DScrumServiceAsync service;
     private ContentPanel center;
+    private FlowLayoutContainer con;
 
     public UserNavPanel(DScrumServiceAsync service, ContentPanel center) {
         this.center = center;
@@ -28,8 +31,7 @@ public class UserNavPanel implements IsWidget{
     private ContentPanel panel;
     public Widget asWidget() {
         panel = new ContentPanel();
-        AccordionLayoutContainer con = new AccordionLayoutContainer();
-        con.setExpandMode(AccordionLayoutContainer.ExpandMode.SINGLE_FILL);
+        con = new FlowLayoutContainer();
         panel.add(con);
         panel.setHeadingText("User menu");
         panel.setBodyBorder(false);
@@ -42,24 +44,38 @@ public class UserNavPanel implements IsWidget{
         ContentPanel cp = new ContentPanel();
         cp.setHeaderVisible(false);
         cp.setAnimCollapse(false);
-        cp.setExpanded(true);
         cp.setBodyStyleName("pad-text");
 
         TextButton userDataEditB = new TextButton("Edit user");
         userDataEditB.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                System.out.println("Registered click on edit profile");
                 UserDataEditForm udef = new UserDataEditForm(service);
                 center.clear();
                 center.add(udef.asWidget());
             }
         });
         cp.add(userDataEditB);
+        con.add(cp);
 
-        panel.add(cp);
+        cp = new ContentPanel();
+        cp.setHeaderVisible(false);
+        cp.setAnimCollapse(false);
+        cp.setBodyStyleName("pad-text");
+
+        TextButton sprintRegistrationB = new TextButton("Sprint Management");
+        sprintRegistrationB.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                SprintRegistrationForm srf = new SprintRegistrationForm(service);
+                center.clear();
+                center.add(srf.asWidget());
+            }
+        });
+        cp.add(sprintRegistrationB);
+        con.add(cp);
+
         panel.setWidth(270);
-
     }
 
     private ModelData newItem(String text, String iconStyle) {
