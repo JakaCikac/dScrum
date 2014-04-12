@@ -26,6 +26,7 @@ import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer.BoxLayoutP
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent.SelectHandler;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
@@ -63,12 +64,13 @@ public class SingleUserSearch implements IsWidget {
             HorizontalPanel hp = new HorizontalPanel();
             ContentPanel panel;
 
-            
+
 
             searchField = new TextField();
             panel = new ContentPanel();
             panel.setHeaderVisible(false);
-            panel.add(searchField);
+            panel.setBorders(false);
+            panel.add(new FieldLabel(searchField, "Search by username"));
             hp.add(panel);
 
             TextButton searchButton = new TextButton("Search");
