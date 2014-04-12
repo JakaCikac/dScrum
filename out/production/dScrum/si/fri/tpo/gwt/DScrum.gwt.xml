@@ -1,17 +1,24 @@
-<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0//EN"
-        "http://google-web-toolkit.googlecode.com/svn/releases/2.0/distro-source/core/src/gwt-module.dtd">
-<module>
+<?xml version="1.0" encoding="UTF-8"?>
+        <!-- HTML5 only start -->
+        <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.5.0//EN"
+                "http://google-web-toolkit.googlecode.com/svn/tags/2.5.0/distro-source/core/src/gwt-module.dtd">
+        <!-- HTML5 only end -->
+<module rename-to='dscrum'>
+    <!-- Inherit the core Web Toolkit stuff. -->
+    <inherits name='com.google.gwt.user.User' />
 
-    <!-- Inherit core WebToolkit -->
-    <inherits name='com.google.gwt.user.User'/>
-    <inherits name="com.extjs.gxt.ui.GXT"/>
+    <!-- Other module inherits -->
+    <inherits name='com.sencha.gxt.ui.GXT' />
+    <inherits name="com.sencha.gxt.legacy.Legacy"/>
+    <!-- <<<< Inherits the GXT Module -->
 
-    <!-- Inherit the default GWT style sheet. -->
-    <inherits name='com.google.gwt.user.theme.clean.Clean'/>
+<!-- GXT stylesheet -->
+<stylesheet src="reset.css" /> <!-- <<<< Sets up the GXT default stylesheet -->
 
-    <entry-point class='si.fri.tpo.gwt.client.DScrum'/>
+<!-- Specify the app entry point class. -->
+<entry-point class='si.fri.tpo.gwt.client.DScrum' />
 
-    <source path='client'/>
-    <source path='server'/>
-
+<!-- Specify the paths for translatable code -->
+<source path='client' />
+<source path='shared' />
 </module>
