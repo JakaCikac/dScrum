@@ -2,6 +2,7 @@ package si.fri.tpo.gwt.client.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import si.fri.tpo.gwt.client.components.Pair;
+import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 
 import java.util.List;
@@ -26,5 +27,7 @@ public interface DScrumServiceAsync {
     void findAllUsers(AsyncCallback<List<UserDTO>> callback);
 
     void updateUser(UserDTO userDTO, boolean b, AsyncCallback<Pair<Boolean, String>> updateUser);
+
+
 }
 
