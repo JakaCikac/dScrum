@@ -70,13 +70,13 @@ public class AdminNavPanel implements IsWidget {
         projectManagement.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                //ProjectRegistrationForm pgf = new ProjectRegistrationForm(service);
-                //center.clear();
-                //center.add(pgf.asWidget());
-                //TODO: only testing, remove
-                SingleUserSearchDialog sus = new SingleUserSearchDialog(service);
+                ProjectRegistrationForm pgf = new ProjectRegistrationForm(service);
                 center.clear();
-                sus.show();
+                center.add(pgf.asWidget());
+                //TODO: only testing, remove
+                //SingleUserSearchDialog sus = new SingleUserSearchDialog(service);
+                //center.clear();
+                //sus.show();
             }
         });
         cp.add(projectManagement);

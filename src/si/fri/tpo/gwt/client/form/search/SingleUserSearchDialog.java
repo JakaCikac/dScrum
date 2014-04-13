@@ -15,14 +15,15 @@ public class SingleUserSearchDialog extends Dialog {
 
     private DScrumServiceAsync service;
     private SingleUserSearch sus;
-    private UserDTO userDTO;
+    private SingleUserSearchCallback callback;
 
-    public SingleUserSearchDialog(DScrumServiceAsync service) {
+    public SingleUserSearchDialog(DScrumServiceAsync service, SingleUserSearchCallback callback) {
         this.service = service;
+        this.callback = callback;
 
 
             setBodyBorder(false);
-            setHeadingText("BorderLayout Dialog");
+            setHeadingText("User Search Dialog");
             setWidth(500);
             setHeight(325);
             setHideOnButtonClick(true);
@@ -41,13 +42,14 @@ public class SingleUserSearchDialog extends Dialog {
             getButton(PredefinedButton.OK).addSelectHandler(new SelectEvent.SelectHandler() {
                 @Override
                 public void onSelect(SelectEvent event) {
-                    userDTO = sus.getDTO();
+                    final UserDTO userDTO = sus.getDTO();
+                    getCallback().userSearchCallback(userDTO);
                 }
             });
         }
 
-    private UserDTO get(UserDTO userDTO) {
-        return this.userDTO;
+    public SingleUserSearchCallback getCallback() {
+        return callback;
     }
 }
 

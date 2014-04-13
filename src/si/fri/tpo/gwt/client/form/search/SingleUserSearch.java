@@ -158,8 +158,7 @@ public class SingleUserSearch implements IsWidget {
     }
 
     public UserDTO getDTO() {
-        setDTO(grid.getSelectionModel().getSelectedItem());
-        return this.userDTO;
+        return grid.getSelectionModel().getSelectedItem();
     }
 
     public ListStore<UserDTO> getListStore() {

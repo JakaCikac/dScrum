@@ -7,13 +7,18 @@ import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.core.client.util.ToggleGroup;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.*;
 import com.sencha.gxt.widget.core.client.form.TextArea;
 import com.sencha.gxt.widget.core.client.form.validator.MinLengthValidator;
+import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.form.search.SingleUserSearchCallback;
+import si.fri.tpo.gwt.client.form.search.SingleUserSearchDialog;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 import java.util.ArrayList;
@@ -35,13 +40,23 @@ public class ProjectRegistrationForm implements IsWidget {
     private Radio assigned;
     private Radio waiting;
 
+    private ProjectDTO projectDTO;
+    private UserDTO scrumMasterDTO;
+    private UserDTO productOwnerDTO;
+
+
     private TextButton submitButton;
     private TextButton userSearchButton;
 
     // TODO: Add team members
-    private TextButton addTeamMemberB;
     private TextButton selectScrumMasterB;
     private TextButton selectProductOwnerB;
+
+    private FieldLabel scrumMasterLabel;
+    private FieldLabel productOwnerLabel;
+    private TextField selScrumMaster;
+    private TextField selProductOwner;
+
 
      public Widget asWidget() {
          if (vp == null) {
@@ -55,9 +70,6 @@ public class ProjectRegistrationForm implements IsWidget {
     public ProjectRegistrationForm(DScrumServiceAsync service) {
         this.service = service;
     }
-
-    private ProjectDTO dto;
-
 
     private void createProjectForm() {
         FramedPanel panel = new FramedPanel();
@@ -98,14 +110,72 @@ public class ProjectRegistrationForm implements IsWidget {
 
         p.add(new FieldLabel(rbp, "Project status"));
 
-        VerticalPanel userSelectionPanel = new VerticalPanel();
-        addTeamMemberB = new TextButton("Add Team");
+        selProductOwner = new TextField();
+        selScrumMaster = new TextField();
+        selScrumMaster.setAllowBlank(false);
+        selProductOwner.setAllowBlank(false);
+        productOwnerLabel = new FieldLabel();
+        scrumMasterLabel = new FieldLabel();
+
+        HorizontalPanel userSelectionPanel = new HorizontalPanel();
         selectScrumMasterB = new TextButton("Select SM");
-        selectProductOwnerB = new TextButton("SelectPO");
-        userSelectionPanel.add(addTeamMemberB);
+        selectScrumMasterB.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                SingleUserSearchDialog sus = new SingleUserSearchDialog(service, new SingleUserSearchCallback() {
+                    @Override
+                    public void userSearchCallback(UserDTO userDTO) {
+                        if ((productOwnerDTO == null) || (!(productOwnerDTO == null) && !userDTO.getUsername().equals(productOwnerDTO.getUsername()))){
+                            setScrumMasterDTO(userDTO);
+                            selScrumMaster.setText(scrumMasterDTO.getUsername());
+                            System.out.println("Zomgz1");
+                        }
+                        else Info.display("Warning", "Scrum Master can not be the same person as Product Owner!");
+                        System.out.println("Zomgz");
+                    }
+                });
+                sus.show();
+            }
+        });
+        selectProductOwnerB = new TextButton("Select PO");
+        selectProductOwnerB.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                SingleUserSearchDialog sus = new SingleUserSearchDialog(service, new SingleUserSearchCallback() {
+                    @Override
+                    public void userSearchCallback(UserDTO userDTO) {
+                        if ((scrumMasterDTO == null) || (!(scrumMasterDTO == null) && !userDTO.getUsername().equals(scrumMasterDTO.getUsername()))) {
+                            setProductOwnerDTO(userDTO);
+                            selProductOwner.setText(productOwnerDTO.getUsername());
+                            System.out.println("Zomgz2");
+                        } else Info.display("Warning", "Product Owner can not be the same person as Scrum Master!");
+                        System.out.println("Zomgz");
+                    }
+                });
+                sus.show();
+            }
+        });
         userSelectionPanel.add(selectProductOwnerB);
         userSelectionPanel.add(selectScrumMasterB);
         p.add(userSelectionPanel);
+
+        VerticalPanel selectedUserPanel = new VerticalPanel();
+        selProductOwner.setReadOnly(true);
+        selScrumMaster.setReadOnly(true);
+        productOwnerLabel.setText("Product Owner");
+        scrumMasterLabel.setText("Scrum Master");
+        HorizontalPanel po = new HorizontalPanel();
+        po.add(productOwnerLabel);
+        po.add(selProductOwner);
+        selectedUserPanel.add(po);
+        po = new HorizontalPanel();
+        po.add(scrumMasterLabel);
+        po.add(selScrumMaster);
+        selectedUserPanel.add(po);
+        p.add(selectedUserPanel);
+
+
+        //TODO: sm in po ne sme biti ista oseba!
 
         // we can set name on radios or use toggle group
         ToggleGroup toggle = new ToggleGroup();
@@ -133,9 +203,19 @@ public class ProjectRegistrationForm implements IsWidget {
         vp.add(panel);
     }
 
-    private void setDTO(ProjectDTO dto) {
-        this.dto = dto;
+    private void setProjectDTO(ProjectDTO dto) {
+        this.projectDTO = dto;
     }
+
+    public void setProductOwnerDTO(UserDTO productOwnerDTO) {
+        this.productOwnerDTO = productOwnerDTO;
+    }
+
+    public void setScrumMasterDTO(UserDTO scrumMasterDTO) {
+        this.scrumMasterDTO = scrumMasterDTO;
+    }
+
+
 }
 
 
