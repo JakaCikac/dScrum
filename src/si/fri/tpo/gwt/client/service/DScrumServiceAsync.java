@@ -27,7 +27,7 @@ public interface DScrumServiceAsync {
 
     void findAllUsers(AsyncCallback<List<UserDTO>> callback);
 
-    void saveTeam(TeamDTO teamDTO, AsyncCallback<Pair<Boolean, Integer>> saveTeam);
+    void saveTeam(TeamDTO teamDTO, String projectName, boolean withProject, AsyncCallback<Pair<Boolean, Integer>> saveTeam);
 
     void saveProject(ProjectDTO projectDTO, AsyncCallback<Pair<Boolean,String>> saveProject);
 }

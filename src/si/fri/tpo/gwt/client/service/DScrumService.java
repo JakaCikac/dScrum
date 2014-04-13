@@ -30,7 +30,7 @@ public interface DScrumService extends RemoteService {
 
     public List<UserDTO> findAllUsers();
 
-    public Pair<Boolean, Integer> saveTeam(TeamDTO teamDTO);
+    public Pair<Boolean, Integer> saveTeam(TeamDTO teamDTO, String projectName, boolean withProject);
 
     public Pair<Boolean, String> saveProject(ProjectDTO projectDTO);
 }

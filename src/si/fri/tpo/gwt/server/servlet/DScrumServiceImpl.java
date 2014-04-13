@@ -8,6 +8,7 @@ import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.server.impl.login.LoginServiceImpl;
 import si.fri.tpo.gwt.server.impl.registration.ProjectRegistrationServiceImpl;
+import si.fri.tpo.gwt.server.impl.registration.TeamRegistrationServiceImpl;
 import si.fri.tpo.gwt.server.impl.registration.UserRegistrationServiceImpl;
 import si.fri.tpo.gwt.server.impl.team.TeamImpl;
 import si.fri.tpo.gwt.server.impl.user.UserImpl;
@@ -60,9 +61,14 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
         return UserImpl.getAllUsers();
     }
 
+    // with project if team gets stored with project, so you can validate
+    // if the project exists
     @Override
-    public Pair<Boolean, Integer> saveTeam(TeamDTO teamDTO) {
-        return TeamImpl.saveTeam(teamDTO);
+    public Pair<Boolean, Integer> saveTeam(TeamDTO teamDTO, String projectName, boolean withProject) {
+        if (withProject) {
+            return TeamRegistrationServiceImpl.saveTeamWithProject(teamDTO, projectName);
+        } else
+            return TeamImpl.saveTeam(teamDTO);
     }
 
     @Override

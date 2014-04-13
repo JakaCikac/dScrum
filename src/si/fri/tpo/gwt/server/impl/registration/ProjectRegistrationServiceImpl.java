@@ -40,7 +40,7 @@ public class ProjectRegistrationServiceImpl {
 
         List<ProjectDTO> projectDTOs = ProjectImpl.getAllProject();
         if(projectDTOs != null) {
-            System.out.println("Retrieved All users list.");
+            System.out.println("Retrieved All project list.");
         }
         for (ProjectDTO dto : projectDTOs) {
             //TODO: in case required, check for more equals with &&

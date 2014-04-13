@@ -268,7 +268,6 @@ public class ProjectRegistrationForm implements IsWidget {
                 }
                 else if (!result.getFirst()) {
                     AlertMessageBox amb2 = new AlertMessageBox("Error saving team!", result.getSecond().toString());
-                    amb2.show();
                 }
             }
             @Override
@@ -276,7 +275,7 @@ public class ProjectRegistrationForm implements IsWidget {
                 Window.alert(caught.getMessage());
             }
         };
-        service.saveTeam(teamDTO, saveTeam);
+        service.saveTeam(teamDTO, projectDTO.getName(), true, saveTeam);
     }
 
     private void setProjectDTO(ProjectDTO dto) {
