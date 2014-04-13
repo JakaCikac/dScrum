@@ -170,9 +170,14 @@ public class SingleUserSearch implements IsWidget {
         AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
             @Override
             public void onSuccess(UserDTO result) {
-                store.clear();
-                store.add(result);
-                grid.reconfigure(store, cm);
+                if (result != null) {
+                    store.clear();
+                    store.add(result);
+                    grid.reconfigure(store, cm);
+                }
+                else {
+                    Info.display("Non existent user", "User with this username doesn't exist!");
+                }
             }
             @Override
             public void onFailure(Throwable caught) {
