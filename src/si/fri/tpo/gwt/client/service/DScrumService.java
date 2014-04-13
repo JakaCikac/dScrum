@@ -3,6 +3,8 @@ package si.fri.tpo.gwt.client.service;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import si.fri.tpo.gwt.client.components.Pair;
+import si.fri.tpo.gwt.client.dto.ProjectDTO;
+import si.fri.tpo.gwt.client.dto.TeamDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 
 import java.util.List;
@@ -28,4 +30,7 @@ public interface DScrumService extends RemoteService {
 
     public List<UserDTO> findAllUsers();
 
+    public Pair<Boolean, Integer> saveTeam(TeamDTO teamDTO, String projectName, boolean withProject);
+
+    public Pair<Boolean, String> saveProject(ProjectDTO projectDTO);
 }

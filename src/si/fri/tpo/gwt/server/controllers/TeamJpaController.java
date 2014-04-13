@@ -39,7 +39,8 @@ public class TeamJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Team team) {
+    public int create(Team team) {
+        int insertedTeamID = -1;
         if (team.getUserList() == null) {
             team.setUserList(new ArrayList<User>());
         }
@@ -76,12 +77,15 @@ public class TeamJpaController implements Serializable {
                     oldTeamTeamIdOfProjectListProject = em.merge(oldTeamTeamIdOfProjectListProject);
                 }
             }
+            // TODO : try flush before commit and assign value to inserted teamID
             em.getTransaction().commit();
         } finally {
             if (em != null) {
+                insertedTeamID = team.getTeamId();
                 em.close();
             }
         }
+        return insertedTeamID;
     }
 
     public void edit(Team team) throws NonexistentEntityException, Exception {

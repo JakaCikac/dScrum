@@ -77,8 +77,11 @@ public class UserImpl {
     public static UserDTO findUserByUsername(String username) {
         User user;
         user = ProxyManager.getUserProxy().findUserByUsername(username);
-        UserDTO userDTO = FillDTO.fillUserDTO(user);
-        return userDTO;
+        if (user != null) {
+            UserDTO userDTO = FillDTO.fillUserDTO(user);
+            return userDTO;
+        }
+        else return null;
     }
 
 }
