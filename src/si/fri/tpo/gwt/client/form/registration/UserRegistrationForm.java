@@ -127,7 +127,6 @@ public class UserRegistrationForm implements IsWidget {
             }
         });
 
-
         final TextButton submitButton = new TextButton("Submit");
         submitButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override

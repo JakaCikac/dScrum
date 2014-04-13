@@ -3,9 +3,13 @@ package si.fri.tpo.gwt.client.form.registration;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.core.client.util.ToggleGroup;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
+import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.MarginData;
@@ -15,10 +19,13 @@ import com.sencha.gxt.widget.core.client.form.*;
 import com.sencha.gxt.widget.core.client.form.TextArea;
 import com.sencha.gxt.widget.core.client.form.validator.MinLengthValidator;
 import com.sencha.gxt.widget.core.client.info.Info;
+import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
+import si.fri.tpo.gwt.client.dto.TeamDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.form.search.SingleUserSearchCallback;
 import si.fri.tpo.gwt.client.form.search.SingleUserSearchDialog;
+import si.fri.tpo.gwt.client.form.select.TeamSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 import java.util.ArrayList;
@@ -56,6 +63,8 @@ public class ProjectRegistrationForm implements IsWidget {
     private FieldLabel productOwnerLabel;
     private TextField selScrumMaster;
     private TextField selProductOwner;
+    private TeamSelectForm tsf;
+    private int teamId;
 
 
      public Widget asWidget() {
@@ -74,7 +83,7 @@ public class ProjectRegistrationForm implements IsWidget {
     private void createProjectForm() {
         FramedPanel panel = new FramedPanel();
         panel.setHeadingText("Project Creation Form");
-        panel.setWidth(350);
+        panel.setWidth(320);
         panel.setBodyStyle("background: none; padding: 15px");
 
         VerticalLayoutContainer p = new VerticalLayoutContainer();
@@ -125,13 +134,10 @@ public class ProjectRegistrationForm implements IsWidget {
                 SingleUserSearchDialog sus = new SingleUserSearchDialog(service, new SingleUserSearchCallback() {
                     @Override
                     public void userSearchCallback(UserDTO userDTO) {
-                        if ((productOwnerDTO == null) || (!(productOwnerDTO == null) && !userDTO.getUsername().equals(productOwnerDTO.getUsername()))){
+                        if ((productOwnerDTO == null) || (!(productOwnerDTO == null) && !userDTO.getUsername().equals(productOwnerDTO.getUsername()))) {
                             setScrumMasterDTO(userDTO);
                             selScrumMaster.setText(scrumMasterDTO.getUsername());
-                            System.out.println("Zomgz1");
-                        }
-                        else Info.display("Warning", "Scrum Master can not be the same person as Product Owner!");
-                        System.out.println("Zomgz");
+                        } else Info.display("Warning", "Scrum Master can not be the same person as Product Owner!");
                     }
                 });
                 sus.show();
@@ -147,9 +153,7 @@ public class ProjectRegistrationForm implements IsWidget {
                         if ((scrumMasterDTO == null) || (!(scrumMasterDTO == null) && !userDTO.getUsername().equals(scrumMasterDTO.getUsername()))) {
                             setProductOwnerDTO(userDTO);
                             selProductOwner.setText(productOwnerDTO.getUsername());
-                            System.out.println("Zomgz2");
                         } else Info.display("Warning", "Product Owner can not be the same person as Scrum Master!");
-                        System.out.println("Zomgz");
                     }
                 });
                 sus.show();
@@ -174,9 +178,6 @@ public class ProjectRegistrationForm implements IsWidget {
         selectedUserPanel.add(po);
         p.add(selectedUserPanel);
 
-
-        //TODO: sm in po ne sme biti ista oseba!
-
         // we can set name on radios or use toggle group
         ToggleGroup toggle = new ToggleGroup();
         toggle.add(assigned);
@@ -190,18 +191,103 @@ public class ProjectRegistrationForm implements IsWidget {
             }
         });
 
+
+        FieldLabel lol = new FieldLabel();
+        lol.setText("Team members");
+        p.add(lol);
+        tsf = new TeamSelectForm(service);
+        p.add(tsf.asWidget(), new VerticalLayoutContainer.VerticalLayoutData(-1, -1));
+
+
         submitButton = new TextButton("Submit");
         submitButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                // TODO: add project to database
+                // Get Project Name
+                // Get Project Description
+                // Get Project Status
+                final ProjectDTO projectDTO = new ProjectDTO();
+                projectDTO.setName(projectName.getText());
+                projectDTO.setDescription(description.getText());
+                if (assigned.getValue())
+                    projectDTO.setStatus("assigned");
+                else projectDTO.setStatus("waiting");
+
+                // Get Product Owner
+                // Get Scrum Master
+                // Get Team Members
+                final TeamDTO teamDTO = new TeamDTO();
+                teamDTO.setProductOwnerId(productOwnerDTO.getUserId());
+                teamDTO.setScrumMasterId(scrumMasterDTO.getUserId());
+                teamDTO.setUserList(tsf.getMembers());
+                // Save team to database
+                performSaveTeam(teamDTO);
+                teamDTO.setTeamId(teamId);
+                projectDTO.setTeamTeamId(teamDTO);
+                // Save project to database
+                performSaveProject(projectDTO);
+
             }
         });
-        panel.addButton(submitButton);
-
-
-        vp.add(panel);
     }
+
+    private void performSaveProject(ProjectDTO projectDTO) {
+
+        AsyncCallback<Pair<Boolean, String>> saveProject = new AsyncCallback<Pair<Boolean, String>>() {
+            @Override
+            public void onSuccess(Pair<Boolean, String> result) {
+                if (result == null) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing project saving!");
+                    amb2.show();
+                }
+                else if (!result.getFirst()) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error saving project!", result.getSecond());
+                    amb2.show();
+                }
+                else {
+                    AlertMessageBox amb3 = new AlertMessageBox("Message save Project", result.getSecond());
+                    amb3.show();
+                }
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        System.out.println("Calling saveProject");
+        // TODO: project name duplication
+        service.saveProject(projectDTO, saveProject);
+    }
+
+    private void performSaveTeam(TeamDTO teamDTO) {
+
+        AsyncCallback<Pair<Boolean, Integer>> saveTeam = new AsyncCallback<Pair<Boolean, Integer>>() {
+            @Override
+            public void onSuccess(Pair<Boolean, Integer> result) {
+                if (result == null) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing team saving!");
+                    amb2.show();
+                }
+                else if (!result.getFirst()) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error saving team!", result.getSecond().toString());
+                    amb2.show();
+                }
+                else {
+                    AlertMessageBox amb3 = new AlertMessageBox("Message at save Team", result.getSecond().toString());
+                    amb3.show();
+                    /// set team Id to stored Team
+                    setTeamId(result.getSecond());
+                }
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        System.out.println("Calling saveTeam");
+        service.saveTeam(teamDTO, saveTeam);
+    }
+
 
     private void setProjectDTO(ProjectDTO dto) {
         this.projectDTO = dto;
@@ -215,87 +301,8 @@ public class ProjectRegistrationForm implements IsWidget {
         this.scrumMasterDTO = scrumMasterDTO;
     }
 
-
-}
-
-
- /*   private SelectionListener poSelectionListener = new SelectionListener<ButtonEvent>() {
-        @Override
-        public void componentSelected(ButtonEvent ce) {
-            new UserSearchDialog(getService(), new UserSearchCallback() {
-                @Override
-                public void userSearchCallback(UserDTO dto) {
-                    // return selected user and change label to his username
-                    getSelectedProductOwnerUserLabel().setText(dto.getUsername());
-                    setDTO(dto);
-                }
-            });
-        }
-    };
-
-    private SelectionListener smSelectionListener = new SelectionListener<ButtonEvent>() {
-        @Override
-        public void componentSelected(ButtonEvent ce) {
-            new UserSearchDialog(getService(), new UserSearchCallback() {
-                @Override
-                public void userSearchCallback(UserDTO dto) {
-                    // return selected user and change label to his username
-                    getSelectedScrumMasterUserLabel().setText(dto.getUsername());
-                    setDTO(dto);
-                }
-            });
-        }
-    };
-
-    private SelectionListener addTeamListener = new SelectionListener<ButtonEvent>() {
-        @Override
-        public void componentSelected(ButtonEvent ce) {
-            new UserSearchDialog(getService(), new UserSearchCallback() {
-                @Override
-                public void userSearchCallback(UserDTO dto) {
-                    // return selected user and change label to his username
-                    // TODO: I dont know what but incomplete
-                    setDTO(dto);
-                }
-            });
-        }
-    };
-
-
-    private SelectionListener submitListener = new SelectionListener<ButtonEvent>() {
-        @Override
-        public void componentSelected(ButtonEvent ce) {
-            performSaveProject(new ProjectDTO());
-        }
-    };
-
-    private void performSaveProject(ProjectDTO projectDTO) {
-        System.out.println(getUsersArrayList().size());
+    public void setTeamId(int teamId) {
+        this.teamId = teamId;
     }
 
 }
-*/
-
-/*
-
-
-
-        final TextButton addItem = new TextButton("Add Member");
-        addItem.addSelectHandler(new SelectEvent.SelectHandler() {
-            @Override
-            public void onSelect(SelectEvent event) {
-               /* new UserSearchDialog(getService(), new UserSearchCallback() {
-                    @Override
-                    public void userSearchCallback (UserDTO dto){
-                        // return selected user and change label to his username
-                        setDTO(dto);
-                        al.add(dto);
-                        System.out.println("Adding to listbox: " + dto.getUsername());
-                        lb.addItem(dto.getUsername());
-            }
-        });
-        addItem.addButton(loginButton);
-
-
-
-} */
