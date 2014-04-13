@@ -4,6 +4,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.TeamDTO;
+import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 
 import java.util.List;
@@ -30,5 +31,9 @@ public interface DScrumServiceAsync {
     void saveTeam(TeamDTO teamDTO, String projectName, boolean withProject, AsyncCallback<Pair<Boolean, Integer>> saveTeam);
 
     void saveProject(ProjectDTO projectDTO, AsyncCallback<Pair<Boolean,String>> saveProject);
+
+    void updateUser(UserDTO userDTO, boolean b, AsyncCallback<Pair<Boolean, String>> updateUser);
+
+
 }
 
