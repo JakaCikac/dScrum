@@ -72,11 +72,9 @@ public class AdminNavPanel implements IsWidget {
             public void onSelect(SelectEvent event) {
                 ProjectRegistrationForm pgf = new ProjectRegistrationForm(service);
                 center.clear();
+                System.out.println("Shooow uppp");
                 center.add(pgf.asWidget());
-                //TODO: only testing, remove
-                //SingleUserSearchDialog sus = new SingleUserSearchDialog(service);
-                //center.clear();
-                //sus.show();
+                System.out.println("Showwwwed upp, or not?");
             }
         });
         cp.add(projectManagement);

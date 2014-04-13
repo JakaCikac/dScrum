@@ -8,6 +8,7 @@ import si.fri.tpo.gwt.server.jpa.User;
 import si.fri.tpo.gwt.server.proxy.ProxyManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nanorax on 13/04/14.
@@ -17,11 +18,10 @@ public class TeamImpl {
     public static Pair<Boolean, Integer> saveTeam(TeamDTO dto) {
         int insertedTeamID = -1;
         try {
-
             Team team = new Team();
             team.setScrumMasterId(dto.getScrumMasterId());
             team.setProductOwnerId(dto.getProductOwnerId());
-            ArrayList<User> userList = new ArrayList<User>();
+            List<User> userList = new ArrayList<User>();
             for (UserDTO udto : dto.getUserList()) {
                 User u = new User();
                 u.setPassword(udto.getPassword());
@@ -45,7 +45,7 @@ public class TeamImpl {
                 insertedTeamID = ProxyManager.getTeamProxy().create(team);
                 if (insertedTeamID == -1) {
                     System.out.println("ob vstavljanju s kontrolerjem je id ... -1 :(");
-                } else System.out.println("Zgleda je id ok? : " + insertedTeamID);
+                }
 
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());

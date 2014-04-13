@@ -77,10 +77,10 @@ public class TeamJpaController implements Serializable {
                     oldTeamTeamIdOfProjectListProject = em.merge(oldTeamTeamIdOfProjectListProject);
                 }
             }
+            // TODO : try flush before commit and assign value to inserted teamID
             em.getTransaction().commit();
         } finally {
             if (em != null) {
-                em.flush();
                 insertedTeamID = team.getTeamId();
                 em.close();
             }

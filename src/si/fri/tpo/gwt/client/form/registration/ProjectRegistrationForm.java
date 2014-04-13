@@ -29,6 +29,8 @@ import si.fri.tpo.gwt.client.form.select.TeamSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -48,9 +50,9 @@ public class ProjectRegistrationForm implements IsWidget {
     private Radio waiting;
 
     private ProjectDTO projectDTO;
+    private TeamDTO teamDTO;
     private UserDTO scrumMasterDTO;
     private UserDTO productOwnerDTO;
-
 
     private TextButton submitButton;
     private TextButton userSearchButton;
@@ -65,7 +67,6 @@ public class ProjectRegistrationForm implements IsWidget {
     private TextField selProductOwner;
     private TeamSelectForm tsf;
     private int teamId;
-
 
      public Widget asWidget() {
          if (vp == null) {
@@ -114,8 +115,6 @@ public class ProjectRegistrationForm implements IsWidget {
 
         rbp = new VerticalPanel();
         rbp.add(assigned);
-        //rbp.add(completed);
-        //rbp.add(waiting);
 
         p.add(new FieldLabel(rbp, "Project status"));
 
@@ -191,13 +190,11 @@ public class ProjectRegistrationForm implements IsWidget {
             }
         });
 
-
         FieldLabel lol = new FieldLabel();
         lol.setText("Team members");
         p.add(lol);
         tsf = new TeamSelectForm(service);
         p.add(tsf.asWidget(), new VerticalLayoutContainer.VerticalLayoutData(-1, -1));
-
 
         submitButton = new TextButton("Submit");
         submitButton.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -212,58 +209,59 @@ public class ProjectRegistrationForm implements IsWidget {
                 if (assigned.getValue())
                     projectDTO.setStatus("assigned");
                 else projectDTO.setStatus("waiting");
-
                 // Get Product Owner
                 // Get Scrum Master
                 // Get Team Members
-                final TeamDTO teamDTO = new TeamDTO();
+                TeamDTO teamDTO = new TeamDTO();
                 teamDTO.setProductOwnerId(productOwnerDTO.getUserId());
                 teamDTO.setScrumMasterId(scrumMasterDTO.getUserId());
                 teamDTO.setUserList(tsf.getMembers());
-                // Save team to database
-                performSaveTeam(teamDTO);
-                teamDTO.setTeamId(teamId);
-                projectDTO.setTeamTeamId(teamDTO);
-                // Save project to database
-                performSaveProject(projectDTO);
 
+                // Save project to database with team
+                performSaveTeamAndProject(teamDTO, projectDTO);
             }
         });
+        panel.addButton(submitButton);
+        vp.add(panel);
     }
 
-    private void performSaveProject(ProjectDTO projectDTO) {
+    private void performSaveTeamAndProject(TeamDTO teamDTO, ProjectDTO projectDTO) {
 
-        AsyncCallback<Pair<Boolean, String>> saveProject = new AsyncCallback<Pair<Boolean, String>>() {
-            @Override
-            public void onSuccess(Pair<Boolean, String> result) {
-                if (result == null) {
-                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing project saving!");
-                    amb2.show();
-                }
-                else if (!result.getFirst()) {
-                    AlertMessageBox amb2 = new AlertMessageBox("Error saving project!", result.getSecond());
-                    amb2.show();
-                }
-                else {
-                    AlertMessageBox amb3 = new AlertMessageBox("Message save Project", result.getSecond());
-                    amb3.show();
-                }
-            }
-            @Override
-            public void onFailure(Throwable caught) {
-                Window.alert(caught.getMessage());
-            }
-        };
-        System.out.println("Calling saveProject");
-        // TODO: project name duplication
-        service.saveProject(projectDTO, saveProject);
-    }
-
-    private void performSaveTeam(TeamDTO teamDTO) {
-
+        setProjectDTO(projectDTO);
+        setTeamDTO(teamDTO);
         AsyncCallback<Pair<Boolean, Integer>> saveTeam = new AsyncCallback<Pair<Boolean, Integer>>() {
             @Override
             public void onSuccess(Pair<Boolean, Integer> result) {
+
+                setTeamId(result.getSecond());
+                getTeamDTO().setTeamId(teamId);
+                getProjectDTO().setTeamTeamId(getTeamDTO());
+
+                AsyncCallback<Pair<Boolean, String>> saveProject = new AsyncCallback<Pair<Boolean, String>>() {
+                    @Override
+                    public void onSuccess(Pair<Boolean, String> result) {
+                        if (result == null) {
+                            AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing project saving!");
+                            amb2.show();
+                        }
+                        else if (!result.getFirst()) {
+                            AlertMessageBox amb2 = new AlertMessageBox("Error saving project!", result.getSecond());
+                            amb2.show();
+                        }
+                        else {
+                            AlertMessageBox amb3 = new AlertMessageBox("Message save Project", result.getSecond());
+                            amb3.show();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert(caught.getMessage());
+                    }
+                };
+                System.out.println("Calling saveProject");
+                service.saveProject(getProjectDTO(), saveProject);
+
+
                 if (result == null) {
                     AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing team saving!");
                     amb2.show();
@@ -272,25 +270,29 @@ public class ProjectRegistrationForm implements IsWidget {
                     AlertMessageBox amb2 = new AlertMessageBox("Error saving team!", result.getSecond().toString());
                     amb2.show();
                 }
-                else {
-                    AlertMessageBox amb3 = new AlertMessageBox("Message at save Team", result.getSecond().toString());
-                    amb3.show();
-                    /// set team Id to stored Team
-                    setTeamId(result.getSecond());
-                }
             }
             @Override
             public void onFailure(Throwable caught) {
                 Window.alert(caught.getMessage());
             }
         };
-        System.out.println("Calling saveTeam");
         service.saveTeam(teamDTO, saveTeam);
     }
 
-
     private void setProjectDTO(ProjectDTO dto) {
         this.projectDTO = dto;
+    }
+
+    public ProjectDTO getProjectDTO() {
+        return projectDTO;
+    }
+
+    public TeamDTO getTeamDTO() {
+        return teamDTO;
+    }
+
+    public void setTeamDTO(TeamDTO teamDTO) {
+        this.teamDTO = teamDTO;
     }
 
     public void setProductOwnerDTO(UserDTO productOwnerDTO) {

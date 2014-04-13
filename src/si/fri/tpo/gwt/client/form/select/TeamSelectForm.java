@@ -22,6 +22,7 @@ import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,16 +61,30 @@ public class TeamSelectForm implements IsWidget {
 
             con.add(field);
         }
-
         return panel;
     }
 
     public ListStore<UserDTO> getUsersStore() {
         return usersStore;
     }
+
     public List<UserDTO> getMembers() {
-        List<UserDTO> membersList = members.getAll();
-        return membersList;
+        List<UserDTO> returnUsers = new ArrayList<UserDTO>();
+        for (UserDTO userDTO : members.getAll()) {
+            UserDTO tempDTO = new UserDTO();
+            tempDTO.setAdmin(userDTO.isAdmin());
+            tempDTO.setActive(userDTO.isActive());
+            tempDTO.setUsername(userDTO.getUsername());
+            tempDTO.setLastName(userDTO.getLastName());
+            tempDTO.setFirstName(userDTO.getFirstName());
+            tempDTO.setSalt(userDTO.getSalt());
+            tempDTO.setEmail(userDTO.getEmail());
+            tempDTO.setPassword(userDTO.getPassword());
+            tempDTO.setTimeCreated(userDTO.getTimeCreated());
+            tempDTO.setUserId(userDTO.getUserId());
+            returnUsers.add(tempDTO);
+        }
+        return returnUsers;
     }
 
     public void displayAllUsers() {
