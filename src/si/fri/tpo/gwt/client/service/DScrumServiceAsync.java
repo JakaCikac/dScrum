@@ -34,6 +34,5 @@ public interface DScrumServiceAsync {
 
     void updateUser(UserDTO userDTO, boolean b, AsyncCallback<Pair<Boolean, String>> updateUser);
 
-
 }
 
