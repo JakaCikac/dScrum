@@ -132,6 +132,8 @@ public class UserDataEditForm implements IsWidget{
                                 java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
                                 saveUserDTO.setTimeCreated(sqlDate);
                         // hash retrieved password and set it
+                                //TODO: zgorn prazn spodn povn ne gres naprej
+                                //TODO: zgorn povn spodn prazen ne gres naprej
                         if (password.getText().equals("") && repassword.getText().equals("")) {
                             saveUserDTO.setPassword(userDTO.getPassword());
                         } else {

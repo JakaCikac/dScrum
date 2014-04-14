@@ -14,6 +14,7 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.*;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.form.validator.RegExValidator;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
@@ -91,6 +92,7 @@ public class UserRegistrationForm implements IsWidget {
         email = new TextField();
         email.setAllowBlank(false);
         email.setEmptyText("chuck@norris.com");
+        email.addValidator(new RegExValidator("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", "chuck@norris.com"));
         p.add(new FieldLabel(email, "Email"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         password = new PasswordField();
@@ -126,7 +128,6 @@ public class UserRegistrationForm implements IsWidget {
                 Radio newUserRB = (Radio) group.getValue();
             }
         });
-
         final TextButton submitButton = new TextButton("Submit");
         submitButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
@@ -166,6 +167,7 @@ public class UserRegistrationForm implements IsWidget {
                                 box.show();
                             }
                         }
+
                         @Override
                         public void onFailure(Throwable caught) {
                             Window.alert(caught.getMessage());
@@ -176,6 +178,7 @@ public class UserRegistrationForm implements IsWidget {
                 }
             }
         });
+
         panel.addButton(submitButton);
         vp.add(panel);
     }
