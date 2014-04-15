@@ -15,6 +15,7 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.PasswordField;
 import com.sencha.gxt.widget.core.client.form.TextField;
+import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
@@ -100,8 +101,17 @@ public class UserDataEditForm implements IsWidget{
                         amb.show();
                         repassword.setText("");
                         save = false;
-                    }
+                    }   // if confirm password entered and password empty block data change
                 }
+                if (password.getText().equals("") && !repassword.getText().equals("")) {
+                   save = false;
+                   Info.display("Confirm Password enetered", "No password to confirm, please fill out both Password and Confirm password fields.");
+                }
+                if (!password.getText().equals("") && repassword.getText().equals("")) {
+                    save = false;
+                    Info.display("Password enetered", "No confirmation password, please fill out both Password and Confirm password fields.");
+                }
+
                 changedUsername = false;
                 if(save) {
                     AsyncCallback<Pair<Boolean, String>> validationCallback = new AsyncCallback<Pair<Boolean, String>>() {
@@ -132,8 +142,6 @@ public class UserDataEditForm implements IsWidget{
                                 java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
                                 saveUserDTO.setTimeCreated(sqlDate);
                         // hash retrieved password and set it
-                                //TODO: zgorn prazn spodn povn ne gres naprej
-                                //TODO: zgorn povn spodn prazen ne gres naprej
                         if (password.getText().equals("") && repassword.getText().equals("")) {
                             saveUserDTO.setPassword(userDTO.getPassword());
                         } else {
