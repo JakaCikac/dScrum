@@ -20,6 +20,7 @@ import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.TeamDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
+import si.fri.tpo.gwt.client.session.SessionInfo;
 import si.fri.tpo.gwt.server.jpa.Project;
 import si.fri.tpo.gwt.server.jpa.Team;
 import si.fri.tpo.gwt.server.jpa.User;
@@ -79,9 +80,6 @@ public class SprintRegistrationForm implements IsWidget {
         finishDate.addValidator(new MinDateValidator(startDate.getValue()));
         p.add(new FieldLabel(finishDate, "Finish Date"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
-        startDate.setMaxValue(finishDate.getValue());
-        startDate.addValidator(new MaxDateValidator(finishDate.getValue()));
-
         velocity = new IntegerField();
         velocity.setAllowBlank(false);
         velocity.setAllowNegative(false);
@@ -104,6 +102,14 @@ public class SprintRegistrationForm implements IsWidget {
                 } else {
                     sprintDTO.setStatus("Waiting");
                 }
+                ProjectDTO projectDTO = SessionInfo.projectDTO;
+                List<SprintDTO> sprintDTOList = projectDTO.getSprintList();
+                if(sprintDTOList == null){
+                    sprintDTO.setSeqNumber(1);
+                } else {
+                    sprintDTO.setSeqNumber(sprintDTOList.size()+1);
+                }
+                sprintDTO.setProject(projectDTO);
 
                 performSaveSprint(sprintDTO);
 
@@ -139,6 +145,6 @@ public class SprintRegistrationForm implements IsWidget {
         };
         System.out.println("Calling saveSprint");
         // TODO: project name duplication
-        //service.saveSprint(sprintDTO, saveSprint);
+        service.saveSprint(sprintDTO, saveSprint);
     }
 }

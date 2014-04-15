@@ -17,6 +17,7 @@ import com.sencha.gxt.widget.core.client.form.FieldSet;
 import com.sencha.gxt.widget.core.client.form.PasswordField;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import si.fri.tpo.gwt.client.components.Pair;
+import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
@@ -25,6 +26,7 @@ import si.fri.tpo.gwt.client.session.SessionInfo;
 import si.fri.tpo.gwt.client.verification.PassHash;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent.DialogHideHandler;
+import si.fri.tpo.gwt.server.impl.fill.FillDTO;
 
 /**
  * Created by nanorax on 4/4/14.
@@ -138,6 +140,7 @@ public class LoginPanel  extends FormPanel implements IsWidget {
 
     private void checkUserRole(boolean isAdmin, UserDTO userDTO) {
         SessionInfo.userDTO = userDTO;
+
         // Check if user is administrator and display appropriate message
         if (isAdmin) {
             String message = "Welcome to dScrum admin " +

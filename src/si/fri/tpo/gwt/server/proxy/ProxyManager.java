@@ -14,6 +14,7 @@ public class ProxyManager {
     private static UserProxy userProxy = null;
     private static TeamProxy teamProxy = null;
     private static ProjectProxy projectProxy = null;
+    private static SprintProxy sprintProxy = null;
 
     public static EntityManagerFactory getEmf() {
         if (emf == null) {
@@ -44,5 +45,12 @@ public class ProxyManager {
             teamProxy = new TeamProxy(getEmf());
         }
         return teamProxy;
+    }
+
+    public static SprintProxy getSprintProxy() {
+        if (sprintProxy == null) {
+            sprintProxy = new SprintProxy(getEmf());
+        }
+        return sprintProxy;
     }
 }
