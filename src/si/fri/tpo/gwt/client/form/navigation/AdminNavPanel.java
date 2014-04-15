@@ -17,17 +17,20 @@ import si.fri.tpo.gwt.client.form.registration.ProjectRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
 import si.fri.tpo.gwt.client.form.search.SingleUserSearch;
 import si.fri.tpo.gwt.client.form.search.SingleUserSearchDialog;
+import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 //TODO: merge cnavpanel into admin nav panel!
 public class AdminNavPanel implements IsWidget {
     private DScrumServiceAsync service;
     private ContentPanel center;
+    private ContentPanel east;
     private FlowLayoutContainer con;
 
-    public AdminNavPanel(ContentPanel center, DScrumServiceAsync service) {
+    public AdminNavPanel(ContentPanel center, ContentPanel east, DScrumServiceAsync service) {
         this.service = service;
         this.center = center;
+        this.east = east;
     }
 
     private ContentPanel panel;
@@ -43,10 +46,14 @@ public class AdminNavPanel implements IsWidget {
 
     private void createAdminNavPanel() {
 
+        //ProjectSelectForm psf = new ProjectSelectForm(service);
+        //east.add(psf.asWidget());
+
         ContentPanel cp = new ContentPanel();
         cp.setHeaderVisible(false);
         cp.setAnimCollapse(false);
         cp.setBodyStyleName("pad-text");
+
 
         final TextButton users = new TextButton("User Management");
         users.addSelectHandler(new SelectEvent.SelectHandler() {

@@ -144,7 +144,7 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
             // open appropriate navigation panel and main form
-            AdminNavPanel adminNav = new AdminNavPanel(center, service);
+            AdminNavPanel adminNav = new AdminNavPanel(center, east, service);
 
             fillNavigationMainAndHeader(adminNav.asWidget(), null);//new UserSearchForm(service), message);
         } else {

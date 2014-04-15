@@ -35,4 +35,5 @@ public interface DScrumService extends RemoteService {
     public Pair<Boolean, String> saveProject(ProjectDTO projectDTO);
     public Pair<Boolean, String> updateUser(UserDTO userDTO, boolean b);
 
+    public List<ProjectDTO> findAllProjects();
 }
