@@ -68,7 +68,6 @@ public class ProjectImpl {
         System.out.println("Project to check in base: " + projectDTO.getName());
         Project existingProject = ProxyManager.getProjectProxy().findProjectByName(projectDTO.getName());
         try {
-            // TODO: complete project
             if (existingProject != null) {
                 System.out.println("Existing project exists!");
                 return Pair.of(false, "Project with this name already exists!");

@@ -1,16 +1,12 @@
 package si.fri.tpo.gwt.client.form.addedit;
 
 //import com.extjs.gxt.ui.client.widget.form.TextField;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import si.fri.tpo.gwt.client.dto.UserDTO;
-import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 /**
  * Created by nanorax on 07/04/14.
  */
 
-public class TeamMemberAddEditDialog extends AbstractAddEditDialog<UserDTO> {
+public class TeamMemberAddEditDialog extends com.sencha.gxt.widget.core.client.Dialog {
    /* public TeamMemberAddEditDialog(boolean addMode, AbstractAddEditForm parentForm, DScrumServiceAsync service, UserDTO dto) {
         super(addMode, service, parentForm);
 

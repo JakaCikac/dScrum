@@ -12,6 +12,7 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import si.fri.tpo.gwt.client.form.addedit.AdminUserDataEditForm;
 import si.fri.tpo.gwt.client.form.registration.ProjectRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
 import si.fri.tpo.gwt.client.form.search.SingleUserSearch;
@@ -43,7 +44,6 @@ public class AdminNavPanel implements IsWidget {
     private void createAdminNavPanel() {
 
         ContentPanel cp = new ContentPanel();
-
         cp.setHeaderVisible(false);
         cp.setAnimCollapse(false);
         cp.setBodyStyleName("pad-text");
@@ -72,12 +72,27 @@ public class AdminNavPanel implements IsWidget {
             public void onSelect(SelectEvent event) {
                 ProjectRegistrationForm pgf = new ProjectRegistrationForm(service);
                 center.clear();
-                System.out.println("Shooow uppp");
                 center.add(pgf.asWidget());
-                System.out.println("Showwwwed upp, or not?");
             }
         });
         cp.add(projectManagement);
+        con.add(cp);
+
+        cp = new ContentPanel();
+        cp.setHeaderVisible(false);
+        cp.setAnimCollapse(false);
+        cp.setBodyStyleName("pad-text");
+
+        final TextButton userEditing = new TextButton("User Editing");
+        userEditing.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                AdminUserDataEditForm audf = new AdminUserDataEditForm(service);
+                center.clear();
+                center.add(audf.asWidget());
+            }
+        });
+        cp.add(userEditing);
         con.add(cp);
 
         panel.setWidth(160);
