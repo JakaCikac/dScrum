@@ -20,6 +20,8 @@ public interface DScrumServiceAsync {
 
     void dummyUserTrigger(UserDTO userDTO, AsyncCallback<UserDTO> callback3);
 
+    void dummyTeamTrigger(TeamDTO teamDTO, AsyncCallback<TeamDTO> callback5);
+
     void validateUserData(String emailValue, AsyncCallback<Pair<Boolean, String>> validationCallback);
 
     void saveUser(UserDTO userDTO, Boolean value, AsyncCallback<Pair<Boolean, String>> saveUser);
@@ -35,5 +37,7 @@ public interface DScrumServiceAsync {
     void updateUser(UserDTO userDTO, boolean b, AsyncCallback<Pair<Boolean, String>> updateUser);
 
     void findAllProjects(AsyncCallback<List<ProjectDTO>> callback);
+
+    void dummyProjectTrigger(ProjectDTO projectDTO, AsyncCallback<ProjectDTO> callback6);
 }
 

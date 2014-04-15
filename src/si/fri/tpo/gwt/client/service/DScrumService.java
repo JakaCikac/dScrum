@@ -22,6 +22,8 @@ public interface DScrumService extends RemoteService {
 
     public UserDTO dummyUserTrigger(UserDTO userDTO);
 
+    public TeamDTO dummyTeamTrigger(TeamDTO teamDTO);
+
     public Pair<Boolean , String> validateUserData(String emailValue);
 
     public Pair<Boolean, String>  saveUser(UserDTO userDTO, Boolean isNew);
@@ -36,4 +38,6 @@ public interface DScrumService extends RemoteService {
     public Pair<Boolean, String> updateUser(UserDTO userDTO, boolean b);
 
     public List<ProjectDTO> findAllProjects();
+
+    public ProjectDTO dummyProjectTrigger(ProjectDTO projectDTO);
 }

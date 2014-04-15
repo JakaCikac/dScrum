@@ -46,8 +46,7 @@ public class AdminNavPanel implements IsWidget {
 
     private void createAdminNavPanel() {
 
-        //ProjectSelectForm psf = new ProjectSelectForm(service);
-        //east.add(psf.asWidget());
+
 
         ContentPanel cp = new ContentPanel();
         cp.setHeaderVisible(false);
@@ -101,6 +100,14 @@ public class AdminNavPanel implements IsWidget {
         });
         cp.add(userEditing);
         con.add(cp);
+
+        ProjectSelectForm psf = new ProjectSelectForm(service);
+        System.out.println("PGF");
+        center.add(psf.asWidget());
+        System.out.println("PGF3");
+        east.add(psf.asWidget());
+        System.out.println("PGF2");
+
 
         panel.setWidth(160);
 

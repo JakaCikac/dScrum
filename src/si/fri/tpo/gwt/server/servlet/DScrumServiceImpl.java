@@ -37,6 +37,11 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     }
 
     @Override
+    public TeamDTO dummyTeamTrigger(TeamDTO teamDTO) {
+        return new TeamDTO();
+    }
+
+    @Override
     public Pair<Boolean, String> validateUserData(String emailValue) {
 
         //if (!Validate.isEmail(emailValue)) {
@@ -85,6 +90,11 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     @Override
     public List<ProjectDTO> findAllProjects() {
         return ProjectImpl.getAllProject();
+    }
+
+    @Override
+    public ProjectDTO dummyProjectTrigger(ProjectDTO projectDTO) {
+        return new ProjectDTO();
     }
 
 }

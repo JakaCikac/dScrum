@@ -56,13 +56,13 @@ public class ProjectSelectForm implements IsWidget {
             projectList = new ListStore<ProjectDTO>(getModelKeyProvider());
             projectList.addSortInfo(new Store.StoreSortInfo<ProjectDTO>(getNameValue(), SortDir.ASC));
             getProjectList();
+            System.out.println("Size of project list: " + projectList.size());
+            System.out.println("Service call to project list after.");
             ListView<ProjectDTO, String> list1 = new ListView<ProjectDTO, String>(projectList, getNameValue());
 
             projectList = new ListStore<ProjectDTO>(getModelKeyProvider());
             projectList.addSortInfo(new Store.StoreSortInfo<ProjectDTO>(getNameValue(), SortDir.ASC));
 
-            ListView<ProjectDTO, String> list2 = new ListView<ProjectDTO, String>(projectList, getNameValue());
-            list2.getSelectionModel().setSelectionMode(Style.SelectionMode.MULTI);
 
             new ListViewDragSource<ProjectDTO>(list1).setGroup("top");
 
@@ -73,26 +73,6 @@ public class ProjectSelectForm implements IsWidget {
             panel.add(con);
             vp.add(panel);
 
-            panel = new FramedPanel();
-            panel.setHeadingText("ListView Insert");
-            panel.setPixelSize(500, 225);
-
-            con = new HorizontalLayoutContainer();
-
-            projectList = new ListStore<ProjectDTO>(getModelKeyProvider());
-
-            list1 = new ListView<ProjectDTO, String>(projectList, getNameValue());
-
-            new ListViewDragSource<ProjectDTO>(list1).setGroup("bottom");
-
-            ListViewDropTarget<ProjectDTO> target1 = new ListViewDropTarget<ProjectDTO>(list1);
-            target1.setFeedback(DND.Feedback.INSERT);
-            target1.setGroup("bottom");
-
-            con.add(list1, new HorizontalLayoutContainer.HorizontalLayoutData(.5, 1, new Margins(5)));
-
-            panel.add(con);
-            vp.add(panel);
         }
 
         return vp;
@@ -103,6 +83,7 @@ public class ProjectSelectForm implements IsWidget {
             @Override
             public void onSuccess(List<ProjectDTO> result) {
                 projectList.addAll(result);
+                System.out.println("Size: " + result.size());
             }
 
             @Override
@@ -111,6 +92,7 @@ public class ProjectSelectForm implements IsWidget {
             }
         };
         //TODO: write service
+        System.out.println("Service call to project list.");
         service.findAllProjects(callback);
     }
 

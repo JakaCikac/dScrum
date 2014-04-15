@@ -7,9 +7,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
-import si.fri.tpo.gwt.client.dto.DiscussionDTO;
-import si.fri.tpo.gwt.client.dto.SprintDTO;
-import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.dto.*;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import com.sencha.gxt.core.client.util.Margins;
@@ -133,6 +131,35 @@ public class DScrum implements IsWidget, EntryPoint {
             }
         };
         service.dummyUserTrigger(new UserDTO(), callback3);
+
+
+        AsyncCallback<TeamDTO> callback5 = new AsyncCallback<TeamDTO>() {
+
+            @Override
+            public void onSuccess(TeamDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyTeamTrigger(new TeamDTO(), callback5);
+
+        AsyncCallback<ProjectDTO> callback6 = new AsyncCallback<ProjectDTO>() {
+
+            @Override
+            public void onSuccess(ProjectDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyProjectTrigger(new ProjectDTO(), callback6);
 
         AsyncCallback<DiscussionDTO> callback4 = new AsyncCallback<DiscussionDTO>() {
 
