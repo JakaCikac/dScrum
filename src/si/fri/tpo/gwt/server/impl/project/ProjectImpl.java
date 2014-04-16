@@ -160,4 +160,42 @@ public class ProjectImpl {
         }
         return resList;
     }
+
+    public static ProjectDTO getProjectByName(String name) {
+        Project p;
+        p = ProxyManager.getProjectProxy().findProjectByName(name);
+        if (p != null) {
+            ProjectDTO projectDTO = new ProjectDTO();
+            projectDTO.setProjectId(p.getProjectId());
+            projectDTO.setName(p.getName());
+            projectDTO.setDescription(p.getDescription());
+            projectDTO.setStatus(p.getStatus());
+            Team team = p.getTeamTeamId();
+            if (team != null) {
+                TeamDTO teamDTO = new TeamDTO();
+                teamDTO.setTeamId(team.getTeamId());
+                teamDTO.setProductOwnerId(team.getProductOwnerId());
+                teamDTO.setScrumMasterId(team.getScrumMasterId());
+                ArrayList<UserDTO> userDTOList = new ArrayList<UserDTO>();
+                for (User user : team.getUserList()){
+                    UserDTO userDTO = new UserDTO();
+                    userDTO.setUserId(user.getUserId());
+                    userDTO.setUsername(user.getUsername());
+                    userDTO.setPassword(user.getPassword());
+                    userDTO.setFirstName(user.getFirstName());
+                    userDTO.setLastName(user.getLastName());
+                    userDTO.setEmail(user.getEmail());
+                    userDTO.setAdmin(user.getIsAdmin());
+                    userDTO.setSalt(user.getSalt());
+                    userDTO.setActive(user.getIsActive());
+                    userDTO.setTimeCreated(user.getTimeCreated());
+                    userDTOList.add(userDTO);
+                }
+                teamDTO.setUserList(userDTOList);
+                projectDTO.setTeamTeamId(teamDTO);
+            } else projectDTO.setTeamTeamId(null);
+            return projectDTO;
+        }
+        else return null;
+    }
 }
