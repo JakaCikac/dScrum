@@ -41,6 +41,7 @@ public class ProjectSelectForm implements IsWidget {
 
     private DScrumServiceAsync service;
     private ListStore<ProjectDTO> projectList;
+    private ProjectDTO selectedProject;
 
     private VerticalPanel vp;
 
@@ -80,7 +81,7 @@ public class ProjectSelectForm implements IsWidget {
             list1.getSelectionModel().addSelectionHandler(new SelectionHandler<ProjectDTO>() {
                 @Override
                 public void onSelection(SelectionEvent<ProjectDTO> event) {
-                    SessionInfo.projectDTO = event.getSelectedItem();
+                    getProjectDTO(event.getSelectedItem().getName());
                     Info.display("Selected project", "Project " + event.getSelectedItem().getName() + " selected.");
                 }
             });
@@ -89,6 +90,23 @@ public class ProjectSelectForm implements IsWidget {
 
         }
         return vp;
+    }
+
+    private void getProjectDTO(String name) {
+        AsyncCallback<ProjectDTO> callback = new AsyncCallback<ProjectDTO>() {
+            @Override
+            public void onSuccess(ProjectDTO result) {
+                selectedProject = result;
+                SessionInfo.projectDTO = selectedProject;
+                System.out.println("SelectedProject ID : " + selectedProject.getProjectId());
+                System.out.println("SessionProjectDTO ID: " + SessionInfo.projectDTO.getProjectId() );
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.findProjectByName(name, callback);
     }
 
     private void getProjectList() {
