@@ -41,5 +41,7 @@ public interface DScrumServiceAsync {
     void dummyProjectTrigger(ProjectDTO projectDTO, AsyncCallback<ProjectDTO> callback6);
 
     void findUserProjects(UserDTO userDTO, AsyncCallback<List<ProjectDTO>> callback);
+
+    void saveSprint(SprintDTO sprintDTO, AsyncCallback<Pair<Boolean,String>> saveSprint);
 }
 

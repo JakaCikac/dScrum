@@ -3,14 +3,17 @@ package si.fri.tpo.gwt.server.servlet;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
+import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.TeamDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.server.impl.login.LoginServiceImpl;
 import si.fri.tpo.gwt.server.impl.project.ProjectImpl;
 import si.fri.tpo.gwt.server.impl.registration.ProjectRegistrationServiceImpl;
+import si.fri.tpo.gwt.server.impl.registration.SprintRegistrationServiceImpl;
 import si.fri.tpo.gwt.server.impl.registration.TeamRegistrationServiceImpl;
 import si.fri.tpo.gwt.server.impl.registration.UserRegistrationServiceImpl;
+import si.fri.tpo.gwt.server.impl.sprint.SprintImpl;
 import si.fri.tpo.gwt.server.impl.team.TeamImpl;
 import si.fri.tpo.gwt.server.impl.user.UserImpl;
 
@@ -85,6 +88,11 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     @Override
     public Pair<Boolean, String> updateUser(UserDTO userDTO, boolean b) {
         return UserImpl.updateUser(userDTO, b);
+    }
+
+    @Override
+    public Pair<Boolean, String> saveSprint(SprintDTO sprintDTO) {
+        return SprintImpl.saveNewSprint(sprintDTO);
     }
 
     @Override

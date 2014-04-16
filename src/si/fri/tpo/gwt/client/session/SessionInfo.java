@@ -10,5 +10,6 @@ public class SessionInfo {
 
     public static UserDTO userDTO = null;
 
+    //TODO: izbira med različnimi projekti
     public static ProjectDTO projectDTO = null;
 }

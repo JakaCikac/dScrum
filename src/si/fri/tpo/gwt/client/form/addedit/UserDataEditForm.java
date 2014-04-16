@@ -26,7 +26,7 @@ import si.fri.tpo.gwt.client.verification.PassHash;
  * Created by nanorax on 07/04/14.
  */
 public class UserDataEditForm implements IsWidget{
-//TODO: Something :)
+
     private DScrumServiceAsync service;
     private VerticalPanel vp;
     private TextField username;
