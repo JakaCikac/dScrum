@@ -90,6 +90,9 @@ public class SprintRegistrationForm implements IsWidget {
         submitButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
+                //TODO: popravi prekrivanje datumov med sprinti
+                //TODO: popravi povečevanje seq_number
+                //TODO: popravi stanje sprinta
                 // Get Sprint Start Date
                 // Get Sprint Finish Date
                 // Get Sprint Velocity
