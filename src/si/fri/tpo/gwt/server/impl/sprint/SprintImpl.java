@@ -38,6 +38,7 @@ public class SprintImpl {
             team.setProductOwnerId(projectDTO.getTeamTeamId().getProductOwnerId());
 
             List<User> userList = new ArrayList<User>();
+            System.out.println("Team's userList:" + projectDTO.getTeamTeamId().getUserList().size());
             if (projectDTO.getTeamTeamId().getUserList() != null) {
                 for (UserDTO userDTO : projectDTO.getTeamTeamId().getUserList()) {
                     User user = new User();
@@ -56,6 +57,7 @@ public class SprintImpl {
                 team.setUserList(userList);
             } else return Pair.of(false, "No user list when saving team.");
             project.setTeamTeamId(team);
+
             s.setProject(project);
             try {
                 if (s == null)

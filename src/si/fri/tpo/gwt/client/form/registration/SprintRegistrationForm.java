@@ -103,6 +103,7 @@ public class SprintRegistrationForm implements IsWidget {
                     sprintDTO.setStatus("Waiting");
                 }
                 ProjectDTO projectDTO = SessionInfo.projectDTO;
+                System.out.println(projectDTO.getProjectId());
                 List<SprintDTO> sprintDTOList = projectDTO.getSprintList();
                 if(sprintDTOList == null){
                     sprintDTO.setSeqNumber(1);
