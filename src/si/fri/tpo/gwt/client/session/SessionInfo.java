@@ -1,5 +1,6 @@
 package si.fri.tpo.gwt.client.session;
 
+import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 
 /**
@@ -8,4 +9,6 @@ import si.fri.tpo.gwt.client.dto.UserDTO;
 public class SessionInfo {
 
     public static UserDTO userDTO = null;
+
+    public static ProjectDTO projectDTO = null;
 }

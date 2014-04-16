@@ -31,7 +31,6 @@ import com.sencha.gxt.widget.core.client.event.DialogHideEvent.DialogHideHandler
  */
 public class LoginPanel  extends FormPanel implements IsWidget {
 
-    private Grid grid;
     private DScrum dscrum;
     private DScrumServiceAsync service;
     private PasswordField password;
@@ -144,7 +143,7 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
             // open appropriate navigation panel and main form
-            AdminNavPanel adminNav = new AdminNavPanel(center, east, service);
+            AdminNavPanel adminNav = new AdminNavPanel(center, west, service);
 
             fillNavigationMainAndHeader(adminNav.asWidget(), null);//new UserSearchForm(service), message);
         } else {
@@ -155,7 +154,7 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
             // open appropriate navigation panel and main form
-              UserNavPanel userNavPanel = new UserNavPanel(service, center);
+              UserNavPanel userNavPanel = new UserNavPanel(service, center, west);
               fillNavigationMainAndHeader(userNavPanel.asWidget(), null); // TODO: dodaj se main form
 
 
@@ -170,12 +169,15 @@ public class LoginPanel  extends FormPanel implements IsWidget {
         logoutButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                // TODO: kill session?!
                 // clear the current panel
                 vp.clear();
                 south.clear();
                 east.clear();
+                west.clear();
                 center.clear();
+                // reset session variables
+                SessionInfo.userDTO = null;
+                SessionInfo.projectDTO = null;
                 // display new login panel
                 center.add(new LoginPanel(dscrum, center, north, south, east, west, service).asWidget());            }
         });

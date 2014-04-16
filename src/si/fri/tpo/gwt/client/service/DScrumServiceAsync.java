@@ -39,5 +39,7 @@ public interface DScrumServiceAsync {
     void findAllProjects(AsyncCallback<List<ProjectDTO>> callback);
 
     void dummyProjectTrigger(ProjectDTO projectDTO, AsyncCallback<ProjectDTO> callback6);
+
+    void findUserProjects(UserDTO userDTO, AsyncCallback<List<ProjectDTO>> callback);
 }
 

@@ -24,13 +24,13 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 public class AdminNavPanel implements IsWidget {
     private DScrumServiceAsync service;
     private ContentPanel center;
-    private ContentPanel east;
+    private ContentPanel west;
     private FlowLayoutContainer con;
 
-    public AdminNavPanel(ContentPanel center, ContentPanel east, DScrumServiceAsync service) {
+    public AdminNavPanel(ContentPanel center, ContentPanel west, DScrumServiceAsync service) {
         this.service = service;
         this.center = center;
-        this.east = east;
+        this.west = west;
     }
 
     private ContentPanel panel;
@@ -46,13 +46,10 @@ public class AdminNavPanel implements IsWidget {
 
     private void createAdminNavPanel() {
 
-
-
         ContentPanel cp = new ContentPanel();
         cp.setHeaderVisible(false);
         cp.setAnimCollapse(false);
         cp.setBodyStyleName("pad-text");
-
 
         final TextButton users = new TextButton("User Management");
         users.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -102,21 +99,11 @@ public class AdminNavPanel implements IsWidget {
         con.add(cp);
 
         ProjectSelectForm psf = new ProjectSelectForm(service);
-        System.out.println("PGF");
-        center.add(psf.asWidget());
-        System.out.println("PGF3");
-        east.add(psf.asWidget());
-        System.out.println("PGF2");
+        west.setHeadingText("Project list");
+        west.add(psf.asWidget());
 
 
         panel.setWidth(160);
 
-    }
-
-    private ModelData newItem(String text, String iconStyle) {
-        ModelData m = new BaseModelData();
-        m.set("name", text);
-        m.set("icon", iconStyle);
-        return m;
     }
 }

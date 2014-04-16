@@ -118,4 +118,46 @@ public class ProjectImpl {
         return Pair.of(true, "");
     }
 
+    public static List<ProjectDTO> getUserProject(UserDTO dto) {
+        //Get project list
+        List<Project> projectList;
+        // retrieve project list from JPA controller
+        projectList = ProxyManager.getProjectProxy().getUserProjectsList(dto.getUserId());
+
+        ArrayList<ProjectDTO> resList = new ArrayList<ProjectDTO>();
+        ProjectDTO projectDTO;
+        for (Project p : projectList) {
+            projectDTO = new ProjectDTO();
+            projectDTO.setName(p.getName());
+            projectDTO.setDescription(p.getDescription());
+            projectDTO.setStatus(p.getStatus());
+            Team team = p.getTeamTeamId();
+            if (team != null) {
+                TeamDTO teamDTO = new TeamDTO();
+                teamDTO.setTeamId(team.getTeamId());
+                teamDTO.setProductOwnerId(team.getProductOwnerId());
+                teamDTO.setScrumMasterId(team.getScrumMasterId());
+                ArrayList<UserDTO> userDTOList = new ArrayList<UserDTO>();
+                for (User user : team.getUserList()){
+                    UserDTO userDTO = new UserDTO();
+                    userDTO.setUserId(user.getUserId());
+                    userDTO.setUsername(user.getUsername());
+                    userDTO.setPassword(user.getPassword());
+                    userDTO.setFirstName(user.getFirstName());
+                    userDTO.setLastName(user.getLastName());
+                    userDTO.setEmail(user.getEmail());
+                    userDTO.setAdmin(user.getIsAdmin());
+                    userDTO.setSalt(user.getSalt());
+                    userDTO.setActive(user.getIsActive());
+                    userDTO.setTimeCreated(user.getTimeCreated());
+                    userDTOList.add(userDTO);
+                }
+                teamDTO.setUserList(userDTOList);
+                projectDTO.setTeamTeamId(teamDTO);
+            }
+            else projectDTO.setTeamTeamId(null); //TODO: possible break
+            resList.add(projectDTO);
+        }
+        return resList;
+    }
 }

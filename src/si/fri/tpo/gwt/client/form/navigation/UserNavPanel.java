@@ -12,6 +12,7 @@ import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
 import si.fri.tpo.gwt.client.form.registration.SprintRegistrationForm;
+import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 /**
@@ -22,10 +23,12 @@ public class UserNavPanel implements IsWidget{
     private DScrumServiceAsync service;
     private ContentPanel center;
     private FlowLayoutContainer con;
+    private ContentPanel west;
 
-    public UserNavPanel(DScrumServiceAsync service, ContentPanel center) {
+    public UserNavPanel(DScrumServiceAsync service, ContentPanel center, ContentPanel west) {
         this.center = center;
         this.service = service;
+        this.west = west;
     }
 
     private ContentPanel panel;
@@ -75,14 +78,11 @@ public class UserNavPanel implements IsWidget{
         cp.add(sprintRegistrationB);
         con.add(cp);
 
-        panel.setWidth(270);
-    }
+        ProjectSelectForm psf = new ProjectSelectForm(service);
+        west.setHeadingText("Project list");
+        west.add(psf.asWidget());
 
-    private ModelData newItem(String text, String iconStyle) {
-        ModelData m = new BaseModelData();
-        m.set("name", text);
-        m.set("icon", iconStyle);
-        return m;
+        panel.setWidth(270);
     }
 
 }

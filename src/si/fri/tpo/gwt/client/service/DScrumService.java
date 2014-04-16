@@ -40,4 +40,6 @@ public interface DScrumService extends RemoteService {
     public List<ProjectDTO> findAllProjects();
 
     public ProjectDTO dummyProjectTrigger(ProjectDTO projectDTO);
+
+    public List<ProjectDTO> findUserProjects(UserDTO userDTO);
 }

@@ -49,6 +49,8 @@ public class DScrum implements IsWidget, EntryPoint {
             ContentPanel south = new ContentPanel();
             ContentPanel north = new ContentPanel();
             ContentPanel west = new ContentPanel();
+            west.setCollapsible(false);
+            west.setResize(false);
 
             center.setHeadingText("DScrum application");
             LoginPanel lp = new LoginPanel(this, center, north, south, east, west,  service);

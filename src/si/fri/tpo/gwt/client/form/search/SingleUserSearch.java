@@ -64,8 +64,6 @@ public class SingleUserSearch implements IsWidget {
             HorizontalPanel hp = new HorizontalPanel();
             ContentPanel panel;
 
-
-
             searchField = new TextField();
             panel = new ContentPanel();
             panel.setHeaderVisible(false);
