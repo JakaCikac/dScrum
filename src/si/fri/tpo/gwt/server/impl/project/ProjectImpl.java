@@ -1,11 +1,10 @@
 package si.fri.tpo.gwt.server.impl.project;
 
 import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.dto.ProjectDTO;
-import si.fri.tpo.gwt.client.dto.TeamDTO;
-import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.dto.*;
 import si.fri.tpo.gwt.server.impl.fill.FillDTO;
 import si.fri.tpo.gwt.server.jpa.Project;
+import si.fri.tpo.gwt.server.jpa.Sprint;
 import si.fri.tpo.gwt.server.jpa.Team;
 import si.fri.tpo.gwt.server.jpa.User;
 import si.fri.tpo.gwt.server.proxy.ProxyManager;
@@ -194,6 +193,25 @@ public class ProjectImpl {
                 teamDTO.setUserList(userDTOList);
                 projectDTO.setTeamTeamId(teamDTO);
             } else projectDTO.setTeamTeamId(null);
+
+            List<SprintDTO> sprintDTOList = new ArrayList<SprintDTO>();
+            if (sprintDTOList != null) {
+                for (Sprint s : p.getSprintList()) {
+                    SprintDTO sprintDTO = new SprintDTO();
+                    SprintPKDTO sprintPKDTO = new SprintPKDTO();
+                    sprintPKDTO.setSprintId(s.getSprintPK().getSprintId());
+                    sprintPKDTO.setProjectProjectId(s.getSprintPK().getProjectProjectId());
+                    sprintDTO.setSprintPK(sprintPKDTO);
+                    sprintDTO.setSeqNumber(s.getSeqNumber());
+                    sprintDTO.setStatus(s.getStatus());
+                    sprintDTO.setStartDate(s.getStartDate());
+                    sprintDTO.setEndDate(s.getEndDate());
+                    sprintDTO.setVelocity(s.getVelocity());
+                    sprintDTOList.add(sprintDTO);
+                }
+                projectDTO.setSprintList(sprintDTOList);
+
+            } else projectDTO.setSprintList(null);
             return projectDTO;
         }
         else return null;

@@ -99,7 +99,7 @@ public class ProjectSelectForm implements IsWidget {
                 selectedProject = result;
                 SessionInfo.projectDTO = selectedProject;
                 System.out.println("SelectedProject ID : " + selectedProject.getProjectId());
-                System.out.println("SessionProjectDTO ID: " + SessionInfo.projectDTO.getProjectId() );
+                System.out.println("SessionProjectDTO ID: " + selectedProject.getSprintList().size() );
             }
             @Override
             public void onFailure(Throwable caught) {

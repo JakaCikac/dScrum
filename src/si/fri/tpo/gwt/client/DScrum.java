@@ -118,7 +118,21 @@ public class DScrum implements IsWidget, EntryPoint {
                 Window.alert(caught.getMessage());
             }
         };
-        //service.dummySprintTrigger(new SprintDTO(), callback2);
+        service.dummySprintTrigger(new SprintDTO(), callback2);
+
+        AsyncCallback<SprintPKDTO> callbackPKDTO = new AsyncCallback<SprintPKDTO>() {
+
+            @Override
+            public void onSuccess(SprintPKDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummySprintPKTrigger(new SprintPKDTO(), callbackPKDTO);
 
         AsyncCallback<UserDTO> callback3 = new AsyncCallback<UserDTO>() {
 
@@ -177,6 +191,7 @@ public class DScrum implements IsWidget, EntryPoint {
             }
         };
         //service.dummyDiscussionTrigger(new DiscussionDTO(), callback4);
+
 
     }
 }

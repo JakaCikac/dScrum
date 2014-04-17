@@ -2,10 +2,7 @@ package si.fri.tpo.gwt.server.servlet;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.dto.ProjectDTO;
-import si.fri.tpo.gwt.client.dto.SprintDTO;
-import si.fri.tpo.gwt.client.dto.TeamDTO;
-import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.dto.*;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.server.impl.login.LoginServiceImpl;
 import si.fri.tpo.gwt.server.impl.project.ProjectImpl;
@@ -113,6 +110,16 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     @Override
     public ProjectDTO findProjectByName(String name) {
         return ProjectImpl.getProjectByName(name);
+    }
+
+    @Override
+    public SprintDTO dummySprintTrigger(SprintDTO sprintDTO) {
+        return new SprintDTO();
+    }
+
+    @Override
+    public SprintPKDTO dummySprintPKTrigger(SprintPKDTO sprintPKDTO) {
+        return new SprintPKDTO();
     }
 
 }

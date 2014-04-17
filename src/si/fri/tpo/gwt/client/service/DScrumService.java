@@ -3,10 +3,7 @@ package si.fri.tpo.gwt.client.service;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.dto.ProjectDTO;
-import si.fri.tpo.gwt.client.dto.SprintDTO;
-import si.fri.tpo.gwt.client.dto.TeamDTO;
-import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.dto.*;
 
 import java.util.List;
 
@@ -48,4 +45,8 @@ public interface DScrumService extends RemoteService {
     public List<ProjectDTO> findUserProjects(UserDTO userDTO);
 
     public ProjectDTO findProjectByName(String name);
+
+    SprintDTO dummySprintTrigger(SprintDTO sprintDTO);
+
+    SprintPKDTO dummySprintPKTrigger(SprintPKDTO sprintPKDTO);
 }

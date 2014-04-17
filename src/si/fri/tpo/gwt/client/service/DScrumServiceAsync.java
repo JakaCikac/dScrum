@@ -2,10 +2,7 @@ package si.fri.tpo.gwt.client.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.dto.ProjectDTO;
-import si.fri.tpo.gwt.client.dto.TeamDTO;
-import si.fri.tpo.gwt.client.dto.SprintDTO;
-import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.dto.*;
 
 import java.util.List;
 
@@ -45,5 +42,9 @@ public interface DScrumServiceAsync {
     void saveSprint(SprintDTO sprintDTO, AsyncCallback<Pair<Boolean,String>> saveSprint);
 
     void findProjectByName(String name, AsyncCallback<ProjectDTO> callback);
+
+    void dummySprintTrigger(SprintDTO sprintDTO, AsyncCallback<SprintDTO> callback2);
+
+    void dummySprintPKTrigger(SprintPKDTO sprintPKDTO, AsyncCallback<SprintPKDTO> callbackPKDTO);
 }
 
