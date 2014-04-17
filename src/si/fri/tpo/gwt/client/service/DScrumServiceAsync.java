@@ -47,5 +47,9 @@ public interface DScrumServiceAsync {
     void findProjectByName(String name, AsyncCallback<ProjectDTO> callback);
 
     void findUserById(int userId, AsyncCallback<UserDTO> getOrigScrumMasterDTO);
+
+    void updateTeam(TeamDTO teamDTO, String name, boolean withProject, AsyncCallback<Pair<Boolean, Integer>> updateTeam);
+
+    void updateProject(ProjectDTO projectDTO, boolean changedProjectName, String originalProjectName, AsyncCallback<Pair<Boolean,String>> updateProject);
 }
 

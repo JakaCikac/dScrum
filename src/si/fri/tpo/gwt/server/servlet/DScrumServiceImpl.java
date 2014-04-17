@@ -81,6 +81,16 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     }
 
     @Override
+    public Pair<Boolean, Integer> updateTeam(TeamDTO teamDTO, String name, boolean withProject) {
+            return TeamImpl.updateTeamWithProject(teamDTO);
+    }
+
+    @Override
+    public Pair<Boolean, String> updateProject(ProjectDTO projectDTO, boolean changedProjectName, String originalProjectName) {
+        return ProjectImpl.updateProject(projectDTO,changedProjectName, originalProjectName);
+    }
+
+    @Override
     public Pair<Boolean, String> saveProject(ProjectDTO projectDTO) {
         return ProjectRegistrationServiceImpl.saveProject(projectDTO);
     }

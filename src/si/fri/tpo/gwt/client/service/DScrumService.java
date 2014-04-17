@@ -50,4 +50,8 @@ public interface DScrumService extends RemoteService {
     public ProjectDTO findProjectByName(String name);
 
     public UserDTO findUserById(int userId);
+
+    public Pair<Boolean, Integer> updateTeam(TeamDTO teamDTO, String name, boolean withProject);
+
+    public Pair<Boolean, String> updateProject(ProjectDTO projectDTO, boolean changedProjectName, String originalProjectName);
 }

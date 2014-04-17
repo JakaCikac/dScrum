@@ -16,19 +16,16 @@ public class UserImpl {
 
 
     public static Pair<Boolean, String> saveNewUser(Boolean newUser, UserDTO dto) {
-        System.out.println("OWARAT sAVAVA userereere");
         try {
-
             // Additional duplication control
             if (newUser) {
                 // check for such username in database
-                System.out.println("Username to check in base: " + dto.getUsername());
-                User existingUser = ProxyManager.getUserProxy().findUserByUsername(dto.getUsername());;
+                User existingUser = ProxyManager.getUserProxy().findUserByUsername(dto.getUsername());
 
                 if (existingUser != null) {
                     System.out.println("Existing user exists!");
                     return Pair.of(false, "User with this username already exists!");
-                } else System.out.println("User check passed, no existing user");
+                }
 
                 User u = new User();
                 System.out.println("DTO username = " + dto.getUsername());
@@ -91,13 +88,9 @@ public class UserImpl {
     }
 
     public static Pair<Boolean, String> updateUser(UserDTO userDTO, boolean changedUsername) {
-        System.out.println("OMGGMGMGMGM update userereere");
         try {
-
             // Additional duplication control
-
             // check for such username in database
-            System.out.println("Username to check in base: " + userDTO.getUsername() + " with changed flag " + changedUsername);
             User existingUser = null;
             if (changedUsername) {
                 existingUser = ProxyManager.getUserProxy().findUserByUsername(userDTO.getUsername());
@@ -107,40 +100,25 @@ public class UserImpl {
             if (existingUser != null && changedUsername) {
                 System.out.println("Existing user exists!");
                 return Pair.of(false, "User with this username already exists!");
-            } else System.out.println("User check passed, no existing user");
+            }
 
             User u = ProxyManager.getUserProxy().findUserById(userDTO.getUserId());
             //System.out.println("DTO getUsername = " + userDTO.getUsername());
             //u.setUserId(new Integer(userDTO.getUserId()));
-            System.out.println("\n\n u getUserId = " + u.getUserId());
             u.setLastName(userDTO.getLastName());
-            System.out.println("u getLastName = " + u.getLastName());
             u.setFirstName(userDTO.getFirstName());
-            System.out.println("u getFirstName = " + u.getFirstName());
             u.setEmail(userDTO.getEmail());
-            System.out.println("u getEmail = " + u.getEmail());
             u.setTimeCreated(userDTO.getTimeCreated());
-            System.out.println("u getTimeCreated = " + u.getTimeCreated());
             u.setUsername(userDTO.getUsername());
-            System.out.println("u getUsername = " + u.getUsername());
             u.setSalt(userDTO.getSalt());
-            System.out.println("u getSalt = " + u.getSalt());
             u.setIsActive(userDTO.isActive());
-            System.out.println("u getIsActive = " + u.getIsActive());
             u.setIsAdmin(userDTO.isAdmin());
-            System.out.println("u getIsAdmin = " + u.getIsAdmin());
             u.setPassword(userDTO.getPassword());
-            System.out.println("u getPassword = " + u.getPassword());
 
-            System.out.println("userFill completed");
             try {
                 if (u == null)
                     return Pair.of(false, "Data error!");
-                System.out.println("Calling JPA controller update user, with username " + u.getUsername());
-                // TODO: test
                 ProxyManager.getUserProxy().edit(u);
-                // LALAALAL
-                System.out.println("NO UPDATE.");
 
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
@@ -152,7 +130,6 @@ public class UserImpl {
             return Pair.of(false, e.getMessage());
         }
         return Pair.of(true, "User should be updated, all good..");
-
     }
 
     public static UserDTO findUserById(int userId) {

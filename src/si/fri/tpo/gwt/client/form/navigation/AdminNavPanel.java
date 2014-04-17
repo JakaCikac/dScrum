@@ -113,7 +113,7 @@ public class AdminNavPanel implements IsWidget {
                 if (SessionInfo.projectDTO == null) {
                     Info.display("No project selected", "Please select project from the list on the left." );
                 } else {
-                    ProjecDataEditForm pdef = new ProjecDataEditForm(service);
+                    ProjecDataEditForm pdef = new ProjecDataEditForm(service, center, west);
                     center.clear();
                     center.add(pdef.asWidget());
                 }
