@@ -45,5 +45,7 @@ public interface DScrumServiceAsync {
     void saveSprint(SprintDTO sprintDTO, AsyncCallback<Pair<Boolean,String>> saveSprint);
 
     void findProjectByName(String name, AsyncCallback<ProjectDTO> callback);
+
+    void findUserById(int userId, AsyncCallback<UserDTO> getOrigScrumMasterDTO);
 }
 

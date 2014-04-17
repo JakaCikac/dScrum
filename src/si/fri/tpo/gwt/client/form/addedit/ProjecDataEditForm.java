@@ -1,5 +1,4 @@
-package si.fri.tpo.gwt.client.form.registration;
-
+package si.fri.tpo.gwt.client.form.addedit;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -7,12 +6,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.core.client.util.ToggleGroup;
-import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
-import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.*;
@@ -27,16 +24,15 @@ import si.fri.tpo.gwt.client.form.search.SingleUserSearchCallback;
 import si.fri.tpo.gwt.client.form.search.SingleUserSearchDialog;
 import si.fri.tpo.gwt.client.form.select.TeamSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
+import si.fri.tpo.gwt.client.session.SessionInfo;
+import si.fri.tpo.gwt.client.verification.PassHash;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 
 /**
  * Created by nanorax on 07/04/14.
  */
-public class ProjectRegistrationForm implements IsWidget {
+public class ProjecDataEditForm implements IsWidget{
 
     private DScrumServiceAsync service;
     private VerticalPanel vp;
@@ -53,6 +49,8 @@ public class ProjectRegistrationForm implements IsWidget {
     private TeamDTO teamDTO;
     private UserDTO scrumMasterDTO;
     private UserDTO productOwnerDTO;
+    private UserDTO origScrumMasterDTO;
+    private UserDTO origProductOwnerDTO;
 
     private TextButton submitButton;
     private TextButton userSearchButton;
@@ -68,22 +66,22 @@ public class ProjectRegistrationForm implements IsWidget {
     private TeamSelectForm tsf;
     private int teamId;
 
-     public Widget asWidget() {
-         if (vp == null) {
-             vp = new VerticalPanel();
-             vp.setSpacing(10);
-             createProjectForm();
-         }
-         return vp;
+    public Widget asWidget() {
+        if (vp == null) {
+            vp = new VerticalPanel();
+            vp.setSpacing(10);
+            createProjectForm();
+        }
+        return vp;
     }
 
-    public ProjectRegistrationForm(DScrumServiceAsync service) {
+    public ProjecDataEditForm(DScrumServiceAsync service) {
         this.service = service;
     }
 
     private void createProjectForm() {
         FramedPanel panel = new FramedPanel();
-        panel.setHeadingText("Project Creation Form");
+        panel.setHeadingText("Project Data Edit Form");
         panel.setWidth(320);
         panel.setBodyStyle("background: none; padding: 15px");
 
@@ -193,10 +191,12 @@ public class ProjectRegistrationForm implements IsWidget {
         FieldLabel lol = new FieldLabel();
         lol.setText("Team members");
         p.add(lol);
-        tsf = new TeamSelectForm(service, true);
+        // don't fill data
+        tsf = new TeamSelectForm(service, false);
         p.add(tsf.asWidget(), new VerticalLayoutContainer.VerticalLayoutData(-1, -1));
 
-        submitButton = new TextButton("Submit");
+
+        submitButton = new TextButton("Save");
         submitButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
@@ -222,7 +222,49 @@ public class ProjectRegistrationForm implements IsWidget {
             }
         });
         panel.addButton(submitButton);
+        // get project data
+        fillFormData();
         vp.add(panel);
+    }
+
+    public void fillFormData() {
+        projectDTO = SessionInfo.projectDTO;
+        projectName.setText(projectDTO.getName());
+        description.setText(projectDTO.getDescription());
+        getScrumMasterName(projectDTO.getTeamTeamId().getScrumMasterId());
+        getProductOwnerName(projectDTO.getTeamTeamId().getProductOwnerId());
+        tsf.setMembers(projectDTO.getTeamTeamId().getUserList());
+        tsf.setUserList(projectDTO.getTeamTeamId().getUserList());
+    }
+
+    private void getScrumMasterName(int scrumMasterId) {
+        AsyncCallback<UserDTO> getOrigScrumMasterDTO = new AsyncCallback<UserDTO>() {
+            @Override
+            public void onSuccess(UserDTO result) {
+                setOrigScrumMasterDTO(result);
+                selScrumMaster.setText(getOrigScrumMasterDTO().getUsername());
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.findUserById(scrumMasterId, getOrigScrumMasterDTO);
+    }
+
+    private void getProductOwnerName(int productOwnerId) {
+        AsyncCallback<UserDTO> getOrigProductOwnerDTO = new AsyncCallback<UserDTO>() {
+            @Override
+            public void onSuccess(UserDTO result) {
+                setOrigProductOwnerDTO(result);
+                selProductOwner.setText(getOrigProductOwnerDTO().getUsername());
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.findUserById(productOwnerId, getOrigProductOwnerDTO);
     }
 
     private void performSaveTeamAndProject(TeamDTO teamDTO, ProjectDTO projectDTO) {
@@ -304,6 +346,22 @@ public class ProjectRegistrationForm implements IsWidget {
 
     public void setTeamId(int teamId) {
         this.teamId = teamId;
+    }
+
+    public UserDTO getOrigScrumMasterDTO() {
+        return origScrumMasterDTO;
+    }
+
+    public void setOrigScrumMasterDTO(UserDTO origScrumMasterDTO) {
+        this.origScrumMasterDTO = origScrumMasterDTO;
+    }
+
+    public UserDTO getOrigProductOwnerDTO() {
+        return origProductOwnerDTO;
+    }
+
+    public void setOrigProductOwnerDTO(UserDTO origProductOwnerDTO) {
+        this.origProductOwnerDTO = origProductOwnerDTO;
     }
 
 }

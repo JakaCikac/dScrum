@@ -19,6 +19,7 @@ import com.sencha.gxt.data.shared.Store;
 import com.sencha.gxt.dnd.core.client.DND;
 import com.sencha.gxt.dnd.core.client.ListViewDragSource;
 import com.sencha.gxt.dnd.core.client.ListViewDropTarget;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.ListViewSelectionModel;
@@ -28,6 +29,7 @@ import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
+import si.fri.tpo.gwt.client.form.addedit.ProjecDataEditForm;
 
 
 import java.util.List;
@@ -42,11 +44,14 @@ public class ProjectSelectForm implements IsWidget {
     private DScrumServiceAsync service;
     private ListStore<ProjectDTO> projectList;
     private ProjectDTO selectedProject;
+    private ProjecDataEditForm pdef;
+    private ContentPanel center;
 
     private VerticalPanel vp;
 
-    public ProjectSelectForm(DScrumServiceAsync service) {
+    public ProjectSelectForm(DScrumServiceAsync service, ContentPanel center) {
         this.service = service;
+        this.center = center;
     }
 
     @Override
@@ -83,6 +88,8 @@ public class ProjectSelectForm implements IsWidget {
                 public void onSelection(SelectionEvent<ProjectDTO> event) {
                     getProjectDTO(event.getSelectedItem().getName());
                     Info.display("Selected project", "Project " + event.getSelectedItem().getName() + " selected.");
+                    // TODO: WHen you have a project wall, redirect to project wall
+                    center.clear();
                 }
             });
             panel.add(con);
@@ -100,6 +107,8 @@ public class ProjectSelectForm implements IsWidget {
                 SessionInfo.projectDTO = selectedProject;
                 System.out.println("SelectedProject ID : " + selectedProject.getProjectId());
                 System.out.println("SessionProjectDTO ID: " + SessionInfo.projectDTO.getProjectId() );
+                // TODO: uh oh, tole ne bo slo tako, moras pogruntat kako osvzit data edit forme, ce se project zamenja med urejanjem
+                //pdef.fillFormData();
             }
             @Override
             public void onFailure(Throwable caught) {

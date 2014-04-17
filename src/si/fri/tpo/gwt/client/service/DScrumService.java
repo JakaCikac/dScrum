@@ -48,4 +48,6 @@ public interface DScrumService extends RemoteService {
     public List<ProjectDTO> findUserProjects(UserDTO userDTO);
 
     public ProjectDTO findProjectByName(String name);
+
+    public UserDTO findUserById(int userId);
 }

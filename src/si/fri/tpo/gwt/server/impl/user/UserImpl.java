@@ -77,12 +77,17 @@ public class UserImpl {
 
     public static UserDTO findUserByUsername(String username) {
         User user;
-        user = ProxyManager.getUserProxy().findUserByUsername(username);
-        if (user != null) {
-            UserDTO userDTO = FillDTO.fillUserDTO(user);
-            return userDTO;
+        try {
+            user = ProxyManager.getUserProxy().findUserByUsername(username);
+            if (user != null) {
+                UserDTO userDTO = FillDTO.fillUserDTO(user);
+                return userDTO;
+            } else return null;
+        } catch (Exception e) {
+                System.out.println("Exception while fetching user by username");
+                System.err.println("Error: " + e.getMessage());
         }
-        else return null;
+        return null;
     }
 
     public static Pair<Boolean, String> updateUser(UserDTO userDTO, boolean changedUsername) {
@@ -148,5 +153,20 @@ public class UserImpl {
         }
         return Pair.of(true, "User should be updated, all good..");
 
+    }
+
+    public static UserDTO findUserById(int userId) {
+        User user;
+        try {
+            user = ProxyManager.getUserProxy().findUserById(userId);
+            if (user != null) {
+                UserDTO userDTO = FillDTO.fillUserDTO(user);
+                return userDTO;
+            } else return null;
+        } catch (Exception e) {
+            System.out.println("Exception while fetching user by id");
+            System.err.println("Error: " + e.getMessage());
+        }
+        return null;
     }
 }

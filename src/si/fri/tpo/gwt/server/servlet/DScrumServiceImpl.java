@@ -115,4 +115,9 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
         return ProjectImpl.getProjectByName(name);
     }
 
+    @Override
+    public UserDTO findUserById(int userId) {
+        return UserImpl.findUserById(userId);
+    }
+
 }

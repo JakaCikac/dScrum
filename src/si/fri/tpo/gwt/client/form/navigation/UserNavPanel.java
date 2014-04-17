@@ -78,7 +78,7 @@ public class UserNavPanel implements IsWidget{
         cp.add(sprintRegistrationB);
         con.add(cp);
 
-        ProjectSelectForm psf = new ProjectSelectForm(service);
+        ProjectSelectForm psf = new ProjectSelectForm(service, center);
         west.setHeadingText("Project list");
         west.add(psf.asWidget());
 
