@@ -12,13 +12,16 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.form.addedit.AdminUserDataEditForm;
+import si.fri.tpo.gwt.client.form.addedit.ProjecDataEditForm;
 import si.fri.tpo.gwt.client.form.registration.ProjectRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
 import si.fri.tpo.gwt.client.form.search.SingleUserSearch;
 import si.fri.tpo.gwt.client.form.search.SingleUserSearchDialog;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
+import si.fri.tpo.gwt.client.session.SessionInfo;
 
 //TODO: merge cnavpanel into admin nav panel!
 public class AdminNavPanel implements IsWidget {
@@ -98,10 +101,30 @@ public class AdminNavPanel implements IsWidget {
         cp.add(userEditing);
         con.add(cp);
 
-        ProjectSelectForm psf = new ProjectSelectForm(service);
+        cp = new ContentPanel();
+        cp.setHeaderVisible(false);
+        cp.setAnimCollapse(false);
+        cp.setBodyStyleName("pad-text");
+
+        final TextButton projectEditing = new TextButton("Project Editing");
+        projectEditing.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                if (SessionInfo.projectDTO == null) {
+                    Info.display("No project selected", "Please select project from the list on the left." );
+                } else {
+                    ProjecDataEditForm pdef = new ProjecDataEditForm(service, center, west);
+                    center.clear();
+                    center.add(pdef.asWidget());
+                }
+            }
+        });
+        cp.add(projectEditing);
+        con.add(cp);
+
+        ProjectSelectForm psf = new ProjectSelectForm(service, center);
         west.setHeadingText("Project list");
         west.add(psf.asWidget());
-
 
         panel.setWidth(160);
 

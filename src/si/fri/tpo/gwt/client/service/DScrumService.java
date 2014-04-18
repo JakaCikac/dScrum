@@ -49,4 +49,10 @@ public interface DScrumService extends RemoteService {
     SprintDTO dummySprintTrigger(SprintDTO sprintDTO);
 
     SprintPKDTO dummySprintPKTrigger(SprintPKDTO sprintPKDTO);
+
+    public UserDTO findUserById(int userId);
+
+    public Pair<Boolean, Integer> updateTeam(TeamDTO teamDTO, String name, boolean withProject);
+
+    public Pair<Boolean, String> updateProject(ProjectDTO projectDTO, boolean changedProjectName, String originalProjectName);
 }

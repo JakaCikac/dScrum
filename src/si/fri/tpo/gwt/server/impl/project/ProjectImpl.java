@@ -216,4 +216,63 @@ public class ProjectImpl {
         }
         else return null;
     }
+
+    public static Pair<Boolean, String> updateProject(ProjectDTO projectDTO, boolean changedProjectName, String originalProjectName) {
+        try {
+            // Additional duplication control
+            Project existingProject;
+            if (changedProjectName) {
+                existingProject = ProxyManager.getProjectProxy().findProjectByName(projectDTO.getName());
+            } else existingProject = null;
+
+
+            if (existingProject != null && changedProjectName) {
+                System.out.println("Existing project exists!");
+                return Pair.of(false, "Project with this name already exists!");
+            }
+
+            Project p = ProxyManager.getProjectProxy().findProjectByName(originalProjectName);
+            p.setProjectId(projectDTO.getProjectId());
+            p.setName(projectDTO.getName());
+            p.setDescription(projectDTO.getDescription());
+            p.setStatus(projectDTO.getStatus());
+            Team team = new Team();
+            team.setTeamId(projectDTO.getTeamTeamId().getTeamId());
+            team.setScrumMasterId(projectDTO.getTeamTeamId().getScrumMasterId());
+            team.setProductOwnerId(projectDTO.getTeamTeamId().getProductOwnerId());
+
+            List<User> userList = new ArrayList<User>();
+            if (projectDTO.getTeamTeamId().getUserList() != null) {
+                for (UserDTO userDTO : projectDTO.getTeamTeamId().getUserList()) {
+                    User user = new User();
+                    user.setUserId(userDTO.getUserId());
+                    user.setUsername(userDTO.getUsername());
+                    user.setPassword(userDTO.getPassword());
+                    user.setFirstName(userDTO.getFirstName());
+                    user.setLastName(userDTO.getLastName());
+                    user.setEmail(userDTO.getEmail());
+                    user.setIsAdmin(userDTO.isAdmin());
+                    user.setSalt(userDTO.getSalt());
+                    user.setIsActive(userDTO.isActive());
+                    user.setTimeCreated(userDTO.getTimeCreated());
+                    userList.add(user);
+                }
+                team.setUserList(userList);
+            } else return Pair.of(false, "No project list when saving team.");
+            p.setTeamTeamId(team);
+            try {
+                if (p == null)
+                    return Pair.of(false, "Data error!");
+                ProxyManager.getProjectProxy().edit(p);
+
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+                return Pair.of(false, e.getMessage());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Pair.of(false, e.getMessage());
+        }
+        return Pair.of(true, "Project should be updated, all good..");
+    }
 }

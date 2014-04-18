@@ -46,5 +46,11 @@ public interface DScrumServiceAsync {
     void dummySprintTrigger(SprintDTO sprintDTO, AsyncCallback<SprintDTO> callback2);
 
     void dummySprintPKTrigger(SprintPKDTO sprintPKDTO, AsyncCallback<SprintPKDTO> callbackPKDTO);
+
+    void findUserById(int userId, AsyncCallback<UserDTO> getOrigScrumMasterDTO);
+
+    void updateTeam(TeamDTO teamDTO, String name, boolean withProject, AsyncCallback<Pair<Boolean, Integer>> updateTeam);
+
+    void updateProject(ProjectDTO projectDTO, boolean changedProjectName, String originalProjectName, AsyncCallback<Pair<Boolean,String>> updateProject);
 }
 

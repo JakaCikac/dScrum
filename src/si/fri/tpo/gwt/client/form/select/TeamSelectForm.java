@@ -34,9 +34,12 @@ public class TeamSelectForm implements IsWidget {
     private ContentPanel panel;
     private ListStore<UserDTO> usersStore;
     private ListStore<UserDTO> members;
+    private boolean fillData;
+    private List<UserDTO> projecUserList;
 
-    public TeamSelectForm(DScrumServiceAsync service) {
+    public TeamSelectForm(DScrumServiceAsync service, boolean fillData) {
         this.service = service;
+        this.fillData = fillData;
     }
 
     public Widget asWidget() {
@@ -49,6 +52,8 @@ public class TeamSelectForm implements IsWidget {
             panel.add(con, new MarginData(10));
 
             usersStore = new ListStore<UserDTO>(getModelKeyProvider());
+
+            if (fillData)
             getUserList();
 
              members = new ListStore<UserDTO>(getModelKeyProvider());
@@ -87,6 +92,39 @@ public class TeamSelectForm implements IsWidget {
         return returnUsers;
     }
 
+    public void setMembers(List<UserDTO> userList) {
+        members.replaceAll(userList);
+    }
+
+    public void removeUsersFromUserList(List<UserDTO> userListDTO, List<UserDTO> oldList) {
+        List<UserDTO> newList = new ArrayList<UserDTO>();
+        for (UserDTO dto : usersStore.getAll()) {
+            UserDTO tempDTO = new UserDTO();
+            tempDTO.setAdmin(dto.isAdmin());
+            tempDTO.setActive(dto.isActive());
+            tempDTO.setUsername(dto.getUsername());
+            tempDTO.setLastName(dto.getLastName());
+            tempDTO.setFirstName(dto.getFirstName());
+            tempDTO.setSalt(dto.getSalt());
+            tempDTO.setEmail(dto.getEmail());
+            tempDTO.setPassword(dto.getPassword());
+            tempDTO.setTimeCreated(dto.getTimeCreated());
+            tempDTO.setUserId(dto.getUserId());
+            oldList.add(tempDTO);
+            }
+        for (int i = 0; i < oldList.size(); i++) {
+            boolean addToList = true;
+            for(int j = 0; j < userListDTO.size(); j++) {
+                if ((oldList.get(i).getUsername()).equals(userListDTO.get(j).getUsername())) {
+                    addToList = false;
+                }
+            }
+            if (addToList)
+                newList.add(oldList.get(i));
+        }
+        usersStore.addAll(newList);
+    }
+
     public void displayAllUsers() {
         usersStore.clear();
         getUserList();
@@ -98,6 +136,22 @@ public class TeamSelectForm implements IsWidget {
             public void onSuccess(List<UserDTO> result) {
                 // add list to ListStore
                 usersStore.addAll(result);
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.findAllUsers(callback);
+    }
+
+    public void setUserList(List<UserDTO> userListDTO) {
+        setProjecUserList(userListDTO);
+        AsyncCallback<List<UserDTO>> callback = new AsyncCallback<List<UserDTO>>() {
+            @Override
+            public void onSuccess(List<UserDTO> result) {
+                // add list to ListStore
+                removeUsersFromUserList(getProjecUserList(), result);
             }
             @Override
             public void onFailure(Throwable caught) {
@@ -169,6 +223,15 @@ public class TeamSelectForm implements IsWidget {
             }
         };
         return vpln;
+    }
+
+
+    public List<UserDTO> getProjecUserList() {
+        return projecUserList;
+    }
+
+    public void setProjecUserList(List<UserDTO> projecUserList) {
+        this.projecUserList = projecUserList;
     }
 
 }
