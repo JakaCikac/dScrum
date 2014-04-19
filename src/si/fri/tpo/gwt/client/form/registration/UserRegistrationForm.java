@@ -42,6 +42,7 @@ public class UserRegistrationForm implements IsWidget {
     private TextField firstName;
     private Radio newUserRB;
     private Radio newAdminRB;
+    private HorizontalPanel hp;
 
 
     public UserRegistrationForm(DScrumServiceAsync service) {
@@ -68,11 +69,10 @@ public class UserRegistrationForm implements IsWidget {
 
         username = new TextField();
         username.setAllowBlank(false);
-        username.setEmptyText("ChuckNorris");
-        p.add(new FieldLabel(username, "Username"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        username.setEmptyText("Enter username...");
+        p.add(new FieldLabel(username, "Username *"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         firstName = new TextField();
-        firstName.setAllowBlank(true);
         firstName.setEmptyText("Enter your name...");
             /* firstName.addValueChangeHandler(new ValueChangeHandler<String>() {
                 @Override
@@ -80,29 +80,24 @@ public class UserRegistrationForm implements IsWidget {
                     Info.display("Value Changed", "First name changed to " + event.getValue() == null ? "blank" : event.getValue());
                 }
             }); */
-
         p.add(new FieldLabel(firstName, "Name"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         lastName = new TextField();
-        lastName.setAllowBlank(false);
-        lastName.setEmptyText("Norris");
-
+        lastName.setEmptyText("Enter your surname...");
         p.add(new FieldLabel(lastName, "Surname"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         email = new TextField();
         email.setAllowBlank(false);
         email.setEmptyText("chuck@norris.com");
         email.addValidator(new RegExValidator("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", "chuck@norris.com"));
-        p.add(new FieldLabel(email, "Email"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        p.add(new FieldLabel(email, "Email *"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         password = new PasswordField();
-        p.add(new FieldLabel(password, "Password"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        password.setAllowBlank(false);
+        p.add(new FieldLabel(password, "Password *"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
         repassword = new PasswordField();
         repassword.setAllowBlank(false);
-        p.add(new FieldLabel(repassword, "Confirm Password"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
-
-
-        HorizontalPanel hp;
+        p.add(new FieldLabel(repassword, "Confirm Password *"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         newUserRB = new Radio();
         newUserRB.setBoxLabel("New User");
@@ -114,7 +109,6 @@ public class UserRegistrationForm implements IsWidget {
         hp = new HorizontalPanel();
         hp.add(newUserRB);
         hp.add(newAdminRB);
-
         p.add(new FieldLabel(hp, "User Type"));
 
         // we can set name on radios or use toggle group
@@ -128,54 +122,77 @@ public class UserRegistrationForm implements IsWidget {
                 Radio newUserRB = (Radio) group.getValue();
             }
         });
+
         final TextButton submitButton = new TextButton("Submit");
         submitButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                // check if password and repassword match
-                String hashPass = PassHash.getMD5Password(password.getValue());
-                String confirmPass = PassHash.getMD5Password(repassword.getValue());
-                if (!hashPass.equals(confirmPass)) {
-                    AlertMessageBox amb = new AlertMessageBox("Password confirmation", "Password and Confirm password fields don't match!");
-                    amb.show();
-                    repassword.setText("");
-                } else {
-                    AsyncCallback<Pair<Boolean, String>> validationCallback = new AsyncCallback<Pair<Boolean, String>>() {
-                        @Override
-                        public void onSuccess(Pair<Boolean, String> result) {
-                            if (result.getFirst()) {
-                                final UserDTO userDTO = new UserDTO();
-                                userDTO.setUsername(username.getValue());
-                                userDTO.setEmail(email.getValue());
-                                userDTO.setAdmin(newAdminRB.getValue());
-                                userDTO.setFirstName(firstName.getValue());
-                                userDTO.setLastName(lastName.getValue());
-                                userDTO.setActive(true);
-                                userDTO.setSalt("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
-                                // create time created = now()
-                                java.util.Date utilDate = new java.util.Date();
-                                java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-                                userDTO.setTimeCreated(sqlDate);
-                                // hash retrieved password and set it
-                                userDTO.setPassword(PassHash.getMD5Password(password.getValue()));
+                AsyncCallback<Pair<Boolean, String>> validationCallback = new AsyncCallback<Pair<Boolean, String>>() {
+                    @Override
+                    public void onSuccess(Pair<Boolean, String> result) {
+                        String hashPass = null, confirmPass = null;
+                        AlertMessageBox amb;
+                        //TODO: zakaj je tuki if, ki se izvede vsakič ?????????
+                        if (result.getFirst()) {
+                            final UserDTO userDTO = new UserDTO();
+                            if (username.getValue() == null) {
+                                amb = new AlertMessageBox("Empty Username", "Please enter username!");
+                                amb.show();
+                                return;
+                            } else userDTO.setUsername(username.getValue());
 
-                                // Save user
-                                performSaveUser(userDTO);
+                            if (email.getValue() == null) {
+                                amb = new AlertMessageBox("Empty Email", "Please enter your email!");
+                                amb.show();
+                                return;
+                            } else userDTO.setEmail(email.getValue());
 
-                            } else {
-                                MessageBox box = new MessageBox("Confirm", "Are you sure you want to do that?");
-                                box.show();
+                            userDTO.setAdmin(newAdminRB.getValue());
+                            userDTO.setFirstName(firstName.getValue());
+                            userDTO.setLastName(lastName.getValue());
+                            userDTO.setActive(true);
+                            userDTO.setSalt("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+                            // create time created = now()
+                            java.util.Date utilDate = new java.util.Date();
+                            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+                            userDTO.setTimeCreated(sqlDate);
+
+                            // check if password and repassword match
+                            if (password.getValue() == null) {
+                                amb = new AlertMessageBox("Empty Password", "Please enter password!");
+                                amb.show();
+                                return;
+                            } else hashPass = PassHash.getMD5Password(password.getText());
+                            if (repassword.getValue() == null) {
+                                amb = new AlertMessageBox("Empty Confirm Password", "Please enter confirm password!");
+                                amb.show();
+                                return;
+                            } else confirmPass = PassHash.getMD5Password(repassword.getText());
+                            if (!hashPass.equals(confirmPass)) {
+                                amb = new AlertMessageBox("Password confirmation", "Password and Confirm password fields don't match!");
+                                amb.show();
+                                repassword.setText("");
+                                return;
                             }
-                        }
+                            // hash retrieved password and set it
+                            userDTO.setPassword(PassHash.getMD5Password(password.getValue()));
 
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            Window.alert(caught.getMessage());
+                            // Save user
+                            performSaveUser(userDTO);
+
+                        } else {
+                            MessageBox box = new MessageBox("Confirm", "Are you sure you want to do that?");
+                            box.show();
                         }
-                    };
-                    //TODO: validate user data
-                    service.validateUserData(email.getValue(), validationCallback);
-                }
+                    }
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert(caught.getMessage());
+                    }
+                };
+                //TODO: validate user data
+                service.validateUserData(email.getValue(), validationCallback);
             }
         });
 
@@ -193,15 +210,15 @@ public class UserRegistrationForm implements IsWidget {
             @Override
             public void onSuccess(Pair<Boolean, String> result) {
                 if (result == null) {
-                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while saving!");
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing user saving!");
                     amb2.show();
                 }
                 else if (!result.getFirst()) {
-                    AlertMessageBox amb2 = new AlertMessageBox("Error!", result.getSecond());
+                    AlertMessageBox amb2 = new AlertMessageBox("Error saving user!", result.getSecond());
                     amb2.show();
                 }
                 else {
-                    AlertMessageBox amb3 = new AlertMessageBox("Message", result.getSecond());
+                    MessageBox amb3 = new MessageBox("Message save User", result.getSecond());
                     amb3.show();
                 }
             }

@@ -164,7 +164,7 @@ public class LoginPanel  extends FormPanel implements IsWidget {
         }
     }
 
-    private void fillNavigationMainAndHeader(Widget navigationPanel, Widget mainPanel) {
+    public void fillNavigationMainAndHeader(Widget navigationPanel, Widget mainPanel) {
 
         vp.clear();
         east.add(navigationPanel);

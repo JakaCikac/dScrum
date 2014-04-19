@@ -10,10 +10,12 @@ import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
 import si.fri.tpo.gwt.client.form.registration.SprintRegistrationForm;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
+import si.fri.tpo.gwt.client.session.SessionInfo;
 
 /**
  * Created by nanorax on 06/04/14.
@@ -70,9 +72,13 @@ public class UserNavPanel implements IsWidget{
         sprintRegistrationB.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                SprintRegistrationForm srf = new SprintRegistrationForm(service);
-                center.clear();
-                center.add(srf.asWidget());
+                if (SessionInfo.projectDTO == null) {
+                    Info.display("No project selected", "Please select project from the list on the left.");
+                } else {
+                    SprintRegistrationForm srf = new SprintRegistrationForm(service);
+                    center.clear();
+                    center.add(srf.asWidget());
+                }
             }
         });
         cp.add(sprintRegistrationB);

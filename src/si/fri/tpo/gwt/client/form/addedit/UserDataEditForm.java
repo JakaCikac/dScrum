@@ -1,6 +1,5 @@
 package si.fri.tpo.gwt.client.form.addedit;
 
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -15,6 +14,7 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.PasswordField;
 import com.sencha.gxt.widget.core.client.form.TextField;
+import com.sencha.gxt.widget.core.client.form.validator.RegExValidator;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
@@ -65,7 +65,7 @@ public class UserDataEditForm implements IsWidget{
 
         username = new TextField();
         username.setAllowBlank(false);
-        p.add(new FieldLabel(username, "Username"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        p.add(new FieldLabel(username, "Username *"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         firstName = new TextField();
         firstName.setAllowBlank(true);
@@ -77,7 +77,8 @@ public class UserDataEditForm implements IsWidget{
 
         email = new TextField();
         email.setAllowBlank(false);
-        p.add(new FieldLabel(email, "E-mail"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        email.addValidator(new RegExValidator("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", "chuck@norris.com"));
+        p.add(new FieldLabel(email, "E-mail *"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         password = new PasswordField();
         password.setAllowBlank(true);
@@ -93,6 +94,14 @@ public class UserDataEditForm implements IsWidget{
 
                 boolean save = true;
                 // check if password and repassword match
+                if (password.getText().equals("") && !repassword.getText().equals("")) {
+                    Info.display("Confirm Password enetered", "No password to confirm, please fill out both Password and Confirm password fields.");
+                    return;
+                }
+                if (!password.getText().equals("") && repassword.getText().equals("")) {
+                    Info.display("Password enetered", "No confirmation password, please fill out both Password and Confirm password fields.");
+                    return;
+                }
                 if (!password.getText().equals("")) {
                     String hashPass = PassHash.getMD5Password(password.getValue());
                     String confirmPass = PassHash.getMD5Password(repassword.getValue());
@@ -100,68 +109,70 @@ public class UserDataEditForm implements IsWidget{
                         AlertMessageBox amb = new AlertMessageBox("Password confirmation", "Password and Confirm password fields don't match!");
                         amb.show();
                         repassword.setText("");
-                        save = false;
+                        return;
                     }   // if confirm password entered and password empty block data change
-                }
-                if (password.getText().equals("") && !repassword.getText().equals("")) {
-                   save = false;
-                   Info.display("Confirm Password enetered", "No password to confirm, please fill out both Password and Confirm password fields.");
-                }
-                if (!password.getText().equals("") && repassword.getText().equals("")) {
-                    save = false;
-                    Info.display("Password enetered", "No confirmation password, please fill out both Password and Confirm password fields.");
                 }
 
                 changedUsername = false;
-                if(save) {
-                    AsyncCallback<Pair<Boolean, String>> validationCallback = new AsyncCallback<Pair<Boolean, String>>() {
-                        @Override
-                        public void onSuccess(Pair<Boolean, String> result) {
-                            if (result.getFirst()) {
-                                final UserDTO saveUserDTO = new UserDTO();
-                                saveUserDTO.setUserId(userDTO.getUserId());
-                                System.out.println("UserDTO id :" + userDTO.getUserId());
-                                if (!username.getText().equals(userDTO.getUsername())) {
-                                    changedUsername = true;
-                                    saveUserDTO.setUsername(username.getText());
-                                } else {
-                                    changedUsername = false;
-                                    saveUserDTO.setUsername(userDTO.getUsername());
-                                }
-                        System.out.println("Changed username from " + userDTO.getUsername() + " to " + username.getText() + " and flag is " + changedUsername);
-                        saveUserDTO.setEmail(email.getText());
-                        if (userDTO.isAdmin())
-                                saveUserDTO.setAdmin(true);
-                        else saveUserDTO.setAdmin(false);
-                        saveUserDTO.setFirstName(firstName.getText());
-                        saveUserDTO.setLastName(lastName.getText());
-                        saveUserDTO.setActive(true);
-                        saveUserDTO.setSalt("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
-                        saveUserDTO.setTimeCreated(userDTO.getTimeCreated());
-                        // hash retrieved password and set it
-                        if (password.getText().equals("") && repassword.getText().equals("")) {
-                            saveUserDTO.setPassword(userDTO.getPassword());
+
+                AsyncCallback<Pair<Boolean, String>> validationCallback = new AsyncCallback<Pair<Boolean, String>>() {
+                    @Override
+                    public void onSuccess(Pair<Boolean, String> result) {
+                        AlertMessageBox amb;
+                        if (result.getFirst()) {
+                            final UserDTO saveUserDTO = new UserDTO();
+                            saveUserDTO.setUserId(userDTO.getUserId());
+                            System.out.println("UserDTO id :" + userDTO.getUserId());
+                            if (username.getText().equals("")) {
+                                amb = new AlertMessageBox("Empty Username", "Please enter username!");
+                                amb.show();
+                                return;
+                            }
+                            if (!username.getText().equals(userDTO.getUsername())) {
+                                changedUsername = true;
+                                saveUserDTO.setUsername(username.getText());
+                            } else {
+                                changedUsername = false;
+                                saveUserDTO.setUsername(userDTO.getUsername());
+                            }
+                            System.out.println("Changed username from " + userDTO.getUsername() + " to " + username.getText() + " and flag is " + changedUsername);
+
+                            if (email.getText().equals("")) {
+                                amb = new AlertMessageBox("Empty Email", "Please enter your email!");
+                                amb.show();
+                                return;
+                            } else saveUserDTO.setEmail(email.getText());
+
+                            saveUserDTO.setAdmin(userDTO.isAdmin());
+                            saveUserDTO.setFirstName(firstName.getText());
+                            saveUserDTO.setLastName(lastName.getText());
+                            saveUserDTO.setActive(true);
+                            saveUserDTO.setSalt("00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+                            saveUserDTO.setTimeCreated(userDTO.getTimeCreated());
+                            // hash retrieved password and set it
+                            if (password.getText().equals("") && repassword.getText().equals("")) {
+                                saveUserDTO.setPassword(userDTO.getPassword());
+                            } else {
+                                saveUserDTO.setPassword(PassHash.getMD5Password(password.getText()));
+                            }
+                            // Update user
+                            performUpdateUser(saveUserDTO);
+
                         } else {
-                            saveUserDTO.setPassword(PassHash.getMD5Password(password.getText()));
+                            MessageBox box = new MessageBox("Confirm", "Are you sure you want to do that?");
+                            box.show();
                         }
-                        // Save user
-                        performUpdateUser(saveUserDTO);
-
-                    } else {
-                        MessageBox box = new MessageBox("Confirm", "Are you sure you want to do that?");
-                        box.show();
                     }
-                }
 
-                @Override
-                public void onFailure(Throwable caught) {
-                    Window.alert(caught.getMessage());
-                }
-                    };
-                    //TODO: validate user data
-                    service.validateUserData(email.getText(), validationCallback);
-                }
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert(caught.getMessage());
+                    }
+                };
+                //TODO: validate user data
+                service.validateUserData(email.getText(), validationCallback);
             }
+
         });
         panel.addButton(saveButton);
         vp.add(panel);
@@ -191,15 +202,15 @@ public class UserDataEditForm implements IsWidget{
             @Override
             public void onSuccess(Pair<Boolean, String> result) {
                 if (result == null) {
-                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while saving!");
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while updating user!");
                     amb2.show();
                 }
                 else if (!result.getFirst()) {
-                    AlertMessageBox amb2 = new AlertMessageBox("Error!", result.getSecond());
+                    AlertMessageBox amb2 = new AlertMessageBox("Error updating!", result.getSecond());
                     amb2.show();
                 }
                 else {
-                    AlertMessageBox amb3 = new AlertMessageBox("Message", result.getSecond());
+                    MessageBox amb3 = new MessageBox("Message", result.getSecond());
                     amb3.show();
                 }
             }

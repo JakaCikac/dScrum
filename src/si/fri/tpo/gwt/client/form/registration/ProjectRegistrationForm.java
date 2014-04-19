@@ -7,12 +7,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.core.client.util.ToggleGroup;
-import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
-import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.*;
@@ -29,8 +27,6 @@ import si.fri.tpo.gwt.client.form.select.TeamSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 
 /**
@@ -93,7 +89,7 @@ public class ProjectRegistrationForm implements IsWidget {
         projectName = new TextField();
         projectName.setAllowBlank(false);
         projectName.setEmptyText("Chuck's project");
-        p.add(new FieldLabel(projectName, "Project Name"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        p.add(new FieldLabel(projectName, "Project Name *"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         description = new TextArea();
         description.setAllowBlank(false);
@@ -165,8 +161,8 @@ public class ProjectRegistrationForm implements IsWidget {
         VerticalPanel selectedUserPanel = new VerticalPanel();
         selProductOwner.setReadOnly(true);
         selScrumMaster.setReadOnly(true);
-        productOwnerLabel.setText("Product Owner");
-        scrumMasterLabel.setText("Scrum Master");
+        productOwnerLabel.setText("Product Owner *");
+        scrumMasterLabel.setText("Scrum Master *");
         HorizontalPanel po = new HorizontalPanel();
         po.add(productOwnerLabel);
         po.add(selProductOwner);
@@ -200,11 +196,16 @@ public class ProjectRegistrationForm implements IsWidget {
         submitButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
+                AlertMessageBox amb;
                 // Get Project Name
                 // Get Project Description
                 // Get Project Status
                 final ProjectDTO projectDTO = new ProjectDTO();
-                projectDTO.setName(projectName.getText());
+                if (projectName.getValue() == null){
+                    amb = new AlertMessageBox("Empty Project Name", "Please enter project name!");
+                    amb.show();
+                    return;
+                } else projectDTO.setName(projectName.getText());
                 projectDTO.setDescription(description.getText());
                 if (assigned.getValue())
                     projectDTO.setStatus("assigned");
@@ -213,8 +214,18 @@ public class ProjectRegistrationForm implements IsWidget {
                 // Get Scrum Master
                 // Get Team Members
                 TeamDTO teamDTO = new TeamDTO();
-                teamDTO.setProductOwnerId(productOwnerDTO.getUserId());
-                teamDTO.setScrumMasterId(scrumMasterDTO.getUserId());
+                if (selProductOwner.getText().equals("")){
+                    amb = new AlertMessageBox("Empty Product Owner", "Please choose product owner!");
+                    amb.show();
+                    return;
+                } else teamDTO.setProductOwnerId(productOwnerDTO.getUserId());
+                if (selScrumMaster.getText().equals("")){
+                    amb = new AlertMessageBox("Empty Scrum Master", "Please choose scrum master!");
+                    amb.show();
+                    return;
+                } else teamDTO.setScrumMasterId(scrumMasterDTO.getUserId());
+                //TODO: Ali je potrebno da projekt ima člane skupine ali ne??
+                System.out.println(tsf.getMembers().size());//vrne 0 če je prazen
                 teamDTO.setUserList(tsf.getMembers());
 
                 // Save project to database with team
@@ -249,7 +260,7 @@ public class ProjectRegistrationForm implements IsWidget {
                             amb2.show();
                         }
                         else {
-                            AlertMessageBox amb3 = new AlertMessageBox("Message save Project", result.getSecond());
+                            MessageBox amb3 = new MessageBox("Message save Project", result.getSecond());
                             amb3.show();
                         }
                     }

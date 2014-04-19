@@ -27,7 +27,6 @@ import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.form.select.TeamSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
-import si.fri.tpo.gwt.client.verification.PassHash;
 
 import java.util.ArrayList;
 
@@ -97,7 +96,6 @@ public class ProjecDataEditForm implements IsWidget{
 
         projectName = new TextField();
         projectName.setAllowBlank(false);
-        projectName.setEmptyText("Chuck's project");
         p.add(new FieldLabel(projectName, "Project Name"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         description = new TextArea();
@@ -207,12 +205,18 @@ public class ProjecDataEditForm implements IsWidget{
         submitButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
+                AlertMessageBox amb;
                 // Get Project Name
                 // Get Project Description
                 // Get Project Status
                 final ProjectDTO projectDTO = new ProjectDTO();
                 projectDTO.setProjectId(SessionInfo.projectDTO.getProjectId());
-                projectDTO.setName(projectName.getText());
+                System.out.println(projectName.getText());
+                if (projectName.getText().equals("")){
+                    amb = new AlertMessageBox("Empty Project Name", "Please enter project name!");
+                    amb.show();
+                    return;
+                } else projectDTO.setName(projectName.getText());
 
                 // Check if project name was changed
                 if (projectName.getText().equals(SessionInfo.projectDTO.getName()))
@@ -228,8 +232,18 @@ public class ProjecDataEditForm implements IsWidget{
                 // Get Team Members
                 TeamDTO teamDTO = new TeamDTO();
                 teamDTO.setTeamId(SessionInfo.projectDTO.getTeamTeamId().getTeamId());
-                teamDTO.setProductOwnerId(productOwnerDTO.getUserId());
-                teamDTO.setScrumMasterId(scrumMasterDTO.getUserId());
+                if (selProductOwner.getText().equals("")){
+                    amb = new AlertMessageBox("Empty Product Owner", "Please choose product owner!");
+                    amb.show();
+                    return;
+                } else teamDTO.setProductOwnerId(productOwnerDTO.getUserId());
+                if (selScrumMaster.getText().equals("")){
+                    amb = new AlertMessageBox("Empty Scrum Master", "Please choose scrum master!");
+                    amb.show();
+                    return;
+                } else teamDTO.setScrumMasterId(scrumMasterDTO.getUserId());
+                //TODO: Ali je potrebno da projekt ima člane skupine ali ne??
+                System.out.println(tsf.getMembers().size());//vrne 0 če je prazen
                 teamDTO.setUserList(tsf.getMembers());
 
                 // Save project to database with team
@@ -309,7 +323,7 @@ public class ProjecDataEditForm implements IsWidget{
                             amb2.show();
                         }
                         else {
-                            AlertMessageBox amb3 = new AlertMessageBox("Message update Project", result.getSecond());
+                            MessageBox amb3 = new MessageBox("Message update Project", result.getSecond());
                             amb3.show();
                             // refresh gui
                             west.clear();

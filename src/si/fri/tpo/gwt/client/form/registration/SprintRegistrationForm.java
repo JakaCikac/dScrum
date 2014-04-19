@@ -2,14 +2,13 @@ package si.fri.tpo.gwt.client.form.registration;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.i18n.server.Message;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
-import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import com.sencha.gxt.widget.core.client.form.*;
 import com.sencha.gxt.widget.core.client.form.validator.MaxNumberValidator;
 import com.sencha.gxt.widget.core.client.form.validator.MinDateValidator;
@@ -88,26 +87,7 @@ public class SprintRegistrationForm implements IsWidget {
                 // Get Sprint Start Date
                 // Get Sprint Finish Date
                 // Get Sprint Velocity
-                boolean error = false;
                 final SprintDTO sprintDTO = new SprintDTO();
-
-                if (velocity.getText().equals("")){
-                    error = true;
-                    AlertMessageBox d = new AlertMessageBox("Velocity empty", "Please enter sprint velocity!");
-                    d.addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
-                        @Override
-                        public void onDialogHide(DialogHideEvent event) {}
-                    });
-                    d.show();
-                } else {
-                    sprintDTO.setVelocity(Integer.parseInt(velocity.getText()));
-                }
-
-                if (startDate.getValue().before(new Date())) {
-                    sprintDTO.setStatus("In progress");
-                } else {
-                    sprintDTO.setStatus("Waiting");
-                }
 
                 ProjectDTO projectDTO = SessionInfo.projectDTO;
                 List<SprintDTO> sprintDTOList = projectDTO.getSprintList();
@@ -118,38 +98,40 @@ public class SprintRegistrationForm implements IsWidget {
                 }
                 sprintDTO.setProject(projectDTO);
 
-                if (!error) {
-                    for (SprintDTO sprintDT : sprintDTOList) {
-                        if (startDate.getValue().before(sprintDT.getEndDate())) {
-                            error = true;
-                            AlertMessageBox d = new AlertMessageBox("Wrong date", "Sprint v tem časovnem obdobju je že registriran.");
-                            d.addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
-                                @Override
-                                public void onDialogHide(DialogHideEvent event) {
-                                }
-                            });
-                            d.show();
-                        } else {
-                            sprintDTO.setStartDate(startDate.getValue());
-                            break;
-                        }
-                    }
-
-                    if (finishDate.getValue().before(startDate.getValue()) && !error) {
-                        error = true;
-                        AlertMessageBox d = new AlertMessageBox("Wrong date", "Sprint v tem časovnem obdobju že obstaja.");
-                        d.addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
-                            @Override
-                            public void onDialogHide(DialogHideEvent event) {
-                            }
-                        });
+                for (SprintDTO sprintDT : sprintDTOList) {
+                    if (startDate.getValue().before(sprintDT.getEndDate())) {
+                        AlertMessageBox d = new AlertMessageBox("Wrong Start Date", "Sprint v tem časovnem obdobju že obstaja.");
                         d.show();
-                    } else if (!error){
-                        sprintDTO.setEndDate(finishDate.getValue());
+                        return;
+                    } else {
+                        sprintDTO.setStartDate(startDate.getValue());
+                        break;
                     }
                 }
 
-                if (!error)performSaveSprint(sprintDTO);
+                if (finishDate.getValue().before(startDate.getValue())) {
+                    AlertMessageBox d = new AlertMessageBox("Wrong Finish Date", "Sprint v tem časovnem obdobju že obstaja.");
+                    d.show();
+                    return;
+                } else {
+                    sprintDTO.setEndDate(finishDate.getValue());
+                }
+
+                if (velocity.getText().equals("")){
+                    AlertMessageBox d = new AlertMessageBox("Velocity empty", "Please enter sprint velocity!");
+                    d.show();
+                    return;
+                } else {
+                    sprintDTO.setVelocity(Integer.parseInt(velocity.getText()));
+                }
+
+                if (startDate.getValue().before(new Date())) {
+                    sprintDTO.setStatus("In progress");
+                } else {
+                    sprintDTO.setStatus("Waiting");
+                }
+
+                performSaveSprint(sprintDTO);
             }
         });
         panel.addButton(submitButton);
@@ -171,7 +153,7 @@ public class SprintRegistrationForm implements IsWidget {
                     amb2.show();
                 }
                 else {
-                    AlertMessageBox amb3 = new AlertMessageBox("Message save Sprint", result.getSecond());
+                    MessageBox amb3 = new MessageBox("Message save Sprint", result.getSecond());
                     amb3.show();
                 }
             }
