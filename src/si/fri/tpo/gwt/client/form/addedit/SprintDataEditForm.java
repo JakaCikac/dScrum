@@ -56,6 +56,7 @@ public class SprintDataEditForm implements IsWidget {
     private TextField status;
 
     private SubmitButton submitButton;
+    private Button deleteButton;
 
     public SprintDataEditForm(DScrumServiceAsync service)  {
         this.service = service;
@@ -122,8 +123,13 @@ public class SprintDataEditForm implements IsWidget {
             public void onRowClick(RowClickEvent event) {
                 sprintDTO = grid.getSelectionModel().getSelectedItem();
                 if (sprintDTO.getEndDate().before(new Date())){
+                    sprintDTO = null;
                     emptyForm();
                     Info.display("Sprint finished", "This Sprint has already completed.");
+                } else if(sprintDTO.getStartDate().before(new Date())){
+                    sprintDTO = null;
+                    emptyForm();
+                    Info.display("Sprint in progress", "This Sprint is in progress.");
                 } else fillForm();
             }
         });
@@ -212,7 +218,48 @@ public class SprintDataEditForm implements IsWidget {
         });
         panel.addButton(submitButton);
 
+        deleteButton = new Button("Delete");
+        deleteButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                //TODO: Delete sprint??
+                final SprintDTO sprintDTO = getSprintDTO();
+                ProjectDTO projectDTO = SessionInfo.projectDTO;
+                List<SprintDTO> sprintDTOList = projectDTO.getSprintList();
+                sprintDTO.setProject(projectDTO);
+                performDeleteSprint(sprintDTO);
+            }
+        });
+        panel.addButton(deleteButton);
+
         vp.add(panel);
+    }
+
+    private void performDeleteSprint(SprintDTO sprintDTO) {
+        AsyncCallback<Pair<Boolean, String>> deleteSprint = new AsyncCallback<Pair<Boolean, String>>() {
+            @Override
+            public void onSuccess(Pair<Boolean, String> result) {
+                if (result == null) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing sprint deleting!");
+                    amb2.show();
+                }
+                else if (!result.getFirst()) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error deleting Sprint!", result.getSecond());
+                    amb2.show();
+                }
+                else {
+                    MessageBox amb3 = new MessageBox("Message delete Sprint", result.getSecond());
+                    amb3.show();
+                }
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        System.out.println("Calling updateSprint");
+        // TODO: project name duplication
+        service.deleteSprint(sprintDTO, deleteSprint);
     }
 
     private void emptyForm() {

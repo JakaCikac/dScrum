@@ -93,6 +93,11 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     }
 
     @Override
+    public Pair<Boolean, String> deleteSprint(SprintDTO sprintDTO) {
+        return SprintImpl.deleteSprint(sprintDTO);
+    }
+
+    @Override
     public Pair<Boolean, String> saveProject(ProjectDTO projectDTO) {
         return ProjectRegistrationServiceImpl.saveProject(projectDTO);
     }
