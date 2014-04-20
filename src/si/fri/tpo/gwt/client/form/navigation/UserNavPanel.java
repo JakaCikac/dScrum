@@ -11,6 +11,7 @@ import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.info.Info;
+import si.fri.tpo.gwt.client.form.addedit.SprintDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
 import si.fri.tpo.gwt.client.form.registration.SprintRegistrationForm;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
@@ -51,7 +52,7 @@ public class UserNavPanel implements IsWidget{
         cp.setAnimCollapse(false);
         cp.setBodyStyleName("pad-text");
 
-        TextButton userDataEditB = new TextButton("Edit user");
+        TextButton userDataEditB = new TextButton("User Edit");
         userDataEditB.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
@@ -82,6 +83,27 @@ public class UserNavPanel implements IsWidget{
             }
         });
         cp.add(sprintRegistrationB);
+        con.add(cp);
+
+        cp = new ContentPanel();
+        cp.setHeaderVisible(false);
+        cp.setAnimCollapse(false);
+        cp.setBodyStyleName("pad-text");
+
+        TextButton sprintDataEditB = new TextButton("Sprint Edit");
+        sprintDataEditB.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                if (SessionInfo.projectDTO == null) {
+                    Info.display("No project selected", "Please select project from the list on the left.");
+                } else {
+                    SprintDataEditForm sdef = new SprintDataEditForm(service);
+                    center.clear();
+                    center.add(sdef.asWidget());
+                }
+            }
+        });
+        cp.add(sprintDataEditB);
         con.add(cp);
 
         ProjectSelectForm psf = new ProjectSelectForm(service, center);

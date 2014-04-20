@@ -52,5 +52,7 @@ public interface DScrumServiceAsync {
     void updateTeam(TeamDTO teamDTO, String name, boolean withProject, AsyncCallback<Pair<Boolean, Integer>> updateTeam);
 
     void updateProject(ProjectDTO projectDTO, boolean changedProjectName, String originalProjectName, AsyncCallback<Pair<Boolean,String>> updateProject);
+
+    void updateSprint(SprintDTO sprintDTO, AsyncCallback<Pair<Boolean,String>> updateSprint);
 }
 

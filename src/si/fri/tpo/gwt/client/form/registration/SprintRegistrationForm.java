@@ -110,7 +110,7 @@ public class SprintRegistrationForm implements IsWidget {
                 }
 
                 if (finishDate.getValue().before(startDate.getValue())) {
-                    AlertMessageBox d = new AlertMessageBox("Wrong Finish Date", "Sprint v tem časovnem obdobju že obstaja.");
+                    AlertMessageBox d = new AlertMessageBox("Wrong Finish Date", "Finish Date must be after Start Date.");
                     d.show();
                     return;
                 } else {
