@@ -43,7 +43,7 @@ public class TeamImpl {
                     return Pair.of(false, -1);
                 insertedTeamID = ProxyManager.getTeamProxy().create(team);
                 if (insertedTeamID == -1) {
-                    System.out.println("ob vstavljanju s kontrolerjem je id ... -1 :(");
+                    System.out.println("ob vstavljanju s kontrolerjem je team id ... -1 :(");
                 }
 
             } catch (Exception e) {
@@ -90,7 +90,7 @@ public class TeamImpl {
                 ProxyManager.getTeamProxy().edit(team);
                 insertedTeamID = dto.getTeamId();
                 if (insertedTeamID == -1) {
-                    System.out.println("ob vstavljanju s kontrolerjem je id ... -1 :(");
+                    System.out.println("ob vstavljanju s kontrolerjem je team id ... -1 :(");
                 }
 
             } catch (Exception e) {

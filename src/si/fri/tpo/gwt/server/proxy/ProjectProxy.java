@@ -2,12 +2,10 @@ package si.fri.tpo.gwt.server.proxy;
 
 import si.fri.tpo.gwt.server.controllers.ProjectJpaController;
 import si.fri.tpo.gwt.server.jpa.Project;
-import si.fri.tpo.gwt.server.jpa.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,7 +32,7 @@ public class ProjectProxy extends ProjectJpaController {
                 p = em.createNamedQuery("Project.findByName", Project.class).setParameter("name", name).getSingleResult();
                 return p;
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                System.out.println("Project proxy findProjectByName error: " + e.getMessage());
                 return null;
             }
         } finally {
@@ -54,7 +52,7 @@ public class ProjectProxy extends ProjectJpaController {
                 p = query.getResultList();
                 return p;
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                System.out.println("Project proxy getUserProjectsList error: " + e.getMessage());
                 return null;
             }
         } finally {
