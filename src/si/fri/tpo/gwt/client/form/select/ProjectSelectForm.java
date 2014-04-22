@@ -27,6 +27,7 @@ import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
 import com.sencha.gxt.widget.core.client.info.Info;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
+import si.fri.tpo.gwt.client.form.navigation.ScrumMasterNavPanel;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 import si.fri.tpo.gwt.client.form.addedit.ProjecDataEditForm;
@@ -46,13 +47,17 @@ public class ProjectSelectForm implements IsWidget {
     private ProjectDTO selectedProject;
     private ProjecDataEditForm pdef;
     private ContentPanel center;
+    private ContentPanel west;
+    private ContentPanel east;
 
     private VerticalPanel vp;
 
     
-    public ProjectSelectForm(DScrumServiceAsync service, ContentPanel center) {
+    public ProjectSelectForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east) {
         this.service = service;
         this.center = center;
+        this.west = west;
+        this.east = east;
     }
 
     @Override
@@ -109,6 +114,14 @@ public class ProjectSelectForm implements IsWidget {
                 System.out.println("SelectedProject ID : " + selectedProject.getProjectId());
                 System.out.println("SessionProjectDTO ID: " + selectedProject.getSprintList().size() );
                 // TODO: uh oh, tole ne bo slo tako, moras pogruntat kako osvzit data edit forme, ce se project zamenja med urejanjem
+                // TODO: preveri ce je loginan user scrum master za tolele in naredi nov nav panel
+                // if user is scrum master for selected project
+                if (SessionInfo.projectDTO.getTeamTeamId().getScrumMasterId() == SessionInfo.userDTO.getUserId()) {
+                    // replace navigation panel with scrum master panel
+                    east.clear();
+                    ScrumMasterNavPanel smnp = new ScrumMasterNavPanel(center, west, east, service);
+                    east.add(smnp.asWidget());
+                }
                 //pdef.fillFormData();
             }
             @Override

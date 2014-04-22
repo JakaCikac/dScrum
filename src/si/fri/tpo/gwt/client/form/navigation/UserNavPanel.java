@@ -27,11 +27,13 @@ public class UserNavPanel implements IsWidget{
     private ContentPanel center;
     private FlowLayoutContainer con;
     private ContentPanel west;
+    private ContentPanel east;
 
-    public UserNavPanel(DScrumServiceAsync service, ContentPanel center, ContentPanel west) {
+    public UserNavPanel(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east) {
         this.center = center;
         this.service = service;
         this.west = west;
+        this.east = east;
     }
 
     private ContentPanel panel;
@@ -64,49 +66,7 @@ public class UserNavPanel implements IsWidget{
         cp.add(userDataEditB);
         con.add(cp);
 
-        cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
-
-        TextButton sprintRegistrationB = new TextButton("Sprint Management");
-        sprintRegistrationB.addSelectHandler(new SelectEvent.SelectHandler() {
-            @Override
-            public void onSelect(SelectEvent event) {
-                if (SessionInfo.projectDTO == null) {
-                    Info.display("No project selected", "Please select project from the list on the left.");
-                } else {
-                    SprintRegistrationForm srf = new SprintRegistrationForm(service);
-                    center.clear();
-                    center.add(srf.asWidget());
-                }
-            }
-        });
-        cp.add(sprintRegistrationB);
-        con.add(cp);
-
-        cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
-
-        TextButton sprintDataEditB = new TextButton("Sprint Edit");
-        sprintDataEditB.addSelectHandler(new SelectEvent.SelectHandler() {
-            @Override
-            public void onSelect(SelectEvent event) {
-                if (SessionInfo.projectDTO == null) {
-                    Info.display("No project selected", "Please select project from the list on the left.");
-                } else {
-                    SprintDataEditForm sdef = new SprintDataEditForm(service);
-                    center.clear();
-                    center.add(sdef.asWidget());
-                }
-            }
-        });
-        cp.add(sprintDataEditB);
-        con.add(cp);
-
-        ProjectSelectForm psf = new ProjectSelectForm(service, center);
+        ProjectSelectForm psf = new ProjectSelectForm(service, center, east);
         west.setHeadingText("Project list");
         west.add(psf.asWidget());
 

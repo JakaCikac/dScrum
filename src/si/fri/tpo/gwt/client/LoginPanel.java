@@ -1,7 +1,9 @@
 package si.fri.tpo.gwt.client;
 
 
+import com.sencha.gxt.core.client.dom.ScrollSupport;
 import com.sencha.gxt.core.client.util.Format;
+import com.sencha.gxt.core.client.util.Scroll;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
@@ -51,6 +53,7 @@ public class LoginPanel  extends FormPanel implements IsWidget {
         this.west = west;
         this.north = north;
         this.center = center;
+
     }
 
     public Widget asWidget() {
@@ -146,7 +149,7 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
             // open appropriate navigation panel and main form
-            AdminNavPanel adminNav = new AdminNavPanel(center, west, service);
+            AdminNavPanel adminNav = new AdminNavPanel(center, west, east, service);
 
             fillNavigationMainAndHeader(adminNav.asWidget(), null);//new UserSearchForm(service), message);
         } else {
@@ -157,9 +160,8 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
             // open appropriate navigation panel and main form
-              UserNavPanel userNavPanel = new UserNavPanel(service, center, west);
+              UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east);
               fillNavigationMainAndHeader(userNavPanel.asWidget(), null); // TODO: dodaj se main form
-
 
         }
     }

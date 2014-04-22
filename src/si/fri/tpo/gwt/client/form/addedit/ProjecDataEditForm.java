@@ -41,6 +41,7 @@ public class ProjecDataEditForm implements IsWidget{
     private ArrayList<UserDTO> al;
     private ContentPanel center;
     private ContentPanel west;
+    private ContentPanel east;
 
     private TextField projectName;
     private boolean changedProjectName;
@@ -79,10 +80,11 @@ public class ProjecDataEditForm implements IsWidget{
         return vp;
     }
 
-    public ProjecDataEditForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west) {
+    public ProjecDataEditForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east) {
         this.service = service;
         this.center = center;
         this.west = west;
+        this.east = east;
     }
 
     private void createProjectForm() {
@@ -327,7 +329,7 @@ public class ProjecDataEditForm implements IsWidget{
                             amb3.show();
                             // refresh gui
                             west.clear();
-                            ProjectSelectForm psf = new ProjectSelectForm(service, center);
+                            ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
                             west.add(psf.asWidget());
                             center.clear();
                         }

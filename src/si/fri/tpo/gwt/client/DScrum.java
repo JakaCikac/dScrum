@@ -7,16 +7,16 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.core.client.dom.ScrollSupport;
+import com.sencha.gxt.widget.core.client.container.*;
 import si.fri.tpo.gwt.client.dto.*;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.widget.core.client.ContentPanel;
-import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer.BorderLayoutData;
-import com.sencha.gxt.widget.core.client.container.MarginData;
-import com.sencha.gxt.widget.core.client.container.SimpleContainer;
-import com.sencha.gxt.widget.core.client.container.Viewport;
+
+import java.awt.*;
 
 /**
  * Created by nanorax on 2/4/14.
@@ -49,6 +49,15 @@ public class DScrum implements IsWidget, EntryPoint {
             ContentPanel south = new ContentPanel();
             ContentPanel north = new ContentPanel();
             ContentPanel west = new ContentPanel();
+            FlowLayoutContainer fl = new FlowLayoutContainer();
+            fl.getScrollSupport().setScrollMode(ScrollSupport.ScrollMode.AUTO);
+            center.add(fl);
+            /* TODO: ok, tole ne bo slo skoz, je treba cez v loginPanel in naprej poslat fl
+                ne center, in potem dodajat stvari na fl ... drugace je scroll no go
+             */
+
+
+
             west.setCollapsible(false);
             west.setResize(false);
 
