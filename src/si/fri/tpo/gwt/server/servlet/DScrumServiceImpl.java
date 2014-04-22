@@ -147,4 +147,79 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
         return UserImpl.findUserById(userId);
     }
 
+    @Override
+    public WorkloadDTO dummyWorkloadTrigger(WorkloadDTO workloadDTO) {
+        return new WorkloadDTO();
+    }
+
+    @Override
+    public WorkloadPKDTO dummyWorkloadPKTrigger(WorkloadPKDTO workloadPKDTO) {
+        return new WorkloadPKDTO();
+    }
+
+    @Override
+    public DiscussionDTO dummyDiscussionTrigger(DiscussionDTO discussionDTO) {
+        return new DiscussionDTO();
+    }
+
+    @Override
+    public DiscussionPKDTO dummyDiscussionPKTrigger(DiscussionPKDTO discussionPKDTO) {
+        return new DiscussionPKDTO();
+    }
+
+    @Override
+    public AcceptanceTestDTO dummyAcceptanceTestTrigger(AcceptanceTestDTO acceptanceTestDTO) {
+        return new AcceptanceTestDTO();
+    }
+
+    @Override
+    public CommentDTO dummyCommentTrigger(CommentDTO commentDTO) {
+        return new CommentDTO();
+    }
+
+    @Override
+    public CommentPKDTO dummyCommentPKTrigger(CommentPKDTO commentPKDTO) {
+        return new CommentPKDTO();
+    }
+
+    @Override
+    public DailyScrumEntryDTO dummyDailyScrumEntryTrigger(DailyScrumEntryDTO dailyScrumEntryDTO) {
+        return new DailyScrumEntryDTO();
+    }
+
+    @Override
+    public DailyScrumEntryPKDTO dummyDailyScrumEntryPKTrigger(DailyScrumEntryPKDTO dailyScrumEntryPKDTO) {
+        return new DailyScrumEntryPKDTO();
+    }
+
+    @Override
+    public PriorityDTO dummyPriorityTrigger(PriorityDTO priorityDTO) {
+        return new PriorityDTO();
+    }
+
+    @Override
+    public WorkblockDTO dummyWorkblockTrigger(WorkblockDTO workblockDTO) {
+        return new WorkblockDTO();
+    }
+
+    @Override
+    public WorkblockPKDTO dummyWorkblockPKTrigger(WorkblockPKDTO workblockPKDTO) {
+        return new WorkblockPKDTO();
+    }
+
+    @Override
+    public TaskDTO dummyTaskTrigger(TaskDTO taskDTO) {
+        return new TaskDTO();
+    }
+
+    @Override
+    public TaskPKDTO dummyTaskPKTrigger(TaskPKDTO taskPKDTO) {
+        return new TaskPKDTO();
+    }
+
+    @Override
+    public UserStoryDTO dummyUserStoryTrigger(UserStoryDTO userStoryDTO) {
+        return new UserStoryDTO();
+    }
+
 }

@@ -8,15 +8,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.dom.ScrollSupport;
+import com.sencha.gxt.core.client.util.Margins;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.*;
+import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer.BorderLayoutData;
 import si.fri.tpo.gwt.client.dto.*;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
-import com.sencha.gxt.core.client.util.Margins;
-import com.sencha.gxt.widget.core.client.ContentPanel;
-import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer.BorderLayoutData;
-
-import java.awt.*;
 
 /**
  * Created by nanorax on 2/4/14.
@@ -115,7 +113,7 @@ public class DScrum implements IsWidget, EntryPoint {
         };
         service.dummyCharacterTrigger(new Character('B'), callback);
 
-        AsyncCallback<SprintDTO> callback2 = new AsyncCallback<SprintDTO>() {
+        AsyncCallback<SprintDTO> sprintCallback = new AsyncCallback<SprintDTO>() {
 
             @Override
             public void onSuccess(SprintDTO result) {
@@ -127,23 +125,9 @@ public class DScrum implements IsWidget, EntryPoint {
                 Window.alert(caught.getMessage());
             }
         };
-        service.dummySprintTrigger(new SprintDTO(), callback2);
+        service.dummySprintTrigger(new SprintDTO(), sprintCallback);
 
-        AsyncCallback<SprintPKDTO> callbackPKDTO = new AsyncCallback<SprintPKDTO>() {
-
-            @Override
-            public void onSuccess(SprintPKDTO result) {
-                //Window.alert(result);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                Window.alert(caught.getMessage());
-            }
-        };
-        service.dummySprintPKTrigger(new SprintPKDTO(), callbackPKDTO);
-
-        AsyncCallback<UserDTO> callback3 = new AsyncCallback<UserDTO>() {
+        AsyncCallback<UserDTO> userCallback = new AsyncCallback<UserDTO>() {
 
             @Override
             public void onSuccess(UserDTO result) {
@@ -155,10 +139,10 @@ public class DScrum implements IsWidget, EntryPoint {
                 Window.alert(caught.getMessage());
             }
         };
-        service.dummyUserTrigger(new UserDTO(), callback3);
+        service.dummyUserTrigger(new UserDTO(), userCallback);
 
 
-        AsyncCallback<TeamDTO> callback5 = new AsyncCallback<TeamDTO>() {
+        AsyncCallback<TeamDTO> teamCallback = new AsyncCallback<TeamDTO>() {
 
             @Override
             public void onSuccess(TeamDTO result) {
@@ -170,9 +154,9 @@ public class DScrum implements IsWidget, EntryPoint {
                 Window.alert(caught.getMessage());
             }
         };
-        service.dummyTeamTrigger(new TeamDTO(), callback5);
+        service.dummyTeamTrigger(new TeamDTO(), teamCallback);
 
-        AsyncCallback<ProjectDTO> callback6 = new AsyncCallback<ProjectDTO>() {
+        AsyncCallback<ProjectDTO> projectCallback = new AsyncCallback<ProjectDTO>() {
 
             @Override
             public void onSuccess(ProjectDTO result) {
@@ -184,9 +168,9 @@ public class DScrum implements IsWidget, EntryPoint {
                 Window.alert(caught.getMessage());
             }
         };
-        service.dummyProjectTrigger(new ProjectDTO(), callback6);
+        service.dummyProjectTrigger(new ProjectDTO(), projectCallback);
 
-        AsyncCallback<DiscussionDTO> callback4 = new AsyncCallback<DiscussionDTO>() {
+        AsyncCallback<DiscussionDTO> discussionCallback = new AsyncCallback<DiscussionDTO>() {
 
             @Override
             public void onSuccess(DiscussionDTO result) {
@@ -196,11 +180,218 @@ public class DScrum implements IsWidget, EntryPoint {
             @Override
             public void onFailure(Throwable caught) {
                 Window.alert(caught.getMessage());
-
             }
         };
-        //service.dummyDiscussionTrigger(new DiscussionDTO(), callback4);
+        service.dummyDiscussionTrigger(new DiscussionDTO(), discussionCallback);
 
+        AsyncCallback<WorkloadDTO> workloadCallback = new AsyncCallback<WorkloadDTO>() {
 
+            @Override
+            public void onSuccess(WorkloadDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyWorkloadTrigger(new WorkloadDTO(), workloadCallback);
+
+        AsyncCallback<WorkloadPKDTO> workloadPKCallback = new AsyncCallback<WorkloadPKDTO>() {
+
+            @Override
+            public void onSuccess(WorkloadPKDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyWorkloadPKTrigger(new WorkloadPKDTO(), workloadPKCallback);
+
+        AsyncCallback<DiscussionPKDTO> discussionPKCallback = new AsyncCallback<DiscussionPKDTO>() {
+
+            @Override
+            public void onSuccess(DiscussionPKDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyDiscussionPKTrigger(new DiscussionPKDTO(), discussionPKCallback);
+
+        AsyncCallback<AcceptanceTestDTO> acceptanceTestCallback = new AsyncCallback<AcceptanceTestDTO>() {
+
+            @Override
+            public void onSuccess(AcceptanceTestDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyAcceptanceTestTrigger(new AcceptanceTestDTO(), acceptanceTestCallback);
+
+        AsyncCallback<CommentDTO> commentCallback = new AsyncCallback<CommentDTO>() {
+
+            @Override
+            public void onSuccess(CommentDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyCommentTrigger(new CommentDTO(), commentCallback);
+
+        AsyncCallback<CommentPKDTO> commentPKCallback = new AsyncCallback<CommentPKDTO>() {
+
+            @Override
+            public void onSuccess(CommentPKDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyCommentPKTrigger(new CommentPKDTO(), commentPKCallback);
+
+        AsyncCallback<DailyScrumEntryDTO> dailyScrumEntryCallback = new AsyncCallback<DailyScrumEntryDTO>() {
+
+            @Override
+            public void onSuccess(DailyScrumEntryDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyDailyScrumEntryTrigger(new DailyScrumEntryDTO(), dailyScrumEntryCallback);
+
+        AsyncCallback<DailyScrumEntryPKDTO> dailyScrumEntryPKCallback = new AsyncCallback<DailyScrumEntryPKDTO>() {
+
+            @Override
+            public void onSuccess(DailyScrumEntryPKDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyDailyScrumEntryPKTrigger(new DailyScrumEntryPKDTO(), dailyScrumEntryPKCallback);
+
+        AsyncCallback<PriorityDTO> priorityCallback = new AsyncCallback<PriorityDTO>() {
+
+            @Override
+            public void onSuccess(PriorityDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyPriorityTrigger(new PriorityDTO(), priorityCallback);
+
+        AsyncCallback<WorkblockDTO> workblockCallback = new AsyncCallback<WorkblockDTO>() {
+
+            @Override
+            public void onSuccess(WorkblockDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyWorkblockTrigger(new WorkblockDTO(), workblockCallback);
+
+        AsyncCallback<WorkblockPKDTO> workblockPKCallback = new AsyncCallback<WorkblockPKDTO>() {
+
+            @Override
+            public void onSuccess(WorkblockPKDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyWorkblockPKTrigger(new WorkblockPKDTO(), workblockPKCallback);
+
+        AsyncCallback<SprintPKDTO> sprintPKCallback = new AsyncCallback<SprintPKDTO>() {
+
+            @Override
+            public void onSuccess(SprintPKDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummySprintPKTrigger(new SprintPKDTO(), sprintPKCallback);
+
+        AsyncCallback<TaskDTO> taskCallback = new AsyncCallback<TaskDTO>() {
+
+            @Override
+            public void onSuccess(TaskDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyTaskTrigger(new TaskDTO(), taskCallback);
+
+        AsyncCallback<TaskPKDTO> taskPKCallback = new AsyncCallback<TaskPKDTO>() {
+
+            @Override
+            public void onSuccess(TaskPKDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyTaskPKTrigger(new TaskPKDTO(), taskPKCallback);
+
+        AsyncCallback<UserStoryDTO> userStoryCallback = new AsyncCallback<UserStoryDTO>() {
+
+            @Override
+            public void onSuccess(UserStoryDTO result) {
+                //Window.alert(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.dummyUserStoryTrigger(new UserStoryDTO(), userStoryCallback);
     }
 }

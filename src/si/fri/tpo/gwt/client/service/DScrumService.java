@@ -59,4 +59,34 @@ public interface DScrumService extends RemoteService {
     public Pair<Boolean, String> updateSprint(SprintDTO sprintDTO);
 
     public Pair<Boolean, String> deleteSprint(SprintDTO sprintDTO);
+
+    public WorkloadDTO dummyWorkloadTrigger(WorkloadDTO workloadDTO);
+
+    public WorkloadPKDTO dummyWorkloadPKTrigger(WorkloadPKDTO workloadPKDTO);
+
+    public DiscussionDTO dummyDiscussionTrigger(DiscussionDTO discussionDTO);
+
+    public DiscussionPKDTO dummyDiscussionPKTrigger(DiscussionPKDTO discussionPKDTO);
+
+    public AcceptanceTestDTO dummyAcceptanceTestTrigger(AcceptanceTestDTO acceptanceTestDTO);
+
+    public CommentDTO dummyCommentTrigger(CommentDTO commentDTO);
+
+    public CommentPKDTO dummyCommentPKTrigger(CommentPKDTO commentPKDTO);
+
+    public DailyScrumEntryDTO dummyDailyScrumEntryTrigger(DailyScrumEntryDTO dailyScrumEntryDTO);
+
+    public DailyScrumEntryPKDTO dummyDailyScrumEntryPKTrigger(DailyScrumEntryPKDTO dailyScrumEntryPKDTO);
+
+    public PriorityDTO dummyPriorityTrigger(PriorityDTO priorityDTO);
+
+    public WorkblockDTO dummyWorkblockTrigger(WorkblockDTO workblockDTO);
+
+    public WorkblockPKDTO dummyWorkblockPKTrigger(WorkblockPKDTO workblockPKDTO);
+
+    public TaskDTO dummyTaskTrigger(TaskDTO taskDTO);
+
+    public TaskPKDTO dummyTaskPKTrigger(TaskPKDTO taskPKDTO);
+
+    public UserStoryDTO dummyUserStoryTrigger(UserStoryDTO userStoryDTO);
 }

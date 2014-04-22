@@ -56,5 +56,35 @@ public interface DScrumServiceAsync {
     void updateSprint(SprintDTO sprintDTO, AsyncCallback<Pair<Boolean,String>> updateSprint);
 
     void deleteSprint(SprintDTO sprintDTO, AsyncCallback<Pair<Boolean,String>> deleteSprint);
+
+    void dummyWorkloadTrigger(WorkloadDTO workloadDTO, AsyncCallback<WorkloadDTO> workloadCallback);
+
+    void dummyWorkloadPKTrigger(WorkloadPKDTO workloadPKDTO, AsyncCallback<WorkloadPKDTO> workloadPKCallback);
+
+    void dummyDiscussionTrigger(DiscussionDTO discussionDTO, AsyncCallback<DiscussionDTO> discussionCallback);
+
+    void dummyDiscussionPKTrigger(DiscussionPKDTO discussionPKDTO, AsyncCallback<DiscussionPKDTO> discussionPKCallback);
+
+    void dummyAcceptanceTestTrigger(AcceptanceTestDTO acceptanceTestDTO, AsyncCallback<AcceptanceTestDTO> acceptanceTestCallback);
+
+    void dummyCommentTrigger(CommentDTO commentDTO, AsyncCallback<CommentDTO> commentCallback);
+
+    void dummyCommentPKTrigger(CommentPKDTO commentPKDTO, AsyncCallback<CommentPKDTO> commentPKCallback);
+
+    void dummyDailyScrumEntryTrigger(DailyScrumEntryDTO dailyScrumEntryDTO, AsyncCallback<DailyScrumEntryDTO> dailyScrumEntryCallback);
+
+    void dummyDailyScrumEntryPKTrigger(DailyScrumEntryPKDTO dailyScrumEntryPKDTO, AsyncCallback<DailyScrumEntryPKDTO> dailyScrumEntryPKCallback);
+
+    void dummyPriorityTrigger(PriorityDTO priorityDTO, AsyncCallback<PriorityDTO> priorityCallback);
+
+    void dummyWorkblockTrigger(WorkblockDTO workblockDTO, AsyncCallback<WorkblockDTO> workblockCallback);
+
+    void dummyWorkblockPKTrigger(WorkblockPKDTO workblockPKDTO, AsyncCallback<WorkblockPKDTO> workblockPKCallback);
+
+    void dummyTaskTrigger(TaskDTO taskDTO, AsyncCallback<TaskDTO> taskCallback);
+
+    void dummyTaskPKTrigger(TaskPKDTO taskPKDTO, AsyncCallback<TaskPKDTO> taskPKCallback);
+
+    void dummyUserStoryTrigger(UserStoryDTO userStoryDTO, AsyncCallback<UserStoryDTO> userStoryCallback);
 }
 
