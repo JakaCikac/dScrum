@@ -11,13 +11,10 @@ import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.info.Info;
-import si.fri.tpo.gwt.client.form.addedit.AdminUserDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.ProjecDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.SprintDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
-import si.fri.tpo.gwt.client.form.registration.ProjectRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.SprintRegistrationForm;
-import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
@@ -61,7 +58,7 @@ public class ScrumMasterNavPanel implements IsWidget {
         userDataEditB.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                UserDataEditForm udef = new UserDataEditForm(service);
+                UserDataEditForm udef = new UserDataEditForm(service, center);
                 center.clear();
                 center.add(udef.asWidget());
             }

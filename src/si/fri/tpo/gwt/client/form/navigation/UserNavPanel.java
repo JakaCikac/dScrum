@@ -1,22 +1,14 @@
 package si.fri.tpo.gwt.client.form.navigation;
 
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.legacy.client.data.BaseModelData;
-import com.sencha.gxt.legacy.client.data.ModelData;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
-import com.sencha.gxt.widget.core.client.info.Info;
-import si.fri.tpo.gwt.client.form.addedit.SprintDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
-import si.fri.tpo.gwt.client.form.registration.SprintRegistrationForm;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
-import si.fri.tpo.gwt.client.session.SessionInfo;
 
 /**
  * Created by nanorax on 06/04/14.
@@ -58,7 +50,7 @@ public class UserNavPanel implements IsWidget{
         userDataEditB.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                UserDataEditForm udef = new UserDataEditForm(service);
+                UserDataEditForm udef = new UserDataEditForm(service, center);
                 center.clear();
                 center.add(udef.asWidget());
             }

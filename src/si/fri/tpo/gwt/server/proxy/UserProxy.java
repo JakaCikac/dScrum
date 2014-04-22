@@ -32,7 +32,7 @@ public class UserProxy extends UserJpaController {
                 u = em.createNamedQuery("User.findByUsername", User.class).setParameter("username", username).getSingleResult();
                 return u;
             } catch (Exception e) {
-                System.out.println("User proxy findUserByUsername error: " + e.getMessage());
+                //System.out.println("User proxy findUserByUsername error: " + e.getMessage());
                 return null;
             }
         } finally {
@@ -53,7 +53,7 @@ public class UserProxy extends UserJpaController {
                 u = em.createNamedQuery("User.findByUserId", User.class).setParameter("userId", userId).getSingleResult();
                 return u;
             } catch (Exception e) {
-                System.out.println("User proxy findUserById error: " + e.getMessage());
+                //System.out.println("User proxy findUserById error: " + e.getMessage());
                 return null;
             }
         } finally {

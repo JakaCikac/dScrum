@@ -257,7 +257,7 @@ public class SprintDataEditForm implements IsWidget {
                 Window.alert(caught.getMessage());
             }
         };
-        System.out.println("Calling updateSprint");
+        //System.out.println("Calling updateSprint");
         // TODO: project name duplication
         service.deleteSprint(sprintDTO, deleteSprint);
     }
@@ -412,7 +412,7 @@ public class SprintDataEditForm implements IsWidget {
                 Window.alert(caught.getMessage());
             }
         };
-        System.out.println("Calling updateSprint");
+        //System.out.println("Calling updateSprint");
         // TODO: project name duplication
         service.updateSprint(sprintDTO, updateSprint);
     }

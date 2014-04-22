@@ -33,6 +33,11 @@ public class DScrum implements IsWidget, EntryPoint {
     }
 
     private SimpleContainer simpleContainer;
+    private ContentPanel center;
+    private ContentPanel east;
+    private ContentPanel south;
+    private ContentPanel north;
+    private ContentPanel west;
 
     public Widget asWidget() {
         if (simpleContainer == null) {
@@ -42,11 +47,11 @@ public class DScrum implements IsWidget, EntryPoint {
             simpleContainer.add(con, new MarginData(10));
             con.setBorders(false);
 
-            ContentPanel center = new ContentPanel();
-            ContentPanel east = new ContentPanel();
-            ContentPanel south = new ContentPanel();
-            ContentPanel north = new ContentPanel();
-            ContentPanel west = new ContentPanel();
+            center = new ContentPanel();
+            east = new ContentPanel();
+            south = new ContentPanel();
+            north = new ContentPanel();
+            west = new ContentPanel();
             FlowLayoutContainer fl = new FlowLayoutContainer();
             fl.getScrollSupport().setScrollMode(ScrollSupport.ScrollMode.AUTO);
             center.add(fl);
@@ -393,5 +398,25 @@ public class DScrum implements IsWidget, EntryPoint {
             }
         };
         service.dummyUserStoryTrigger(new UserStoryDTO(), userStoryCallback);
+    }
+
+    public ContentPanel getCenter() {
+        return this.center;
+    }
+
+    public ContentPanel getSouth() {
+        return this.south;
+    }
+
+    public ContentPanel getWest() {
+        return this.west;
+    }
+
+    public ContentPanel getEast() {
+        return this.east;
+    }
+
+    public ContentPanel getNorth() {
+        return this.north;
     }
 }

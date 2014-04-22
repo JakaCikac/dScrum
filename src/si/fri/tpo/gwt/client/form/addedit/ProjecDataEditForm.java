@@ -331,7 +331,7 @@ public class ProjecDataEditForm implements IsWidget{
                             west.clear();
                             ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
                             west.add(psf.asWidget());
-                            center.clear();
+                            center.clear(); //TODO: when home page (wall, sprint backlog etc) create as widget on center, till then just clear.
                         }
                     }
                     @Override

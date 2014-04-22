@@ -28,7 +28,7 @@ public class UserImpl {
                 }
 
                 User u = new User();
-                System.out.println("DTO username = " + dto.getUsername());
+                //System.out.println("DTO username = " + dto.getUsername());
                 u.setLastName(dto.getLastName());
                 u.setFirstName(dto.getFirstName());
                 u.setEmail(dto.getEmail());

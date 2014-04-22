@@ -79,7 +79,7 @@ public class GodNavPanel implements IsWidget {
         userDataEditB.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                UserDataEditForm udef = new UserDataEditForm(service);
+                UserDataEditForm udef = new UserDataEditForm(service, center);
                 center.clear();
                 center.add(udef.asWidget());
             }
@@ -96,7 +96,7 @@ public class GodNavPanel implements IsWidget {
         userEditing.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                AdminUserDataEditForm audf = new AdminUserDataEditForm(service);
+                AdminUserDataEditForm audf = new AdminUserDataEditForm(service, center);
                 center.clear();
                 center.add(audf.asWidget());
             }

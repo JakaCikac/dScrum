@@ -219,11 +219,12 @@ public class ProjectRegistrationForm implements IsWidget {
                     amb.show();
                     return;
                 } else teamDTO.setProductOwnerId(productOwnerDTO.getUserId());
-                if (selScrumMaster.getText().equals("")){
+                // Enforcing ScrumMaster selection when Project is selected (suspended - not required)
+                /*if (selScrumMaster.getText().equals("")){
                     amb = new AlertMessageBox("Empty Scrum Master", "Please choose scrum master!");
                     amb.show();
                     return;
-                } else teamDTO.setScrumMasterId(scrumMasterDTO.getUserId());
+                } else*/ teamDTO.setScrumMasterId(scrumMasterDTO.getUserId());
                 //TODO: Ali je potrebno da projekt ima člane skupine ali ne??
                 System.out.println(tsf.getMembers().size());//vrne 0 če je prazen
                 teamDTO.setUserList(tsf.getMembers());

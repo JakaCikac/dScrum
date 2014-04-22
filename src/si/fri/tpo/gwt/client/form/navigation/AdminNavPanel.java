@@ -4,12 +4,10 @@ package si.fri.tpo.gwt.client.form.navigation;
  * Created by nanorax on 04/04/14.
  */
 
-import com.google.gwt.user.client.ui.*;
-import com.sencha.gxt.legacy.client.data.ModelData;
-import com.sencha.gxt.legacy.client.data.BaseModelData;
-import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.ContentPanel;
-import com.sencha.gxt.widget.core.client.container.AccordionLayoutContainer;
+import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.info.Info;
@@ -17,8 +15,6 @@ import si.fri.tpo.gwt.client.form.addedit.AdminUserDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.ProjecDataEditForm;
 import si.fri.tpo.gwt.client.form.registration.ProjectRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
-import si.fri.tpo.gwt.client.form.search.SingleUserSearch;
-import si.fri.tpo.gwt.client.form.search.SingleUserSearchDialog;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
@@ -95,7 +91,7 @@ public class AdminNavPanel implements IsWidget {
         userEditing.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                AdminUserDataEditForm audf = new AdminUserDataEditForm(service);
+                AdminUserDataEditForm audf = new AdminUserDataEditForm(service, center);
                 center.clear();
                 center.add(audf.asWidget());
             }

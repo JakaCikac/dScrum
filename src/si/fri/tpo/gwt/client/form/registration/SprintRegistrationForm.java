@@ -9,7 +9,9 @@ import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
-import com.sencha.gxt.widget.core.client.form.*;
+import com.sencha.gxt.widget.core.client.form.DateField;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.IntegerField;
 import com.sencha.gxt.widget.core.client.form.validator.MaxNumberValidator;
 import com.sencha.gxt.widget.core.client.form.validator.MinDateValidator;
 import si.fri.tpo.gwt.client.components.Pair;
@@ -98,34 +100,55 @@ public class SprintRegistrationForm implements IsWidget {
                 }
                 sprintDTO.setProject(projectDTO);
 
-                for (SprintDTO sprintDT : sprintDTOList) {
-                    if (startDate.getValue().before(sprintDT.getEndDate())) {
-                        AlertMessageBox d = new AlertMessageBox("Wrong Start Date", "Sprint v tem časovnem obdobju že obstaja.");
-                        d.show();
-                        return;
-                    } else {
-                        sprintDTO.setStartDate(startDate.getValue());
-                        break;
-                    }
+                Date today = new Date(); // Get today's date.
+                Date yesterday = new Date();
+                yesterday.setDate(today.getDate()-1);
+                // Check if sprint is in past.
+                if (startDate.getValue().before(yesterday)) {
+                        AlertMessageBox d = new AlertMessageBox("Sprint in past", "Sprints cannot be entered in the past.");
+                    d.show();
+                    return;
                 }
 
+                // Check if two sprints overlap.
+                    for (SprintDTO sprintDT : sprintDTOList) {
+                        if (startDate.getValue().before(sprintDT.getEndDate())) {
+                        AlertMessageBox d = new AlertMessageBox("Wrong Start Date", "Sprint already exists in selected date range.");
+                        d.show();
+                        return;
+                    }
+                } //TODO: če je sprint v prihodnosti, ampak se ne prekriva s temle, vseeno ne spusti čez
+                sprintDTO.setStartDate(startDate.getValue());
+
+                // Check if sprint ends before it started.
                 if (finishDate.getValue().before(startDate.getValue())) {
-                    AlertMessageBox d = new AlertMessageBox("Wrong Finish Date", "Finish Date must be after Start Date.");
+                    AlertMessageBox d = new AlertMessageBox("Wrong Finish Date", "Finish date must be after start date.");
                     d.show();
                     return;
                 } else {
                     sprintDTO.setEndDate(finishDate.getValue());
                 }
 
-                if (velocity.getText().equals("")){
+                // Check if velocity is entered.
+                if (velocity.getText().equals("")) {
                     AlertMessageBox d = new AlertMessageBox("Velocity empty", "Please enter sprint velocity!");
                     d.show();
                     return;
-                } else {
-                    sprintDTO.setVelocity(Integer.parseInt(velocity.getText()));
                 }
 
-                if (startDate.getValue().before(new Date())) {
+                int sprintVelocity = Integer.parseInt(velocity.getText()); // Convert sprint velocity to integer.
+
+                // Check if velocity is greater than 0.
+                if (sprintVelocity < 1) {
+                    AlertMessageBox d = new AlertMessageBox("Velocity zero", "Please enter sprint velocity that is greater than zero!");
+                    d.show();
+                    return;
+                } else {
+                    sprintDTO.setVelocity(sprintVelocity);
+                }
+
+                // Sets sprint status according to its date boundaries.
+                if (startDate.getValue().before(today)) {
                     sprintDTO.setStatus("In progress");
                 } else {
                     sprintDTO.setStatus("Waiting");

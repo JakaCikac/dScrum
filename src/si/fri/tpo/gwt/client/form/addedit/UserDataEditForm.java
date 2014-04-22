@@ -5,6 +5,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
@@ -37,9 +38,11 @@ public class UserDataEditForm implements IsWidget{
     private PasswordField repassword;
     private UserDTO userDTO;
     private boolean changedUsername;
+    private ContentPanel center;
 
-    public UserDataEditForm(DScrumServiceAsync service) {
+    public UserDataEditForm(DScrumServiceAsync service, ContentPanel center) {
         this.service = service;
+        this.center = center;
     }
 
     @Override
@@ -122,7 +125,7 @@ public class UserDataEditForm implements IsWidget{
                         if (result.getFirst()) {
                             final UserDTO saveUserDTO = new UserDTO();
                             saveUserDTO.setUserId(userDTO.getUserId());
-                            System.out.println("UserDTO id :" + userDTO.getUserId());
+                            //System.out.println("UserDTO id :" + userDTO.getUserId());
                             if (username.getText().equals("")) {
                                 amb = new AlertMessageBox("Empty Username", "Please enter username!");
                                 amb.show();
@@ -135,7 +138,7 @@ public class UserDataEditForm implements IsWidget{
                                 changedUsername = false;
                                 saveUserDTO.setUsername(userDTO.getUsername());
                             }
-                            System.out.println("Changed username from " + userDTO.getUsername() + " to " + username.getText() + " and flag is " + changedUsername);
+                            //System.out.println("Changed username from " + userDTO.getUsername() + " to " + username.getText() + " and flag is " + changedUsername);
 
                             if (email.getText().equals("")) {
                                 amb = new AlertMessageBox("Empty Email", "Please enter your email!");
@@ -212,6 +215,8 @@ public class UserDataEditForm implements IsWidget{
                 else {
                     MessageBox amb3 = new MessageBox("Message", result.getSecond());
                     amb3.show();
+
+                    center.clear(); //TODO: when home page (wall, sprint backlog etc) create as widget on center, till then just clear.
                 }
             }
             @Override
@@ -220,7 +225,7 @@ public class UserDataEditForm implements IsWidget{
             }
         };
         // true, ker vedno dodamo novega userja / admina
-        System.out.println("Calling updateUser with changed username flag " + changedUsername);
+        //System.out.println("Calling updateUser with changed username flag " + changedUsername);
         service.updateUser(userDTO, changedUsername, updateUser);
 
     }

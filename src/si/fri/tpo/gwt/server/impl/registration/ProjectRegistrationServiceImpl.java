@@ -2,9 +2,7 @@ package si.fri.tpo.gwt.server.impl.registration;
 
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
-import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.server.impl.project.ProjectImpl;
-import si.fri.tpo.gwt.server.impl.user.UserImpl;
 
 import java.util.List;
 
@@ -35,16 +33,17 @@ public class ProjectRegistrationServiceImpl {
     }
 
 
-
     private static Pair<Boolean, String> duplicateCheck(ProjectDTO epDTO) {
 
+        String epDTOLo = epDTO.getName().toLowerCase();
         List<ProjectDTO> projectDTOs = ProjectImpl.getAllProject();
         if(projectDTOs != null) {
             System.out.println("Retrieved All project list.");
         }
         for (ProjectDTO dto : projectDTOs) {
             //TODO: in case required, check for more equals with &&
-            if (dto.getName().equals(epDTO.getName())) {
+
+            if (dto.getName().toLowerCase().equals(epDTOLo)) {
                 System.out.println("Can't add: existing project!");
                 return Pair.of(false, "Can't add: existing project!");
             }

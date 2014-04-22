@@ -6,6 +6,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.core.client.util.ToggleGroup;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
@@ -48,9 +49,11 @@ public class AdminUserDataEditForm implements IsWidget{
     private UserDTO userDTO;
     private boolean changedUsername;
     private TextButton selectUser;
+    private ContentPanel center;
 
-    public AdminUserDataEditForm(DScrumServiceAsync service) {
+    public AdminUserDataEditForm(DScrumServiceAsync service, ContentPanel center) {
         this.service = service;
+        this.center = center;
     }
 
     @Override
@@ -109,7 +112,6 @@ public class AdminUserDataEditForm implements IsWidget{
                     activeRB.setValue(false);
                     inactiveRB.setValue(true);
                     updateUserCall();
-                    emptyForm();
                     Info.display("Resetting form.", "The form has been reset.");
                 } else Info.display("No selected user", "There is no user select, please select one.");
             }
@@ -273,7 +275,7 @@ public class AdminUserDataEditForm implements IsWidget{
             }
         };
         // true, ker vedno dodamo novega userja / admina
-        System.out.println("Calling updateUser with changed username flag " + changedUsername);
+        //System.out.println("Calling updateUser with changed username flag " + changedUsername);
         service.updateUser(userDTO, changedUsername, updateUser);
 
     }
@@ -308,7 +310,7 @@ public class AdminUserDataEditForm implements IsWidget{
                     if (result.getFirst()) {
                         final UserDTO saveUserDTO = new UserDTO();
                         saveUserDTO.setUserId(userDTO.getUserId());
-                        System.out.println("UserDTO id :" + userDTO.getUserId());
+                        //System.out.println("UserDTO id :" + userDTO.getUserId());
                         if (username.getText().equals("")) {
                             amb = new AlertMessageBox("Empty Username", "Please enter username!");
                             amb.show();
@@ -321,7 +323,7 @@ public class AdminUserDataEditForm implements IsWidget{
                             changedUsername = false;
                             saveUserDTO.setUsername(userDTO.getUsername());
                         }
-                        System.out.println("Changed username from " + username.getText() + " to " + username.getText());
+                        //System.out.println("Changed username from " + username.getText() + " to " + username.getText());
                         if (email.getText().equals("")) {
                             amb = new AlertMessageBox("Empty Email", "Please enter your email!");
                             amb.show();
@@ -341,6 +343,7 @@ public class AdminUserDataEditForm implements IsWidget{
                         }
                         // Save user
                         performUpdateUser(saveUserDTO);
+                        center.clear(); //TODO: when home page (wall, sprint backlog etc) create as widget on center, till then just clear.
 
                     } else {
                         MessageBox box = new MessageBox("Select user", "Maybe select a user first, yes?");

@@ -3,6 +3,8 @@ package si.fri.tpo.gwt.client.form.registration;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.regexp.shared.MatchResult;
+import com.google.gwt.regexp.shared.RegExp;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
@@ -10,10 +12,13 @@ import com.sencha.gxt.core.client.util.ToggleGroup;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
+import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
-import com.sencha.gxt.widget.core.client.form.*;
-import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.PasswordField;
+import com.sencha.gxt.widget.core.client.form.Radio;
+import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.form.validator.RegExValidator;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
@@ -88,8 +93,8 @@ public class UserRegistrationForm implements IsWidget {
 
         email = new TextField();
         email.setAllowBlank(false);
-        email.setEmptyText("chuck@norris.com");
-        email.addValidator(new RegExValidator("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", "chuck@norris.com"));
+        email.setEmptyText("local-part@domain");
+        email.addValidator(new RegExValidator("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$", "Email format must be local-part@domain."));
         p.add(new FieldLabel(email, "Email *"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         password = new PasswordField();
@@ -132,7 +137,12 @@ public class UserRegistrationForm implements IsWidget {
                     public void onSuccess(Pair<Boolean, String> result) {
                         String hashPass = null, confirmPass = null;
                         AlertMessageBox amb;
-                        //TODO: zakaj je tuki if, ki se izvede vsakič ?????????
+
+                        // check if email address is valid
+                        RegExp emailRegExp = RegExp.compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
+                        MatchResult emailMatcher = emailRegExp.exec(email.getValue());
+
+                        // This if is for validation, but is unused (always true).
                         if (result.getFirst()) {
                             final UserDTO userDTO = new UserDTO();
                             if (username.getValue() == null) {
@@ -143,6 +153,10 @@ public class UserRegistrationForm implements IsWidget {
 
                             if (email.getValue() == null) {
                                 amb = new AlertMessageBox("Empty Email", "Please enter your email!");
+                                amb.show();
+                                return;
+                            } else if (emailMatcher == null) {
+                                amb = new AlertMessageBox("Invalid email format", "Please enter correct email address!");
                                 amb.show();
                                 return;
                             } else userDTO.setEmail(email.getValue());

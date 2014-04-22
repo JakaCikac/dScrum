@@ -36,13 +36,13 @@ public class UserRegistrationServiceImpl {
     private static Pair<Boolean, String> duplicateCheck(UserDTO esDTO) {
 
             List<UserDTO> userDTOs = UserImpl.getAllUsers();
-            if(userDTOs != null) {
+            /*if(userDTOs != null) {
                 System.out.println("Retrieved All users list.");
-            }
+            }*/
             for (UserDTO dto : userDTOs) {
                 //TODO: in case required, check for more equals with &&
                 if (dto.getUsername().equals(esDTO.getUsername())) {
-                    System.out.println("Can't add: existing user!");
+                    //System.out.println("Can't add: existing user!");
                     return Pair.of(false, "Can't add: existing user!");
                 }
             }
