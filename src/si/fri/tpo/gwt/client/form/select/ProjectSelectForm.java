@@ -27,7 +27,10 @@ import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
 import com.sencha.gxt.widget.core.client.info.Info;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
+import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
+import si.fri.tpo.gwt.client.form.navigation.GodNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.ScrumMasterNavPanel;
+import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 import si.fri.tpo.gwt.client.form.addedit.ProjecDataEditForm;
@@ -115,13 +118,33 @@ public class ProjectSelectForm implements IsWidget {
                 System.out.println("SessionProjectDTO ID: " + selectedProject.getSprintList().size() );
                 // TODO: uh oh, tole ne bo slo tako, moras pogruntat kako osvzit data edit forme, ce se project zamenja med urejanjem
                 // TODO: preveri ce je loginan user scrum master za tolele in naredi nov nav panel
-                // if user is scrum master for selected project
-                if (SessionInfo.projectDTO.getTeamTeamId().getScrumMasterId() == SessionInfo.userDTO.getUserId()) {
+                // if user is scrum master for selected project and not an admin
+                if (SessionInfo.projectDTO.getTeamTeamId().getScrumMasterId() == SessionInfo.userDTO.getUserId()
+                        && !SessionInfo.userDTO.isAdmin()) {
                     // replace navigation panel with scrum master panel
                     east.clear();
                     ScrumMasterNavPanel smnp = new ScrumMasterNavPanel(center, west, east, service);
                     east.add(smnp.asWidget());
+                }  // if user is just a user and not a scrum master
+                else if (SessionInfo.projectDTO.getTeamTeamId().getScrumMasterId() != SessionInfo.userDTO.getUserId()
+                        && !SessionInfo.userDTO.isAdmin()) {
+                    east.clear();
+                    UserNavPanel unp = new UserNavPanel(service, center, west, east);
+                    east.add(unp.asWidget());
+                } // if user is not scrum master but admin
+                else if (SessionInfo.projectDTO.getTeamTeamId().getScrumMasterId() != SessionInfo.userDTO.getUserId()
+                        && SessionInfo.userDTO.isAdmin()) {
+                    east.clear();
+                    AdminNavPanel anp = new AdminNavPanel(center, west, east, service);
+                    east.add(anp.asWidget());
+                } // if user is scrum master and admin
+                else if (SessionInfo.projectDTO.getTeamTeamId().getScrumMasterId() == SessionInfo.userDTO.getUserId()
+                        && SessionInfo.userDTO.isAdmin()) {
+                    east.clear();
+                    GodNavPanel gnp = new GodNavPanel(center, west, east, service);
+                    east.add(gnp.asWidget());
                 }
+
                 //pdef.fillFormData();
             }
             @Override
