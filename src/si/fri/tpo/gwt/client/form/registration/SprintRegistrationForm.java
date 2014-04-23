@@ -34,6 +34,7 @@ public class SprintRegistrationForm implements IsWidget {
     private VerticalPanel vp;
     private ListBox lb;
     private ArrayList<UserDTO> al;
+    private ProjectDTO pdto;
 
     private DateField startDate;
     private DateField finishDate;
@@ -90,16 +91,19 @@ public class SprintRegistrationForm implements IsWidget {
                 // Get Sprint Finish Date
                 // Get Sprint Velocity
                 final SprintDTO sprintDTO = new SprintDTO();
-
-                ProjectDTO projectDTO = SessionInfo.projectDTO;
-                List<SprintDTO> sprintDTOList = projectDTO.getSprintList();
-                if(sprintDTOList == null){
+                //TODO: SEQUENCE NUMBER NOT WORKING!!!
+                System.out.println("Session Project Name: " + SessionInfo.projectDTO.getName());
+                getNewProjectDTO(SessionInfo.projectDTO.getName());
+                System.out.println("Project Name: " + SessionInfo.projectDTO.getName());
+                List<SprintDTO> sprintDTOList = SessionInfo.projectDTO.getSprintList();
+                if (sprintDTOList == null){
                     sprintDTO.setSeqNumber(1);
                 } else {
                     sprintDTO.setSeqNumber(sprintDTOList.size()+1);
                 }
-                sprintDTO.setProject(projectDTO);
+                sprintDTO.setProject(SessionInfo.projectDTO);
 
+                /* ------------------------------- VALIDATORS --------------------------------- */
                 Date today = new Date(); // Get today's date.
                 Date yesterday = new Date();
                 yesterday.setDate(today.getDate()-1);
@@ -110,24 +114,30 @@ public class SprintRegistrationForm implements IsWidget {
                     return;
                 }
 
-                // Check if two sprints overlap.
-                    for (SprintDTO sprintDT : sprintDTOList) {
-                        if (startDate.getValue().before(sprintDT.getEndDate())) {
-                        AlertMessageBox d = new AlertMessageBox("Wrong Start Date", "Sprint already exists in selected date range.");
-                        d.show();
-                        return;
-                    }
-                } //TODO: če je sprint v prihodnosti, ampak se ne prekriva s temle, vseeno ne spusti čez
-                sprintDTO.setStartDate(startDate.getValue());
-
                 // Check if sprint ends before it started.
-                if (finishDate.getValue().before(startDate.getValue())) {
+                if (finishDate.getValue().before(startDate.getValue()) || finishDate.getValue().equals(startDate.getValue())) {
                     AlertMessageBox d = new AlertMessageBox("Wrong Finish Date", "Finish date must be after start date.");
                     d.show();
                     return;
-                } else {
-                    sprintDTO.setEndDate(finishDate.getValue());
                 }
+
+                // Check if two sprints overlap.
+                for (SprintDTO sprintDT : sprintDTOList) {
+                    if (startDate.getValue().before(sprintDT.getEndDate()) && finishDate.getValue().after(sprintDT.getStartDate())) {
+                        AlertMessageBox d = new AlertMessageBox("Wrong date range", "Sprint already exists in selected date range.");
+                        d.show();
+                        return;
+                    }
+                    if (startDate.getValue().equals(sprintDT.getEndDate()) || finishDate.getValue().equals(sprintDT.getStartDate())) {
+                        AlertMessageBox d = new AlertMessageBox("Wrong date range", "Next sprint cannot begin the same day previous sprint ended and vice versa.");
+                        d.show();
+                        return;
+                    }
+                }
+
+                // If all date validation tests have been passed, enter the dates into DTO.
+                sprintDTO.setStartDate(startDate.getValue());
+                sprintDTO.setEndDate(finishDate.getValue());
 
                 // Check if velocity is entered.
                 if (velocity.getText().equals("")) {
@@ -143,9 +153,12 @@ public class SprintRegistrationForm implements IsWidget {
                     AlertMessageBox d = new AlertMessageBox("Velocity zero", "Please enter sprint velocity that is greater than zero!");
                     d.show();
                     return;
-                } else {
-                    sprintDTO.setVelocity(sprintVelocity);
                 }
+
+                // If velocity validators have been passed enter sprint velocity into DTO.
+                sprintDTO.setVelocity(sprintVelocity);
+
+                /* ----------------------------- END VALIDATORS ------------------------------- */
 
                 // Sets sprint status according to its date boundaries.
                 if (startDate.getValue().before(today)) {
@@ -160,6 +173,25 @@ public class SprintRegistrationForm implements IsWidget {
         panel.addButton(submitButton);
 
         vp.add(panel);
+    }
+
+    private void getNewProjectDTO(String name) {
+        AsyncCallback<ProjectDTO> callback = new AsyncCallback<ProjectDTO>() {
+            @Override
+            public void onSuccess(ProjectDTO result) {
+                System.out.println("Vrne projectDTO ime" + result.getName());
+                SessionInfo.projectDTO = result;
+                setPdto(result);
+                System.out.println("SelectedProject ID : " + pdto.getProjectId());
+                System.out.println("SessionProjectDTO ID: " + pdto.getSprintList().size());
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.findProjectByName(name, callback);
+
     }
 
     private void performSaveSprint(SprintDTO sprintDTO) {
@@ -188,5 +220,9 @@ public class SprintRegistrationForm implements IsWidget {
         System.out.println("Calling saveSprint");
         // TODO: project name duplication
         service.saveSprint(sprintDTO, saveSprint);
+    }
+
+    public void setPdto(ProjectDTO pdto) {
+        this.pdto = pdto;
     }
 }
