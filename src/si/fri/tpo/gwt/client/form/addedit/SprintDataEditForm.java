@@ -126,11 +126,19 @@ public class SprintDataEditForm implements IsWidget {
                     sprintDTO = null;
                     emptyForm();
                     Info.display("Sprint finished", "This Sprint has already completed.");
+                    submitButton.setEnabled(false);
+                    deleteButton.setEnabled(false);
                 } else if(sprintDTO.getStartDate().before(new Date())){
                     sprintDTO = null;
                     emptyForm();
                     Info.display("Sprint in progress", "This Sprint is in progress.");
-                } else fillForm();
+                    submitButton.setEnabled(false);
+                    deleteButton.setEnabled(false);
+                } else {
+                    fillForm();
+                    submitButton.setEnabled(true);
+                    deleteButton.setEnabled(true);
+                }
             }
         });
 
@@ -167,6 +175,7 @@ public class SprintDataEditForm implements IsWidget {
         p.add(new FieldLabel(status, "Status"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         submitButton = new SubmitButton("Update Sprint");
+        submitButton.setEnabled(false);
         submitButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -184,32 +193,65 @@ public class SprintDataEditForm implements IsWidget {
                 }*/
                 sprintDTO.setProject(projectDTO);
 
+                /* ------------------------------- VALIDATORS --------------------------------- */
+                Date today = new Date(); // Get today's date.
+                Date yesterday = new Date();
+                yesterday.setDate(today.getDate()-1);
+                // Check if sprint is in past.
+                if (startDate.getValue().before(yesterday)) {
+                    AlertMessageBox d = new AlertMessageBox("Sprint in past", "Sprints cannot be entered in the past.");
+                    d.show();
+                    return;
+                }
+
+                // Check if sprint ends before it started.
+                if (finishDate.getValue().before(startDate.getValue()) || finishDate.getValue().equals(startDate.getValue())) {
+                    AlertMessageBox d = new AlertMessageBox("Wrong Finish Date", "Finish date must be after start date.");
+                    d.show();
+                    return;
+                }
+
+                // Check if two sprints overlap.
                 for (SprintDTO sprintDT : sprintDTOList) {
-                    if (startDate.getValue().before(sprintDT.getEndDate())) {
-                        AlertMessageBox d = new AlertMessageBox("Wrong Start Date", "Sprint v tem časovnem obdobju že obstaja.");
-                        d.show();
-                        return;
-                    } else {
-                        sprintDTO.setStartDate(startDate.getValue());
-                        break;
+                    // Must exclude sprint in question.
+                    if (sprintDTO.getSprintPK().getSprintId() != sprintDT.getSprintPK().getSprintId()) {
+                        if (startDate.getValue().before(sprintDT.getEndDate()) && finishDate.getValue().after(sprintDT.getStartDate())) {
+                            AlertMessageBox d = new AlertMessageBox("Wrong date range", "Sprint already exists in selected date range.");
+                            d.show();
+                            return;
+                        }
+                        if (startDate.getValue().equals(sprintDT.getEndDate()) || finishDate.getValue().equals(sprintDT.getStartDate())) {
+                            AlertMessageBox d = new AlertMessageBox("Wrong date range", "Next sprint cannot begin the same day previous sprint ended and vice versa.");
+                            d.show();
+                            return;
+                        }
                     }
                 }
 
-                if (finishDate.getValue().before(startDate.getValue())) {
-                    AlertMessageBox d = new AlertMessageBox("Wrong Finish Date", "Finish Date must be after Start Date.");
-                    d.show();
-                    return;
-                } else {
-                    sprintDTO.setEndDate(finishDate.getValue());
-                }
+                // If all date validation tests have been passed, enter the dates into DTO.
+                sprintDTO.setStartDate(startDate.getValue());
+                sprintDTO.setEndDate(finishDate.getValue());
 
-                if (velocity.getText().equals("")){
+                // Check if velocity is entered.
+                if (velocity.getText().equals("")) {
                     AlertMessageBox d = new AlertMessageBox("Velocity empty", "Please enter sprint velocity!");
                     d.show();
                     return;
-                } else {
-                    sprintDTO.setVelocity(Integer.parseInt(velocity.getText()));
                 }
+
+                int sprintVelocity = Integer.parseInt(velocity.getText()); // Convert sprint velocity to integer.
+
+                // Check if velocity is greater than 0.
+                if (sprintVelocity < 1) {
+                    AlertMessageBox d = new AlertMessageBox("Velocity zero", "Please enter sprint velocity that is greater than zero!");
+                    d.show();
+                    return;
+                }
+
+                // If velocity validators have been passed enter sprint velocity into DTO.
+                sprintDTO.setVelocity(sprintVelocity);
+
+                /* ----------------------------- END VALIDATORS ------------------------------- */
 
                 sprintDTO.setStatus(status.getValue());
 
@@ -219,6 +261,7 @@ public class SprintDataEditForm implements IsWidget {
         panel.addButton(submitButton);
 
         deleteButton = new Button("Delete");
+        deleteButton.setEnabled(false);
         deleteButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {

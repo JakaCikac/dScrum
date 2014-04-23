@@ -71,7 +71,7 @@ public class SprintImpl {
             e.printStackTrace();
             return Pair.of(false, e.getMessage());
         }
-        return Pair.of(true, "");
+        return Pair.of(true, "Sprint was entered successfully!");
     }
 
     public static Pair<Boolean, String> updateSprint(SprintDTO sprintDTO) {
@@ -136,7 +136,7 @@ public class SprintImpl {
             e.printStackTrace();
             return Pair.of(false, e.getMessage());
         }
-        return Pair.of(true, "");
+        return Pair.of(true, "Sprint was updated successfully!");
     }
 
     public static Pair<Boolean, String> deleteSprint(SprintDTO sprintDTO) {
@@ -201,6 +201,6 @@ public class SprintImpl {
             e.printStackTrace();
             return Pair.of(false, e.getMessage());
         }
-        return Pair.of(true, "");
+        return Pair.of(true, "Sprint was deleted successfully!");
     }
 }
