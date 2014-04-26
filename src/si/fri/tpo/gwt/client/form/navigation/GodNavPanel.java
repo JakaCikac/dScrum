@@ -18,6 +18,7 @@ import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
 import si.fri.tpo.gwt.client.form.registration.ProjectRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.SprintRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
+import si.fri.tpo.gwt.client.form.registration.UserStoryRegistrationForm;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
@@ -75,7 +76,7 @@ public class GodNavPanel implements IsWidget {
         cp.setAnimCollapse(false);
         cp.setBodyStyleName("pad-text");
 
-        TextButton userDataEditB = new TextButton("Edit me");
+        final TextButton userDataEditB = new TextButton("Edit me");
         userDataEditB.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
@@ -147,7 +148,7 @@ public class GodNavPanel implements IsWidget {
         cp.setAnimCollapse(false);
         cp.setBodyStyleName("pad-text");
 
-        TextButton sprintRegistrationB = new TextButton("Sprint Management");
+        final TextButton sprintRegistrationB = new TextButton("Sprint Management");
         sprintRegistrationB.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
@@ -168,7 +169,7 @@ public class GodNavPanel implements IsWidget {
         cp.setAnimCollapse(false);
         cp.setBodyStyleName("pad-text");
 
-        TextButton sprintDataEditB = new TextButton("Sprint Edit");
+        final TextButton sprintDataEditB = new TextButton("Sprint Edit");
         sprintDataEditB.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
@@ -182,6 +183,27 @@ public class GodNavPanel implements IsWidget {
             }
         });
         cp.add(sprintDataEditB);
+        con.add(cp);
+
+        cp = new ContentPanel();
+        cp.setHeaderVisible(false);
+        cp.setAnimCollapse(false);
+        cp.setBodyStyleName("pad-text");
+
+        final TextButton userStoryManagement = new TextButton("User Story Management");
+        userStoryManagement.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                if (SessionInfo.projectDTO == null) {
+                    Info.display("No project selected", "Please select project from the list on the left." );
+                } else {
+                    UserStoryRegistrationForm usrf = new UserStoryRegistrationForm(service, center, west, east);
+                    center.clear();
+                    center.add(usrf.asWidget());
+                }
+            }
+        });
+        cp.add(userStoryManagement);
         con.add(cp);
 
         ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);

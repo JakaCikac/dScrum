@@ -15,7 +15,6 @@ import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.IntegerField;
 import com.sencha.gxt.widget.core.client.form.validator.MaxNumberValidator;
 import com.sencha.gxt.widget.core.client.form.validator.MinDateValidator;
-import org.eclipse.jetty.server.ResourceCache;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;

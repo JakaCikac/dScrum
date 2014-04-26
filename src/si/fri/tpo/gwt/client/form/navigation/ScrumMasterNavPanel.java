@@ -10,11 +10,16 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.grid.editing.GridEditing;
 import com.sencha.gxt.widget.core.client.info.Info;
+import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
+import si.fri.tpo.gwt.client.form.addedit.AcceptanceTestDataEditAbstractForm;
 import si.fri.tpo.gwt.client.form.addedit.ProjecDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.SprintDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
 import si.fri.tpo.gwt.client.form.registration.SprintRegistrationForm;
+import si.fri.tpo.gwt.client.form.registration.UserStoryRegistrationForm;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
@@ -128,6 +133,27 @@ public class ScrumMasterNavPanel implements IsWidget {
             }
         });
         cp.add(sprintDataEditB);
+        con.add(cp);
+
+        cp = new ContentPanel();
+        cp.setHeaderVisible(false);
+        cp.setAnimCollapse(false);
+        cp.setBodyStyleName("pad-text");
+
+        final TextButton userStoryManagement = new TextButton("User Story Management");
+        userStoryManagement.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                if (SessionInfo.projectDTO == null) {
+                    Info.display("No project selected", "Please select project from the list on the left." );
+                } else {
+                    UserStoryRegistrationForm usrf = new UserStoryRegistrationForm(service, center, west, east);
+                    center.clear();
+                    center.add(usrf.asWidget());
+                }
+            }
+        });
+        cp.add(userStoryManagement);
         con.add(cp);
 
         ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
