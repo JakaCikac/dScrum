@@ -5,6 +5,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
@@ -14,10 +15,12 @@ import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.IntegerField;
 import com.sencha.gxt.widget.core.client.form.validator.MaxNumberValidator;
 import com.sencha.gxt.widget.core.client.form.validator.MinDateValidator;
+import org.eclipse.jetty.server.ResourceCache;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
@@ -31,10 +34,10 @@ import java.util.List;
 public class SprintRegistrationForm implements IsWidget {
 
     private DScrumServiceAsync service;
+    private ContentPanel center, west, east;
     private VerticalPanel vp;
     private ListBox lb;
     private ArrayList<UserDTO> al;
-    private ProjectDTO pdto;
 
     private DateField startDate;
     private DateField finishDate;
@@ -42,8 +45,11 @@ public class SprintRegistrationForm implements IsWidget {
 
     private SubmitButton submitButton;
 
-    public SprintRegistrationForm(DScrumServiceAsync service)  {
+    public SprintRegistrationForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east)  {
         this.service = service;
+        this.center = center;
+        this.west = west;
+        this.east = east;
     }
 
     @Override
@@ -92,9 +98,7 @@ public class SprintRegistrationForm implements IsWidget {
                 // Get Sprint Velocity
                 final SprintDTO sprintDTO = new SprintDTO();
                 //TODO: SEQUENCE NUMBER NOT WORKING!!!
-                System.out.println("Session Project Name: " + SessionInfo.projectDTO.getName());
-                getNewProjectDTO(SessionInfo.projectDTO.getName());
-                System.out.println("Project Name: " + SessionInfo.projectDTO.getName());
+
                 List<SprintDTO> sprintDTOList = SessionInfo.projectDTO.getSprintList();
                 if (sprintDTOList == null){
                     sprintDTO.setSeqNumber(1);
@@ -175,25 +179,6 @@ public class SprintRegistrationForm implements IsWidget {
         vp.add(panel);
     }
 
-    private void getNewProjectDTO(String name) {
-        AsyncCallback<ProjectDTO> callback = new AsyncCallback<ProjectDTO>() {
-            @Override
-            public void onSuccess(ProjectDTO result) {
-                System.out.println("Vrne projectDTO ime" + result.getName());
-                SessionInfo.projectDTO = result;
-                setPdto(result);
-                System.out.println("SelectedProject ID : " + pdto.getProjectId());
-                System.out.println("SessionProjectDTO ID: " + pdto.getSprintList().size());
-            }
-            @Override
-            public void onFailure(Throwable caught) {
-                Window.alert(caught.getMessage());
-            }
-        };
-        service.findProjectByName(name, callback);
-
-    }
-
     private void performSaveSprint(SprintDTO sprintDTO) {
 
         AsyncCallback<Pair<Boolean, String>> saveSprint = new AsyncCallback<Pair<Boolean, String>>() {
@@ -210,6 +195,10 @@ public class SprintRegistrationForm implements IsWidget {
                 else {
                     MessageBox amb3 = new MessageBox("Message save Sprint", result.getSecond());
                     amb3.show();
+                    center.clear();
+                    west.clear();
+                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
+                    west.add(psf.asWidget());
                 }
             }
             @Override
@@ -222,7 +211,4 @@ public class SprintRegistrationForm implements IsWidget {
         service.saveSprint(sprintDTO, saveSprint);
     }
 
-    public void setPdto(ProjectDTO pdto) {
-        this.pdto = pdto;
-    }
 }

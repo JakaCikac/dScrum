@@ -28,6 +28,7 @@ import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
@@ -41,6 +42,7 @@ import java.util.List;
 public class SprintDataEditForm implements IsWidget {
 
     private DScrumServiceAsync service;
+    private ContentPanel center, west, east;
     private VerticalPanel vp;
     private ListBox lb;
     private ArrayList<UserDTO> al;
@@ -58,8 +60,11 @@ public class SprintDataEditForm implements IsWidget {
     private SubmitButton submitButton;
     private Button deleteButton;
 
-    public SprintDataEditForm(DScrumServiceAsync service)  {
+    public SprintDataEditForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east)  {
         this.service = service;
+        this.center = center;
+        this.west = west;
+        this.east = east;
     }
 
     @Override
@@ -81,7 +86,6 @@ public class SprintDataEditForm implements IsWidget {
         VerticalLayoutContainer p = new VerticalLayoutContainer();
         panel.add(p);
 
-        //RowNumberer<SprintDTO> numberer = new RowNumberer<SprintDTO>();
         ColumnConfig<SprintDTO, Integer> seqNumberCol = new ColumnConfig<SprintDTO, Integer>(getSeqNumberValue(), 80, "Seq. Number");
         ColumnConfig<SprintDTO, String> startDateCol = new ColumnConfig<SprintDTO, String>(getStartDateValue(), 80, "Start Date");
         ColumnConfig<SprintDTO, String> endDateCol = new ColumnConfig<SprintDTO, String>(getEndDateValue(), 80, "Finish Date");
@@ -89,7 +93,6 @@ public class SprintDataEditForm implements IsWidget {
         ColumnConfig<SprintDTO, String> statusCol = new ColumnConfig<SprintDTO, String>(getStatusValue(), 60, "Status");
 
         List<ColumnConfig<SprintDTO, ?>> l = new ArrayList<ColumnConfig<SprintDTO, ?>>();
-        //l.add(numberer);
         l.add(seqNumberCol);
         l.add(startDateCol);
         l.add(endDateCol);
@@ -293,6 +296,10 @@ public class SprintDataEditForm implements IsWidget {
                 else {
                     MessageBox amb3 = new MessageBox("Message delete Sprint", result.getSecond());
                     amb3.show();
+                    center.clear();
+                    west.clear();
+                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
+                    west.add(psf.asWidget());
                 }
             }
             @Override
@@ -448,6 +455,10 @@ public class SprintDataEditForm implements IsWidget {
                 else {
                     MessageBox amb3 = new MessageBox("Message update Sprint", result.getSecond());
                     amb3.show();
+                    center.clear();
+                    west.clear();
+                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
+                    west.add(psf.asWidget());
                 }
             }
             @Override

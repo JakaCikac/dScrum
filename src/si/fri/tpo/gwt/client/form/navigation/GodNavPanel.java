@@ -154,7 +154,7 @@ public class GodNavPanel implements IsWidget {
                 if (SessionInfo.projectDTO == null) {
                     Info.display("No project selected", "Please select project from the list on the left.");
                 } else {
-                    SprintRegistrationForm srf = new SprintRegistrationForm(service);
+                    SprintRegistrationForm srf = new SprintRegistrationForm(service, center, west, east);
                     center.clear();
                     center.add(srf.asWidget());
                 }
@@ -175,7 +175,7 @@ public class GodNavPanel implements IsWidget {
                 if (SessionInfo.projectDTO == null) {
                     Info.display("No project selected", "Please select project from the list on the left.");
                 } else {
-                    SprintDataEditForm sdef = new SprintDataEditForm(service);
+                    SprintDataEditForm sdef = new SprintDataEditForm(service, center, west, east);
                     center.clear();
                     center.add(sdef.asWidget());
                 }
