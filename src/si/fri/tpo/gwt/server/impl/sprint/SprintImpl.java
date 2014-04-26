@@ -58,56 +58,7 @@ public class SprintImpl {
 
             s.setProject(project);
 
-
-            List<SprintDTO> sprintDTOList = projectDTO.getSprintList();
             List<Sprint> sprintList = project.getSprintList();
-            /*for (SprintDTO sDTO : sprintDTOList){
-                Sprint sprint = new Sprint();
-                SprintPK sprintPK = new SprintPK();
-                sprintPK.setSprintId(sDTO.getSprintPK().getSprintId());
-                sprintPK.setProjectProjectId(sDTO.getSprintPK().getProjectProjectId());
-                sprint.setSprintPK(sprintPK);
-                sprint.setStartDate(sDTO.getStartDate());
-                sprint.setEndDate(sDTO.getEndDate());
-                sprint.setSeqNumber(sDTO.getSeqNumber());
-                sprint.setStatus(sDTO.getStatus());
-                sprint.setVelocity(sDTO.getVelocity());
-
-                projectDTO = sDTO.getProject();
-                project = new Project();
-                project.setProjectId(projectDTO.getProjectId());
-                project.setStatus(projectDTO.getStatus());
-                project.setDescription(projectDTO.getDescription());
-                project.setName(projectDTO.getName());
-                team = new Team();
-                team.setTeamId(projectDTO.getTeamTeamId().getTeamId());
-                team.setScrumMasterId(projectDTO.getTeamTeamId().getScrumMasterId());
-                team.setProductOwnerId(projectDTO.getTeamTeamId().getProductOwnerId());
-
-                userList = new ArrayList<User>();
-                //System.out.println("Team's userList:" + projectDTO.getTeamTeamId().getUserList().size());
-                if (projectDTO.getTeamTeamId().getUserList() != null) {
-                    for (UserDTO userDTO : projectDTO.getTeamTeamId().getUserList()) {
-                        User user = new User();
-                        user.setUserId(userDTO.getUserId());
-                        user.setUsername(userDTO.getUsername());
-                        user.setPassword(userDTO.getPassword());
-                        user.setFirstName(userDTO.getFirstName());
-                        user.setLastName(userDTO.getLastName());
-                        user.setEmail(userDTO.getEmail());
-                        user.setIsAdmin(userDTO.isAdmin());
-                        user.setSalt(userDTO.getSalt());
-                        user.setIsActive(userDTO.isActive());
-                        user.setTimeCreated(userDTO.getTimeCreated());
-                        userList.add(user);
-                    }
-                    team.setUserList(userList);
-                } else return Pair.of(false, "No user list when saving team.");
-                project.setTeamTeamId(team);
-                sprint.setProject(project);
-
-                sprintList.add(sprint);
-            }*/
             sprintList.add(s);
             project.setSprintList(sprintList);
             try {
@@ -146,7 +97,7 @@ public class SprintImpl {
             s.setVelocity(sprintDTO.getVelocity());
 
             ProjectDTO projectDTO = sprintDTO.getProject();
-            Project project = new Project();
+            Project project = ProxyManager.getProjectProxy().findProjectByName(projectDTO.getName());
             project.setProjectId(projectDTO.getProjectId());
             project.setStatus(projectDTO.getStatus());
             project.setDescription(projectDTO.getDescription());

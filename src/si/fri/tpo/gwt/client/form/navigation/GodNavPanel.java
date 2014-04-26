@@ -62,7 +62,7 @@ public class GodNavPanel implements IsWidget {
             @Override
             public void onSelect(SelectEvent event) {
                 // TODO: Append registration form to center panel
-                UserRegistrationForm rgf = new UserRegistrationForm(service);
+                UserRegistrationForm rgf = new UserRegistrationForm(service, center);
                 center.clear();
                 center.add(rgf.asWidget());
             }
@@ -113,7 +113,7 @@ public class GodNavPanel implements IsWidget {
         projectManagement.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                ProjectRegistrationForm pgf = new ProjectRegistrationForm(service);
+                ProjectRegistrationForm pgf = new ProjectRegistrationForm(service, center, west, east);
                 center.clear();
                 center.add(pgf.asWidget());
             }

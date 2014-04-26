@@ -23,10 +23,14 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.ListView;
 import com.sencha.gxt.widget.core.client.ListViewSelectionModel;
+import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
 import com.sencha.gxt.widget.core.client.info.Info;
 import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
+import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
+import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.GodNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.ScrumMasterNavPanel;
@@ -36,6 +40,8 @@ import si.fri.tpo.gwt.client.session.SessionInfo;
 import si.fri.tpo.gwt.client.form.addedit.ProjecDataEditForm;
 
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -114,10 +120,40 @@ public class ProjectSelectForm implements IsWidget {
             public void onSuccess(ProjectDTO result) {
                 selectedProject = result;
                 SessionInfo.projectDTO = selectedProject;
-                System.out.println("SelectedProject ID : " + selectedProject.getProjectId());
-                System.out.println("SessionProjectDTO ID: " + selectedProject.getSprintList().size() );
-                // TODO: uh oh, tole ne bo slo tako, moras pogruntat kako osvzit data edit forme, ce se project zamenja med urejanjem
-                // TODO: preveri ce je loginan user scrum master za tolele in naredi nov nav panel
+                List<SprintDTO> sprintDTOList = selectedProject.getSprintList();
+                List<SprintDTO> newSprintDTOList = new ArrayList<SprintDTO>();
+                // If sprint for the selected project is over or in progress, the status may need to be changed.
+                // Go through sprints and check if status is ok, update sprints accordingly and update SessionInfo.projectDTO
+                for (SprintDTO sprintDTO : sprintDTOList){
+                    if ((sprintDTO.getStartDate().before(new Date()) && sprintDTO.getEndDate().after(new Date())) ||
+                            sprintDTO.getStartDate().equals(new Date()) || sprintDTO.getEndDate().equals(new Date())){
+                        sprintDTO.setStatus("In progress");
+                    } else if (sprintDTO.getEndDate().before(new Date())){
+                        sprintDTO.setStatus("Completed");
+                    }
+                    sprintDTO.setProject(SessionInfo.projectDTO);
+                    AsyncCallback<Pair<Boolean, String>> updateSprint = new AsyncCallback<Pair<Boolean, String>>() {
+                        @Override
+                        public void onSuccess(Pair<Boolean, String> result) {
+                            if (result == null) {
+                                AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing sprint updating!");
+                                amb2.show();
+                            }
+                            else if (!result.getFirst()) {
+                                AlertMessageBox amb2 = new AlertMessageBox("Error updating Sprint!", result.getSecond());
+                                amb2.show();
+                            }
+                        }
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            Window.alert(caught.getMessage());
+                        }
+                    };
+                    service.updateSprint(sprintDTO, updateSprint);
+                    newSprintDTOList.add(sprintDTO);
+                }
+                SessionInfo.projectDTO.setSprintList(newSprintDTOList);
+
                 // if user is scrum master for selected project and not an admin
                 if (SessionInfo.projectDTO.getTeamTeamId().getScrumMasterId() == SessionInfo.userDTO.getUserId()
                         && !SessionInfo.userDTO.isAdmin()) {

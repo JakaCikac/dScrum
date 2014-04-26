@@ -46,8 +46,7 @@ public class ProjectProxy extends ProjectJpaController {
             em = getEntityManager();
             List<Project> p;
             try {
-                // TODO: change database name!
-                Query query =  em.createNativeQuery("SELECT * FROM test.project WHERE team_team_id IN (SELECT team_team_id FROM test.team_has_user WHERE user_user_id = ?)", Project.class);
+                Query query =  em.createNativeQuery("SELECT * FROM t13_2014.project WHERE team_team_id IN (SELECT team_team_id FROM t13_2014.team_has_user WHERE user_user_id = ?)", Project.class);
                 query.setParameter(1, id);
                 p = query.getResultList();
                 return p;

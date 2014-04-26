@@ -7,6 +7,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.core.client.util.ToggleGroup;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
@@ -23,8 +24,10 @@ import si.fri.tpo.gwt.client.dto.TeamDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.form.search.SingleUserSearchCallback;
 import si.fri.tpo.gwt.client.form.search.SingleUserSearchDialog;
+import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.form.select.TeamSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
+import si.fri.tpo.gwt.client.session.SessionInfo;
 
 import java.util.ArrayList;
 
@@ -35,6 +38,7 @@ import java.util.ArrayList;
 public class ProjectRegistrationForm implements IsWidget {
 
     private DScrumServiceAsync service;
+    private ContentPanel center, west, east;
     private VerticalPanel vp;
     private ListBox lb;
     private ArrayList<UserDTO> al;
@@ -73,8 +77,11 @@ public class ProjectRegistrationForm implements IsWidget {
          return vp;
     }
 
-    public ProjectRegistrationForm(DScrumServiceAsync service) {
+    public ProjectRegistrationForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east) {
         this.service = service;
+        this.center = center;
+        this.west = west;
+        this.east = east;
     }
 
     private void createProjectForm() {
@@ -263,6 +270,11 @@ public class ProjectRegistrationForm implements IsWidget {
                         else {
                             MessageBox amb3 = new MessageBox("Message save Project", result.getSecond());
                             amb3.show();
+                            center.clear();
+                            west.clear();
+                            SessionInfo.projectDTO = null;
+                            ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
+                            west.add(psf.asWidget());
                         }
                     }
                     @Override

@@ -329,6 +329,7 @@ public class ProjecDataEditForm implements IsWidget{
                             amb3.show();
                             // refresh gui
                             west.clear();
+                            SessionInfo.projectDTO = null;
                             ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
                             west.add(psf.asWidget());
                             center.clear(); //TODO: when home page (wall, sprint backlog etc) create as widget on center, till then just clear.

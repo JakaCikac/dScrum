@@ -9,6 +9,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.core.client.util.ToggleGroup;
+import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 public class UserRegistrationForm implements IsWidget {
 
     private DScrumServiceAsync service;
+    private ContentPanel center;
     private VerticalPanel vp;
     private UserDTO dto;
     private ListBox lb;
@@ -50,8 +52,9 @@ public class UserRegistrationForm implements IsWidget {
     private HorizontalPanel hp;
 
 
-    public UserRegistrationForm(DScrumServiceAsync service) {
+    public UserRegistrationForm(DScrumServiceAsync service, ContentPanel center) {
         this.service = service;
+        this.center = center;
     }
 
     public Widget asWidget() {
@@ -234,6 +237,7 @@ public class UserRegistrationForm implements IsWidget {
                 else {
                     MessageBox amb3 = new MessageBox("Message save User", result.getSecond());
                     amb3.show();
+                    center.clear();
                 }
             }
             @Override
