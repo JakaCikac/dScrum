@@ -6,9 +6,23 @@
 
 package si.fri.tpo.gwt.server.jpa;
 
-import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  *
@@ -17,11 +31,13 @@ import java.util.List;
 @Entity
 @Table(name = "user_story")
 @NamedQueries({
-    @NamedQuery(name = "UserStory.findAll", query = "SELECT u FROM UserStory u"),
-    @NamedQuery(name = "UserStory.findByStoryId", query = "SELECT u FROM UserStory u WHERE u.storyId = :storyId"),
-    @NamedQuery(name = "UserStory.findByName", query = "SELECT u FROM UserStory u WHERE u.name = :name"),
-    @NamedQuery(name = "UserStory.findByContent", query = "SELECT u FROM UserStory u WHERE u.content = :content"),
-    @NamedQuery(name = "UserStory.findByBusinessValue", query = "SELECT u FROM UserStory u WHERE u.businessValue = :businessValue")})
+        @NamedQuery(name = "UserStory.findAll", query = "SELECT u FROM UserStory u"),
+        @NamedQuery(name = "UserStory.findByStoryId", query = "SELECT u FROM UserStory u WHERE u.storyId = :storyId"),
+        @NamedQuery(name = "UserStory.findByName", query = "SELECT u FROM UserStory u WHERE u.name = :name"),
+        @NamedQuery(name = "UserStory.findByContent", query = "SELECT u FROM UserStory u WHERE u.content = :content"),
+        @NamedQuery(name = "UserStory.findByBusinessValue", query = "SELECT u FROM UserStory u WHERE u.businessValue = :businessValue"),
+        @NamedQuery(name = "UserStory.findByStatus", query = "SELECT u FROM UserStory u WHERE u.status = :status"),
+        @NamedQuery(name = "UserStory.findByEstimateTime", query = "SELECT u FROM UserStory u WHERE u.estimateTime = :estimateTime")})
 public class UserStory implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -36,13 +52,19 @@ public class UserStory implements Serializable {
     private String content;
     @Column(name = "business_value")
     private Integer businessValue;
+    @Basic(optional = false)
+    @Column(name = "status")
+    private String status;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "estimate_time")
+    private BigDecimal estimateTime;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userStory")
     private List<Task> taskList;
     @OneToMany(mappedBy = "userStoryStoryId")
     private List<AcceptanceTest> acceptanceTestList;
     @JoinColumns({
-        @JoinColumn(name = "sprint_sprint_id", referencedColumnName = "sprint_id"),
-        @JoinColumn(name = "sprint_project_project_id", referencedColumnName = "project_project_id")})
+            @JoinColumn(name = "sprint_sprint_id", referencedColumnName = "sprint_id"),
+            @JoinColumn(name = "sprint_project_project_id", referencedColumnName = "project_project_id")})
     @ManyToOne
     private Sprint sprint;
     @JoinColumn(name = "priority_priority_id", referencedColumnName = "priority_id")
@@ -59,10 +81,11 @@ public class UserStory implements Serializable {
         this.storyId = storyId;
     }
 
-    public UserStory(Integer storyId, String name, String content) {
+    public UserStory(Integer storyId, String name, String content, String status) {
         this.storyId = storyId;
         this.name = name;
         this.content = content;
+        this.status = status;
     }
 
     public Integer getStoryId() {
@@ -95,6 +118,22 @@ public class UserStory implements Serializable {
 
     public void setBusinessValue(Integer businessValue) {
         this.businessValue = businessValue;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public BigDecimal getEstimateTime() {
+        return estimateTime;
+    }
+
+    public void setEstimateTime(BigDecimal estimateTime) {
+        this.estimateTime = estimateTime;
     }
 
     public List<Task> getTaskList() {
@@ -161,5 +200,5 @@ public class UserStory implements Serializable {
     public String toString() {
         return "si.fri.tpo.gwt.server.jpa.UserStory[ storyId=" + storyId + " ]";
     }
-    
+
 }

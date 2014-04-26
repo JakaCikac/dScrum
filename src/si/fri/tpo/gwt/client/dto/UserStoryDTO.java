@@ -1,6 +1,8 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.sencha.gxt.legacy.client.data.BaseModelData;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -12,6 +14,8 @@ public class UserStoryDTO extends BaseModelData {
     //private String name;
     //private String content;
     //private Integer businessValue;
+    //private String status;
+    //private BigDecimal estimateTime;
     //private List<Task> taskList;
     //private List<AcceptanceTest> acceptanceTestList;
     //private Sprint sprint;
@@ -51,6 +55,22 @@ public class UserStoryDTO extends BaseModelData {
 
     public void setBusinessValue(Integer businessValue) {
         set("businessValue", businessValue);
+    }
+
+    public String getStatus() {
+        return get("status");
+    }
+
+    public void setStatus(String status){
+        set("status", status);
+    }
+
+    public BigDecimal getEstimateTime(){
+        return get("estimateTime");
+    }
+
+    public void setEstimateTime(BigDecimal estimateTime){
+        set("estimateTime", estimateTime);
     }
 
     public List<TaskDTO> getTaskList() {

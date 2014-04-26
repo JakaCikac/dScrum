@@ -76,8 +76,8 @@ public class SprintRegistrationForm implements IsWidget {
         p.add(new FieldLabel(startDate, "Start Date"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         finishDate = new DateField();
-        final Date start= startDate.getValue();
-        start.setDate(startDate.getValue().getDate()+1);
+        final Date start= new Date();
+        start.setDate(start.getDate()+1);
         finishDate.setValue(start);
         finishDate.setMinValue(startDate.getValue());
         finishDate.addValidator(new MinDateValidator(startDate.getValue()));
@@ -197,6 +197,7 @@ public class SprintRegistrationForm implements IsWidget {
                     amb3.show();
                     center.clear();
                     west.clear();
+                    SessionInfo.projectDTO = null;
                     ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
                     west.add(psf.asWidget());
                 }

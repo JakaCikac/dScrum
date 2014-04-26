@@ -298,6 +298,7 @@ public class SprintDataEditForm implements IsWidget {
                     amb3.show();
                     center.clear();
                     west.clear();
+                    SessionInfo.projectDTO = null;
                     ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
                     west.add(psf.asWidget());
                 }
@@ -457,6 +458,7 @@ public class SprintDataEditForm implements IsWidget {
                     amb3.show();
                     center.clear();
                     west.clear();
+                    SessionInfo.projectDTO = null;
                     ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
                     west.add(psf.asWidget());
                 }
