@@ -100,9 +100,6 @@ public class SingleUserSearch implements IsWidget {
 
             p.add(hp);
 
-            // TODO: add search button and field
-            final NumberFormat number = NumberFormat.getFormat("0.00");
-
             RowNumberer<UserDTO> numberer = new RowNumberer<UserDTO>();
             ColumnConfig<UserDTO, String> usernameCol = new ColumnConfig<UserDTO, String>(getUsernameValue(), 100, "Username");
             ColumnConfig<UserDTO, String> firstNameCol = new ColumnConfig<UserDTO, String>(getFirstNameValue(), 100, "First Name");

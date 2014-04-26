@@ -59,13 +59,10 @@ public class UserStoryRegistrationForm implements IsWidget {
     private TextButton submitButton;
 
     public Widget asWidget() {
-        System.out.println("Neko sranje");
         if (vp == null) {
             vp = new VerticalPanel();
             vp.setSpacing(10);
-            System.out.println("Calling create user story");
             createUserStoryForm();
-            System.out.println("Created user story");
         }
         return vp;
     }
@@ -125,8 +122,6 @@ public class UserStoryRegistrationForm implements IsWidget {
             }
         });
 
-        System.out.println("Prisel do accccccccc test.");
-        // TODO: add grid for acceptance tests
         AcceptanceTestDataEditAbstractForm atdeaf = new AcceptanceTestDataEditAbstractForm(service, center, west, east) {
             @Override
             protected GridEditing<AcceptanceTestDTO> createGridEditing(Grid<AcceptanceTestDTO> grid) {

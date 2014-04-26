@@ -57,7 +57,7 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
         if (panel == null) {
 
             RowNumberer<AcceptanceTestDTO> numberer = new RowNumberer<AcceptanceTestDTO>();
-            numberer.setWidth(40);
+            numberer.setWidth(100);
             ColumnConfig<AcceptanceTestDTO, String> content = new ColumnConfig<AcceptanceTestDTO, String>(getContentValue(), 300, "Content");
 
             List<ColumnConfig<AcceptanceTestDTO, ?>> l = new ArrayList<ColumnConfig<AcceptanceTestDTO, ?>>();
@@ -82,6 +82,8 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
 
             customizeGrid(grid);
 
+            numberer.initPlugin(grid);
+
             panel = new FramedPanel();
             //panel.setHeadingText("Edit acceptance tests");
             panel.setHeaderVisible(false);
@@ -98,7 +100,7 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
                     AcceptanceTestDTO test = new AcceptanceTestDTO();
                     // set values
                     test.setAcceptanceTestId(acceptanceTestCount);
-                    // warningz: this id MUST NOT BE SAVED IN DB
+                    // warningzi: this id MUST NOT BE SAVED IN DB
                     test.setContent("Add content");
 
                     editing.cancelEditing();
