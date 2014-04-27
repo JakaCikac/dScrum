@@ -1,5 +1,7 @@
 package si.fri.tpo.gwt.server.proxy;
 
+import si.fri.tpo.gwt.server.jpa.UserStory;
+
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -15,6 +17,8 @@ public class ProxyManager {
     private static TeamProxy teamProxy = null;
     private static ProjectProxy projectProxy = null;
     private static SprintProxy sprintProxy = null;
+    private static AcceptanceTestProxy acceptanceTestProxy = null;
+    private static UserStoryProxy userStoryProxy = null;
 
     public static EntityManagerFactory getEmf() {
         if (emf == null) {
@@ -52,5 +56,19 @@ public class ProxyManager {
             sprintProxy = new SprintProxy(getEmf());
         }
         return sprintProxy;
+    }
+
+    public static AcceptanceTestProxy getAcceptanceTestProxy() {
+        if (acceptanceTestProxy == null) {
+            acceptanceTestProxy = new AcceptanceTestProxy(getEmf());
+        }
+        return acceptanceTestProxy;
+    }
+
+    public static UserStoryProxy getUserStoryProxy() {
+        if (userStoryProxy == null) {
+            userStoryProxy = new UserStoryProxy(getEmf());
+        }
+        return userStoryProxy;
     }
 }

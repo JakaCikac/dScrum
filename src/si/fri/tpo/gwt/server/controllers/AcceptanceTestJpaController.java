@@ -34,7 +34,8 @@ public class AcceptanceTestJpaController implements Serializable  {
         return emf.createEntityManager();
     }
 
-    public void create(AcceptanceTest acceptanceTest) {
+    public int create(AcceptanceTest acceptanceTest) {
+        int insertedAcceptanceTestID = -1;
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -52,9 +53,11 @@ public class AcceptanceTestJpaController implements Serializable  {
             em.getTransaction().commit();
         } finally {
             if (em != null) {
+                insertedAcceptanceTestID = acceptanceTest.getAcceptanceTestId();
                 em.close();
             }
         }
+        return insertedAcceptanceTestID;
     }
 
     public void edit(AcceptanceTest acceptanceTest) throws NonexistentEntityException, Exception {

@@ -89,4 +89,8 @@ public interface DScrumService extends RemoteService {
     public TaskPKDTO dummyTaskPKTrigger(TaskPKDTO taskPKDTO);
 
     public UserStoryDTO dummyUserStoryTrigger(UserStoryDTO userStoryDTO);
+
+    public Pair<Boolean, List<Integer>> saveAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList);
+
+    public Pair<Boolean, Integer> saveUserStory(UserStoryDTO userStoryDTO, ProjectDTO projectDTO);
 }

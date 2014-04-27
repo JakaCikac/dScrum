@@ -86,5 +86,9 @@ public interface DScrumServiceAsync {
     void dummyTaskPKTrigger(TaskPKDTO taskPKDTO, AsyncCallback<TaskPKDTO> taskPKCallback);
 
     void dummyUserStoryTrigger(UserStoryDTO userStoryDTO, AsyncCallback<UserStoryDTO> userStoryCallback);
+
+    void saveAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList, AsyncCallback<Pair<Boolean,List<Integer>>> saveAcceptanceTestList);
+
+    void saveUserStory(UserStoryDTO userStoryDTO, ProjectDTO projectDTO, AsyncCallback<Pair<Boolean,Integer>> saveUserStory);
 }
 

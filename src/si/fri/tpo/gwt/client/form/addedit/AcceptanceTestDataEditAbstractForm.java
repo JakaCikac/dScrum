@@ -12,6 +12,7 @@ import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.event.CompleteEditEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
@@ -27,6 +28,7 @@ import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
+import si.fri.tpo.gwt.server.jpa.AcceptanceTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +39,17 @@ import java.util.List;
 public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
 
     protected Grid<AcceptanceTestDTO> grid;
+
     private List<AcceptanceTestDTO> acceptanceTestList;
     private FramedPanel panel;
     private ContentPanel center, west, east;
     private DScrumServiceAsync service;
     private UserStoryDTO storyDTO;
     static private int acceptanceTestCount;
+    private TextField contentTF;
+    private ListStore<AcceptanceTestDTO> store;
+    private AcceptanceTestDTO tempDTO;
+
 
     public AcceptanceTestDataEditAbstractForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east) {
         this.service = service;
@@ -57,7 +64,7 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
         if (panel == null) {
 
             RowNumberer<AcceptanceTestDTO> numberer = new RowNumberer<AcceptanceTestDTO>();
-            numberer.setWidth(100);
+            //numberer.setWidth(200);
             ColumnConfig<AcceptanceTestDTO, String> content = new ColumnConfig<AcceptanceTestDTO, String>(getContentValue(), 300, "Content");
 
             List<ColumnConfig<AcceptanceTestDTO, ?>> l = new ArrayList<ColumnConfig<AcceptanceTestDTO, ?>>();
@@ -66,28 +73,28 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
 
             ColumnModel<AcceptanceTestDTO> cm = new ColumnModel<AcceptanceTestDTO>(l);
 
-
-            final ListStore<AcceptanceTestDTO> store = new ListStore<AcceptanceTestDTO>(getModelKeyProvider());
-
+            System.out.println("Before crating ListStore");
+            store = new ListStore<AcceptanceTestDTO>(getModelKeyProvider());
+            System.out.println("After crating ListStore, store size: " + store.size());
+            store.setAutoCommit(true);
 
             grid = new Grid<AcceptanceTestDTO>(store, cm);
             grid.getView().setAutoExpandColumn(content);
             grid.getSelectionModel().setSelectionMode(Style.SelectionMode.SINGLE);
 
-            // EDITING//
+            // EDITING //
             final GridEditing<AcceptanceTestDTO> editing = createGridEditing(grid);
-            editing.addEditor(content, new TextField());
+            contentTF = new TextField();
+            contentTF.setAllowBlank(false);
+            editing.addEditor(content, contentTF);
 
-            // EDITING//
 
             customizeGrid(grid);
-
-            numberer.initPlugin(grid);
 
             panel = new FramedPanel();
             //panel.setHeadingText("Edit acceptance tests");
             panel.setHeaderVisible(false);
-            panel.setPixelSize(380, 220);
+            panel.setPixelSize(380, 200);
             //panel.addStyleName("margin-10");
 
             ToolBar toolBar = new ToolBar();
@@ -105,14 +112,30 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
 
                     editing.cancelEditing();
                     store.add(0, test);
+                    System.out.println("After crating ListStore1, store size: " + store.size());
+
 
                     int row = store.indexOf(test);
                     editing.startEditing(new Grid.GridCell(row, 0));
+                    System.out.println("After crating ListStore,2 store size: " + store.size());
+
+                    editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<AcceptanceTestDTO>() {
+                        @Override
+                        public void onCompleteEdit(CompleteEditEvent<AcceptanceTestDTO> event) {
+                            System.out.println("Sem v edit ocomeom ojd handlerju!");
+
+                            System.out.println(grid.getSelectionModel().getSelectedItem().getContent());
+                                tempDTO.setContent(grid.getSelectionModel().getSelectedItem().getContent());
+                        }
+                    });
+
                     acceptanceTestCount++;
                 }
             });
 
             toolBar.add(add);
+
+
 
             panel.setButtonAlign(BoxLayoutContainer.BoxLayoutPack.END);
             final TextButton removeButton = new TextButton("Remove Selected Test");
@@ -135,9 +158,10 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
                     removeButton.setEnabled( ! event.getSelection().isEmpty());
                 }
             });
-            panel.addButton(removeButton);
 
             toolBar.add(removeButton);
+
+            numberer.initPlugin(grid);
 
             VerticalLayoutContainer con = new VerticalLayoutContainer();
             con.setBorders(true);
@@ -146,8 +170,8 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
 
             panel.setWidget(con);
 
-            panel.setButtonAlign(BoxLayoutContainer.BoxLayoutPack.CENTER);
-            /* panel.addButton(new TextButton("Reset", new SelectEvent.SelectHandler() {
+            /*panel.setButtonAlign(BoxLayoutContainer.BoxLayoutPack.CENTER);
+            panel.addButton(new TextButton("Reset", new SelectEvent.SelectHandler() {
 
                 @Override
                 public void onSelect(SelectEvent event) {
@@ -161,7 +185,7 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
                 public void onSelect(SelectEvent event) {
                     store.commitChanges();
                 }
-            })); */
+            }));*/
         }
 
         return panel;
@@ -200,6 +224,16 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
         this.acceptanceTestList = acceptanceTestList;
     }
 
+    public List<AcceptanceTestDTO> getAcceptanceTestList() {
+        List<AcceptanceTestDTO> acceptanceTestDTOList = new ArrayList<AcceptanceTestDTO>();
+        for (AcceptanceTestDTO acceptanceTestDTO : store.getAll()){
+            AcceptanceTestDTO temp = new AcceptanceTestDTO();
+            temp.setContent(acceptanceTestDTO.getContent());
+            acceptanceTestDTOList.add(temp);
+        }
+        return acceptanceTestDTOList;
+    }
+
     /**
      * Abstract method to allow example subclass to build the specific editing details
      */
@@ -209,4 +243,12 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
      * Additional modifications can be made to the grid in the subclass with this method
      */
     protected void customizeGrid(Grid<AcceptanceTestDTO> grid) { }
+
+    public AcceptanceTestDTO getTempDTO() {
+        return tempDTO;
+    }
+
+    public void setTempDTO(AcceptanceTestDTO tempDTO) {
+        this.tempDTO = tempDTO;
+    }
 }

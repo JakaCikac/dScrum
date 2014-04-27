@@ -3,13 +3,12 @@ package si.fri.tpo.gwt.server.servlet;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.*;
+import si.fri.tpo.gwt.client.form.registration.UserStoryRegistrationForm;
 import si.fri.tpo.gwt.client.service.DScrumService;
+import si.fri.tpo.gwt.server.impl.acceptanceTest.AcceptanceTestImpl;
 import si.fri.tpo.gwt.server.impl.login.LoginServiceImpl;
 import si.fri.tpo.gwt.server.impl.project.ProjectImpl;
-import si.fri.tpo.gwt.server.impl.registration.ProjectRegistrationServiceImpl;
-import si.fri.tpo.gwt.server.impl.registration.SprintRegistrationServiceImpl;
-import si.fri.tpo.gwt.server.impl.registration.TeamRegistrationServiceImpl;
-import si.fri.tpo.gwt.server.impl.registration.UserRegistrationServiceImpl;
+import si.fri.tpo.gwt.server.impl.registration.*;
 import si.fri.tpo.gwt.server.impl.sprint.SprintImpl;
 import si.fri.tpo.gwt.server.impl.team.TeamImpl;
 import si.fri.tpo.gwt.server.impl.user.UserImpl;
@@ -221,5 +220,16 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     public UserStoryDTO dummyUserStoryTrigger(UserStoryDTO userStoryDTO) {
         return new UserStoryDTO();
     }
+
+    @Override
+    public Pair<Boolean, List<Integer>> saveAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList) {
+        return AcceptanceTestImpl.saveAcceptanceTestList(acceptanceTestDTOList);
+    }
+
+    @Override
+    public Pair<Boolean, Integer> saveUserStory(UserStoryDTO userStoryDTO, ProjectDTO projectDTO) {
+        return UserStoryServiceImpl.saveUserStory(userStoryDTO, projectDTO);
+    }
+
 
 }
