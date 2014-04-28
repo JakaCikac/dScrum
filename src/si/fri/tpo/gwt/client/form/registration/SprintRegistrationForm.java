@@ -99,12 +99,8 @@ public class SprintRegistrationForm implements IsWidget {
                 //TODO: SEQUENCE NUMBER NOT WORKING!!!
 
                 List<SprintDTO> sprintDTOList = SessionInfo.projectDTO.getSprintList();
-                if (sprintDTOList == null){
-                    sprintDTO.setSeqNumber(1);
-                } else {
-                    sprintDTO.setSeqNumber(sprintDTOList.size()+1);
-                }
-                sprintDTO.setProject(SessionInfo.projectDTO);
+                System.out.println("Number of sprint: " + sprintDTOList.size());
+
 
                 /* ------------------------------- VALIDATORS --------------------------------- */
                 Date today = new Date(); // Get today's date.
@@ -169,6 +165,15 @@ public class SprintRegistrationForm implements IsWidget {
                 } else {
                     sprintDTO.setStatus("Waiting");
                 }
+
+                //System.out.println("Number of sprint2: " + sprintDTOList.size());
+                if (sprintDTOList == null){
+                    sprintDTO.setSeqNumber(1);
+                } else {
+                    sprintDTO.setSeqNumber(sprintDTOList.size()+1);
+                }
+                sprintDTO.setProject(SessionInfo.projectDTO);
+                //System.out.println("Number of sprint: " + SessionInfo.projectDTO.getSprintList().size());
 
                 performSaveSprint(sprintDTO);
             }

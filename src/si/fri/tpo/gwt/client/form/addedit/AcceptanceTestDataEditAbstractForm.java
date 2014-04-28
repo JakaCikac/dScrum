@@ -104,7 +104,7 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
 
                 @Override
                 public void onSelect(SelectEvent event) {
-                    AcceptanceTestDTO test = new AcceptanceTestDTO();
+                    final AcceptanceTestDTO test = new AcceptanceTestDTO();
                     // set values
                     test.setAcceptanceTestId(acceptanceTestCount);
                     // warningzi: this id MUST NOT BE SAVED IN DB
@@ -123,9 +123,8 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
                         @Override
                         public void onCompleteEdit(CompleteEditEvent<AcceptanceTestDTO> event) {
                             System.out.println("Sem v edit ocomeom ojd handlerju!");
-
-                            System.out.println(grid.getSelectionModel().getSelectedItem().getContent());
-                                tempDTO.setContent(grid.getSelectionModel().getSelectedItem().getContent());
+                            System.out.println(contentTF.getValue());
+                            tempDTO.setContent(contentTF.getValue());
                         }
                     });
 

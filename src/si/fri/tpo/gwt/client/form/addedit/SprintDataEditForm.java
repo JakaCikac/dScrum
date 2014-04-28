@@ -112,8 +112,6 @@ public class SprintDataEditForm implements IsWidget {
         grid.getView().setColumnLines(true);
         grid.getSelectionModel().setSelectionMode(Style.SelectionMode.SINGLE);
 
-        //numberer.initPlugin(grid);
-
         ContentPanel panel1 = new ContentPanel();
         panel1.setHeaderVisible(false);
         //panel1.setPixelSize(200, 200);
@@ -189,12 +187,6 @@ public class SprintDataEditForm implements IsWidget {
 
                 ProjectDTO projectDTO = SessionInfo.projectDTO;
                 List<SprintDTO> sprintDTOList = projectDTO.getSprintList();
-                /*if(sprintDTOList == null){
-                    sprintDTO.setSeqNumber(1);
-                } else {
-                    sprintDTO.setSeqNumber(sprintDTOList.size()+1);
-                }*/
-                sprintDTO.setProject(projectDTO);
 
                 /* ------------------------------- VALIDATORS --------------------------------- */
                 Date today = new Date(); // Get today's date.
@@ -257,6 +249,7 @@ public class SprintDataEditForm implements IsWidget {
                 /* ----------------------------- END VALIDATORS ------------------------------- */
 
                 sprintDTO.setStatus(status.getValue());
+                sprintDTO.setProject(projectDTO);
 
                 performUpdateSprint(sprintDTO);
             }

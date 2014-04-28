@@ -87,14 +87,25 @@ public class SprintImpl {
             SprintPK sprintPK = new SprintPK();
             sprintPK.setSprintId(sprintPKDTO.getSprintId());
             sprintPK.setProjectProjectId(sprintPKDTO.getProjectProjectId());
-            Sprint s = ProxyManager.getSprintProxy().findSprint(sprintPK);
 
-            s.setSprintPK(sprintPK);
-            s.setSeqNumber(sprintDTO.getSeqNumber());
-            s.setStatus(sprintDTO.getStatus());
-            s.setEndDate(sprintDTO.getEndDate());
-            s.setStartDate(sprintDTO.getStartDate());
-            s.setVelocity(sprintDTO.getVelocity());
+            Sprint s = null;
+            try {
+                s = ProxyManager.getSprintProxy().findSprint(sprintPK);
+
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+                return Pair.of(false, e.getMessage());
+            }
+            if (s == null){
+                System.out.println("Proxy je vrnu: null");
+            } else {
+                s.setSprintPK(sprintPK);
+                s.setSeqNumber(sprintDTO.getSeqNumber());
+                s.setStatus(sprintDTO.getStatus());
+                s.setEndDate(sprintDTO.getEndDate());
+                s.setStartDate(sprintDTO.getStartDate());
+                s.setVelocity(sprintDTO.getVelocity());
+            }
 
             ProjectDTO projectDTO = sprintDTO.getProject();
             Project project = ProxyManager.getProjectProxy().findProjectByName(projectDTO.getName());
