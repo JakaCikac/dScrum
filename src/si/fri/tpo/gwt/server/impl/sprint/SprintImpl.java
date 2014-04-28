@@ -61,6 +61,9 @@ public class SprintImpl {
             List<Sprint> sprintList = project.getSprintList();
             sprintList.add(s);
             project.setSprintList(sprintList);
+            for (Sprint sprint : sprintList){
+                System.out.println("SprintImpl Sprint seqNumber : " + sprint.getSeqNumber());
+            }
             try {
                 if (s == null)
                     return Pair.of(false, "Data error!");

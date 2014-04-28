@@ -100,6 +100,9 @@ public class SprintRegistrationForm implements IsWidget {
 
                 List<SprintDTO> sprintDTOList = SessionInfo.projectDTO.getSprintList();
                 System.out.println("Number of sprint: " + sprintDTOList.size());
+                for (SprintDTO sprintDTO1 : sprintDTOList){
+                    System.out.println("SprintDTOlist : " + sprintDTO1.getSeqNumber());
+                }
 
 
                 /* ------------------------------- VALIDATORS --------------------------------- */
@@ -174,6 +177,8 @@ public class SprintRegistrationForm implements IsWidget {
                 }
                 sprintDTO.setProject(SessionInfo.projectDTO);
                 //System.out.println("Number of sprint: " + SessionInfo.projectDTO.getSprintList().size());
+                sprintDTOList.add(sprintDTO);
+                SessionInfo.projectDTO.setSprintList(sprintDTOList);
 
                 performSaveSprint(sprintDTO);
             }
@@ -204,6 +209,11 @@ public class SprintRegistrationForm implements IsWidget {
                     SessionInfo.projectDTO = null;
                     ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
                     west.add(psf.asWidget());
+                    List<SprintDTO> sprintDTOList = SessionInfo.projectDTO.getSprintList();
+                    System.out.println("Number of sprint: " + sprintDTOList.size());
+                    for (SprintDTO sprintDTO1 : sprintDTOList){
+                        System.out.println("SprintDTOlist OnSuccess : " + sprintDTO1.getSeqNumber());
+                    }
                 }
             }
             @Override
