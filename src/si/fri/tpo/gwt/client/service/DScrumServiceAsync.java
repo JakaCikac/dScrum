@@ -11,51 +11,18 @@ import java.util.List;
  */
 public interface DScrumServiceAsync {
 
-    void performUserLogin(String username, String passwordHash, AsyncCallback<Pair<UserDTO, String>> async);
-
+    // DUMMY //
     void dummyCharacterTrigger(Character b, AsyncCallback<Character> callback);
 
     void dummyUserTrigger(UserDTO userDTO, AsyncCallback<UserDTO> callback3);
 
     void dummyTeamTrigger(TeamDTO teamDTO, AsyncCallback<TeamDTO> callback5);
 
-    void validateUserData(String emailValue, AsyncCallback<Pair<Boolean, String>> validationCallback);
-
-    void saveUser(UserDTO userDTO, Boolean value, AsyncCallback<Pair<Boolean, String>> saveUser);
-
-    void findUserByUsername(String username, AsyncCallback<UserDTO> callback);
-
-    void findAllUsers(AsyncCallback<List<UserDTO>> callback);
-
-    void saveTeam(TeamDTO teamDTO, String projectName, boolean withProject, AsyncCallback<Pair<Boolean, Integer>> saveTeam);
-
-    void saveProject(ProjectDTO projectDTO, AsyncCallback<Pair<Boolean,String>> saveProject);
-
-    void updateUser(UserDTO userDTO, boolean b, AsyncCallback<Pair<Boolean, String>> updateUser);
-
-    void findAllProjects(AsyncCallback<List<ProjectDTO>> callback);
-
     void dummyProjectTrigger(ProjectDTO projectDTO, AsyncCallback<ProjectDTO> callback6);
-
-    void findUserProjects(UserDTO userDTO, AsyncCallback<List<ProjectDTO>> callback);
-
-    void saveSprint(SprintDTO sprintDTO, AsyncCallback<Pair<Boolean,String>> saveSprint);
-
-    void findProjectByName(String name, AsyncCallback<ProjectDTO> callback);
 
     void dummySprintTrigger(SprintDTO sprintDTO, AsyncCallback<SprintDTO> callback2);
 
     void dummySprintPKTrigger(SprintPKDTO sprintPKDTO, AsyncCallback<SprintPKDTO> callbackPKDTO);
-
-    void findUserById(int userId, AsyncCallback<UserDTO> getOrigScrumMasterDTO);
-
-    void updateTeam(TeamDTO teamDTO, String name, boolean withProject, AsyncCallback<Pair<Boolean, Integer>> updateTeam);
-
-    void updateProject(ProjectDTO projectDTO, boolean changedProjectName, String originalProjectName, AsyncCallback<Pair<Boolean,String>> updateProject);
-
-    void updateSprint(SprintDTO sprintDTO, AsyncCallback<Pair<Boolean,String>> updateSprint);
-
-    void deleteSprint(SprintDTO sprintDTO, AsyncCallback<Pair<Boolean,String>> deleteSprint);
 
     void dummyWorkloadTrigger(WorkloadDTO workloadDTO, AsyncCallback<WorkloadDTO> workloadCallback);
 
@@ -86,9 +53,56 @@ public interface DScrumServiceAsync {
     void dummyTaskPKTrigger(TaskPKDTO taskPKDTO, AsyncCallback<TaskPKDTO> taskPKCallback);
 
     void dummyUserStoryTrigger(UserStoryDTO userStoryDTO, AsyncCallback<UserStoryDTO> userStoryCallback);
+    // DUMMY //
 
+    // PROJECT //
+    void saveProject(ProjectDTO projectDTO, AsyncCallback<Pair<Boolean,String>> saveProject);
+
+    void updateProject(ProjectDTO projectDTO, boolean changedProjectName, String originalProjectName, AsyncCallback<Pair<Boolean,String>> updateProject);
+
+    void findAllProjects(AsyncCallback<List<ProjectDTO>> callback);
+
+    void findUserProjects(UserDTO userDTO, AsyncCallback<List<ProjectDTO>> callback);
+
+    void findProjectByName(String name, AsyncCallback<ProjectDTO> callback);
+    // PROJECT //
+
+    // USER //
+    void saveUser(UserDTO userDTO, Boolean value, AsyncCallback<Pair<Boolean, String>> saveUser);
+
+    void updateUser(UserDTO userDTO, boolean b, AsyncCallback<Pair<Boolean, String>> updateUser);
+
+    void validateUserData(String emailValue, AsyncCallback<Pair<Boolean, String>> validationCallback);
+
+    void performUserLogin(String username, String passwordHash, AsyncCallback<Pair<UserDTO, String>> async);
+
+    void findUserById(int userId, AsyncCallback<UserDTO> getOrigScrumMasterDTO);
+
+    void findUserByUsername(String username, AsyncCallback<UserDTO> callback);
+
+    void findAllUsers(AsyncCallback<List<UserDTO>> callback);
+    // USER //
+
+    // TEAM //
+    void saveTeam(TeamDTO teamDTO, String projectName, boolean withProject, AsyncCallback<Pair<Boolean, Integer>> saveTeam);
+
+    void updateTeam(TeamDTO teamDTO, String name, boolean withProject, AsyncCallback<Pair<Boolean, Integer>> updateTeam);
+    // TEAM //
+
+    // SPRINT //
+    void saveSprint(SprintDTO sprintDTO, AsyncCallback<Pair<Boolean,Integer>> saveSprint);
+
+    void updateSprint(SprintDTO sprintDTO, AsyncCallback<Pair<Boolean,String>> updateSprint);
+
+    void deleteSprint(SprintDTO sprintDTO, AsyncCallback<Pair<Boolean,String>> deleteSprint);
+    // SPRINT //
+
+    // ACCEPTANCE TEST //
     void saveAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList, AsyncCallback<Pair<Boolean,List<Integer>>> saveAcceptanceTestList);
+    // ACCEPTANCE TEST //
 
+    // USER STORY //
     void saveUserStory(UserStoryDTO userStoryDTO, ProjectDTO projectDTO, AsyncCallback<Pair<Boolean,Integer>> saveUserStory);
+    // USER STORY //
 }
 

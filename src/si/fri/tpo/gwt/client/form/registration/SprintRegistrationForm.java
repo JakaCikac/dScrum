@@ -18,10 +18,12 @@ import com.sencha.gxt.widget.core.client.form.validator.MinDateValidator;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
+import si.fri.tpo.gwt.client.dto.SprintPKDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
+import si.fri.tpo.gwt.server.jpa.SprintPK;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -99,11 +101,6 @@ public class SprintRegistrationForm implements IsWidget {
                 //TODO: SEQUENCE NUMBER NOT WORKING!!!
 
                 List<SprintDTO> sprintDTOList = SessionInfo.projectDTO.getSprintList();
-                System.out.println("Number of sprint: " + sprintDTOList.size());
-                for (SprintDTO sprintDTO1 : sprintDTOList){
-                    System.out.println("SprintDTOlist : " + sprintDTO1.getSeqNumber());
-                }
-
 
                 /* ------------------------------- VALIDATORS --------------------------------- */
                 Date today = new Date(); // Get today's date.
@@ -111,7 +108,7 @@ public class SprintRegistrationForm implements IsWidget {
                 yesterday.setDate(today.getDate()-1);
                 // Check if sprint is in past.
                 if (startDate.getValue().before(yesterday)) {
-                        AlertMessageBox d = new AlertMessageBox("Sprint in past", "Sprints cannot be entered in the past.");
+                    AlertMessageBox d = new AlertMessageBox("Sprint in past", "Sprints cannot be entered in the past.");
                     d.show();
                     return;
                 }
@@ -176,9 +173,9 @@ public class SprintRegistrationForm implements IsWidget {
                     sprintDTO.setSeqNumber(sprintDTOList.size()+1);
                 }
                 sprintDTO.setProject(SessionInfo.projectDTO);
-                //System.out.println("Number of sprint: " + SessionInfo.projectDTO.getSprintList().size());
-                sprintDTOList.add(sprintDTO);
-                SessionInfo.projectDTO.setSprintList(sprintDTOList);
+                for (SprintDTO sprintDTO1 : sprintDTOList){
+                    System.out.println("Sprint id: " + sprintDTO1.getSprintPK().getSprintId());
+                }
 
                 performSaveSprint(sprintDTO);
             }
@@ -188,32 +185,56 @@ public class SprintRegistrationForm implements IsWidget {
         vp.add(panel);
     }
 
-    private void performSaveSprint(SprintDTO sprintDTO) {
+    private void performSaveSprint(final SprintDTO sprintDTO) {
 
-        AsyncCallback<Pair<Boolean, String>> saveSprint = new AsyncCallback<Pair<Boolean, String>>() {
+        AsyncCallback<Pair<Boolean, Integer>> saveSprint = new AsyncCallback<Pair<Boolean, Integer>>() {
             @Override
-            public void onSuccess(Pair<Boolean, String> result) {
+            public void onSuccess(Pair<Boolean, Integer> result) {
                 if (result == null) {
                     AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing sprint saving!");
                     amb2.show();
                 }
                 else if (!result.getFirst()) {
-                    AlertMessageBox amb2 = new AlertMessageBox("Error saving Sprint!", result.getSecond());
+                    AlertMessageBox amb2 = new AlertMessageBox("Error saving Sprint!", result.getSecond().toString());
                     amb2.show();
-                }
-                else {
-                    MessageBox amb3 = new MessageBox("Message save Sprint", result.getSecond());
-                    amb3.show();
-                    center.clear();
-                    west.clear();
-                    SessionInfo.projectDTO = null;
-                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
-                    west.add(psf.asWidget());
-                    List<SprintDTO> sprintDTOList = SessionInfo.projectDTO.getSprintList();
-                    System.out.println("Number of sprint: " + sprintDTOList.size());
-                    for (SprintDTO sprintDTO1 : sprintDTOList){
-                        System.out.println("SprintDTOlist OnSuccess : " + sprintDTO1.getSeqNumber());
-                    }
+                } else if (result.getSecond() == -1){
+                    AlertMessageBox amb2 = new AlertMessageBox("Error getting SprintID!", result.getSecond().toString());
+                    amb2.show();
+                } else {
+                    SprintPKDTO sprintPKDTO = new SprintPKDTO();
+                    sprintPKDTO.setSprintId(result.getSecond());
+                    System.out.println("saveSprint: " + sprintPKDTO.getSprintId());
+                    sprintPKDTO.setProjectProjectId(SessionInfo.projectDTO.getProjectId());
+                    sprintDTO.setSprintPK(sprintPKDTO);
+                    AsyncCallback<Pair<Boolean, String>> updateSprint = new AsyncCallback<Pair<Boolean, String>>() {
+                        @Override
+                        public void onSuccess(Pair<Boolean, String> result) {
+                            if (result == null) {
+                                AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing sprint updating!");
+                                amb2.show();
+                            }
+                            else if (!result.getFirst()) {
+                                AlertMessageBox amb2 = new AlertMessageBox("Error updating Sprint!", result.getSecond());
+                                amb2.show();
+                            }
+                            else {
+                                MessageBox amb3 = new MessageBox("Message update Sprint", result.getSecond());
+                                amb3.show();
+                                center.clear();
+                                west.clear();
+                                SessionInfo.projectDTO = null;
+                                ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
+                                west.add(psf.asWidget());
+                            }
+                        }
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            Window.alert(caught.getMessage());
+                        }
+                    };
+                    //System.out.println("Calling updateSprint");
+                    // TODO: project name duplication
+                    service.updateSprint(sprintDTO, updateSprint);
                 }
             }
             @Override
@@ -222,7 +243,6 @@ public class SprintRegistrationForm implements IsWidget {
             }
         };
         System.out.println("Calling saveSprint");
-        // TODO: project name duplication
         service.saveSprint(sprintDTO, saveSprint);
     }
 

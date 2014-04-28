@@ -5,6 +5,7 @@ import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.SprintPKDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.session.SessionInfo;
 import si.fri.tpo.gwt.server.jpa.*;
 import si.fri.tpo.gwt.server.proxy.ProxyManager;
 
@@ -15,7 +16,8 @@ import java.util.List;
  * Created by Administrator on 15-Apr-14.
  */
 public class SprintImpl {
-    public static Pair<Boolean, String> saveNewSprint(SprintDTO sprintDTO) {
+    public static Pair<Boolean, Integer> saveNewSprint(SprintDTO sprintDTO) {
+        int sprintID = -1;
         try {
             Sprint s = new Sprint();
             s.setSeqNumber(sprintDTO.getSeqNumber());
@@ -24,64 +26,33 @@ public class SprintImpl {
             s.setStartDate(sprintDTO.getStartDate());
             s.setVelocity(sprintDTO.getVelocity());
 
-            ProjectDTO projectDTO = sprintDTO.getProject();
-            Project project = ProxyManager.getProjectProxy().findProjectByName(projectDTO.getName());
-            project.setProjectId(projectDTO.getProjectId());
-            project.setStatus(projectDTO.getStatus());
-            project.setDescription(projectDTO.getDescription());
-            project.setName(projectDTO.getName());
-            Team team = new Team();
-            team.setTeamId(projectDTO.getTeamTeamId().getTeamId());
-            team.setScrumMasterId(projectDTO.getTeamTeamId().getScrumMasterId());
-            team.setProductOwnerId(projectDTO.getTeamTeamId().getProductOwnerId());
-
-            List<User> userList = new ArrayList<User>();
-            //System.out.println("Team's userList:" + projectDTO.getTeamTeamId().getUserList().size());
-            if (projectDTO.getTeamTeamId().getUserList() != null) {
-                for (UserDTO userDTO : projectDTO.getTeamTeamId().getUserList()) {
-                    User user = new User();
-                    user.setUserId(userDTO.getUserId());
-                    user.setUsername(userDTO.getUsername());
-                    user.setPassword(userDTO.getPassword());
-                    user.setFirstName(userDTO.getFirstName());
-                    user.setLastName(userDTO.getLastName());
-                    user.setEmail(userDTO.getEmail());
-                    user.setIsAdmin(userDTO.isAdmin());
-                    user.setSalt(userDTO.getSalt());
-                    user.setIsActive(userDTO.isActive());
-                    user.setTimeCreated(userDTO.getTimeCreated());
-                    userList.add(user);
-                }
-                team.setUserList(userList);
-            } else return Pair.of(false, "No user list when saving team.");
-            project.setTeamTeamId(team);
-
+            Project project = ProxyManager.getProjectProxy().findProjectByName(sprintDTO.getProject().getName());
             s.setProject(project);
 
-            List<Sprint> sprintList = project.getSprintList();
-            sprintList.add(s);
-            project.setSprintList(sprintList);
-            for (Sprint sprint : sprintList){
-                System.out.println("SprintImpl Sprint seqNumber : " + sprint.getSeqNumber());
-            }
+            SprintPK sprintPK = new SprintPK();
+            sprintPK.setProjectProjectId(project.getProjectId());
+            s.setSprintPK(sprintPK);
+
+            //List<Sprint> sprintList = project.getSprintList();
+            //sprintList.add(s);
+            //project.setSprintList(sprintList);
+
             try {
                 if (s == null)
-                    return Pair.of(false, "Data error!");
+                    return Pair.of(false, -1);
 
-                ProxyManager.getSprintProxy().create(s);
-                System.out.println("Shranjen Sprint");
-                ProxyManager.getProjectProxy().edit(project);
-                System.out.println("Posodobljen Project");
+                sprintID = ProxyManager.getSprintProxy().create(s);
+                System.out.println("Shranjen Sprint " + sprintID);
 
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
-                return Pair.of(false, e.getMessage());
+                return Pair.of(false, -2);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return Pair.of(false, e.getMessage());
+            return Pair.of(false, -3);
         }
-        return Pair.of(true, "Sprint was entered successfully!");
+        return Pair.of(true, sprintID);
     }
 
     public static Pair<Boolean, String> updateSprint(SprintDTO sprintDTO) {
@@ -90,6 +61,7 @@ public class SprintImpl {
             SprintPK sprintPK = new SprintPK();
             sprintPK.setSprintId(sprintPKDTO.getSprintId());
             sprintPK.setProjectProjectId(sprintPKDTO.getProjectProjectId());
+            System.out.println("1. updateSprint: " + sprintPK.getSprintId());
 
             Sprint s = null;
             try {
@@ -99,49 +71,17 @@ public class SprintImpl {
                 System.err.println("Error: " + e.getMessage());
                 return Pair.of(false, e.getMessage());
             }
-            if (s == null){
-                System.out.println("Proxy je vrnu: null");
-            } else {
-                s.setSprintPK(sprintPK);
-                s.setSeqNumber(sprintDTO.getSeqNumber());
-                s.setStatus(sprintDTO.getStatus());
-                s.setEndDate(sprintDTO.getEndDate());
-                s.setStartDate(sprintDTO.getStartDate());
-                s.setVelocity(sprintDTO.getVelocity());
-            }
+            System.out.println("2. updateSprint: " + s.getSprintPK().getSprintId());
+            s.setSprintPK(sprintPK);
+            System.out.println("3. updateSprint: " + s.getSprintPK().getSprintId());
+            s.setSeqNumber(sprintDTO.getSeqNumber());
+            s.setStatus(sprintDTO.getStatus());
+            s.setEndDate(sprintDTO.getEndDate());
+            s.setStartDate(sprintDTO.getStartDate());
+            s.setVelocity(sprintDTO.getVelocity());
 
             ProjectDTO projectDTO = sprintDTO.getProject();
             Project project = ProxyManager.getProjectProxy().findProjectByName(projectDTO.getName());
-            project.setProjectId(projectDTO.getProjectId());
-            project.setStatus(projectDTO.getStatus());
-            project.setDescription(projectDTO.getDescription());
-            project.setName(projectDTO.getName());
-            Team team = new Team();
-            team.setTeamId(projectDTO.getTeamTeamId().getTeamId());
-            team.setScrumMasterId(projectDTO.getTeamTeamId().getScrumMasterId());
-            team.setProductOwnerId(projectDTO.getTeamTeamId().getProductOwnerId());
-
-            List<User> userList = new ArrayList<User>();
-            //System.out.println("Team's userList:" + projectDTO.getTeamTeamId().getUserList().size());
-            if (projectDTO.getTeamTeamId().getUserList() != null) {
-                for (UserDTO userDTO : projectDTO.getTeamTeamId().getUserList()) {
-                    User user = new User();
-                    user.setUserId(userDTO.getUserId());
-                    user.setUsername(userDTO.getUsername());
-                    user.setPassword(userDTO.getPassword());
-                    user.setFirstName(userDTO.getFirstName());
-                    user.setLastName(userDTO.getLastName());
-                    user.setEmail(userDTO.getEmail());
-                    user.setIsAdmin(userDTO.isAdmin());
-                    user.setSalt(userDTO.getSalt());
-                    user.setIsActive(userDTO.isActive());
-                    user.setTimeCreated(userDTO.getTimeCreated());
-                    userList.add(user);
-                }
-                team.setUserList(userList);
-            } else return Pair.of(false, "No user list when saving team.");
-            project.setTeamTeamId(team);
-
             s.setProject(project);
             try {
                 if (s == null)

@@ -3,7 +3,6 @@ package si.fri.tpo.gwt.server.servlet;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.*;
-import si.fri.tpo.gwt.client.form.registration.UserStoryRegistrationForm;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.server.impl.acceptanceTest.AcceptanceTestImpl;
 import si.fri.tpo.gwt.server.impl.login.LoginServiceImpl;
@@ -20,11 +19,7 @@ import java.util.List;
  */
 public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumService {
 
-    @Override
-    public Pair<UserDTO, String> performUserLogin(String username, String passwordHash) {
-        return LoginServiceImpl.performUserLogin(username, passwordHash);
-    }
-
+    // DUMMY //
     @Override
     public Character dummyCharacterTrigger(Character b) {
         return new Character('A');
@@ -41,94 +36,8 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     }
 
     @Override
-    public Pair<Boolean, String> validateUserData(String emailValue) {
-
-        //if (!Validate.isEmail(emailValue)) {
-            // getEmail().focus();
-        //    return Pair.of(false, "Email not valid!");
-        //}
-
-        return Pair.of(true, "");
-    }
-
-    @Override
-    public Pair<Boolean, String> saveUser(UserDTO userDTO, Boolean isNew) {
-        return UserRegistrationServiceImpl.saveUser(userDTO, isNew);
-    }
-
-    @Override
-    public UserDTO findUserByUsername(String username) {
-        return UserImpl.findUserByUsername(username);
-    }
-
-    @Override
-    public List<UserDTO> findAllUsers() {
-        return UserImpl.getAllUsers();
-    }
-
-    // with project if team gets stored with project, so you can validate
-    // if the project exists
-    @Override
-    public Pair<Boolean, Integer> saveTeam(TeamDTO teamDTO, String projectName, boolean withProject) {
-        if (withProject) {
-            return TeamRegistrationServiceImpl.saveTeamWithProject(teamDTO, projectName);
-        } else
-            return TeamImpl.saveTeam(teamDTO);
-    }
-
-    @Override
-    public Pair<Boolean, Integer> updateTeam(TeamDTO teamDTO, String name, boolean withProject) {
-            return TeamImpl.updateTeamWithProject(teamDTO);
-    }
-
-    @Override
-    public Pair<Boolean, String> updateProject(ProjectDTO projectDTO, boolean changedProjectName, String originalProjectName) {
-        return ProjectImpl.updateProject(projectDTO,changedProjectName, originalProjectName);
-    }
-
-    @Override
-    public Pair<Boolean, String> updateSprint(SprintDTO sprintDTO) {
-        return SprintImpl.updateSprint(sprintDTO);
-    }
-
-    @Override
-    public Pair<Boolean, String> deleteSprint(SprintDTO sprintDTO) {
-        return SprintImpl.deleteSprint(sprintDTO);
-    }
-
-    @Override
-    public Pair<Boolean, String> saveProject(ProjectDTO projectDTO) {
-        return ProjectRegistrationServiceImpl.saveProject(projectDTO);
-    }
-
-    @Override
-    public Pair<Boolean, String> updateUser(UserDTO userDTO, boolean b) {
-        return UserImpl.updateUser(userDTO, b);
-    }
-
-    @Override
-    public Pair<Boolean, String> saveSprint(SprintDTO sprintDTO) {
-        return SprintImpl.saveNewSprint(sprintDTO);
-    }
-
-    @Override
-    public List<ProjectDTO> findAllProjects() {
-        return ProjectImpl.getAllProject();
-    }
-
-    @Override
     public ProjectDTO dummyProjectTrigger(ProjectDTO projectDTO) {
         return new ProjectDTO();
-    }
-
-    @Override
-    public List<ProjectDTO> findUserProjects(UserDTO userDTO) {
-        return ProjectImpl.getUserProject(userDTO);
-    }
-
-    @Override
-    public ProjectDTO findProjectByName(String name) {
-        return ProjectImpl.getProjectByName(name);
     }
 
     @Override
@@ -139,11 +48,6 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     @Override
     public SprintPKDTO dummySprintPKTrigger(SprintPKDTO sprintPKDTO) {
         return new SprintPKDTO();
-    }
-
-    @Override
-    public UserDTO findUserById(int userId) {
-        return UserImpl.findUserById(userId);
     }
 
     @Override
@@ -220,16 +124,124 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     public UserStoryDTO dummyUserStoryTrigger(UserStoryDTO userStoryDTO) {
         return new UserStoryDTO();
     }
+    // DUMMY //
 
+    // PROJECT //
+    @Override
+    public Pair<Boolean, String> saveProject(ProjectDTO projectDTO) {
+        return ProjectRegistrationServiceImpl.saveProject(projectDTO);
+    }
+
+    @Override
+    public Pair<Boolean, String> updateProject(ProjectDTO projectDTO, boolean changedProjectName, String originalProjectName) {
+        return ProjectImpl.updateProject(projectDTO,changedProjectName, originalProjectName);
+    }
+
+    @Override
+    public List<ProjectDTO> findAllProjects() {
+        return ProjectImpl.getAllProject();
+    }
+
+    @Override
+    public List<ProjectDTO> findUserProjects(UserDTO userDTO) {
+        return ProjectImpl.getUserProject(userDTO);
+    }
+
+    @Override
+    public ProjectDTO findProjectByName(String name) {
+        return ProjectImpl.getProjectByName(name);
+    }
+    // PROJECT //
+
+    // USER //
+    @Override
+    public Pair<Boolean, String> saveUser(UserDTO userDTO, Boolean isNew) {
+        return UserRegistrationServiceImpl.saveUser(userDTO, isNew);
+    }
+
+    @Override
+    public Pair<Boolean, String> updateUser(UserDTO userDTO, boolean b) {
+        return UserImpl.updateUser(userDTO, b);
+    }
+
+    @Override
+    public Pair<Boolean, String> validateUserData(String emailValue) {
+
+        //if (!Validate.isEmail(emailValue)) {
+        // getEmail().focus();
+        //    return Pair.of(false, "Email not valid!");
+        //}
+
+        return Pair.of(true, "");
+    }
+
+    @Override
+    public Pair<UserDTO, String> performUserLogin(String username, String passwordHash) {
+        return LoginServiceImpl.performUserLogin(username, passwordHash);
+    }
+
+    @Override
+    public UserDTO findUserById(int userId) {
+        return UserImpl.findUserById(userId);
+    }
+
+    @Override
+    public UserDTO findUserByUsername(String username) {
+        return UserImpl.findUserByUsername(username);
+    }
+
+    @Override
+    public List<UserDTO> findAllUsers() {
+        return UserImpl.getAllUsers();
+    }
+    // USER //
+
+    // TEAM //
+    // with project if team gets stored with project, so you can validate
+    // if the project exists
+    @Override
+    public Pair<Boolean, Integer> saveTeam(TeamDTO teamDTO, String projectName, boolean withProject) {
+        if (withProject) {
+            return TeamRegistrationServiceImpl.saveTeamWithProject(teamDTO, projectName);
+        } else
+            return TeamImpl.saveTeam(teamDTO);
+    }
+
+    @Override
+    public Pair<Boolean, Integer> updateTeam(TeamDTO teamDTO, String name, boolean withProject) {
+            return TeamImpl.updateTeamWithProject(teamDTO);
+    }
+    // TEAM //
+
+    // SPRINT //
+    @Override
+    public Pair<Boolean, Integer> saveSprint(SprintDTO sprintDTO) {
+        return SprintImpl.saveNewSprint(sprintDTO);
+    }
+
+    @Override
+    public Pair<Boolean, String> updateSprint(SprintDTO sprintDTO) {
+        return SprintImpl.updateSprint(sprintDTO);
+    }
+
+    @Override
+    public Pair<Boolean, String> deleteSprint(SprintDTO sprintDTO) {
+        return SprintImpl.deleteSprint(sprintDTO);
+    }
+    // SPRINT //
+
+    // ACCEPTANCE TEST //
     @Override
     public Pair<Boolean, List<Integer>> saveAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList) {
         return AcceptanceTestImpl.saveAcceptanceTestList(acceptanceTestDTOList);
     }
+    // ACCEPTANCE TEST //
 
+    // USER STORY //
     @Override
     public Pair<Boolean, Integer> saveUserStory(UserStoryDTO userStoryDTO, ProjectDTO projectDTO) {
         return UserStoryServiceImpl.saveUserStory(userStoryDTO, projectDTO);
     }
-
+    // USER STORY //
 
 }

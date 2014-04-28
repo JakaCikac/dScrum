@@ -41,7 +41,8 @@ public class SprintJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Sprint sprint) throws PreexistingEntityException, Exception {
+    public int create(Sprint sprint) throws PreexistingEntityException, Exception {
+        int insertedSprintID = -1;
         if (sprint.getSprintPK() == null) {
             sprint.setSprintPK(new SprintPK());
         }
@@ -86,9 +87,11 @@ public class SprintJpaController implements Serializable {
             throw ex;
         } finally {
             if (em != null) {
+                insertedSprintID = sprint.getSprintPK().getSprintId();
                 em.close();
             }
         }
+        return insertedSprintID;
     }
 
     public void edit(Sprint sprint) throws NonexistentEntityException, Exception {
@@ -151,6 +154,7 @@ public class SprintJpaController implements Serializable {
             throw ex;
         } finally {
             if (em != null) {
+                System.out.println("SprintJpaController: " + sprint.getSprintPK().getSprintId());
                 em.close();
             }
         }

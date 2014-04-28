@@ -23,7 +23,7 @@ public class SprintRegistrationServiceImpl {
             return duplPair;
 
 
-        Pair<Boolean, String> aBoolean = SprintImpl.saveNewSprint(sprintDTO);
+        Pair<Boolean, Integer> aBoolean = SprintImpl.saveNewSprint(sprintDTO);
         if (aBoolean == null)
             return Pair.of(false, "User DB insertion failed!");
         if (aBoolean.getFirst())
