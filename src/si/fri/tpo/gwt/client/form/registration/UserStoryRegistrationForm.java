@@ -80,7 +80,7 @@ public class UserStoryRegistrationForm implements IsWidget {
     private void createUserStoryForm() {
         FramedPanel panel = new FramedPanel();
         panel.setHeadingText("User Story Creation Form");
-        panel.setWidth(450);
+        panel.setWidth(470);
         panel.setBodyStyle("background: none; padding: 15px");
 
         VerticalLayoutContainer p = new VerticalLayoutContainer();

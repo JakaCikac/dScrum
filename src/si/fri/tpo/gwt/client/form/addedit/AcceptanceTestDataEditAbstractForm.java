@@ -7,6 +7,7 @@ import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
+import com.sencha.gxt.data.shared.event.StoreAddEvent;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
@@ -49,14 +50,15 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
     private TextField contentTF;
     private ListStore<AcceptanceTestDTO> store;
     private AcceptanceTestDTO tempDTO;
-
+    private boolean firstTimeEdit = true;
 
     public AcceptanceTestDataEditAbstractForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east) {
         this.service = service;
         this.center = center;
         this.west = west;
         this.east = east;
-        acceptanceTestCount = 0;
+        this.acceptanceTestCount = 0;
+
     }
 
     @Override
@@ -73,10 +75,14 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
 
             ColumnModel<AcceptanceTestDTO> cm = new ColumnModel<AcceptanceTestDTO>(l);
 
-            System.out.println("Before crating ListStore");
             store = new ListStore<AcceptanceTestDTO>(getModelKeyProvider());
-            System.out.println("After crating ListStore, store size: " + store.size());
-            store.setAutoCommit(true);
+            //store.setAutoCommit(true);
+            grid.getStore().addStoreAddHandler(new StoreAddEvent.StoreAddHandler<AcceptanceTestDTO>() {
+                @Override
+                public void onAdd(StoreAddEvent<AcceptanceTestDTO> event) {
+
+                }
+            });
 
             grid = new Grid<AcceptanceTestDTO>(store, cm);
             grid.getView().setAutoExpandColumn(content);
@@ -112,23 +118,41 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
 
                     editing.cancelEditing();
                     store.add(0, test);
-                    System.out.println("After crating ListStore1, store size: " + store.size());
-
 
                     int row = store.indexOf(test);
                     editing.startEditing(new Grid.GridCell(row, 0));
-                    System.out.println("After crating ListStore,2 store size: " + store.size());
 
-                    editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<AcceptanceTestDTO>() {
+                    firstTimeEdit = true;
+
+                    // TODO: ko se editira ze ustvarjen acceptance test se tud klice ta zadeva, jup you're fucked.
+                    // TODO: celica se updata sele potem ko jo spet kliknes za urejanje. ...  -. -.- .- .-
+                   /* editing.addCompleteEditHandler(new CompleteEditEvent.CompleteEditHandler<AcceptanceTestDTO>() {
                         @Override
                         public void onCompleteEdit(CompleteEditEvent<AcceptanceTestDTO> event) {
                             System.out.println("Sem v edit ocomeom ojd handlerju!");
                             System.out.println(contentTF.getValue());
-                            tempDTO.setContent(contentTF.getValue());
+                            System.out.println("ACctestCou " + acceptanceTestCount );
+                            System.out.println("store at acc test count: " + store.get(acceptanceTestCount));
+                            System.out.println("Store at acc test count content before change: " + store.get(acceptanceTestCount).getContent());
+                            store.get(acceptanceTestCount).setContent(contentTF.getValue());
+                            System.out.println("Store at acc test count content after change: " + store.get(acceptanceTestCount).getContent());
+                            grid.getSelectionModel().select(0, true);
+                            System.out.println("Grid content before change: " + grid.getSelectionModel().getSelectedItem().getContent());
+                            grid.getSelectionModel().getSelectedItem().setContent(store.get(acceptanceTestCount).getContent());
+                            System.out.println("Grid content after change: " + grid.getSelectionModel().getSelectedItem().getContent());
+                            if (firstTimeEdit) {
+                                acceptanceTestCount++;
+                                firstTimeEdit = false;
+                            }
                         }
-                    });
+                    }); */
 
-                    acceptanceTestCount++;
+                    //System.out.println("STore content: " + store.get(acceptanceTestCount).getContent());
+                    //grid.getSelectionModel().select(0, true);
+                    //grid.getSelectionModel().getSelectedItem().setContent(store.get(acceptanceTestCount).getContent());
+                    //System.out.println("Grid content: " + grid.getSelectionModel().getSelectedItem().getContent());
+
+
                 }
             });
 
@@ -177,14 +201,14 @@ public abstract class AcceptanceTestDataEditAbstractForm implements IsWidget {
                     store.rejectChanges();
                 }
             }));
-
+            */
             panel.addButton(new TextButton("Save", new SelectEvent.SelectHandler() {
 
                 @Override
                 public void onSelect(SelectEvent event) {
                     store.commitChanges();
                 }
-            }));*/
+            }));
         }
 
         return panel;
