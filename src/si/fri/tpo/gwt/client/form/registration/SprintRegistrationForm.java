@@ -203,7 +203,6 @@ public class SprintRegistrationForm implements IsWidget {
                 } else {
                     SprintPKDTO sprintPKDTO = new SprintPKDTO();
                     sprintPKDTO.setSprintId(result.getSecond());
-                    System.out.println("saveSprint: " + sprintPKDTO.getSprintId());
                     sprintPKDTO.setProjectProjectId(SessionInfo.projectDTO.getProjectId());
                     sprintDTO.setSprintPK(sprintPKDTO);
                     AsyncCallback<Pair<Boolean, String>> updateSprint = new AsyncCallback<Pair<Boolean, String>>() {
@@ -232,7 +231,7 @@ public class SprintRegistrationForm implements IsWidget {
                             Window.alert(caught.getMessage());
                         }
                     };
-                    //System.out.println("Calling updateSprint");
+                    System.out.println("Calling updateSprint");
                     // TODO: project name duplication
                     service.updateSprint(sprintDTO, updateSprint);
                 }

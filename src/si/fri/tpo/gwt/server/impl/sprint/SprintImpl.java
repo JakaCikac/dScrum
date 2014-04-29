@@ -32,17 +32,12 @@ public class SprintImpl {
             SprintPK sprintPK = new SprintPK();
             sprintPK.setProjectProjectId(project.getProjectId());
             s.setSprintPK(sprintPK);
-
-            //List<Sprint> sprintList = project.getSprintList();
-            //sprintList.add(s);
-            //project.setSprintList(sprintList);
-
             try {
                 if (s == null)
                     return Pair.of(false, -1);
 
                 sprintID = ProxyManager.getSprintProxy().create(s);
-                System.out.println("Shranjen Sprint " + sprintID);
+                //System.out.println("Shranjen Sprint " + sprintID);
 
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
@@ -61,19 +56,15 @@ public class SprintImpl {
             SprintPK sprintPK = new SprintPK();
             sprintPK.setSprintId(sprintPKDTO.getSprintId());
             sprintPK.setProjectProjectId(sprintPKDTO.getProjectProjectId());
-            System.out.println("1. updateSprint: " + sprintPK.getSprintId());
 
             Sprint s = null;
             try {
                 s = ProxyManager.getSprintProxy().findSprint(sprintPK);
-
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
                 return Pair.of(false, e.getMessage());
             }
-            System.out.println("2. updateSprint: " + s.getSprintPK().getSprintId());
             s.setSprintPK(sprintPK);
-            System.out.println("3. updateSprint: " + s.getSprintPK().getSprintId());
             s.setSeqNumber(sprintDTO.getSeqNumber());
             s.setStatus(sprintDTO.getStatus());
             s.setEndDate(sprintDTO.getEndDate());
@@ -86,9 +77,7 @@ public class SprintImpl {
             try {
                 if (s == null)
                     return Pair.of(false, "Data error!");
-
                 ProxyManager.getSprintProxy().edit(s);
-
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
                 return Pair.of(false, e.getMessage());

@@ -6,9 +6,7 @@
 
 package si.fri.tpo.gwt.server.jpa;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -17,7 +15,8 @@ import java.io.Serializable;
  */
 @Embeddable
 public class SprintPK implements Serializable {
-    @Basic(optional = false)
+    //@Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sprint_id")
     private int sprintId;
     @Basic(optional = false)

@@ -154,7 +154,6 @@ public class SprintJpaController implements Serializable {
             throw ex;
         } finally {
             if (em != null) {
-                System.out.println("SprintJpaController: " + sprint.getSprintPK().getSprintId());
                 em.close();
             }
         }
