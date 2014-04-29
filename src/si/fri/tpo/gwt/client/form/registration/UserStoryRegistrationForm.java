@@ -16,22 +16,14 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.*;
 import com.sencha.gxt.widget.core.client.form.TextArea;
 import com.sencha.gxt.widget.core.client.form.validator.MinLengthValidator;
-import com.sencha.gxt.widget.core.client.grid.*;
-import com.sencha.gxt.widget.core.client.grid.Grid;
-import com.sencha.gxt.widget.core.client.grid.editing.GridEditing;
-import com.sencha.gxt.widget.core.client.grid.editing.GridRowEditing;
-import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.*;
-import si.fri.tpo.gwt.client.form.addedit.AcceptanceTestDataEditAbstractForm;
-import si.fri.tpo.gwt.client.form.search.SingleUserSearchCallback;
-import si.fri.tpo.gwt.client.form.search.SingleUserSearchDialog;
+import si.fri.tpo.gwt.client.form.addedit.AcceptanceTestDataEditForm;
+import si.fri.tpo.gwt.client.form.addedit.AcceptanceTestDataEditor;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
-import si.fri.tpo.gwt.client.form.select.TeamSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -45,7 +37,7 @@ public class UserStoryRegistrationForm implements IsWidget {
     private VerticalPanel vp;
     private HorizontalPanel hp;
     private List<AcceptanceTestDTO> acceptanceTestDTOList;
-    private AcceptanceTestDataEditAbstractForm atdeaf;
+    private AcceptanceTestDataEditForm atdeaf;
 
     private TextField userStoryName;
     private TextArea content;
@@ -134,12 +126,7 @@ public class UserStoryRegistrationForm implements IsWidget {
             }
         });
 
-        atdeaf = new AcceptanceTestDataEditAbstractForm(service, center, west, east) {
-            @Override
-            protected GridEditing<AcceptanceTestDTO> createGridEditing(Grid<AcceptanceTestDTO> grid) {
-                return new GridRowEditing <AcceptanceTestDTO>(grid);
-            }
-        };
+        atdeaf = new AcceptanceTestDataEditForm(service, center, west, east);
         p.add(atdeaf.asWidget());
 
         submitButton = new TextButton("Create");
