@@ -3,8 +3,6 @@ package si.fri.tpo.gwt.client.form.registration;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
@@ -26,11 +24,16 @@ import com.sencha.gxt.widget.core.client.form.*;
 import com.sencha.gxt.widget.core.client.form.FormPanel;
 import com.sencha.gxt.widget.core.client.form.TextArea;
 import com.sencha.gxt.widget.core.client.form.validator.MinLengthValidator;
-import com.sencha.gxt.widget.core.client.grid.*;
+import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
+import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.grid.RowNumberer;
 import com.sencha.gxt.widget.core.client.grid.editing.GridInlineEditing;
 import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.dto.*;
+import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
+import si.fri.tpo.gwt.client.dto.PriorityDTO;
+import si.fri.tpo.gwt.client.dto.ProjectDTO;
+import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
@@ -275,6 +278,7 @@ public class UserStoryRegistrationForm implements IsWidget, Editor<UserStoryDTO>
                     new MessageBox("Driver failed completely with numerous errors.").show();
                 }
 
+                userStoryDTO.setAcceptanceTestList(acceptanceTestDTOList); // za vsak slucaj ce uno spodi ne dela
                 performSaveAcceptanceTestAndUserStory(acceptanceTestDTOList, userStoryDTO);
             }
         });
@@ -362,15 +366,19 @@ public class UserStoryRegistrationForm implements IsWidget, Editor<UserStoryDTO>
     }
 
     public List<AcceptanceTestDTO> getAcceptanceTestDTOList() {
-           List<AcceptanceTestDTO> returnTests = new ArrayList<AcceptanceTestDTO>();
-
-            for (AcceptanceTestDTO accTestDTO : store.getAll()) {
-                AcceptanceTestDTO temp = new AcceptanceTestDTO();
-                temp.setAcceptanceTestId(accTestDTO.getAcceptanceTestId());
-                System.out.println("accTestDTO content form listStore: " + accTestDTO.getContent());
-                temp.setContent(accTestDTO.getContent());
-                returnTests.add(temp);
-            }
+        List<AcceptanceTestDTO> returnTests = new ArrayList<AcceptanceTestDTO>();
+        //System.out.println("Store size: " + store.getAll().size() );
+        for (int i = 0; i < store.getAll().size(); i++) {
+            //grid.getSelectionModel().select(i, true);
+            store.get(i).setContent(grid.getView().getCell(i,1).getInnerText());
+        }
+        for (AcceptanceTestDTO accTestDTO : store.getAll()) {
+            AcceptanceTestDTO temp = new AcceptanceTestDTO();
+            temp.setAcceptanceTestId(accTestDTO.getAcceptanceTestId());
+            //System.out.println("accTestDTO content form listStore: " + accTestDTO.getContent());
+            temp.setContent(accTestDTO.getContent());
+            returnTests.add(temp);
+        }
             return returnTests;
     }
 
