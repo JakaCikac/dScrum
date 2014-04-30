@@ -258,20 +258,9 @@ public class UserStoryRegistrationForm implements IsWidget, Editor<UserStoryDTO>
                 userStoryDTO.setStatus("Unfinished");
                 userStoryDTO.setProjectProjectId(SessionInfo.projectDTO);
                 driver.edit(userStoryDTO);
-                if (userStoryDTO.getAcceptanceTestList() != null) {
-                    System.out.println("Ni null! " + userStoryDTO.getAcceptanceTestList().size());
-                } else System.out.println("List je se vedno null modelj");
-
-                //userStoryDTO.setAcceptanceTestList(acceptanceTestDTOList);
-                /*if (userStoryDTO.getAcceptanceTestList() != null) {
-                   System.out.println("Acceptance list in userStoryDTO is not null and has  " + userStoryDTO.getAcceptanceTestList().size() + " # of objects:");
-                } else System.out.println("AcctestDTO list is null in userStoryDTO."); */
 
                 userStoryDTO = driver.flush();
                 acceptanceTestDTOList = getAcceptanceTestDTOList();
-                if (userStoryDTO.getAcceptanceTestList() != null) {
-                    System.out.println("Ni null! " + userStoryDTO.getAcceptanceTestList().size());
-                } else System.out.println("List je se vedno null modelj");
 
                 if (driver.hasErrors()) {
                     System.out.println("Driver errors: " + driver.getErrors().toString());
@@ -347,8 +336,6 @@ public class UserStoryRegistrationForm implements IsWidget, Editor<UserStoryDTO>
                             Window.alert(caught.getMessage());
                         }
                     };
-                    //TODO: Save UserStory to database
-                    System.out.println("Calling saveProject");
                     service.saveUserStory(userStoryDTO, SessionInfo.projectDTO, saveUserStory);
                 }
             }
@@ -367,15 +354,12 @@ public class UserStoryRegistrationForm implements IsWidget, Editor<UserStoryDTO>
 
     public List<AcceptanceTestDTO> getAcceptanceTestDTOList() {
         List<AcceptanceTestDTO> returnTests = new ArrayList<AcceptanceTestDTO>();
-        //System.out.println("Store size: " + store.getAll().size() );
         for (int i = 0; i < store.getAll().size(); i++) {
-            //grid.getSelectionModel().select(i, true);
             store.get(i).setContent(grid.getView().getCell(i,1).getInnerText());
         }
         for (AcceptanceTestDTO accTestDTO : store.getAll()) {
             AcceptanceTestDTO temp = new AcceptanceTestDTO();
             temp.setAcceptanceTestId(accTestDTO.getAcceptanceTestId());
-            //System.out.println("accTestDTO content form listStore: " + accTestDTO.getContent());
             temp.setContent(accTestDTO.getContent());
             returnTests.add(temp);
         }
@@ -413,24 +397,6 @@ public class UserStoryRegistrationForm implements IsWidget, Editor<UserStoryDTO>
             }
         };
         return vpc;
-    }
-
-    public void setAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestList) {
-        this.acceptanceTestList = acceptanceTestList;
-    }
-
-    public List<AcceptanceTestDTO> getAcceptanceTestList() {
-        List<AcceptanceTestDTO> acceptanceTestDTOList = new ArrayList<AcceptanceTestDTO>();
-        for (AcceptanceTestDTO acceptanceTestDTO : store.getAll()){
-            AcceptanceTestDTO temp = new AcceptanceTestDTO();
-            temp.setContent(acceptanceTestDTO.getContent());
-            acceptanceTestDTOList.add(temp);
-        }
-        return acceptanceTestDTOList;
-    }
-
-    public void setTempDTO(AcceptanceTestDTO tempDTO) {
-        this.tempDTO = tempDTO;
     }
 
 }

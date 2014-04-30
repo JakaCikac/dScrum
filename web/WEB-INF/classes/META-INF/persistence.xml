@@ -24,7 +24,6 @@
         <class>si.fri.tpo.gwt.server.jpa.WorkloadPK</class>
         <properties>
             <property name="javax.persistence.target-database" value="MySQL"/>
-            <!-- TODO:set database to t13_2014 -->
             <property name="javax.persistence.jdbc.url"
                       value="jdbc:mysql://ltpo2.fri1.uni-lj.si:3306/t13_2014?useUnicode=true&amp;characterEncoding=utf8&amp;connectionCollation=utf8_general_ci&amp;characterSetResults=utf8"/>
             <property name="javax.persistence.jdbc.user" value="t13jc"/>
