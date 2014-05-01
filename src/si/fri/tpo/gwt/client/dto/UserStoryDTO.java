@@ -15,7 +15,7 @@ public class UserStoryDTO extends BaseModelData {
     //private String content;
     //private Integer businessValue;
     //private String status;
-    //private BigDecimal estimateTime;
+    //private Double estimateTime;
     //private List<Task> taskList;
     //private List<AcceptanceTest> acceptanceTestList;
     //private Sprint sprint;
@@ -65,11 +65,11 @@ public class UserStoryDTO extends BaseModelData {
         set("status", status);
     }
 
-    public BigDecimal getEstimateTime(){
+    public Double getEstimateTime(){
         return get("estimateTime");
     }
 
-    public void setEstimateTime(BigDecimal estimateTime){
+    public void setEstimateTime(Double estimateTime){
         set("estimateTime", estimateTime);
     }
 

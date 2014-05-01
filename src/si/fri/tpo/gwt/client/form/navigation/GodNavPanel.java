@@ -11,10 +11,7 @@ import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.info.Info;
-import si.fri.tpo.gwt.client.form.addedit.AdminUserDataEditForm;
-import si.fri.tpo.gwt.client.form.addedit.ProjecDataEditForm;
-import si.fri.tpo.gwt.client.form.addedit.SprintDataEditForm;
-import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
+import si.fri.tpo.gwt.client.form.addedit.*;
 import si.fri.tpo.gwt.client.form.registration.ProjectRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.SprintRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
@@ -204,6 +201,49 @@ public class GodNavPanel implements IsWidget {
             }
         });
         cp.add(userStoryManagement);
+        con.add(cp);
+
+        cp = new ContentPanel();
+        cp.setHeaderVisible(false);
+        cp.setAnimCollapse(false);
+        cp.setBodyStyleName("pad-text");
+
+        final TextButton addStoryToSprintManagement = new TextButton("Add User Story to Sprint");
+        addStoryToSprintManagement.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                if (SessionInfo.projectDTO == null) {
+                    Info.display("No project selected", "Please select project from the list on the left." );
+                } else {
+                    AddStoryToSprintForm astsf = new AddStoryToSprintForm(service, center, west, east);
+                    center.clear();
+                    center.add(astsf.asWidget());
+                }
+            }
+        });
+        cp.add(addStoryToSprintManagement);
+        con.add(cp);
+
+        // user story editing
+        cp = new ContentPanel();
+        cp.setHeaderVisible(false);
+        cp.setAnimCollapse(false);
+        cp.setBodyStyleName("pad-text");
+
+        final TextButton userStoryEditing = new TextButton("User Story Editing");
+        userStoryEditing.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                if (SessionInfo.projectDTO == null) {
+                    Info.display("No project selected", "Please select project from the list on the left." );
+                } else {
+                    //UserStoryEditForm usef = new UserStoryEditForm(service, center, west, east);
+                    center.clear();
+                    //center.add(usef.asWidget());
+                }
+            }
+        });
+        cp.add(userStoryEditing);
         con.add(cp);
 
         ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
