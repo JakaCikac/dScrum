@@ -1,5 +1,7 @@
 package si.fri.tpo.gwt.client.form.addedit;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.core.client.IdentityValueProvider;
@@ -9,6 +11,7 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
+import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.RowClickEvent;
 import com.sencha.gxt.widget.core.client.grid.CheckBoxSelectionModel;
@@ -68,7 +71,7 @@ public class AddStoryToSprintForm implements IsWidget{
 
         FramedPanel panel = new FramedPanel();
         panel.setHeadingText("Sprint Creation Form");
-        panel.setWidth(500);
+        panel.setWidth(550);
         panel.setBodyStyle("background: none; padding: 15px");
 
         VerticalLayoutContainer p = new VerticalLayoutContainer();
@@ -102,6 +105,7 @@ public class AddStoryToSprintForm implements IsWidget{
 
         ContentPanel panel1 = new ContentPanel();
         panel1.setHeaderVisible(true);
+        panel1.setHeadingText("Select Sprint");
         //panel1.setPixelSize(200, 200);
         panel1.setSize("360", "100");
 
@@ -114,13 +118,16 @@ public class AddStoryToSprintForm implements IsWidget{
                 if (sprintDTO.getEndDate().before(new Date())){
                     storeUS.clear();
                     sprintDTO = null;
+                    submitButton.setEnabled(false);
                     Info.display("Sprint finished", "This Sprint has already completed.");
                 } else if(sprintDTO.getStartDate().before(new Date())){
                     storeUS.clear();
                     sprintDTO = null;
+                    submitButton.setEnabled(false);
                     Info.display("Sprint in progress", "This Sprint is in progress.");
                 } else {
                     setStoreUS();
+                    submitButton.setEnabled(true);
                 }
             }
         });
@@ -162,6 +169,15 @@ public class AddStoryToSprintForm implements IsWidget{
         panel2.setWidget(gridUS);
         p.add(panel2);
 
+        submitButton = new SubmitButton("Add to Sprint");
+        submitButton.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+
+            }
+        });
+        submitButton.setEnabled(false);
+        panel.addButton(submitButton);
         vp.add(panel);
     }
 
@@ -171,11 +187,13 @@ public class AddStoryToSprintForm implements IsWidget{
             System.out.println("userStoryDTOList je null");
         } else {
             for (UserStoryDTO userStoryDTO : userStoryDTOList){
-                if (userStoryDTO.getSprint() == null){
-                    storeUS.add(userStoryDTO);
-                } else if (userStoryDTO.getSprint().getSprintPK().getSprintId() == sprintDTO.getSprintPK().getSprintId()){
-                    storeUS.add(userStoryDTO);
-                    smUS.select(userStoryDTO, true);
+                if (userStoryDTO.getStatus() != "Finished" && userStoryDTO.getEstimateTime() != null) {
+                    if (userStoryDTO.getSprint() == null) {
+                        storeUS.add(userStoryDTO);
+                    } else if (userStoryDTO.getSprint().getSprintPK().getSprintId() == sprintDTO.getSprintPK().getSprintId()) {
+                        storeUS.add(userStoryDTO);
+                        smUS.select(userStoryDTO, true);
+                    }
                 }
             }
         }

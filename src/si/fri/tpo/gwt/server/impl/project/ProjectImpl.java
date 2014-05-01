@@ -220,7 +220,9 @@ public class ProjectImpl {
                     userStoryDTO.setContent(us.getContent());
                     userStoryDTO.setBusinessValue(us.getBusinessValue());
                     userStoryDTO.setStatus(us.getStatus());
-                    userStoryDTO.setEstimateTime(us.getEstimateTime().doubleValue());
+                    if (us.getEstimateTime() != null) {
+                        userStoryDTO.setEstimateTime(us.getEstimateTime().doubleValue());
+                    } else userStoryDTO.setEstimateTime(null);
                     userStoryDTO.setStoryId(us.getStoryId());
                     userStoryDTO.setProjectProjectId(projectDTO);
 
