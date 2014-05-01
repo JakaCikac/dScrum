@@ -13,7 +13,6 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.form.addedit.ProjectDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.AddStoryToSprintForm;
-import si.fri.tpo.gwt.client.form.addedit.ProjecDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.SprintDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
 import si.fri.tpo.gwt.client.form.registration.SprintRegistrationForm;

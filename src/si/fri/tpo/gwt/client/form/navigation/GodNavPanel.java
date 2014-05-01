@@ -243,9 +243,9 @@ public class GodNavPanel implements IsWidget {
                 if (SessionInfo.projectDTO == null) {
                     Info.display("No project selected", "Please select project from the list on the left." );
                 } else {
-                    //UserStoryEditForm usef = new UserStoryEditForm(service, center, west, east);
+                    UserStoryEditForm usef = new UserStoryEditForm(service, center, west, east);
                     center.clear();
-                    //center.add(usef.asWidget());
+                    center.add(usef.asWidget());
                 }
             }
         });
