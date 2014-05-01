@@ -160,7 +160,9 @@ public class ProductBacklogForm implements IsWidget {
         ValueProvider<UserStoryDTO, Double> vpn = new ValueProvider<UserStoryDTO, Double>() {
             @Override
             public Double getValue(UserStoryDTO object) {
-                return object.getEstimateTime().doubleValue();
+                if(object.getEstimateTime() != null)
+                    return object.getEstimateTime().doubleValue();
+                else return 0.0;
             }
             @Override
             public void setValue(UserStoryDTO object, Double value) {

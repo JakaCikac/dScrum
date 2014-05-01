@@ -23,7 +23,9 @@ public class UserStoryImpl {
             userStoryDTO.setName(userStory.getName());
             userStoryDTO.setContent(userStory.getContent());
             userStoryDTO.setStatus(userStory.getStatus());
-            userStoryDTO.setEstimateTime(userStory.getEstimateTime().doubleValue());
+            if (userStory.getEstimateTime() != null) {
+                userStoryDTO.setEstimateTime(userStory.getEstimateTime().doubleValue());
+            } else userStoryDTO.setEstimateTime(null);
             userStoryDTO.setBusinessValue(userStory.getBusinessValue());
 
             PriorityDTO priorityDTO = new PriorityDTO();
