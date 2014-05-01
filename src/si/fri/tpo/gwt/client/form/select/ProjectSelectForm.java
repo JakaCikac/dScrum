@@ -101,10 +101,8 @@ public class ProjectSelectForm implements IsWidget {
                 @Override
                 public void onSelection(SelectionEvent<ProjectDTO> event) {
                     getProjectDTO(event.getSelectedItem().getName());
+                    // TODO: select selected project after refresh (nekje si verejtn rabs zapomnt kaj je bilo sel in potem sel)
                     Info.display("Selected project", "Project " + event.getSelectedItem().getName() + " selected.");
-                    UserHomeForm uhf = new UserHomeForm(service, center, west, east, north, south);
-                    center.clear();
-                    center.add(uhf.asWidget());
                 }
             });
             panel.add(con);
@@ -181,6 +179,9 @@ public class ProjectSelectForm implements IsWidget {
                     east.add(gnp.asWidget());
                 }
 
+                UserHomeForm uhf = new UserHomeForm(service, center, west, east, north, south);
+                center.clear();
+                center.add(uhf.asWidget());
                 //pdef.fillFormData();
             }
             @Override

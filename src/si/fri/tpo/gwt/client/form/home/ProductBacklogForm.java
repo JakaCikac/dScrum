@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.DateCell;
 import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.EntryPoint;
@@ -16,11 +17,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.cell.core.client.TextButtonCell;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.grid.*;
+import com.sencha.gxt.widget.core.client.info.Info;
+import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
@@ -51,9 +56,12 @@ public class ProductBacklogForm implements IsWidget {
             RowExpander<UserStoryDTO> expander = new RowExpander<UserStoryDTO>(new AbstractCell<UserStoryDTO>() {
                 @Override
                 public void render(Context context, UserStoryDTO value, SafeHtmlBuilder sb) {
-                    //sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Company:</b>" + value.getName() + "</p>");
-                    sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Content:</b> " + value.getContent());
+                    sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Content:</b> " + value.getContent() + "</p>");
+                    sb.appendHtmlConstant("<p style='margin: 5px 5px 5px'><b>Acceptance Tests:</b>" + "</p>");
                     // TODO: add acceptance tests lists
+                    for (AcceptanceTestDTO atDTO : value.getAcceptanceTestList()) {
+                        sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'> <b> # </b> " + atDTO.getContent() + "</p>");
+                    }
                     // TODO: add "Edit" button
                 }
             });
@@ -61,7 +69,20 @@ public class ProductBacklogForm implements IsWidget {
             ColumnConfig<UserStoryDTO, String> nameCol = new ColumnConfig<UserStoryDTO, String>(getNameValue(), 200, "Name");
             ColumnConfig<UserStoryDTO, String> priorityCol = new ColumnConfig<UserStoryDTO, String>(getPriorityValue(), 100, "Priority");
             ColumnConfig<UserStoryDTO, Double> estimatedTimeCol = new ColumnConfig<UserStoryDTO, Double>(getEstimatedTimeValue(), 125, "Estimated Time (Pt)");
-            ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 100, "Business Value");
+            ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 30, "Business Value");
+            ColumnConfig<UserStoryDTO, String> editColumn = new ColumnConfig<UserStoryDTO, String>(getEditValue(), 80, "Edit");
+
+            TextButtonCell editButton = new TextButtonCell();
+            editButton.addSelectHandler(new SelectEvent.SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+                    Cell.Context c = event.getContext();
+                    int row = c.getIndex();
+                    UserStoryDTO p = store.get(row);
+                    Info.display("Event", "The " + p.getName() + " was clicked.");
+                }
+            });
+            editColumn.setCell(editButton);
 
             List<ColumnConfig<UserStoryDTO, ?>> l = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
             l.add(expander);
@@ -69,6 +90,7 @@ public class ProductBacklogForm implements IsWidget {
             l.add(priorityCol);
             l.add(estimatedTimeCol);
             l.add(businessValueCol);
+            l.add(editColumn);
             ColumnModel<UserStoryDTO> cm = new ColumnModel<UserStoryDTO>(l);
 
             store= new ListStore<UserStoryDTO>(getModelKeyProvider());
@@ -76,7 +98,7 @@ public class ProductBacklogForm implements IsWidget {
 
             panel = new ContentPanel();
             panel.setHeadingText("User Story list");
-            panel.setPixelSize(700, 320);
+            panel.setPixelSize(850, 460);
             panel.addStyleName("margin-10");
 
             final Grid<UserStoryDTO> grid = new Grid<UserStoryDTO>(store, cm);
@@ -156,6 +178,24 @@ public class ProductBacklogForm implements IsWidget {
             @Override
             public String getValue(UserStoryDTO object) {
                 return object.getName();
+            }
+            @Override
+            public void setValue(UserStoryDTO object, String value) {
+
+            }
+            @Override
+            public String getPath() {
+                return null;
+            }
+        };
+        return vpn;
+    }
+
+    private ValueProvider<UserStoryDTO, String> getEditValue() {
+        ValueProvider<UserStoryDTO, String> vpn = new ValueProvider<UserStoryDTO, String>() {
+            @Override
+            public String getValue(UserStoryDTO object) {
+                return "Edit";
             }
             @Override
             public void setValue(UserStoryDTO object, String value) {
