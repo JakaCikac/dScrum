@@ -19,13 +19,15 @@ public class UserNavPanel implements IsWidget{
     private ContentPanel center;
     private FlowLayoutContainer con;
     private ContentPanel west;
-    private ContentPanel east;
+    private ContentPanel east, north, south;
 
-    public UserNavPanel(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east) {
+    public UserNavPanel(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south) {
         this.center = center;
         this.service = service;
         this.west = west;
         this.east = east;
+        this.north = north;
+        this.south = south;
     }
 
     private ContentPanel panel;
@@ -58,7 +60,7 @@ public class UserNavPanel implements IsWidget{
         cp.add(userDataEditB);
         con.add(cp);
 
-        ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
+        ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
         west.setHeadingText("Project list");
         west.add(psf.asWidget());
 

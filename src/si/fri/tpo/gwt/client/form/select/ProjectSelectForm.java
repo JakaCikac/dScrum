@@ -1,6 +1,5 @@
 package si.fri.tpo.gwt.client.form.select;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Window;
@@ -11,33 +10,29 @@ import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.core.client.util.Margins;
-import com.sencha.gxt.data.client.editor.ListStoreEditor;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.SortDir;
 import com.sencha.gxt.data.shared.Store;
-import com.sencha.gxt.dnd.core.client.DND;
 import com.sencha.gxt.dnd.core.client.ListViewDragSource;
 import com.sencha.gxt.dnd.core.client.ListViewDropTarget;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.ListView;
-import com.sencha.gxt.widget.core.client.ListViewSelectionModel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
-import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
 import com.sencha.gxt.widget.core.client.info.Info;
-import com.sencha.gxt.widget.core.client.selection.SelectionChangedEvent;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
+import si.fri.tpo.gwt.client.form.addedit.ProjectDataEditForm;
+import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.GodNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.ScrumMasterNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
-import si.fri.tpo.gwt.client.form.addedit.ProjecDataEditForm;
 
 
 import java.util.ArrayList;
@@ -54,19 +49,23 @@ public class ProjectSelectForm implements IsWidget {
     private DScrumServiceAsync service;
     private ListStore<ProjectDTO> projectList;
     private ProjectDTO selectedProject;
-    private ProjecDataEditForm pdef;
+    private ProjectDataEditForm pdef;
     private ContentPanel center;
     private ContentPanel west;
     private ContentPanel east;
+    private ContentPanel north;
+    private ContentPanel south;
 
     private VerticalPanel vp;
 
     
-    public ProjectSelectForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east) {
+    public ProjectSelectForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south) {
         this.service = service;
         this.center = center;
         this.west = west;
         this.east = east;
+        this.north = north;
+        this.south = south;
     }
 
     @Override
@@ -103,8 +102,9 @@ public class ProjectSelectForm implements IsWidget {
                 public void onSelection(SelectionEvent<ProjectDTO> event) {
                     getProjectDTO(event.getSelectedItem().getName());
                     Info.display("Selected project", "Project " + event.getSelectedItem().getName() + " selected.");
-                    // TODO: WHen you have a project wall, redirect to project wall
+                    UserHomeForm uhf = new UserHomeForm(service, center, west, east, north, south);
                     center.clear();
+                    center.add(uhf.asWidget());
                 }
             });
             panel.add(con);
@@ -159,25 +159,25 @@ public class ProjectSelectForm implements IsWidget {
                         && !SessionInfo.userDTO.isAdmin()) {
                     // replace navigation panel with scrum master panel
                     east.clear();
-                    ScrumMasterNavPanel smnp = new ScrumMasterNavPanel(center, west, east, service);
+                    ScrumMasterNavPanel smnp = new ScrumMasterNavPanel(center, west, east,north, south, service);
                     east.add(smnp.asWidget());
                 }  // if user is just a user and not a scrum master
                 else if (SessionInfo.projectDTO.getTeamTeamId().getScrumMasterId() != SessionInfo.userDTO.getUserId()
                         && !SessionInfo.userDTO.isAdmin()) {
                     east.clear();
-                    UserNavPanel unp = new UserNavPanel(service, center, west, east);
+                    UserNavPanel unp = new UserNavPanel(service, center, west, east, north, south);
                     east.add(unp.asWidget());
                 } // if user is not scrum master but admin
                 else if (SessionInfo.projectDTO.getTeamTeamId().getScrumMasterId() != SessionInfo.userDTO.getUserId()
                         && SessionInfo.userDTO.isAdmin()) {
                     east.clear();
-                    AdminNavPanel anp = new AdminNavPanel(center, west, east, service);
+                    AdminNavPanel anp = new AdminNavPanel(center, west, east,north, south, service);
                     east.add(anp.asWidget());
                 } // if user is scrum master and admin
                 else if (SessionInfo.projectDTO.getTeamTeamId().getScrumMasterId() == SessionInfo.userDTO.getUserId()
                         && SessionInfo.userDTO.isAdmin()) {
                     east.clear();
-                    GodNavPanel gnp = new GodNavPanel(center, west, east, service);
+                    GodNavPanel gnp = new GodNavPanel(center, west, east,north, south, service);
                     east.add(gnp.asWidget());
                 }
 

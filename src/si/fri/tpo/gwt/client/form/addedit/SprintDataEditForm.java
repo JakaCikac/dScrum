@@ -42,7 +42,7 @@ import java.util.List;
 public class SprintDataEditForm implements IsWidget {
 
     private DScrumServiceAsync service;
-    private ContentPanel center, west, east;
+    private ContentPanel center, west, east, north, south;
     private VerticalPanel vp;
     private ListBox lb;
     private ArrayList<UserDTO> al;
@@ -60,11 +60,13 @@ public class SprintDataEditForm implements IsWidget {
     private SubmitButton submitButton;
     private Button deleteButton;
 
-    public SprintDataEditForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east)  {
+    public SprintDataEditForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south)  {
         this.service = service;
         this.center = center;
         this.west = west;
         this.east = east;
+        this.north = north;
+        this.south = south;
     }
 
     @Override
@@ -292,7 +294,7 @@ public class SprintDataEditForm implements IsWidget {
                     center.clear();
                     west.clear();
                     SessionInfo.projectDTO = null;
-                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
+                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                     west.add(psf.asWidget());
                 }
             }
@@ -452,7 +454,7 @@ public class SprintDataEditForm implements IsWidget {
                     center.clear();
                     west.clear();
                     SessionInfo.projectDTO = null;
-                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
+                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                     west.add(psf.asWidget());
                 }
             }

@@ -12,7 +12,7 @@ import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.form.addedit.AdminUserDataEditForm;
-import si.fri.tpo.gwt.client.form.addedit.ProjecDataEditForm;
+import si.fri.tpo.gwt.client.form.addedit.ProjectDataEditForm;
 import si.fri.tpo.gwt.client.form.registration.ProjectRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
@@ -24,14 +24,16 @@ public class AdminNavPanel implements IsWidget {
     private DScrumServiceAsync service;
     private ContentPanel center;
     private ContentPanel west;
-    private ContentPanel east;
+    private ContentPanel east, north, south;
     private FlowLayoutContainer con;
 
-    public AdminNavPanel(ContentPanel center, ContentPanel west, ContentPanel east, DScrumServiceAsync service) {
+    public AdminNavPanel(ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, DScrumServiceAsync service) {
         this.service = service;
         this.center = center;
         this.west = west;
         this.east = east;
+        this.north = north;
+        this.south = south;
     }
 
     private ContentPanel panel;
@@ -74,7 +76,7 @@ public class AdminNavPanel implements IsWidget {
         projectManagement.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                ProjectRegistrationForm pgf = new ProjectRegistrationForm(service, center, west, east);
+                ProjectRegistrationForm pgf = new ProjectRegistrationForm(service, center, west, east, north, south);
                 center.clear();
                 center.add(pgf.asWidget());
             }
@@ -111,7 +113,7 @@ public class AdminNavPanel implements IsWidget {
                 if (SessionInfo.projectDTO == null) {
                     Info.display("No project selected", "Please select project from the list on the left." );
                 } else {
-                    ProjecDataEditForm pdef = new ProjecDataEditForm(service, center, west, east);
+                    ProjectDataEditForm pdef = new ProjectDataEditForm(service, center, west, east, north, south);
                     center.clear();
                     center.add(pdef.asWidget());
                 }
@@ -120,7 +122,7 @@ public class AdminNavPanel implements IsWidget {
         cp.add(projectEditing);
         con.add(cp);
 
-        ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
+        ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
         west.setHeadingText("Project list");
         west.add(psf.asWidget());
 

@@ -21,6 +21,7 @@ import com.sencha.gxt.widget.core.client.form.TextField;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
@@ -111,7 +112,6 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                 //Info.display("MessageBox", msg);
             }
         };
-        //todo verify username & password in database
         AsyncCallback<Pair<UserDTO, String>> callback = new AsyncCallback<Pair<UserDTO, String>>() {
 
             @Override
@@ -149,9 +149,10 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
             // open appropriate navigation panel and main form
-            AdminNavPanel adminNav = new AdminNavPanel(center, west, east, service);
+            AdminNavPanel adminNav = new AdminNavPanel(center, west, east,north, south, service);
+            UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
 
-            fillNavigationMainAndHeader(adminNav.asWidget(), null);//new UserSearchForm(service), message);
+            fillNavigationMainAndHeader(adminNav.asWidget(), userHomeForm.asWidget());
         } else {
             // if user is not an admin, display user message
 
@@ -160,8 +161,10 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
             // open appropriate navigation panel and main form
-              UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east);
-              fillNavigationMainAndHeader(userNavPanel.asWidget(), null); // TODO: dodaj se main form
+              UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east, north, south);
+              UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
+              fillNavigationMainAndHeader(userNavPanel.asWidget(), userHomeForm.asWidget());
+
 
         }
     }
@@ -170,6 +173,9 @@ public class LoginPanel  extends FormPanel implements IsWidget {
 
         vp.clear();
         east.add(navigationPanel);
+        center.add(mainPanel);
+
+
         final TextButton logoutButton = new TextButton("Logout");
         logoutButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override

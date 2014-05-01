@@ -33,7 +33,7 @@ import java.util.ArrayList;
 /**
  * Created by nanorax on 07/04/14.
  */
-public class ProjecDataEditForm implements IsWidget{
+public class ProjectDataEditForm implements IsWidget{
 
     private DScrumServiceAsync service;
     private VerticalPanel vp;
@@ -41,7 +41,7 @@ public class ProjecDataEditForm implements IsWidget{
     private ArrayList<UserDTO> al;
     private ContentPanel center;
     private ContentPanel west;
-    private ContentPanel east;
+    private ContentPanel east, north, south;
 
     private TextField projectName;
     private boolean changedProjectName;
@@ -80,11 +80,13 @@ public class ProjecDataEditForm implements IsWidget{
         return vp;
     }
 
-    public ProjecDataEditForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east) {
+    public ProjectDataEditForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south) {
         this.service = service;
         this.center = center;
         this.west = west;
         this.east = east;
+        this.north = north;
+        this.south = south;
     }
 
     private void createProjectForm() {
@@ -330,7 +332,7 @@ public class ProjecDataEditForm implements IsWidget{
                             // refresh gui
                             west.clear();
                             SessionInfo.projectDTO = null;
-                            ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
+                            ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                             west.add(psf.asWidget());
                             center.clear(); //TODO: when home page (wall, sprint backlog etc) create as widget on center, till then just clear.
                         }

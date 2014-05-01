@@ -11,7 +11,7 @@ import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.info.Info;
-import si.fri.tpo.gwt.client.form.addedit.ProjecDataEditForm;
+import si.fri.tpo.gwt.client.form.addedit.ProjectDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.SprintDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
 import si.fri.tpo.gwt.client.form.registration.SprintRegistrationForm;
@@ -25,14 +25,16 @@ public class ScrumMasterNavPanel implements IsWidget {
     private DScrumServiceAsync service;
     private ContentPanel center;
     private ContentPanel west;
-    private ContentPanel east;
+    private ContentPanel east, north, south;
     private FlowLayoutContainer con;
 
-    public ScrumMasterNavPanel(ContentPanel center, ContentPanel west, ContentPanel east, DScrumServiceAsync service) {
+    public ScrumMasterNavPanel(ContentPanel center, ContentPanel west, ContentPanel east,ContentPanel north, ContentPanel south, DScrumServiceAsync service) {
         this.service = service;
         this.center = center;
         this.west = west;
         this.east = east;
+        this.north = north;
+        this.south = south;
     }
 
     private ContentPanel panel;
@@ -80,7 +82,7 @@ public class ScrumMasterNavPanel implements IsWidget {
                 if (SessionInfo.projectDTO == null) {
                     Info.display("No project selected", "Please select project from the list on the left." );
                 } else {
-                    ProjecDataEditForm pdef = new ProjecDataEditForm(service, center, west, east);
+                    ProjectDataEditForm pdef = new ProjectDataEditForm(service, center, west, east, north, south);
                     center.clear();
                     center.add(pdef.asWidget());
                 }
@@ -101,7 +103,7 @@ public class ScrumMasterNavPanel implements IsWidget {
                 if (SessionInfo.projectDTO == null) {
                     Info.display("No project selected", "Please select project from the list on the left.");
                 } else {
-                    SprintRegistrationForm srf = new SprintRegistrationForm(service, center, west, east);
+                    SprintRegistrationForm srf = new SprintRegistrationForm(service, center, west, east, north, south);
                     center.clear();
                     center.add(srf.asWidget());
                 }
@@ -122,7 +124,7 @@ public class ScrumMasterNavPanel implements IsWidget {
                 if (SessionInfo.projectDTO == null) {
                     Info.display("No project selected", "Please select project from the list on the left.");
                 } else {
-                    SprintDataEditForm sdef = new SprintDataEditForm(service, center, west, east);
+                    SprintDataEditForm sdef = new SprintDataEditForm(service, center, west, east, north, south);
                     center.clear();
                     center.add(sdef.asWidget());
                 }
@@ -143,7 +145,7 @@ public class ScrumMasterNavPanel implements IsWidget {
                 if (SessionInfo.projectDTO == null) {
                     Info.display("No project selected", "Please select project from the list on the left." );
                 } else {
-                    UserStoryRegistrationForm usrf = new UserStoryRegistrationForm(service, center, west, east);
+                    UserStoryRegistrationForm usrf = new UserStoryRegistrationForm(service, center, west, east, north, south);
                     center.clear();
                     center.add(usrf.asWidget());
                 }
@@ -152,7 +154,7 @@ public class ScrumMasterNavPanel implements IsWidget {
         cp.add(userStoryManagement);
         con.add(cp);
 
-        ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
+        ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
         west.setHeadingText("Project list");
         west.add(psf.asWidget());
 

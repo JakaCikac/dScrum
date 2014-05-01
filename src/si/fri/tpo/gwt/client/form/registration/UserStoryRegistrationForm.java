@@ -60,7 +60,7 @@ public class UserStoryRegistrationForm implements IsWidget, Editor<UserStoryDTO>
     protected Grid<AcceptanceTestDTO> grid;
 
     private List<AcceptanceTestDTO> acceptanceTestList;
-    private ContentPanel center, west, east;
+    private ContentPanel center, west, east, north, south;
     private DScrumServiceAsync service;
     private UserStoryDTO storyDTO;
     static private int acceptanceTestCount;
@@ -94,11 +94,13 @@ public class UserStoryRegistrationForm implements IsWidget, Editor<UserStoryDTO>
         return vp;
     }
 
-    public UserStoryRegistrationForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east) {
+    public UserStoryRegistrationForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south) {
         this.service = service;
         this.center = center;
         this.west = west;
         this.east = east;
+        this.north = north;
+        this.south = south;
         this.acceptanceTestCount = 0;
     }
 
@@ -327,7 +329,7 @@ public class UserStoryRegistrationForm implements IsWidget, Editor<UserStoryDTO>
                                 center.clear();
                                 west.clear();
                                 SessionInfo.projectDTO = null;
-                                ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east);
+                                ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                                 west.add(psf.asWidget());
                             }
                         }
