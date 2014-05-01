@@ -12,6 +12,8 @@ import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.form.addedit.ProjectDataEditForm;
+import si.fri.tpo.gwt.client.form.addedit.AddStoryToSprintForm;
+import si.fri.tpo.gwt.client.form.addedit.ProjecDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.SprintDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
 import si.fri.tpo.gwt.client.form.registration.SprintRegistrationForm;
@@ -152,6 +154,27 @@ public class ScrumMasterNavPanel implements IsWidget {
             }
         });
         cp.add(userStoryManagement);
+        con.add(cp);
+
+        cp = new ContentPanel();
+        cp.setHeaderVisible(false);
+        cp.setAnimCollapse(false);
+        cp.setBodyStyleName("pad-text");
+
+        final TextButton addStoryToSprintManagement = new TextButton("Add User Story to Sprint");
+        addStoryToSprintManagement.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                if (SessionInfo.projectDTO == null) {
+                    Info.display("No project selected", "Please select project from the list on the left." );
+                } else {
+                    AddStoryToSprintForm astsf = new AddStoryToSprintForm(service, center, west, east);
+                    center.clear();
+                    center.add(astsf.asWidget());
+                }
+            }
+        });
+        cp.add(addStoryToSprintManagement);
         con.add(cp);
 
         ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
