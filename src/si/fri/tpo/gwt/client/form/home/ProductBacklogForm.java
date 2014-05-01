@@ -54,12 +54,13 @@ public class ProductBacklogForm implements IsWidget {
                     //sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Company:</b>" + value.getName() + "</p>");
                     sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Content:</b> " + value.getContent());
                     // TODO: add acceptance tests lists
+                    // TODO: add "Edit" button
                 }
             });
 
             ColumnConfig<UserStoryDTO, String> nameCol = new ColumnConfig<UserStoryDTO, String>(getNameValue(), 200, "Name");
             ColumnConfig<UserStoryDTO, String> priorityCol = new ColumnConfig<UserStoryDTO, String>(getPriorityValue(), 100, "Priority");
-            ColumnConfig<UserStoryDTO, Double> estimatedTimeCol = new ColumnConfig<UserStoryDTO, Double>(getEstimatedTimeValue(), 75, "Estimated Time (Pt)");
+            ColumnConfig<UserStoryDTO, Double> estimatedTimeCol = new ColumnConfig<UserStoryDTO, Double>(getEstimatedTimeValue(), 125, "Estimated Time (Pt)");
             ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 100, "Business Value");
 
             List<ColumnConfig<UserStoryDTO, ?>> l = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
@@ -75,7 +76,7 @@ public class ProductBacklogForm implements IsWidget {
 
             panel = new ContentPanel();
             panel.setHeadingText("User Story list");
-            panel.setPixelSize(600, 320);
+            panel.setPixelSize(700, 320);
             panel.addStyleName("margin-10");
 
             final Grid<UserStoryDTO> grid = new Grid<UserStoryDTO>(store, cm);
