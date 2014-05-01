@@ -106,6 +106,8 @@ public interface DScrumService extends RemoteService {
 
     // USER STORY //
     public Pair<Boolean, Integer> saveUserStory(UserStoryDTO userStoryDTO, ProjectDTO projectDTO);
+
+    public List<UserStoryDTO> findAllStoriesByProject(ProjectDTO projectDTO);
     // USER STORY //
 
 }

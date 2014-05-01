@@ -2,6 +2,7 @@ package si.fri.tpo.gwt.client.form.home;
 
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.button.TextButton;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -16,6 +17,7 @@ import com.sencha.gxt.widget.core.client.PlainTabPanel;
 import com.sencha.gxt.widget.core.client.TabItemConfig;
 import com.sencha.gxt.widget.core.client.TabPanel;
 import com.sencha.gxt.widget.core.client.info.Info;
+import si.fri.tpo.gwt.client.session.SessionInfo;
 
 /**
  * Created by nanorax on 06/04/14.
@@ -39,7 +41,6 @@ public class UserHomeForm implements IsWidget {
         if (vp == null) {
             vp = new VerticalPanel();
             vp.setSpacing(10);
-            System.out.println("Creating home form..");
             //String txt = TestData.DUMMY_TEXT_SHORT;
 
             /* SelectionHandler<Widget> handler = new SelectionHandler<Widget>() {
@@ -56,40 +57,25 @@ public class UserHomeForm implements IsWidget {
             //folder.addSelectionHandler(handler);
             folder.setWidth(450);
 
-            HTML shortText = new HTML("Hello world.");
-            //shortText.addStyleName("pad-text");
-            folder.add(shortText, "Short Text");
+            ContentPanel cp = new ContentPanel();
+            cp.add(new Label("Project waaaalz"));
+            folder.add(cp, "Project wall");
 
-            HTML longText = new HTML("Tomorrow a " + "<br><br>" + " great day.");
-            //longText.addStyleName("pad-text");
-            folder.add(longText, "Long Text");
+            if (SessionInfo.projectDTO == null) {
+                cp = new ContentPanel();
+                cp.add(new Label("No project selected :)"));
+                folder.add(cp, "Product backlog");
+            }
+            else {
+                folder.add(new ProductBacklogForm(service, center, west, east, north, south).asWidget(), "Product Backlog");
+            }
 
-            final PlainTabPanel panel = new PlainTabPanel();
-            panel.setPixelSize(450, 250);
-            //panel.addSelectionHandler(handler);
 
-            Label normal = new Label("Just a plain old tab");
-            //normal.addStyleName("pad-text");
-            panel.add(normal, "Normal");
 
-            Label iconTab = new Label("Just a plain old tab with an icon");
-            //iconTab.addStyleName("pad-text");
 
-            TabItemConfig config = new TabItemConfig("Icon Tab");
-            //config.setIcon(Resources.IMAGES.table());
-            panel.add(iconTab, config);
-
-            Label disabled = new Label("This tab should be disabled");
-            //disabled.addStyleName("pad-text");
-
-            config = new TabItemConfig("Disabled");
-            config.setEnabled(false);
-            panel.add(disabled, config);
 
             vp.add(folder);
-            vp.add(panel);
         }
-        System.out.println("Returning home form.");
 
         return vp;
     }

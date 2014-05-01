@@ -12,8 +12,10 @@ import java.util.List;
  * Created by anze on 27. 04. 14.
  */
 public class UserStoryImpl {
+
     public static List<UserStoryDTO> getAllStoryOfProject(ProjectDTO projectDTO) {
         List<UserStory> userStoryList = ProxyManager.getUserStoryProxy().getUserStoryList(projectDTO.getProjectId());
+
         List<UserStoryDTO> userStoryDTOList = new ArrayList<UserStoryDTO>();
         for (UserStory userStory : userStoryList){
             UserStoryDTO userStoryDTO = new UserStoryDTO();
@@ -21,6 +23,7 @@ public class UserStoryImpl {
             userStoryDTO.setName(userStory.getName());
             userStoryDTO.setContent(userStory.getContent());
             userStoryDTO.setStatus(userStory.getStatus());
+            userStoryDTO.setEstimateTime(userStory.getEstimateTime().doubleValue());
             userStoryDTO.setBusinessValue(userStory.getBusinessValue());
 
             PriorityDTO priorityDTO = new PriorityDTO();

@@ -11,6 +11,7 @@ import si.fri.tpo.gwt.server.impl.registration.*;
 import si.fri.tpo.gwt.server.impl.sprint.SprintImpl;
 import si.fri.tpo.gwt.server.impl.team.TeamImpl;
 import si.fri.tpo.gwt.server.impl.user.UserImpl;
+import si.fri.tpo.gwt.server.impl.userStory.UserStoryImpl;
 
 import java.util.List;
 
@@ -242,6 +243,13 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     public Pair<Boolean, Integer> saveUserStory(UserStoryDTO userStoryDTO, ProjectDTO projectDTO) {
         return UserStoryServiceImpl.saveUserStory(userStoryDTO, projectDTO);
     }
+
+    @Override
+    public List<UserStoryDTO> findAllStoriesByProject(ProjectDTO projectDTO) {
+        return UserStoryImpl.getAllStoryOfProject(projectDTO);
+    }
+
+
     // USER STORY //
 
 }
