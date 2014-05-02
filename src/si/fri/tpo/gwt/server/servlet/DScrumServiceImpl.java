@@ -249,7 +249,10 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
         return UserStoryImpl.getAllStoryOfProject(projectDTO);
     }
 
-
+    @Override
+    public Pair<Boolean, String> updateUserStory(UserStoryDTO userStoryDTO) {
+        return UserStoryImpl.updateUserStory(userStoryDTO);
+    }
     // USER STORY //
 
 }

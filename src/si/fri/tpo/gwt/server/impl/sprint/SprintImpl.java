@@ -1,10 +1,7 @@
 package si.fri.tpo.gwt.server.impl.sprint;
 
 import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.dto.ProjectDTO;
-import si.fri.tpo.gwt.client.dto.SprintDTO;
-import si.fri.tpo.gwt.client.dto.SprintPKDTO;
-import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.dto.*;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 import si.fri.tpo.gwt.server.jpa.*;
 import si.fri.tpo.gwt.server.proxy.ProxyManager;
@@ -74,6 +71,34 @@ public class SprintImpl {
             ProjectDTO projectDTO = sprintDTO.getProject();
             Project project = ProxyManager.getProjectProxy().findProjectByName(projectDTO.getName());
             s.setProject(project);
+
+            List<UserStory> userStoryList = new ArrayList<UserStory>();
+            if (sprintDTO.getUserStoryList() != null){
+                for (UserStoryDTO userStoryDTO : sprintDTO.getUserStoryList()){
+                    UserStory userStory = ProxyManager.getUserStoryProxy().findUserStory(userStoryDTO.getStoryId());
+                    userStory.setName(userStoryDTO.getName());
+                    userStory.setContent(userStoryDTO.getContent());
+                    userStory.setBusinessValue(userStoryDTO.getBusinessValue());
+                    userStory.setStatus(userStoryDTO.getStatus());
+                    userStory.setEstimateTime(userStoryDTO.getEstimateTime());
+
+                    Priority priority = new Priority();
+                    priority.setPriorityId(userStoryDTO.getPriorityPriorityId().getPriorityId());
+                    priority.setName(userStoryDTO.getPriorityPriorityId().getName());
+                    userStory.setPriorityPriorityId(priority);
+
+                    List<AcceptanceTest> acceptanceTestList = new ArrayList<AcceptanceTest>();
+                    for (AcceptanceTestDTO acceptanceTestDTO : userStoryDTO.getAcceptanceTestList()) {
+                        AcceptanceTest acceptanceTest = ProxyManager.getAcceptanceTestProxy().findAcceptanceTest(acceptanceTestDTO.getAcceptanceTestId());
+                        acceptanceTestList.add(acceptanceTest);
+                    }
+                    userStory.setAcceptanceTestList(acceptanceTestList);
+
+                    userStoryList.add(userStory);
+                }
+                s.setUserStoryList(userStoryList);
+            }
+
             try {
                 if (s == null)
                     return Pair.of(false, "Data error!");

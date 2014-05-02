@@ -3,6 +3,8 @@ package si.fri.tpo.gwt.client.form.addedit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.core.client.IdentityValueProvider;
 import com.sencha.gxt.core.client.Style;
@@ -11,6 +13,8 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
+import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.RowClickEvent;
@@ -19,10 +23,12 @@ import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.info.Info;
+import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
+import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
@@ -36,7 +42,7 @@ import java.util.List;
 public class AddStoryToSprintForm implements IsWidget{
 
     private DScrumServiceAsync service;
-    private ContentPanel center, west, east;
+    private ContentPanel center, west, east, north, south;
     private VerticalPanel vp;
     private ColumnModel<SprintDTO> cm;
     private Grid<SprintDTO> grid;
@@ -50,11 +56,13 @@ public class AddStoryToSprintForm implements IsWidget{
     private SubmitButton submitButton;
     private Button deleteButton;
 
-    public AddStoryToSprintForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east)  {
+    public AddStoryToSprintForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south)  {
         this.service = service;
         this.center = center;
         this.west = west;
         this.east = east;
+        this.north = north;
+        this.south = south;
     }
 
     @Override
@@ -173,12 +181,77 @@ public class AddStoryToSprintForm implements IsWidget{
         submitButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-
+                for (UserStoryDTO userStoryDTO : smUS.getSelection()){
+                    userStoryDTO.setSprint(sprintDTO);
+                    performSaveUserStory(userStoryDTO);
+                }
+                sprintDTO.setUserStoryList(smUS.getSelection());
+                performSaveSprint(sprintDTO);
             }
         });
         submitButton.setEnabled(false);
         panel.addButton(submitButton);
         vp.add(panel);
+    }
+
+    private void performSaveSprint(SprintDTO sprintDTO) {
+        AsyncCallback<Pair<Boolean, String>> updateSprint = new AsyncCallback<Pair<Boolean, String>>() {
+            @Override
+            public void onSuccess(Pair<Boolean, String> result) {
+                if (result == null) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing sprint updating!");
+                    amb2.show();
+                }
+                else if (!result.getFirst()) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error updating Sprint!", result.getSecond());
+                    amb2.show();
+                }
+                else {
+                    MessageBox amb3 = new MessageBox("Message update Sprint", result.getSecond());
+                    amb3.show();
+                    center.clear();
+                    west.clear();
+                    SessionInfo.projectDTO = null;
+                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
+                    west.add(psf.asWidget());
+                }
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.updateSprint(sprintDTO, updateSprint);
+    }
+
+    private void performSaveUserStory(UserStoryDTO userStoryDTO) {
+        AsyncCallback<Pair<Boolean, String>> updateUserStory = new AsyncCallback<Pair<Boolean, String>>() {
+            @Override
+            public void onSuccess(Pair<Boolean, String> result) {
+                if (result == null) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing user story updating!");
+                    amb2.show();
+                }
+                else if (!result.getFirst()) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error updating user story!", result.getSecond());
+                    amb2.show();
+                }
+                else {
+                    MessageBox amb3 = new MessageBox("Message update User Story", result.getSecond());
+                    amb3.show();
+                    center.clear();
+                    west.clear();
+                    SessionInfo.projectDTO = null;
+                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
+                    west.add(psf.asWidget());
+                }
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.updateUserStory(userStoryDTO, updateUserStory);
     }
 
     private void setStoreUS() {
