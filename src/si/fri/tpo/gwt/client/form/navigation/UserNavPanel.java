@@ -52,7 +52,7 @@ public class UserNavPanel implements IsWidget{
         userDataEditB.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                UserDataEditForm udef = new UserDataEditForm(service, center);
+                UserDataEditForm udef = new UserDataEditForm(service, center, north, south, east, west);
                 center.clear();
                 center.add(udef.asWidget());
             }

@@ -22,6 +22,8 @@ import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.TeamDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
+import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.search.SingleUserSearchCallback;
 import si.fri.tpo.gwt.client.form.search.SingleUserSearchDialog;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
@@ -274,7 +276,15 @@ public class ProjectRegistrationForm implements IsWidget {
                             amb3.show();
                             center.clear();
                             west.clear();
+                            east.clear();//TODO: when home page (wall, sprint backlog etc) create as widget on center, till then just clear.
                             SessionInfo.projectDTO = null;
+                            if (SessionInfo.userDTO.isAdmin()){
+                                AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
+                                east.add(adminNavPanel.asWidget());
+                            } else {
+                                UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east, north, south);
+                                east.add(userNavPanel.asWidget());
+                            }
                             ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                             west.add(psf.asWidget());
                         }

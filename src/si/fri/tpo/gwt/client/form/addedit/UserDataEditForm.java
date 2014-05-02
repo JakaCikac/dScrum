@@ -19,6 +19,9 @@ import com.sencha.gxt.widget.core.client.form.validator.RegExValidator;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
+import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
+import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 import si.fri.tpo.gwt.client.verification.PassHash;
@@ -38,11 +41,15 @@ public class UserDataEditForm implements IsWidget{
     private PasswordField repassword;
     private UserDTO userDTO;
     private boolean changedUsername;
-    private ContentPanel center;
+    private ContentPanel center, north, south, east, west;
 
-    public UserDataEditForm(DScrumServiceAsync service, ContentPanel center) {
+    public UserDataEditForm(DScrumServiceAsync service, ContentPanel center, ContentPanel north, ContentPanel south, ContentPanel east, ContentPanel west) {
         this.service = service;
         this.center = center;
+        this.north = north;
+        this.south = south;
+        this.east = east;
+        this.west = west;
     }
 
     @Override
@@ -215,8 +222,19 @@ public class UserDataEditForm implements IsWidget{
                 else {
                     MessageBox amb3 = new MessageBox("Message", result.getSecond());
                     amb3.show();
-
-                    center.clear(); //TODO: when home page (wall, sprint backlog etc) create as widget on center, till then just clear.
+                    center.clear();
+                    west.clear();
+                    east.clear();//TODO: when home page (wall, sprint backlog etc) create as widget on center, till then just clear.
+                    SessionInfo.projectDTO = null;
+                    if (SessionInfo.userDTO.isAdmin()){
+                        AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
+                        east.add(adminNavPanel.asWidget());
+                    } else {
+                        UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east, north, south);
+                        east.add(userNavPanel.asWidget());
+                    }
+                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
+                    west.add(psf.asWidget());
                 }
             }
             @Override

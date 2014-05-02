@@ -93,7 +93,7 @@ public class AdminNavPanel implements IsWidget {
         userEditing.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                AdminUserDataEditForm audf = new AdminUserDataEditForm(service, center);
+                AdminUserDataEditForm audf = new AdminUserDataEditForm(service, center, north, south, east, west);
                 center.clear();
                 center.add(audf.asWidget());
             }

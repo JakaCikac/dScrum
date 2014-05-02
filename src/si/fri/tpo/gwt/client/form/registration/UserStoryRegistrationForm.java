@@ -34,6 +34,8 @@ import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
 import si.fri.tpo.gwt.client.dto.PriorityDTO;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
+import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
+import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
@@ -328,7 +330,15 @@ public class UserStoryRegistrationForm implements IsWidget, Editor<UserStoryDTO>
                                 amb3.show();
                                 center.clear();
                                 west.clear();
+                                east.clear();//TODO: when home page (wall, sprint backlog etc) create as widget on center, till then just clear.
                                 SessionInfo.projectDTO = null;
+                                if (SessionInfo.userDTO.isAdmin()){
+                                    AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
+                                    east.add(adminNavPanel.asWidget());
+                                } else {
+                                    UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east, north, south);
+                                    east.add(userNavPanel.asWidget());
+                                }
                                 ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                                 west.add(psf.asWidget());
                             }

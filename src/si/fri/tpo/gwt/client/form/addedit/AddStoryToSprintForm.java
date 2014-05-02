@@ -28,6 +28,8 @@ import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
+import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
+import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
@@ -210,7 +212,15 @@ public class AddStoryToSprintForm implements IsWidget{
                     amb3.show();
                     center.clear();
                     west.clear();
+                    east.clear();
                     SessionInfo.projectDTO = null;
+                    if (SessionInfo.userDTO.isAdmin()){
+                        AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
+                        east.add(adminNavPanel.asWidget());
+                    } else {
+                        UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east, north, south);
+                        east.add(userNavPanel.asWidget());
+                    }
                     ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                     west.add(psf.asWidget());
                 }
@@ -237,12 +247,7 @@ public class AddStoryToSprintForm implements IsWidget{
                 }
                 else {
                     MessageBox amb3 = new MessageBox("Message update User Story", result.getSecond());
-                    amb3.show();
-                    center.clear();
-                    west.clear();
-                    SessionInfo.projectDTO = null;
-                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
-                    west.add(psf.asWidget());
+                    //amb3.show();
                 }
             }
             @Override
