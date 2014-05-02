@@ -54,7 +54,6 @@ public class AddStoryToSprintForm implements IsWidget{
     private CheckBoxSelectionModel<UserStoryDTO> smUS;
 
     private SubmitButton submitButton;
-    private Button deleteButton;
 
     public AddStoryToSprintForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south)  {
         this.service = service;
@@ -256,20 +255,25 @@ public class AddStoryToSprintForm implements IsWidget{
 
     private void setStoreUS() {
         List<UserStoryDTO> userStoryDTOList = projectDTO.getUserStoryList();
+        boolean fill = false;
         if (userStoryDTOList == null) {
             System.out.println("userStoryDTOList je null");
+            storeUS.clear();
         } else {
             for (UserStoryDTO userStoryDTO : userStoryDTOList){
-                if (userStoryDTO.getStatus() != "Finished" && userStoryDTO.getEstimateTime() != null) {
+                if (!userStoryDTO.getStatus().equals("Finished") && userStoryDTO.getEstimateTime() != null) {
                     if (userStoryDTO.getSprint() == null) {
                         storeUS.add(userStoryDTO);
+                        fill = true;
                     } else if (userStoryDTO.getSprint().getSprintPK().getSprintId() == sprintDTO.getSprintPK().getSprintId()) {
                         storeUS.add(userStoryDTO);
                         smUS.select(userStoryDTO, true);
+                        fill = true;
                     }
                 }
             }
         }
+        if (!fill) storeUS.clear();
     }
 
     // ValueProviders for UserStory //
