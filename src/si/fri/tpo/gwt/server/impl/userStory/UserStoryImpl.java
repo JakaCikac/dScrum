@@ -95,4 +95,55 @@ public class UserStoryImpl {
         }
         return Pair.of(true, 0);
     }
+
+    public static Pair<Boolean, String> updateUserStory(UserStoryDTO userStoryDTO) {
+        try {
+            UserStory userStory = ProxyManager.getUserStoryProxy().findUserStory(userStoryDTO.getStoryId());
+            userStory.setName(userStoryDTO.getName());
+            userStory.setContent(userStoryDTO.getContent());
+            userStory.setBusinessValue(userStoryDTO.getBusinessValue());
+            userStory.setStatus(userStoryDTO.getStatus());
+            userStory.setEstimateTime(userStoryDTO.getEstimateTime());
+
+            Priority priority = ProxyManager.getPriorityProxy().findPriority(userStoryDTO.getPriorityPriorityId().getPriorityId());
+            userStory.setPriorityPriorityId(priority);
+
+            Project project = ProxyManager.getProjectProxy().findProjectByName(userStoryDTO.getProjectProjectId().getName());
+            if (project == null){
+                return Pair.of(false, "Data error project!");
+            } else {
+                userStory.setProjectProjectId(project);
+            }
+
+            List<AcceptanceTest> acceptanceTestList = new ArrayList<AcceptanceTest>();
+            for (AcceptanceTestDTO acceptanceTestDTO : userStoryDTO.getAcceptanceTestList()) {
+                AcceptanceTest acceptanceTest = ProxyManager.getAcceptanceTestProxy().findAcceptanceTest(acceptanceTestDTO.getAcceptanceTestId());
+                acceptanceTestList.add(acceptanceTest);
+            }
+            userStory.setAcceptanceTestList(acceptanceTestList);
+
+            SprintDTO sprintDTO = userStoryDTO.getSprint();
+            SprintPKDTO sprintPKDTO = sprintDTO.getSprintPK();
+            SprintPK sprintPK = new SprintPK();
+            sprintPK.setSprintId(sprintPKDTO.getSprintId());
+            sprintPK.setProjectProjectId(sprintPKDTO.getProjectProjectId());
+            Sprint sprint = ProxyManager.getSprintProxy().findSprint(sprintPK);
+            userStory.setSprint(sprint);
+
+            try {
+                if (userStory == null)
+                    return Pair.of(false, "Data error!");
+
+                ProxyManager.getUserStoryProxy().edit(userStory);
+
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+                return Pair.of(false, e.getMessage());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Pair.of(false, e.getMessage());
+        }
+        return Pair.of(true, "User story should be updated.");
+    }
 }

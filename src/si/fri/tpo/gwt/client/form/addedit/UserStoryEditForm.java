@@ -114,13 +114,14 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
 
         // prepare user story selection grid
         userStoryContainer = new FlowPanel();
-        RowNumberer<AcceptanceTestDTO> userStoryRowNumberer = new RowNumberer<AcceptanceTestDTO>();
+        RowNumberer<UserStoryDTO> userStoryRowNumberer = new RowNumberer<UserStoryDTO>();
 
         ColumnConfig<UserStoryDTO, String> userStoryNameCol = new ColumnConfig<UserStoryDTO, String>(getUserStoryName(), 80, "Name");
         ColumnConfig<UserStoryDTO, Integer> businessValCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 20, "Business value");
         ColumnConfig<UserStoryDTO, String> priorityCol = new ColumnConfig<UserStoryDTO, String>(getPriorityValue(), 60, "Priority");
 
         List<ColumnConfig<UserStoryDTO, ?>> userStoryColumnConfigList = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
+        userStoryColumnConfigList.add(userStoryRowNumberer);
         userStoryColumnConfigList.add(userStoryNameCol);
         userStoryColumnConfigList.add(businessValCol);
         userStoryColumnConfigList.add(priorityCol);
@@ -142,7 +143,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
         userStoryGrid.setHeight(200);
 
         FieldLabel userStoryFieldLabel = new FieldLabel();
-        userStoryFieldLabel.setText("Acceptance tests");
+        userStoryFieldLabel.setText("User stories:");
         userStoryFieldLabel.setLabelAlign(FormPanel.LabelAlign.TOP);
         userStoryFieldLabel.setWidget(userStoryGrid);
         userStoryContainer.add(userStoryFieldLabel);
@@ -153,7 +154,38 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
             @Override
             public void onRowClick(RowClickEvent event) {
                 selectedUserStoryDTO = userStoryGrid.getSelectionModel().getSelectedItem();
-
+                userStoryName.setValue(selectedUserStoryDTO.getName());
+                userStoryContent.setValue(selectedUserStoryDTO.getContent());
+                userStoryBusinessValue.setValue(selectedUserStoryDTO.getBusinessValue());
+                int priorityID = selectedUserStoryDTO.getPriorityPriorityId().getPriorityId();
+                switch (priorityID) {
+                    case 1:
+                        mustHave.setValue(true);
+                        shouldHave.setValue(false);
+                        couldHave.setValue(false);
+                        wontHave.setValue(false);
+                        break;
+                    case 2:
+                        mustHave.setValue(false);
+                        shouldHave.setValue(true);
+                        couldHave.setValue(false);
+                        wontHave.setValue(false);
+                        break;
+                    case 3:
+                        mustHave.setValue(false);
+                        shouldHave.setValue(false);
+                        couldHave.setValue(true);
+                        wontHave.setValue(false);
+                        break;
+                    case 4:
+                        mustHave.setValue(false);
+                        shouldHave.setValue(false);
+                        couldHave.setValue(false);
+                        wontHave.setValue(true);
+                }
+                setEnabledUserStoryGUIComponents(true);
+                acceptanceTestStore.clear();
+                acceptanceTestStore.addAll(selectedUserStoryDTO.getAcceptanceTestList());
             }
         });
 
@@ -259,9 +291,6 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
         acceptanceTestsContainer.add(acceptanceTestButtons);
         verticalLayoutContainer.add(acceptanceTestsContainer);
 
-        // disable all user story editing components until user story is selected and loaded
-        setEnabledUserStoryGUIComponents(false);
-
         // initialize driver
         driver.initialize(this);
 
@@ -327,6 +356,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
             }
         });
         panel.addButton(submitButton);
+        setEnabledUserStoryGUIComponents(true);
         verticalPanel.add(panel);
     }
 

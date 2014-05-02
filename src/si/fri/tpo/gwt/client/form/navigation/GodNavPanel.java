@@ -221,7 +221,7 @@ public class GodNavPanel implements IsWidget {
                 if (SessionInfo.projectDTO == null) {
                     Info.display("No project selected", "Please select project from the list on the left." );
                 } else {
-                    AddStoryToSprintForm astsf = new AddStoryToSprintForm(service, center, west, east);
+                    AddStoryToSprintForm astsf = new AddStoryToSprintForm(service, center, west, east, north, south);
                     center.clear();
                     center.add(astsf.asWidget());
                 }
