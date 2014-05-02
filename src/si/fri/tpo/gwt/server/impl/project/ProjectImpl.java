@@ -194,6 +194,7 @@ public class ProjectImpl {
             List<SprintDTO> sprintDTOList = new ArrayList<SprintDTO>();
             if (p.getSprintList() != null) {
                 for (Sprint s : p.getSprintList()) {
+                    s = ProxyManager.getSprintProxy().findSprint(s.getSprintPK());
                     SprintDTO sprintDTO = new SprintDTO();
                     SprintPKDTO sprintPKDTO = new SprintPKDTO();
                     sprintPKDTO.setSprintId(s.getSprintPK().getSprintId());
@@ -205,6 +206,39 @@ public class ProjectImpl {
                     sprintDTO.setEndDate(s.getEndDate());
                     sprintDTO.setVelocity(s.getVelocity());
                     //TODO: Set userStoryDTOList to sprintDTO
+                    if (s.getUserStoryList() != null) {
+                        List<UserStoryDTO> userStoryDTOList = new ArrayList<UserStoryDTO>();
+                        for (UserStory userStory : s.getUserStoryList()) {
+                            userStory = ProxyManager.getUserStoryProxy().findUserStory(userStory.getStoryId());
+                            UserStoryDTO userStoryDTO = new UserStoryDTO();
+                            userStoryDTO.setStoryId(userStory.getStoryId());
+                            userStoryDTO.setName(userStory.getName());
+                            userStoryDTO.setContent(userStory.getContent());
+                            userStoryDTO.setBusinessValue(userStory.getBusinessValue());
+                            userStoryDTO.setStatus(userStory.getStatus());
+                            if (userStory.getEstimateTime() != null) {
+                                userStoryDTO.setEstimateTime(userStory.getEstimateTime().doubleValue());
+                            } else userStoryDTO.setEstimateTime(null);
+                            userStoryDTO.setStoryId(userStory.getStoryId());
+                            userStoryDTO.setProjectProjectId(projectDTO);
+
+                            PriorityDTO priorityDTO = new PriorityDTO();
+                            priorityDTO.setPriorityId(userStory.getPriorityPriorityId().getPriorityId());
+                            priorityDTO.setName(userStory.getPriorityPriorityId().getName());
+                            userStoryDTO.setPriorityPriorityId(priorityDTO);
+
+                            List<AcceptanceTestDTO> acceptanceTestDTOList = new ArrayList<AcceptanceTestDTO>();
+                            for (AcceptanceTest at : userStory.getAcceptanceTestList()) {
+                                AcceptanceTestDTO acceptanceTestDTO = new AcceptanceTestDTO();
+                                acceptanceTestDTO.setAcceptanceTestId(at.getAcceptanceTestId());
+                                acceptanceTestDTO.setContent(at.getContent());
+                                acceptanceTestDTOList.add(acceptanceTestDTO);
+                            }
+                            userStoryDTO.setAcceptanceTestList(acceptanceTestDTOList);
+                            userStoryDTOList.add(userStoryDTO);
+                        }
+                        sprintDTO.setUserStoryList(userStoryDTOList);
+                    }
                     sprintDTOList.add(sprintDTO);
                 }
                 projectDTO.setSprintList(sprintDTOList);

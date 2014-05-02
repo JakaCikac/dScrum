@@ -3,6 +3,7 @@ package si.fri.tpo.gwt.client.form.home;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -18,6 +19,8 @@ import com.sencha.gxt.widget.core.client.TabItemConfig;
 import com.sencha.gxt.widget.core.client.TabPanel;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.session.SessionInfo;
+
+import java.util.Date;
 
 /**
  * Created by nanorax on 06/04/14.
@@ -68,6 +71,22 @@ public class UserHomeForm implements IsWidget {
             }
             else {
                 folder.add(new ProductBacklogForm(service, center, west, east, north, south).asWidget(), "Product Backlog");
+            }
+
+            boolean inProgress = false;
+            if (SessionInfo.projectDTO != null){
+                for (SprintDTO sprintDTO : SessionInfo.projectDTO.getSprintList()){
+                    if ((sprintDTO.getStartDate().before(new Date()) && sprintDTO.getEndDate().after(new Date())) ||
+                            sprintDTO.getStartDate().equals(new Date()) || sprintDTO.getEndDate().equals(new Date())){
+                        folder.add(new SprintBacklogForm(service, center, west, east, north, south, sprintDTO).asWidget(), "Sprint Backlog");
+                        inProgress = true;
+                    }
+                }
+            }
+            if (!inProgress) {
+                cp = new ContentPanel();
+                cp.add(new Label("No sprint in progress :)"));
+                folder.add(cp, "Sprint backlog");
             }
 
             vp.add(folder);
