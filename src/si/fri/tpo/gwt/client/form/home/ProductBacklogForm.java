@@ -33,6 +33,7 @@ public class ProductBacklogForm implements IsWidget {
     private ContentPanel panel, center, west, east, north, south;
     private DScrumServiceAsync service;
     private ListStore<UserStoryDTO> store;
+    private Grid<UserStoryDTO> grid;
 
     public ProductBacklogForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south) {
         this.service = service;
@@ -74,7 +75,7 @@ public class ProductBacklogForm implements IsWidget {
                     int row = c.getIndex();
                     UserStoryDTO p = store.get(row);
                     Info.display("Event", "The " + p.getName() + " was clicked.");
-                    UserStoryEditDialog sed = new UserStoryEditDialog(service, center, west, east, north, south);
+                    UserStoryEditDialog sed = new UserStoryEditDialog(service, center, west, east, north, south, p);
                     sed.show();
                 }
             });
@@ -100,7 +101,7 @@ public class ProductBacklogForm implements IsWidget {
             panel.setPixelSize(850, 460);
             panel.addStyleName("margin-10");
 
-            final Grid<UserStoryDTO> grid = new Grid<UserStoryDTO>(store, cm);
+            grid = new Grid<UserStoryDTO>(store, cm);
             grid.getView().setAutoExpandColumn(nameCol);
             grid.setBorders(true);
             grid.getView().setStripeRows(true);

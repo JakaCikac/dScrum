@@ -236,7 +236,7 @@ public class GodNavPanel implements IsWidget {
         cp.setAnimCollapse(false);
         cp.setBodyStyleName("pad-text");
 
-        final TextButton userStoryEditing = new TextButton("User Story Editing");
+       /* final TextButton userStoryEditing = new TextButton("User Story Editing");
         userStoryEditing.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
@@ -250,7 +250,7 @@ public class GodNavPanel implements IsWidget {
             }
         });
         cp.add(userStoryEditing);
-        con.add(cp);
+        con.add(cp); */
 
         ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
         west.setHeadingText("Project list");

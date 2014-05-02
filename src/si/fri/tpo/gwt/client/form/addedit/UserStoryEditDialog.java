@@ -12,6 +12,7 @@ import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 import java.util.Date;
@@ -23,35 +24,31 @@ public class UserStoryEditDialog extends Dialog {
 
     private DScrumServiceAsync service;
     private ContentPanel center, west, east, north, south;
+    private UserStoryDTO usDTO;
 
-    public UserStoryEditDialog(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south) {
+    public UserStoryEditDialog(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, UserStoryDTO usDTO) {
             this.service = service;
             this.center = center;
             this.west = west;
             this.east = east;
             this.north = north;
             this.south = south;
+            this.usDTO = usDTO;
+            System.out.println("usDTO name: " + usDTO.getName());
+            System.out.println("this.usDTO name: " + this.usDTO.getName());
 
             // Layout
             setBodyBorder(false);
-            setHeadingText("BorderLayout Dialog");
+            setHeadingText("User story edit dialog");
+
             setWidth(400);
             setHeight(225);
             setHideOnButtonClick(true);
 
-            BorderLayoutContainer layout = new BorderLayoutContainer();
+            FlowLayoutContainer layout = new FlowLayoutContainer();
             add(layout);
-
-            // Layout - west
-            ContentPanel panel = new ContentPanel();
-            panel.setHeadingText("West");
-            BorderLayoutContainer.BorderLayoutData data = new BorderLayoutContainer.BorderLayoutData(150);
-            data.setMargins(new Margins(0, 5, 0, 0));
-            panel.setLayoutData(data);
-            layout.setWestWidget(panel);
-
-            layout.setCenterWidget(new UserStoryEditForm(this.service, this.center, this.west, this.east).asWidget());
-
+            UserStoryEditForm usef = new UserStoryEditForm(this.service, this.center, this.west, this.east, this.usDTO);
+            layout.add(usef.asWidget());
         }
 }
 

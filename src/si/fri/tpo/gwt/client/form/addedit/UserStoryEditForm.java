@@ -81,25 +81,36 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
     private ListStoreEditor<UserStoryDTO> editUserStoryStore;
     private List<AcceptanceTestDTO> acceptanceTestDTOList;
     private ToggleGroup userStoryPriorityToggleGroup;
-    private UserStoryDTO selectedUserStoryDTO;
 
-    public Widget asWidget() {
-
-        if (verticalPanel == null) {
-            verticalPanel = new VerticalPanel();
-            verticalPanel.setSpacing(10);
-            createUserStoryEditForm();
-        }
-        return verticalPanel;
+    public void setSelectedUserStoryDTO(UserStoryDTO selectedUserStoryDTO) {
+        this.selectedUserStoryDTO = selectedUserStoryDTO;
     }
 
-    public UserStoryEditForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east) {
+    private UserStoryDTO selectedUserStoryDTO;
 
+    public UserStoryEditForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, UserStoryDTO usDTO) {
         this.service = service;
         this.center = center;
         this.west = west;
         this.east = east;
         this.acceptanceTestCount = 0;
+        System.out.println("usDTO edit name: " + usDTO.getName());
+        this.selectedUserStoryDTO = usDTO;
+        System.out.println("this.usDTO edit: " + this.selectedUserStoryDTO.getName());
+        setSelectedUserStoryDTO(this.selectedUserStoryDTO);
+    }
+
+    @Override
+    public Widget asWidget() {
+        if (verticalPanel == null) {
+            verticalPanel = new VerticalPanel();
+            verticalPanel.setSpacing(10);
+            if (selectedUserStoryDTO != null) {
+                System.out.println("in as widget this.lalal: " + selectedUserStoryDTO.getName());
+            } else System.out.println("Failed horribly.");
+            createUserStoryEditForm();
+        }
+        return verticalPanel;
     }
 
     private void createUserStoryEditForm() {
@@ -114,80 +125,8 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
 
         // prepare user story selection grid
         userStoryContainer = new FlowPanel();
-        RowNumberer<UserStoryDTO> userStoryRowNumberer = new RowNumberer<UserStoryDTO>();
 
-        ColumnConfig<UserStoryDTO, String> userStoryNameCol = new ColumnConfig<UserStoryDTO, String>(getUserStoryName(), 80, "Name");
-        ColumnConfig<UserStoryDTO, Integer> businessValCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 20, "Business value");
-        ColumnConfig<UserStoryDTO, String> priorityCol = new ColumnConfig<UserStoryDTO, String>(getPriorityValue(), 60, "Priority");
-
-        List<ColumnConfig<UserStoryDTO, ?>> userStoryColumnConfigList = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
-        userStoryColumnConfigList.add(userStoryRowNumberer);
-        userStoryColumnConfigList.add(userStoryNameCol);
-        userStoryColumnConfigList.add(businessValCol);
-        userStoryColumnConfigList.add(priorityCol);
-
-        ColumnModel<UserStoryDTO> userStoryColumnModel = new ColumnModel<UserStoryDTO>(userStoryColumnConfigList);
-        userStoryStore = new ListStore<UserStoryDTO>(getUserStoryModelKeyProvider());
-        editUserStoryStore = new ListStoreEditor<UserStoryDTO>(userStoryStore);
-        try {
-            userStoryStore.addAll(SessionInfo.projectDTO.getUserStoryList()); // fill store with data
-        } catch(NullPointerException ex) {}
-
-        userStoryGrid = new Grid<UserStoryDTO>(userStoryStore, userStoryColumnModel); // fill grid with data
-        userStoryGrid.setBorders(false);
-        userStoryGrid.getView().setStripeRows(true);
-        userStoryGrid.getView().setColumnLines(true);
-        userStoryGrid.getSelectionModel().setSelectionMode(Style.SelectionMode.SINGLE);
-
-        userStoryGrid.setWidth(382);
-        userStoryGrid.setHeight(200);
-
-        FieldLabel userStoryFieldLabel = new FieldLabel();
-        userStoryFieldLabel.setText("User stories:");
-        userStoryFieldLabel.setLabelAlign(FormPanel.LabelAlign.TOP);
-        userStoryFieldLabel.setWidget(userStoryGrid);
-        userStoryContainer.add(userStoryFieldLabel);
         verticalLayoutContainer.add(userStoryContainer);
-
-        // handler that gets selected user story data and loads GUI components with it
-        userStoryGrid.addRowClickHandler(new RowClickEvent.RowClickHandler() {
-            @Override
-            public void onRowClick(RowClickEvent event) {
-                selectedUserStoryDTO = userStoryGrid.getSelectionModel().getSelectedItem();
-                userStoryName.setValue(selectedUserStoryDTO.getName());
-                userStoryContent.setValue(selectedUserStoryDTO.getContent());
-                userStoryBusinessValue.setValue(selectedUserStoryDTO.getBusinessValue());
-                int priorityID = selectedUserStoryDTO.getPriorityPriorityId().getPriorityId();
-                switch (priorityID) {
-                    case 1:
-                        mustHave.setValue(true);
-                        shouldHave.setValue(false);
-                        couldHave.setValue(false);
-                        wontHave.setValue(false);
-                        break;
-                    case 2:
-                        mustHave.setValue(false);
-                        shouldHave.setValue(true);
-                        couldHave.setValue(false);
-                        wontHave.setValue(false);
-                        break;
-                    case 3:
-                        mustHave.setValue(false);
-                        shouldHave.setValue(false);
-                        couldHave.setValue(true);
-                        wontHave.setValue(false);
-                        break;
-                    case 4:
-                        mustHave.setValue(false);
-                        shouldHave.setValue(false);
-                        couldHave.setValue(false);
-                        wontHave.setValue(true);
-                }
-                setEnabledUserStoryGUIComponents(true);
-                acceptanceTestStore.clear();
-                acceptanceTestStore.addAll(selectedUserStoryDTO.getAcceptanceTestList());
-            }
-        });
 
         // prepare user story name field
         userStoryName = new TextField();
@@ -290,6 +229,43 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
         acceptanceTestButtons.add(acceptanceTestCreateButton);
         acceptanceTestsContainer.add(acceptanceTestButtons);
         verticalLayoutContainer.add(acceptanceTestsContainer);
+
+        if (selectedUserStoryDTO.getName() != null) {
+
+            userStoryName.setValue(selectedUserStoryDTO.getName());
+            userStoryContent.setValue(selectedUserStoryDTO.getContent());
+            userStoryBusinessValue.setValue(selectedUserStoryDTO.getBusinessValue());
+            int priorityID = selectedUserStoryDTO.getPriorityPriorityId().getPriorityId();
+            switch (priorityID) {
+                case 1:
+                    mustHave.setValue(true);
+                    shouldHave.setValue(false);
+                    couldHave.setValue(false);
+                    wontHave.setValue(false);
+                    break;
+                case 2:
+                    mustHave.setValue(false);
+                    shouldHave.setValue(true);
+                    couldHave.setValue(false);
+                    wontHave.setValue(false);
+                    break;
+                case 3:
+                    mustHave.setValue(false);
+                    shouldHave.setValue(false);
+                    couldHave.setValue(true);
+                    wontHave.setValue(false);
+                    break;
+                case 4:
+                    mustHave.setValue(false);
+                    shouldHave.setValue(false);
+                    couldHave.setValue(false);
+                    wontHave.setValue(true);
+            }
+
+            acceptanceTestStore.clear();
+            acceptanceTestStore.addAll(selectedUserStoryDTO.getAcceptanceTestList());
+        } else System.out.println("Guufdfudf");
+
 
         // initialize driver
         driver.initialize(this);
