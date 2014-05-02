@@ -1,21 +1,10 @@
 package si.fri.tpo.gwt.client.form.addedit;
 
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
-import com.sencha.gxt.widget.core.client.button.ButtonBar;
-import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
-import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
-
-import java.util.Date;
 
 /**
  * Created by nanorax on 02/05/14.
@@ -41,8 +30,8 @@ public class UserStoryEditDialog extends Dialog {
             setBodyBorder(false);
             setHeadingText("User story edit dialog");
 
-            setWidth(400);
-            setHeight(225);
+            setWidth(501);
+            setHeight(615);
             setHideOnButtonClick(true);
 
             FlowLayoutContainer layout = new FlowLayoutContainer();

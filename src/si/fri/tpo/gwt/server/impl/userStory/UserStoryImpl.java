@@ -123,13 +123,17 @@ public class UserStoryImpl {
             userStory.setAcceptanceTestList(acceptanceTestList);
 
             SprintDTO sprintDTO = userStoryDTO.getSprint();
-            SprintPKDTO sprintPKDTO = sprintDTO.getSprintPK();
+            SprintPKDTO sprintPKDTO;
             SprintPK sprintPK = new SprintPK();
-            sprintPK.setSprintId(sprintPKDTO.getSprintId());
-            sprintPK.setProjectProjectId(sprintPKDTO.getProjectProjectId());
-            Sprint sprint = ProxyManager.getSprintProxy().findSprint(sprintPK);
-            userStory.setSprint(sprint);
-
+            try {
+                sprintPKDTO = sprintDTO.getSprintPK();
+                sprintPK.setSprintId(sprintPKDTO.getSprintId());
+                sprintPK.setProjectProjectId(sprintPKDTO.getProjectProjectId());
+                Sprint sprint = ProxyManager.getSprintProxy().findSprint(sprintPK);
+                userStory.setSprint(sprint);
+            } catch(NullPointerException ex) {
+                sprintPKDTO = null;
+            }
             try {
                 if (userStory == null)
                     return Pair.of(false, "Data error!");
@@ -137,7 +141,7 @@ public class UserStoryImpl {
                 ProxyManager.getUserStoryProxy().edit(userStory);
 
             } catch (Exception e) {
-                System.err.println("Error: " + e.getMessage());
+                System.err.println("Error while editing user story with message: " + e.getMessage());
                 return Pair.of(false, e.getMessage());
             }
         } catch (Exception e) {

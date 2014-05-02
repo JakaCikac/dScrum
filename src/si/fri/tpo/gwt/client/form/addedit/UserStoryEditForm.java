@@ -19,7 +19,6 @@ import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.ButtonBar;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
-import com.sencha.gxt.widget.core.client.event.RowClickEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.*;
 import com.sencha.gxt.widget.core.client.form.FormPanel;
@@ -40,7 +39,6 @@ import si.fri.tpo.gwt.client.session.SessionInfo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Created by t13db on 30.4.2014.
@@ -277,6 +275,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
             public void onSelect(SelectEvent event) {
 
                 UserStoryDTO userStoryDTO = new UserStoryDTO();
+                userStoryDTO.setStoryId(selectedUserStoryDTO.getStoryId());
 
                 if (userStoryName.getValue() == null){
                     errorMessage("Empty User Story Name", "Please enter user story name!");
@@ -315,8 +314,11 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
                     userStoryDTO.setPriorityPriorityId(priorityDTO);
                 }
 
-                userStoryDTO.setStatus("Unfinished");
+                userStoryDTO.setStatus(selectedUserStoryDTO.getStatus());
                 userStoryDTO.setProjectProjectId(SessionInfo.projectDTO);
+                userStoryDTO.setSprint(selectedUserStoryDTO.getSprint());
+                userStoryDTO.setEstimateTime(selectedUserStoryDTO.getEstimateTime()); // TODO: GUI komponenta za spreminjanje?
+
                 driver.edit(userStoryDTO);
 
                 userStoryDTO = driver.flush();
@@ -328,7 +330,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
                 }
 
                 userStoryDTO.setAcceptanceTestList(acceptanceTestDTOList); // za vsak slucaj ce uno spodi ne dela
-                performSaveAcceptanceTestAndUserStory(acceptanceTestDTOList, userStoryDTO);
+                performUpdateAcceptanceTestAndUserStory(acceptanceTestDTOList, userStoryDTO);
             }
         });
         panel.addButton(submitButton);
@@ -341,52 +343,37 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
     // 3. Service, ki ti shrani seznam acceptanceTestov, ti vrne seznam AccTestId-jev
     // 4. te idje uporabis da nafilas user story in ga shranis
     // 5. ko service za user story shrani user story ti vrne id user storyja, da ga lahko das k projektu
-    private void performSaveAcceptanceTestAndUserStory(List<AcceptanceTestDTO> acceptanceTestDTOList, final UserStoryDTO userStoryDTO) {
-        AsyncCallback<Pair<Boolean, List<Integer>>> saveAcceptanceTestList = new AsyncCallback<Pair<Boolean, List<Integer>>>() {
+    private void performUpdateAcceptanceTestAndUserStory(List<AcceptanceTestDTO> acceptanceTestDTOList, final UserStoryDTO userStoryDTO) {
+        AsyncCallback<Pair<Boolean, String>> updateAcceptanceTestList = new AsyncCallback<Pair<Boolean, String>>() {
             @Override
-            public void onSuccess(Pair<Boolean, List<Integer>> result) {
+            public void onSuccess(Pair<Boolean, String> result) {
                 if (result == null) {
-                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing acceptance test saving!");
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing acceptance test updating!");
                     amb2.show();
                 }
                 else if (!result.getFirst()) {
-                    AlertMessageBox amb2 = new AlertMessageBox("Error saving acceptance test!", result.getSecond().toString());
+                    AlertMessageBox amb2 = new AlertMessageBox("Error updating acceptance test!", result.getSecond());
                     amb2.show();
-                } else if (result.getSecond() == null) {
-                    errorMessage("Errorrrrrrrr", "Error while creating acceptance test in database!");
                 } else {
-                    List<AcceptanceTestDTO> acceptanceTestDTOList = getAcceptanceTestDTOList();
-
-                    if ( acceptanceTestDTOList.size() == result.getSecond().size()) {
-                        ListIterator litr = result.getSecond().listIterator();
-                        for (AcceptanceTestDTO acceptanceTestDTO : acceptanceTestDTOList){
-                            if(litr.hasNext()) {
-                                acceptanceTestDTO.setAcceptanceTestId((Integer)litr.next());
-                            } else {
-                                errorMessage("Error saving acceptance test!", "There was an error while performing acceptance test saving!");
-                            }
-                        }
-                    } else {
-                        errorMessage("Error saving acceptance test!", "There was an error while performing acceptance test saving!");
-                    }
-                    //TODO: Possible error (getter/setter)
-                    userStoryDTO.setAcceptanceTestList(acceptanceTestDTOList);
-                    AsyncCallback<Pair<Boolean, Integer>> saveUserStory = new AsyncCallback<Pair<Boolean, Integer>>() {
+                    AsyncCallback<Pair<Boolean, String>> updateUserStory = new AsyncCallback<Pair<Boolean, String>>() {
                         @Override
-                        public void onSuccess(Pair<Boolean, Integer> result) {
+                        public void onSuccess(Pair<Boolean, String> result) {
                             if (result == null) {
-                                AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing user story saving!");
+                                AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing user story updating!");
                                 amb2.show();
                             }
                             else if (!result.getFirst()) {
-                                AlertMessageBox amb2 = new AlertMessageBox("Error saving user story!", result.getSecond().toString());
+                                AlertMessageBox amb2 = new AlertMessageBox("Error updating user story!", result.getSecond());
                                 amb2.show();
                             }
                             else {
-                                MessageBox amb3 = new MessageBox("Message save User Story", result.getSecond().toString());
+                                MessageBox amb3 = new MessageBox("Message update User Story", result.getSecond());
                                 amb3.show();
+                                // refresh gui
                                 center.clear();
                                 west.clear();
+                                east.clear();
+                                south.clear();
                                 SessionInfo.projectDTO = null;
                                 ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                                 west.add(psf.asWidget());
@@ -397,7 +384,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
                             Window.alert(caught.getMessage());
                         }
                     };
-                    service.saveUserStory(userStoryDTO, SessionInfo.projectDTO, saveUserStory);
+                    service.updateUserStory(userStoryDTO, updateUserStory);
                 }
             }
             @Override
@@ -405,7 +392,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
                 Window.alert(caught.getMessage());
             }
         };
-        service.saveAcceptanceTestList(acceptanceTestDTOList, saveAcceptanceTestList);
+        service.updateAcceptanceTestList(acceptanceTestDTOList, updateAcceptanceTestList);
     }
 
     private void setEnabledUserStoryGUIComponents(boolean enabled) {
