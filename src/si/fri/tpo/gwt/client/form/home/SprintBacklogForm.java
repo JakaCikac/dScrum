@@ -55,15 +55,15 @@ public class SprintBacklogForm  implements IsWidget{
             RowExpander<UserStoryDTO> expander = new RowExpander<UserStoryDTO>(new AbstractCell<UserStoryDTO>() {
                 @Override
                 public void render(Context context, UserStoryDTO value, SafeHtmlBuilder sb) {
-                    sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Content:</b> " + value.getContent() + "</p>");
-                    sb.appendHtmlConstant("<p style='margin: 5px 5px 5px'><b>Acceptance Tests:</b>" + "</p>");
+                    sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'><b>Content:</b> " + value.getContent() + "</p>");
+                    sb.appendHtmlConstant("<p style='margin: 12px 5px 5px'><b>Acceptance Tests:</b>" + "</p>");
                     // TODO: add acceptance tests lists
                     for (AcceptanceTestDTO atDTO : value.getAcceptanceTestList()) {
                         sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'> <b> # </b> " + atDTO.getContent() + "</p>");
                     }
                     // TODO: add "Edit" button
                     if (value.getTaskList() != null) {
-                        sb.appendHtmlConstant("<p style='margin: 5px 5px 5px'><b>Task:</b>" + "</p>");
+                        sb.appendHtmlConstant("<p style='margin: 12px 5px 5px'><b>Task:</b>" + "</p>");
                         for (TaskDTO taskDTO : value.getTaskList()) {
                             sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'>" + taskDTO.getDescription() + "</p>");
                         }

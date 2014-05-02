@@ -236,11 +236,39 @@ public class ProjectImpl {
                             }
                             userStoryDTO.setAcceptanceTestList(acceptanceTestDTOList);
 
-                            //Task task = ProxyManager.getTaskProxy().findTask(userSt);
                             if (userStory.getTaskList() != null) {
+                                List<TaskDTO> taskDTOList = new ArrayList<TaskDTO>();
                                 for (Task task : userStory.getTaskList()) {
                                     task = ProxyManager.getTaskProxy().findTask(task.getTaskPK());
+                                    TaskDTO taskDTO = new TaskDTO();
+                                    taskDTO.setDescription(task.getDescription());
+                                    taskDTO.setTimeRemaining(task.getTimeRemaining());
+                                    taskDTO.setEstimatedTime(task.getEstimatedTime());
+                                    taskDTO.setStatus(task.getStatus());
+
+                                    TaskPKDTO taskPKDTO = new TaskPKDTO();
+                                    taskPKDTO.setTaskId(task.getTaskPK().getTaskId());
+                                    taskPKDTO.setUserStoryStoryId(task.getTaskPK().getUserStoryStoryId());
+                                    taskDTO.setTaskPK(taskPKDTO);
+
+                                    if (task.getUserUserId() != null) {
+                                        User user = ProxyManager.getUserProxy().findUser(task.getUserUserId().getUserId());
+                                        UserDTO userDTO = new UserDTO();
+                                        userDTO.setUserId(user.getUserId());
+                                        userDTO.setUsername(user.getUsername());
+                                        userDTO.setPassword(user.getPassword());
+                                        userDTO.setFirstName(user.getFirstName());
+                                        userDTO.setLastName(user.getLastName());
+                                        userDTO.setEmail(user.getEmail());
+                                        userDTO.setAdmin(user.getIsAdmin());
+                                        userDTO.setSalt(user.getSalt());
+                                        userDTO.setActive(user.getIsActive());
+                                        userDTO.setTimeCreated(user.getTimeCreated());
+                                        taskDTO.setUserUserId(userDTO);
+                                    }
+                                    taskDTOList.add(taskDTO);
                                 }
+                                userStoryDTO.setTaskList(taskDTOList);
                             }
                             userStoryDTOList.add(userStoryDTO);
                         }
