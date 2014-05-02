@@ -230,28 +230,6 @@ public class GodNavPanel implements IsWidget {
         cp.add(addStoryToSprintManagement);
         con.add(cp);
 
-        // user story editing
-        cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
-
-       final TextButton userStoryEditing = new TextButton("User Story Editing");
-        userStoryEditing.addSelectHandler(new SelectEvent.SelectHandler() {
-            @Override
-            public void onSelect(SelectEvent event) {
-                if (SessionInfo.projectDTO == null) {
-                    Info.display("No project selected", "Please select project from the list on the left." );
-                } else {
-                    UserStoryEditForm usef = new UserStoryEditForm(service, center, west, east);
-                    center.clear();
-                    center.add(usef.asWidget());
-                }
-            }
-        });
-        cp.add(userStoryEditing);
-        con.add(cp);
-
         ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
         west.setHeadingText("Project list");
         west.add(psf.asWidget());
