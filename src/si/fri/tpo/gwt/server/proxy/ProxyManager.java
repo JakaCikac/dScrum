@@ -20,6 +20,7 @@ public class ProxyManager {
     private static AcceptanceTestProxy acceptanceTestProxy = null;
     private static UserStoryProxy userStoryProxy = null;
     private static PriorityProxy priorityProxy = null;
+    private static TaskProxy taskProxy = null;
 
     public static EntityManagerFactory getEmf() {
         if (emf == null) {
@@ -78,5 +79,12 @@ public class ProxyManager {
             priorityProxy = new PriorityProxy(getEmf());
         }
         return priorityProxy;
+    }
+
+    public static TaskProxy getTaskProxy() {
+        if (taskProxy == null){
+            taskProxy = new TaskProxy(getEmf());
+        }
+        return taskProxy;
     }
 }

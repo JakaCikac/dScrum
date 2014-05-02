@@ -62,8 +62,11 @@ public class SprintBacklogForm  implements IsWidget{
                         sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'> <b> # </b> " + atDTO.getContent() + "</p>");
                     }
                     // TODO: add "Edit" button
-                    for (TaskDTO taskDTO : value.getTaskList()){
-
+                    if (value.getTaskList() != null) {
+                        sb.appendHtmlConstant("<p style='margin: 5px 5px 5px'><b>Task:</b>" + "</p>");
+                        for (TaskDTO taskDTO : value.getTaskList()) {
+                            sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'>" + taskDTO.getDescription() + "</p>");
+                        }
                     }
                 }
             });
@@ -72,7 +75,21 @@ public class SprintBacklogForm  implements IsWidget{
             ColumnConfig<UserStoryDTO, String> priorityCol = new ColumnConfig<UserStoryDTO, String>(getPriorityValue(), 100, "Priority");
             ColumnConfig<UserStoryDTO, Double> estimatedTimeCol = new ColumnConfig<UserStoryDTO, Double>(getEstimatedTimeValue(), 100, "Estimated Time (Pt)");
             ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 80, "Business Value");
+            ColumnConfig<UserStoryDTO, String> addTaskColumn = new ColumnConfig<UserStoryDTO, String>(getTaskValue(), 80, "Add Task");
             ColumnConfig<UserStoryDTO, String> confirmColumn = new ColumnConfig<UserStoryDTO, String>(getConfirmValue(), 80, "Confirm");
+
+            TextButtonCell addTaskButton = new TextButtonCell();
+            addTaskButton.addSelectHandler(new SelectEvent.SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+                    Cell.Context c = event.getContext();
+                    int row = c.getIndex();
+                    UserStoryDTO p = store.get(row);
+                    Info.display("Event", "The " + p.getName() + " was clicked.");
+
+                }
+            });
+            addTaskColumn.setCell(addTaskButton);
 
             TextButtonCell confirmButton = new TextButtonCell();
             confirmButton.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -94,6 +111,7 @@ public class SprintBacklogForm  implements IsWidget{
             l.add(priorityCol);
             l.add(estimatedTimeCol);
             l.add(businessValueCol);
+            l.add(addTaskColumn);
             if(productOwner) {
                 l.add(confirmColumn);
             }
@@ -123,6 +141,23 @@ public class SprintBacklogForm  implements IsWidget{
             panel.setWidget(grid);
         }
         return panel;
+    }
+
+    private ValueProvider<UserStoryDTO, String> getTaskValue() {
+        ValueProvider<UserStoryDTO, String> vpn = new ValueProvider<UserStoryDTO, String>() {
+            @Override
+            public String getValue(UserStoryDTO object) {
+                return "Add Task";
+            }
+            @Override
+            public void setValue(UserStoryDTO object, String value) {
+            }
+            @Override
+            public String getPath() {
+                return null;
+            }
+        };
+        return vpn;
     }
 
     private void getStoryList() {

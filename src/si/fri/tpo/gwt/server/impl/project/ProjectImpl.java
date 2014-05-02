@@ -235,6 +235,13 @@ public class ProjectImpl {
                                 acceptanceTestDTOList.add(acceptanceTestDTO);
                             }
                             userStoryDTO.setAcceptanceTestList(acceptanceTestDTOList);
+
+                            //Task task = ProxyManager.getTaskProxy().findTask(userSt);
+                            if (userStory.getTaskList() != null) {
+                                for (Task task : userStory.getTaskList()) {
+                                    task = ProxyManager.getTaskProxy().findTask(task.getTaskPK());
+                                }
+                            }
                             userStoryDTOList.add(userStoryDTO);
                         }
                         sprintDTO.setUserStoryList(userStoryDTOList);
