@@ -70,10 +70,6 @@ public class UserHomeForm implements IsWidget {
                 folder.add(new ProductBacklogForm(service, center, west, east, north, south).asWidget(), "Product Backlog");
             }
 
-
-
-
-
             vp.add(folder);
         }
 

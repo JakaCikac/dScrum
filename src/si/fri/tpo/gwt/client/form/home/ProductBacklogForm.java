@@ -1,21 +1,13 @@
 package si.fri.tpo.gwt.client.form.home;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.google.gwt.cell.client.AbstractCell;
-import com.google.gwt.cell.client.Cell;
-import com.google.gwt.cell.client.DateCell;
-import com.google.gwt.cell.client.TextCell;
-import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.cell.client.*;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.cell.core.client.TextButtonCell;
 import com.sencha.gxt.core.client.ValueProvider;
@@ -26,19 +18,22 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.grid.*;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
-import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
+import si.fri.tpo.gwt.client.form.addedit.UserStoryEditDialog;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
 /**
  * Created by nanorax on 01/05/14.
  */
+
+
 public class ProductBacklogForm implements IsWidget {
 
     private ContentPanel panel, center, west, east, north, south;
     private DScrumServiceAsync service;
     private ListStore<UserStoryDTO> store;
+    private Grid<UserStoryDTO> grid;
 
     public ProductBacklogForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south) {
         this.service = service;
@@ -80,9 +75,12 @@ public class ProductBacklogForm implements IsWidget {
                     int row = c.getIndex();
                     UserStoryDTO p = store.get(row);
                     Info.display("Event", "The " + p.getName() + " was clicked.");
+                    UserStoryEditDialog sed = new UserStoryEditDialog(service, center, west, east, north, south, p);
+                    sed.show();
                 }
             });
             editColumn.setCell(editButton);
+
 
             List<ColumnConfig<UserStoryDTO, ?>> l = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
             l.add(expander);
@@ -93,6 +91,8 @@ public class ProductBacklogForm implements IsWidget {
             l.add(editColumn);
             ColumnModel<UserStoryDTO> cm = new ColumnModel<UserStoryDTO>(l);
 
+
+
             store= new ListStore<UserStoryDTO>(getModelKeyProvider());
             getStoryList();
 
@@ -101,11 +101,15 @@ public class ProductBacklogForm implements IsWidget {
             panel.setPixelSize(850, 460);
             panel.addStyleName("margin-10");
 
-            final Grid<UserStoryDTO> grid = new Grid<UserStoryDTO>(store, cm);
+            grid = new Grid<UserStoryDTO>(store, cm);
             grid.getView().setAutoExpandColumn(nameCol);
-            grid.setBorders(false);
+            grid.setBorders(true);
             grid.getView().setStripeRows(true);
             grid.getView().setColumnLines(true);
+
+            grid.getView().setForceFit(true);
+            //GridInlineEditing<UserStoryDTO> inlineEditor = new GridInlineEditing<UserStoryDTO>(grid);
+            //inlineEditor.addEditor(estimatedTimeCol, new DoubleField());
 
             expander.initPlugin(grid);
             panel.setWidget(grid);

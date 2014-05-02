@@ -236,7 +236,7 @@ public class GodNavPanel implements IsWidget {
         cp.setAnimCollapse(false);
         cp.setBodyStyleName("pad-text");
 
-        final TextButton userStoryEditing = new TextButton("User Story Editing");
+       final TextButton userStoryEditing = new TextButton("User Story Editing");
         userStoryEditing.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
