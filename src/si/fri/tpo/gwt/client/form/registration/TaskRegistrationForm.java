@@ -142,8 +142,7 @@ public class TaskRegistrationForm implements IsWidget {
 
                 if ( assignedDeveloper != null ) {
                     // TODO: send message to developer so it can accept the task
-                    // LOGIKA ZA POSLAT in SPREJET taasssskkkk SK TASK ASSSSK SKKKKK :D
-                    //taskDTO.setUserUserId(assignedDeveloper);
+                    taskDTO.setPreassignedUserId(assignedDeveloper.getUserId());
                 } else {
                     Info.display("Developer not selected.", "Please select the developer.");
                     return;
