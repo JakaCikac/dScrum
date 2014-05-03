@@ -245,6 +245,7 @@ public class ProjectImpl {
                                     taskDTO.setTimeRemaining(task.getTimeRemaining());
                                     taskDTO.setEstimatedTime(task.getEstimatedTime());
                                     taskDTO.setStatus(task.getStatus());
+                                    taskDTO.setPreassignedUserId(task.getPreassignedUserId());
 
                                     TaskPKDTO taskPKDTO = new TaskPKDTO();
                                     taskPKDTO.setTaskId(task.getTaskPK().getTaskId());
