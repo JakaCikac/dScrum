@@ -33,7 +33,7 @@ public class TaskRegistrationDialog extends Dialog {
 
         FlowLayoutContainer layout = new FlowLayoutContainer();
         add(layout);
-        TaskRegistrationForm trf = new TaskRegistrationForm(this.service, this.center, this.west, this.east);
+        TaskRegistrationForm trf = new TaskRegistrationForm(this.service, this.center, this.west, this.east, this.usDTO);
         layout.add(trf.asWidget());
     }
 }

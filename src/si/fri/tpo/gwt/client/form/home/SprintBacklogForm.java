@@ -20,6 +20,7 @@ import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
+import si.fri.tpo.gwt.client.form.registration.TaskRegistrationDialog;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
@@ -85,7 +86,8 @@ public class SprintBacklogForm  implements IsWidget{
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
                     UserStoryDTO p = store.get(row);
-                    Info.display("Event", "The " + p.getName() + " was clicked.");
+                    TaskRegistrationDialog trd = new TaskRegistrationDialog(service, center, west, east, p);
+                    trd.show();
 
                 }
             });
