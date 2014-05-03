@@ -14,6 +14,7 @@ import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.TabPanel;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.grid.*;
 import com.sencha.gxt.widget.core.client.info.Info;
@@ -30,10 +31,13 @@ import si.fri.tpo.gwt.client.session.SessionInfo;
 
 public class ProductBacklogForm implements IsWidget {
 
-    private ContentPanel panel, center, west, east, north, south;
+    private ContentPanel center, west, east, north, south;
     private DScrumServiceAsync service;
     private ListStore<UserStoryDTO> store;
+    private ListStore<UserStoryDTO> ufStore;
     private Grid<UserStoryDTO> grid;
+    private Grid<UserStoryDTO> ufGrid;
+    private TabPanel panel;
 
     public ProductBacklogForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south) {
         this.service = service;
@@ -53,11 +57,20 @@ public class ProductBacklogForm implements IsWidget {
                 public void render(Context context, UserStoryDTO value, SafeHtmlBuilder sb) {
                     sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Content:</b> " + value.getContent() + "</p>");
                     sb.appendHtmlConstant("<p style='margin: 5px 5px 5px'><b>Acceptance Tests:</b>" + "</p>");
-                    // TODO: add acceptance tests lists
                     for (AcceptanceTestDTO atDTO : value.getAcceptanceTestList()) {
                         sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'> <b> # </b> " + atDTO.getContent() + "</p>");
                     }
-                    // TODO: add "Edit" button
+                }
+            });
+
+            RowExpander<UserStoryDTO> ufExpander = new RowExpander<UserStoryDTO>(new AbstractCell<UserStoryDTO>() {
+                @Override
+                public void render(Context context, UserStoryDTO value, SafeHtmlBuilder sb) {
+                    sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Content:</b> " + value.getContent() + "</p>");
+                    sb.appendHtmlConstant("<p style='margin: 5px 5px 5px'><b>Acceptance Tests:</b>" + "</p>");
+                    for (AcceptanceTestDTO atDTO : value.getAcceptanceTestList()) {
+                        sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'> <b> # </b> " + atDTO.getContent() + "</p>");
+                    }
                 }
             });
 
@@ -66,6 +79,7 @@ public class ProductBacklogForm implements IsWidget {
             ColumnConfig<UserStoryDTO, Double> estimatedTimeCol = new ColumnConfig<UserStoryDTO, Double>(getEstimatedTimeValue(), 125, "Estimated Time (Pt)");
             ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 30, "Business Value");
             ColumnConfig<UserStoryDTO, String> editColumn = new ColumnConfig<UserStoryDTO, String>(getEditValue(), 80, "Edit");
+            ColumnConfig<UserStoryDTO, String> ufEditColumn = new ColumnConfig<UserStoryDTO, String>(getEditValue(), 80, "Edit");
 
             TextButtonCell editButton = new TextButtonCell();
             editButton.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -81,6 +95,19 @@ public class ProductBacklogForm implements IsWidget {
             });
             editColumn.setCell(editButton);
 
+            TextButtonCell ufEditButton = new TextButtonCell();
+            editButton.addSelectHandler(new SelectEvent.SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+                    Cell.Context c = event.getContext();
+                    int row = c.getIndex();
+                    UserStoryDTO p = ufStore.get(row);
+                    Info.display("Event", "The " + p.getName() + " was clicked.");
+                    UserStoryEditDialog sed = new UserStoryEditDialog(service, center, west, east, north, south, p);
+                    sed.show();
+                }
+            });
+            editColumn.setCell(ufEditButton);
 
             List<ColumnConfig<UserStoryDTO, ?>> l = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
             l.add(expander);
@@ -91,28 +118,51 @@ public class ProductBacklogForm implements IsWidget {
             l.add(editColumn);
             ColumnModel<UserStoryDTO> cm = new ColumnModel<UserStoryDTO>(l);
 
+            List<ColumnConfig<UserStoryDTO, ?>> ufl = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
+            ufl.add(expander);
+            ufl.add(nameCol);
+            ufl.add(priorityCol);
+            ufl.add(estimatedTimeCol);
+            ufl.add(businessValueCol);
+            ufl.add(editColumn);
+            ColumnModel<UserStoryDTO> ufcm = new ColumnModel<UserStoryDTO>(ufl);
 
 
             store= new ListStore<UserStoryDTO>(getModelKeyProvider());
+            ufStore= new ListStore<UserStoryDTO>(getModelKeyProvider());
             getStoryList();
 
-            panel = new ContentPanel();
-            panel.setHeadingText("User Story list");
-            panel.setPixelSize(850, 460);
-            panel.addStyleName("margin-10");
+            panel = new TabPanel();
+
+            ContentPanel cp = new ContentPanel();
+            cp.setHeaderVisible(false);
+            cp.setPixelSize(850, 460);
+            cp.addStyleName("margin-10");
+            ufGrid = new Grid<UserStoryDTO>(ufStore, ufcm);
+            ufGrid.getView().setAutoExpandColumn(nameCol);
+            ufGrid.setBorders(true);
+            ufGrid.getView().setStripeRows(true);
+            ufGrid.getView().setColumnLines(true);
+            ufGrid.getView().setForceFit(true);
+            ufExpander.initPlugin(ufGrid);
+            cp.setWidget(ufGrid);
+            panel.add(cp, "Unfinished User Stories");
+
+            cp = new ContentPanel();
+            cp.setHeaderVisible(false);
+            cp.setPixelSize(850, 460);
+            cp.addStyleName("margin-10");
 
             grid = new Grid<UserStoryDTO>(store, cm);
             grid.getView().setAutoExpandColumn(nameCol);
             grid.setBorders(true);
             grid.getView().setStripeRows(true);
             grid.getView().setColumnLines(true);
-
             grid.getView().setForceFit(true);
-            //GridInlineEditing<UserStoryDTO> inlineEditor = new GridInlineEditing<UserStoryDTO>(grid);
-            //inlineEditor.addEditor(estimatedTimeCol, new DoubleField());
-
             expander.initPlugin(grid);
-            panel.setWidget(grid);
+            cp.setWidget(grid);
+            panel.add(cp, "Finished User Stories");
+
         }
         return panel;
     }
@@ -121,7 +171,13 @@ public class ProductBacklogForm implements IsWidget {
         AsyncCallback<List<UserStoryDTO>> callback = new AsyncCallback<List<UserStoryDTO>>() {
             @Override
             public void onSuccess(List<UserStoryDTO> result) {
-                store.addAll(result);
+                for (UserStoryDTO usDTO : result) {
+                    if (usDTO.getStatus().equals("Finished")) {
+                        store.add(usDTO);
+                    } else if (usDTO.getStatus().equals("Unfinished")){
+                        ufStore.add(usDTO);
+                    }
+                }
             }
             @Override
             public void onFailure(Throwable caught) {
@@ -130,7 +186,6 @@ public class ProductBacklogForm implements IsWidget {
         };
         service.findAllStoriesByProject(SessionInfo.projectDTO, callback);
     }
-
 
     // return the model key provider for the list store
     private ModelKeyProvider<UserStoryDTO> getModelKeyProvider() {
