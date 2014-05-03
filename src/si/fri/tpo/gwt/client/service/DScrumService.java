@@ -110,6 +110,8 @@ public interface DScrumService extends RemoteService {
     public List<UserStoryDTO> findAllStoriesByProject(ProjectDTO projectDTO);
 
     public Pair<Boolean, String> updateUserStory(UserStoryDTO userStoryDTO);
+
+    Pair<Boolean, String> updateAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList);
     // USER STORY //
 
     // TASK //
