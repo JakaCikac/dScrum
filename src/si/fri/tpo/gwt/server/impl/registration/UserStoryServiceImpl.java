@@ -23,6 +23,8 @@ public class UserStoryServiceImpl {
         Pair<Boolean, Integer> aBoolean = UserStoryImpl.saveUserStory(userStoryDTO);
         if (aBoolean == null)
             return Pair.of(false, -1);
+        if (!aBoolean.getFirst())
+            return Pair.of(false, aBoolean.getSecond());
 
         final String projectName = userStoryDTO.getName();
         return Pair.of(true, aBoolean.getSecond());

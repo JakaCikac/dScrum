@@ -73,11 +73,13 @@ public class UserStoryImpl {
             }
 
             List<AcceptanceTest> acceptanceTestList = new ArrayList<AcceptanceTest>();
-            for (AcceptanceTestDTO acceptanceTestDTO : userStoryDTO.getAcceptanceTestList()) {
-                AcceptanceTest acceptanceTest = ProxyManager.getAcceptanceTestProxy().findAcceptanceTest(acceptanceTestDTO.getAcceptanceTestId());
-                acceptanceTestList.add(acceptanceTest);
+            if (userStoryDTO.getAcceptanceTestList() != null) {
+                for (AcceptanceTestDTO acceptanceTestDTO : userStoryDTO.getAcceptanceTestList()) {
+                    AcceptanceTest acceptanceTest = ProxyManager.getAcceptanceTestProxy().findAcceptanceTest(acceptanceTestDTO.getAcceptanceTestId());
+                    acceptanceTestList.add(acceptanceTest);
+                }
+                userStory.setAcceptanceTestList(acceptanceTestList);
             }
-            userStory.setAcceptanceTestList(acceptanceTestList);
 
             try {
                 if (userStory == null)

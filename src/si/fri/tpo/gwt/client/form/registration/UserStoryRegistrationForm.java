@@ -321,12 +321,10 @@ public class UserStoryRegistrationForm implements IsWidget, Editor<UserStoryDTO>
                             if (result == null) {
                                 AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing user story saving!");
                                 amb2.show();
-                            }
-                            else if (!result.getFirst()) {
+                            } else if (!result.getFirst()) {
                                 AlertMessageBox amb2 = new AlertMessageBox("Error saving user story!", result.getSecond().toString());
                                 amb2.show();
-                            }
-                            else {
+                            } else {
                                 MessageBox amb3 = new MessageBox("Message save User Story", result.getSecond().toString());
                                 amb3.show();
                                 UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
