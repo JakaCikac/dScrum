@@ -3,6 +3,8 @@ package si.fri.tpo.gwt.client.form.home;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.cell.core.client.TextButtonCell;
@@ -10,16 +12,22 @@ import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.RowExpander;
 import com.sencha.gxt.widget.core.client.info.Info;
+import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
+import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
+import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
+import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
@@ -99,7 +107,13 @@ public class SprintBacklogForm  implements IsWidget{
                     int row = c.getIndex();
                     UserStoryDTO p = store.get(row);
                     Info.display("Event", "The " + p.getName() + " was clicked.");
-
+                    if (storyCompleted(p)){
+                        p.setStatus("Finished");
+                        performUpdateUserStory(p);
+                    } else {
+                        AlertMessageBox amb2 = new AlertMessageBox("User Story not completed!", "Tasks are not completed yet.");
+                        amb2.show();
+                    }
                 }
             });
             confirmColumn.setCell(confirmButton);
@@ -134,13 +148,66 @@ public class SprintBacklogForm  implements IsWidget{
             grid.getView().setColumnLines(true);
 
             grid.getView().setForceFit(true);
-            //GridInlineEditing<UserStoryDTO> inlineEditor = new GridInlineEditing<UserStoryDTO>(grid);
-            //inlineEditor.addEditor(estimatedTimeCol, new DoubleField());
 
             expander.initPlugin(grid);
             panel.setWidget(grid);
         }
         return panel;
+    }
+
+    private void performUpdateUserStory(final UserStoryDTO userStoryDTO) {
+        AsyncCallback<Pair<Boolean, String>> updateUserStory = new AsyncCallback<Pair<Boolean, String>>() {
+            @Override
+            public void onSuccess(Pair<Boolean, String> result) {
+                if (result == null) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing user story updating!");
+                    amb2.show();
+                }
+                else if (!result.getFirst()) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error updating user story!", result.getSecond());
+                    amb2.show();
+                }
+                else {
+                    MessageBox amb3 = new MessageBox("Message update User Story", "User story " + userStoryDTO.getName() +"is finished.");
+                    amb3.show();
+                    center.clear();
+                    west.clear();
+                    east.clear();
+                    SessionInfo.projectDTO = null;
+                    if (SessionInfo.userDTO.isAdmin()){
+                        AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
+                        east.add(adminNavPanel.asWidget());
+                    } else {
+                        UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east, north, south);
+                        east.add(userNavPanel.asWidget());
+                    }
+                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
+                    west.add(psf.asWidget());
+                }
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.updateUserStory(userStoryDTO, updateUserStory);
+    }
+
+    private boolean storyCompleted(UserStoryDTO userStoryDTO) {
+        for (TaskDTO taskDTO : userStoryDTO.getTaskList()){
+            if (taskDTO.getTimeRemaining() != 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void getStoryList() {
+        for (UserStoryDTO userStoryDTO : sprintDTO.getUserStoryList()){
+            if (!userStoryDTO.getStatus().equals("Finished")) {
+                store.add(userStoryDTO);
+            }
+        }
     }
 
     private ValueProvider<UserStoryDTO, String> getTaskValue() {
@@ -158,10 +225,6 @@ public class SprintBacklogForm  implements IsWidget{
             }
         };
         return vpn;
-    }
-
-    private void getStoryList() {
-        store.addAll(sprintDTO.getUserStoryList());
     }
 
     // return the model key provider for the list store

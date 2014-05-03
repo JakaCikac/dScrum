@@ -122,11 +122,11 @@ public class UserStoryImpl {
             }
             userStory.setAcceptanceTestList(acceptanceTestList);
 
-            SprintDTO sprintDTO = userStoryDTO.getSprint();
-            SprintPKDTO sprintPKDTO = sprintDTO.getSprintPK();
-            SprintPK sprintPK = new SprintPK();
-            sprintPK.setSprintId(sprintPKDTO.getSprintId());
-            sprintPK.setProjectProjectId(sprintPKDTO.getProjectProjectId());
+            //SprintDTO sprintDTO = userStoryDTO.getSprint();
+            //SprintPKDTO sprintPKDTO = sprintDTO.getSprintPK();
+            SprintPK sprintPK = userStory.getSprint().getSprintPK();
+            //sprintPK.setSprintId(sprintPKDTO.getSprintId());
+            //sprintPK.setProjectProjectId(sprintPKDTO.getProjectProjectId());
             Sprint sprint = ProxyManager.getSprintProxy().findSprint(sprintPK);
             userStory.setSprint(sprint);
 
