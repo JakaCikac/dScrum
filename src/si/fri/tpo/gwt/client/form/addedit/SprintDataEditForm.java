@@ -463,7 +463,8 @@ public class SprintDataEditForm implements IsWidget {
                 else {
                     MessageBox amb3 = new MessageBox("Message update Sprint", result.getSecond());
                     amb3.show();
-                    center.clear();
+                    UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
+                    center.add(userHomeForm.asWidget());
                     west.clear();
                     east.clear();
                     SessionInfo.projectDTO = null;

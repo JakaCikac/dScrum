@@ -23,8 +23,6 @@ public class UserStoryEditDialog extends Dialog {
             this.north = north;
             this.south = south;
             this.usDTO = usDTO;
-            System.out.println("usDTO name: " + usDTO.getName());
-            System.out.println("this.usDTO name: " + this.usDTO.getName());
 
             // Layout
             setBodyBorder(false);

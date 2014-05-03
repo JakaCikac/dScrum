@@ -17,7 +17,8 @@ public class UserStoryImpl {
         List<UserStory> userStoryList = ProxyManager.getUserStoryProxy().getUserStoryList(projectDTO.getProjectId());
 
         List<UserStoryDTO> userStoryDTOList = new ArrayList<UserStoryDTO>();
-        for (UserStory userStory : userStoryList){
+        for (UserStory userStory : userStoryList) {
+            userStory = ProxyManager.getUserStoryProxy().findUserStory(userStory.getStoryId());
             UserStoryDTO userStoryDTO = new UserStoryDTO();
             userStoryDTO.setStoryId(userStory.getStoryId());
             userStoryDTO.setName(userStory.getName());
@@ -37,7 +38,8 @@ public class UserStoryImpl {
 
             List<AcceptanceTestDTO> acceptanceTestDTOList = new ArrayList<AcceptanceTestDTO>();
             List<AcceptanceTest> acceptanceTestList = userStory.getAcceptanceTestList();
-            for (AcceptanceTest acceptanceTest : acceptanceTestList){
+            for (AcceptanceTest acceptanceTest : acceptanceTestList) {
+                acceptanceTest = ProxyManager.getAcceptanceTestProxy().findAcceptanceTest(acceptanceTest.getAcceptanceTestId());
                 AcceptanceTestDTO acceptanceTestDTO = new AcceptanceTestDTO();
                 acceptanceTestDTO.setAcceptanceTestId(acceptanceTest.getAcceptanceTestId());
                 acceptanceTestDTO.setContent(acceptanceTest.getContent());
@@ -45,6 +47,21 @@ public class UserStoryImpl {
                 acceptanceTestDTOList.add(acceptanceTestDTO);
             }
             userStoryDTO.setAcceptanceTestList(acceptanceTestDTOList);
+
+            if (userStory.getSprint() != null){
+                Sprint sprint = ProxyManager.getSprintProxy().findSprint(userStory.getSprint().getSprintPK());
+                SprintDTO sprintDTO = new SprintDTO();
+                SprintPKDTO sprintPKDTO = new SprintPKDTO();
+                sprintPKDTO.setSprintId(sprint.getSprintPK().getSprintId());
+                sprintPKDTO.setProjectProjectId(sprint.getSprintPK().getProjectProjectId());
+                sprintDTO.setSprintPK(sprintPKDTO);
+                sprintDTO.setSeqNumber(sprint.getSeqNumber());
+                sprintDTO.setEndDate(sprint.getEndDate());
+                sprintDTO.setStartDate(sprint.getStartDate());
+                sprintDTO.setStatus(sprint.getStatus());
+                sprintDTO.setVelocity(sprint.getVelocity());
+                userStoryDTO.setSprint(sprintDTO);
+            }
             //TODO: Possible error, later, when we need all userStoryDTO data from DB
             userStoryDTOList.add(userStoryDTO);
         }
@@ -124,23 +141,16 @@ public class UserStoryImpl {
             }
             userStory.setAcceptanceTestList(acceptanceTestList);
 
-            //SprintDTO sprintDTO = userStoryDTO.getSprint();
-            //SprintPKDTO sprintPKDTO = sprintDTO.getSprintPK();
-            SprintPK sprintPK = userStory.getSprint().getSprintPK();
-            //sprintPK.setSprintId(sprintPKDTO.getSprintId());
-            //sprintPK.setProjectProjectId(sprintPKDTO.getProjectProjectId());
-            Sprint sprint = ProxyManager.getSprintProxy().findSprint(sprintPK);
-            userStory.setSprint(sprint);
-
-            try {
-                sprintPKDTO = sprintDTO.getSprintPK();
+            if (userStoryDTO.getSprint() != null && userStoryDTO.getSprint().getSprintPK() != null) {
+                SprintDTO sprintDTO = userStoryDTO.getSprint();
+                SprintPKDTO sprintPKDTO = sprintDTO.getSprintPK();
+                SprintPK sprintPK = new SprintPK();
                 sprintPK.setSprintId(sprintPKDTO.getSprintId());
                 sprintPK.setProjectProjectId(sprintPKDTO.getProjectProjectId());
                 Sprint sprint = ProxyManager.getSprintProxy().findSprint(sprintPK);
                 userStory.setSprint(sprint);
-            } catch(NullPointerException ex) {
-                sprintPKDTO = null;
             }
+
             try {
                 if (userStory == null)
                     return Pair.of(false, "Data error!");
@@ -156,5 +166,25 @@ public class UserStoryImpl {
             return Pair.of(false, e.getMessage());
         }
         return Pair.of(true, "User story should be updated.");
+    }
+
+    public static Pair<Boolean, String> deleteUserStory(UserStoryDTO userStoryDTO) {
+        try {
+            UserStory userStory = ProxyManager.getUserStoryProxy().findUserStory(userStoryDTO.getStoryId());
+            try {
+                if (userStory == null)
+                    return Pair.of(false, "Data error!");
+
+                ProxyManager.getUserStoryProxy().destroy(userStory.getStoryId());
+
+            } catch (Exception e) {
+                System.err.println("Error while deleting user story with message: " + e.getMessage());
+                return Pair.of(false, e.getMessage());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Pair.of(false, e.getMessage());
+        }
+        return Pair.of(true, "User story should be deleted.");
     }
 }

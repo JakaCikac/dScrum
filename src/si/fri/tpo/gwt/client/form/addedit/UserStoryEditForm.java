@@ -34,6 +34,8 @@ import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
 import si.fri.tpo.gwt.client.dto.PriorityDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
+import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
+import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
@@ -93,9 +95,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
         this.west = west;
         this.east = east;
         this.acceptanceTestCount = 0;
-        System.out.println("usDTO edit name: " + usDTO.getName());
         this.selectedUserStoryDTO = usDTO;
-        System.out.println("this.usDTO edit: " + this.selectedUserStoryDTO.getName());
         setSelectedUserStoryDTO(this.selectedUserStoryDTO);
     }
 
@@ -104,9 +104,6 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
         if (verticalPanel == null) {
             verticalPanel = new VerticalPanel();
             verticalPanel.setSpacing(10);
-            if (selectedUserStoryDTO != null) {
-                System.out.println("in as widget this.lalal: " + selectedUserStoryDTO.getName());
-            } else System.out.println("Failed horribly.");
             createUserStoryEditForm();
         }
         return verticalPanel;
@@ -374,8 +371,14 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
                                 center.add(userHomeForm.asWidget());
                                 west.clear();
                                 east.clear();
-                                south.clear();
                                 SessionInfo.projectDTO = null;
+                                if (SessionInfo.userDTO.isAdmin()){
+                                    AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
+                                    east.add(adminNavPanel.asWidget());
+                                } else {
+                                    UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east, north, south);
+                                    east.add(userNavPanel.asWidget());
+                                }
                                 ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                                 west.add(psf.asWidget());
                             }

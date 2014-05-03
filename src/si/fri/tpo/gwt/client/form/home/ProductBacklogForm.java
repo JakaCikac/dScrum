@@ -1,9 +1,7 @@
 package si.fri.tpo.gwt.client.form.home;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.google.gwt.cell.client.*;
+import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.cell.client.Cell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -15,14 +13,24 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.TabPanel;
+import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
-import com.sencha.gxt.widget.core.client.grid.*;
+import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
+import com.sencha.gxt.widget.core.client.grid.ColumnModel;
+import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.grid.RowExpander;
 import com.sencha.gxt.widget.core.client.info.Info;
+import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.form.addedit.UserStoryEditDialog;
+import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nanorax on 01/05/14.
@@ -78,36 +86,41 @@ public class ProductBacklogForm implements IsWidget {
             ColumnConfig<UserStoryDTO, String> priorityCol = new ColumnConfig<UserStoryDTO, String>(getPriorityValue(), 100, "Priority");
             ColumnConfig<UserStoryDTO, Double> estimatedTimeCol = new ColumnConfig<UserStoryDTO, Double>(getEstimatedTimeValue(), 125, "Estimated Time (Pt)");
             ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 30, "Business Value");
-            ColumnConfig<UserStoryDTO, String> editColumn = new ColumnConfig<UserStoryDTO, String>(getEditValue(), 80, "Edit");
             ColumnConfig<UserStoryDTO, String> ufEditColumn = new ColumnConfig<UserStoryDTO, String>(getEditValue(), 80, "Edit");
-
-            TextButtonCell editButton = new TextButtonCell();
-            editButton.addSelectHandler(new SelectEvent.SelectHandler() {
-                @Override
-                public void onSelect(SelectEvent event) {
-                    Cell.Context c = event.getContext();
-                    int row = c.getIndex();
-                    UserStoryDTO p = store.get(row);
-                    Info.display("Event", "The " + p.getName() + " was clicked.");
-                    UserStoryEditDialog sed = new UserStoryEditDialog(service, center, west, east, north, south, p);
-                    sed.show();
-                }
-            });
-            editColumn.setCell(editButton);
+            ColumnConfig<UserStoryDTO, String> ufDeleteColumn = new ColumnConfig<UserStoryDTO, String>(getDeleteValue(), 80, "Delete");
 
             TextButtonCell ufEditButton = new TextButtonCell();
-            editButton.addSelectHandler(new SelectEvent.SelectHandler() {
+            ufEditButton.addSelectHandler(new SelectEvent.SelectHandler() {
                 @Override
                 public void onSelect(SelectEvent event) {
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
                     UserStoryDTO p = ufStore.get(row);
-                    Info.display("Event", "The " + p.getName() + " was clicked.");
-                    UserStoryEditDialog sed = new UserStoryEditDialog(service, center, west, east, north, south, p);
-                    sed.show();
+                    if ( p.getSprint() == null ) {
+                        UserStoryEditDialog sed = new UserStoryEditDialog(service, center, west, east, north, south, p);
+                        sed.show();
+                    } else {
+                        Info.display("User story", "The user story " + p.getName() + " cannot be edited because it is in active sprint.");
+                    }
                 }
             });
-            editColumn.setCell(ufEditButton);
+            ufEditColumn.setCell(ufEditButton);
+
+            TextButtonCell ufDeleteButton = new TextButtonCell();
+            ufDeleteButton.addSelectHandler(new SelectEvent.SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+                    Cell.Context c = event.getContext();
+                    int row = c.getIndex();
+                    UserStoryDTO p = ufStore.get(row);
+                    if ( p.getSprint() == null ) {
+                        performDeleteUserStory(p);
+                    } else {
+                        Info.display("User story", "The user story " + p.getName() + " cannot be deleted because it is in active sprint.");
+                    }
+                }
+            });
+            ufDeleteColumn.setCell(ufDeleteButton);
 
             List<ColumnConfig<UserStoryDTO, ?>> l = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
             l.add(expander);
@@ -115,7 +128,6 @@ public class ProductBacklogForm implements IsWidget {
             l.add(priorityCol);
             l.add(estimatedTimeCol);
             l.add(businessValueCol);
-            l.add(editColumn);
             ColumnModel<UserStoryDTO> cm = new ColumnModel<UserStoryDTO>(l);
 
             List<ColumnConfig<UserStoryDTO, ?>> ufl = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
@@ -124,7 +136,8 @@ public class ProductBacklogForm implements IsWidget {
             ufl.add(priorityCol);
             ufl.add(estimatedTimeCol);
             ufl.add(businessValueCol);
-            ufl.add(editColumn);
+            ufl.add(ufEditColumn);
+            ufl.add(ufDeleteColumn);
             ColumnModel<UserStoryDTO> ufcm = new ColumnModel<UserStoryDTO>(ufl);
 
 
@@ -165,6 +178,58 @@ public class ProductBacklogForm implements IsWidget {
 
         }
         return panel;
+    }
+
+    private void performDeleteUserStory(UserStoryDTO userStoryDTO) {
+        AsyncCallback<Pair<Boolean, String>> deleteUserStory = new AsyncCallback<Pair<Boolean, String>>() {
+            @Override
+            public void onSuccess(Pair<Boolean, String> result) {
+                if (result == null) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing user story deleting!");
+                    amb2.show();
+                }
+                else if (!result.getFirst()) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error deleting user story!", result.getSecond());
+                    amb2.show();
+                }
+                else {
+                    MessageBox amb3 = new MessageBox("Message delete User Story", result.getSecond());
+                    amb3.show();
+                    UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
+                    center.add(userHomeForm.asWidget());
+                    west.clear();
+                    east.clear();
+                    south.clear();
+                    SessionInfo.projectDTO = null;
+                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
+                    west.add(psf.asWidget());
+                }
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.deleteUserStory(userStoryDTO, deleteUserStory);
+    }
+
+
+    private ValueProvider<UserStoryDTO, String> getDeleteValue() {
+        ValueProvider<UserStoryDTO, String> vpn = new ValueProvider<UserStoryDTO, String>() {
+            @Override
+            public String getValue(UserStoryDTO object) {
+                return "Delete";
+            }
+            @Override
+            public void setValue(UserStoryDTO object, String value) {
+
+            }
+            @Override
+            public String getPath() {
+                return null;
+            }
+        };
+        return vpn;
     }
 
     private void getStoryList() {

@@ -99,6 +99,8 @@ public interface DScrumServiceAsync {
 
     // ACCEPTANCE TEST //
     void saveAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList, AsyncCallback<Pair<Boolean,List<Integer>>> saveAcceptanceTestList);
+
+    void updateAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList, AsyncCallback<Pair<Boolean, String>> saveAcceptanceTestList);
     // ACCEPTANCE TEST //
 
     // USER STORY //
@@ -108,7 +110,7 @@ public interface DScrumServiceAsync {
 
     void updateUserStory(UserStoryDTO userStoryDTO, AsyncCallback<Pair<Boolean,String>> updateUserStory);
 
-    void updateAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList, AsyncCallback<Pair<Boolean, String>> saveAcceptanceTestList);
+    void deleteUserStory(UserStoryDTO userStoryDTO, AsyncCallback<Pair<Boolean,String>> deleteUserStory);
     // USER STORY //
 
     // TASK //
