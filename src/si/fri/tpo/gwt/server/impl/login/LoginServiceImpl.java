@@ -23,6 +23,9 @@ public class LoginServiceImpl {
         if (!attempt)
             return Pair.of(null, "Wrong password!");
 
+        if (!user.getIsActive())
+            return Pair.of(null, "User is not active!");
+
         return Pair.of(FillDTO.fillUserDTO(user), "success");
     }
 
