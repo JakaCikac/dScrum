@@ -2,22 +2,12 @@ package si.fri.tpo.gwt.client.form.home;
 
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.ContentPanel;
-import com.sencha.gxt.widget.core.client.button.TextButton;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
-import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.PlainTabPanel;
-import com.sencha.gxt.widget.core.client.TabItemConfig;
 import com.sencha.gxt.widget.core.client.TabPanel;
-import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
 import java.util.Date;
@@ -30,7 +20,7 @@ public class UserHomeForm implements IsWidget {
     private VerticalPanel vp;
     private ContentPanel center, west, east, north, south;
     private DScrumServiceAsync service;
-
+    private TabPanel folder;
     public UserHomeForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south) {
         this.service = service;
         this.center = center;
@@ -40,28 +30,15 @@ public class UserHomeForm implements IsWidget {
         this.south = south;
     }
 
+    @Override
     public Widget asWidget() {
-        if (vp == null) {
-            vp = new VerticalPanel();
-            vp.setSpacing(10);
-            //String txt = TestData.DUMMY_TEXT_SHORT;
+        if (folder == null) {
 
-            /* SelectionHandler<Widget> handler = new SelectionHandler<Widget>() {
-                @Override
-                public void onSelection(SelectionEvent<Widget> event) {
-                    TabPanel panel = (TabPanel) event.getSource();
-                    Widget w = event.getSelectedItem();
-                    TabItemConfig config = panel.getConfig(w);
-                    Info.display("Message", "'" + config.getText() + "' Selected");
-                }
-            }; */
-
-            TabPanel folder = new TabPanel();
-            //folder.addSelectionHandler(handler);
+            folder = new TabPanel();
             folder.setWidth(450);
 
             ContentPanel cp = new ContentPanel();
-            cp.add(new Label("Project waaaalz"));
+            cp.add(new Label("Project wall."));
             folder.add(cp, "Project wall");
 
             if (SessionInfo.projectDTO == null) {
@@ -85,14 +62,11 @@ public class UserHomeForm implements IsWidget {
             }
             if (!inProgress) {
                 cp = new ContentPanel();
-                cp.add(new Label("No sprint in progress :)"));
+                cp.add(new Label("No sprint in progress."));
                 folder.add(cp, "Sprint backlog");
             }
-
-            vp.add(folder);
         }
-
-        return vp;
+        return folder;
     }
 
 }

@@ -108,5 +108,9 @@ public interface DScrumServiceAsync {
 
     void updateUserStory(UserStoryDTO userStoryDTO, AsyncCallback<Pair<Boolean,String>> updateUserStory);
     // USER STORY //
+
+    // TASK //
+    void saveTask(TaskDTO taskDTO, UserStoryDTO userStoryDTO, AsyncCallback<Pair<Boolean, String>> saveTask);
+    // TASK //
 }
 

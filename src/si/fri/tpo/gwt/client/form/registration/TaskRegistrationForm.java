@@ -8,6 +8,8 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.gwt.text.shared.AbstractSafeHtmlRenderer;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -19,15 +21,22 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
+import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.*;
 import com.sencha.gxt.widget.core.client.form.validator.MinLengthValidator;
 import com.sencha.gxt.widget.core.client.info.Info;
+import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.dto.UserStoryDTO;
+import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
+import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
+import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
@@ -54,10 +63,14 @@ public class TaskRegistrationForm implements IsWidget {
     private TextArea description;
     private Radio waiting;
 
-    private ProjectDTO projectDTO;
-
     private TextButton submitButton;
     private ListStore<UserDTO> teamMembers;
+    private TaskDTO taskDTO;
+    private UserDTO assignedDeveloper;
+    private UserStoryDTO userStoryDTO;
+    private IntegerField estimateTime;
+
+    private ComboBox<UserDTO> combo;
 
     @Override
     public Widget asWidget() {
@@ -69,11 +82,12 @@ public class TaskRegistrationForm implements IsWidget {
         return vp;
     }
 
-    public TaskRegistrationForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east) {
+    public TaskRegistrationForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, UserStoryDTO userStoryDTO) {
         this.service = service;
         this.center = center;
         this.west = west;
         this.east = east;
+        this.userStoryDTO = userStoryDTO;
     }
 
     private void createTaskForm() {
@@ -91,10 +105,9 @@ public class TaskRegistrationForm implements IsWidget {
         p.add(new FieldLabel(description, "Description *"), new VerticalLayoutContainer.VerticalLayoutData(1, 100));
 
         teamMembers = new ListStore<UserDTO>(getModelKeyProvider());
-        // TODO: fill combo box with users working on project for story
         setMembers(SessionInfo.projectDTO.getTeamTeamId().getUserList());
 
-        ComboBox<UserDTO> combo = new ComboBox<UserDTO>(teamMembers,getUsernameLabelValue() );
+        combo = new ComboBox<UserDTO>(teamMembers,getUsernameLabelValue() );
         addHandlersForEventObservation(combo, getUsernameLabelValue());
 
         combo.setEmptyText("Assign to developer..");
@@ -111,18 +124,82 @@ public class TaskRegistrationForm implements IsWidget {
         });
         addHandlersForEventObservation(combo, getUsernameLabelValue());
 
-        IntegerField df = new IntegerField();
-        p.add(new FieldLabel(df, " Est. time (h) *"), new VerticalLayoutContainer.VerticalLayoutData(1, 100));
+        estimateTime = new IntegerField();
+        p.add(new FieldLabel(estimateTime, " Est. time (h) *"), new VerticalLayoutContainer.VerticalLayoutData(1, 100));
 
         submitButton = new TextButton("Create");
         submitButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-            // TODO: what happens on create?
+                taskDTO = new TaskDTO();
+
+                if ( !description.getText().equals("") ) {
+                    taskDTO.setDescription(description.getText());
+                } else {
+                    Info.display("Description (name) not entered.", "Please enter the description.");
+                    return;
+                }
+
+                if ( assignedDeveloper != null ) {
+                    // TODO: send message to developer so it can accept the task
+                    // LOGIKA ZA POSLAT in SPREJET taasssskkkk SK TASK ASSSSK SKKKKK :D
+                    //taskDTO.setUserUserId(assignedDeveloper);
+                } else {
+                    Info.display("Developer not selected.", "Please select the developer.");
+                    return;
+                }
+
+                if ( userStoryDTO != null) {
+                    taskDTO.setUserStory(userStoryDTO);
+                } else {
+                    new AlertMessageBox("Null userStoryDTO", "An error occurred with the application, please restart!");
+                    return;
+                }
+
+                if (estimateTime.getValue() != null) {
+                    taskDTO.setEstimatedTime(estimateTime.getValue());
+                    taskDTO.setTimeRemaining(estimateTime.getValue());
+                } else {
+                    Info.display("Estimated time not entered.", "Please enter the estimated time (Integer value).");
+                    return;
+                }
+
+                taskDTO.setStatus("Assigned");
+
+                performTaskSave();
+
             }
         });
         panel.addButton(submitButton);
         vp.add(panel);
+    }
+
+    private void performTaskSave() {
+        AsyncCallback<Pair<Boolean, String>> saveTask = new AsyncCallback<Pair<Boolean, String>>() {
+            @Override
+            public void onSuccess(Pair<Boolean, String> result) {
+                if (result == null) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing task saving!");
+                    amb2.show();
+                }
+                else if (!result.getFirst()) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error saving task!", result.getSecond());
+                    amb2.show();
+                }
+                else {
+                    MessageBox amb3 = new MessageBox("Message save task", result.getSecond());
+                    amb3.show();
+                    description.clear();
+                    estimateTime.clear();
+                    combo.clear();
+                }
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.saveTask(taskDTO, userStoryDTO, saveTask);
     }
 
     public void setMembers(List<UserDTO> userList) {
@@ -136,8 +213,8 @@ public class TaskRegistrationForm implements IsWidget {
         combo.addValueChangeHandler(new ValueChangeHandler<T>() {
             @Override
             public void onValueChange(ValueChangeEvent<T> event) {
-                Info.display("Value Changed", "New value: "
-                        + (event.getValue() == null ? "nothing" : labelProvider.getLabel(event.getValue()) + "!"));
+                //Info.display("Value Changed", "New value: "
+                //        + (event.getValue() == null ? "nothing" : labelProvider.getLabel(event.getValue()) + "!"));
             }
         });
         combo.addSelectionHandler(new SelectionHandler<T>() {
@@ -145,7 +222,7 @@ public class TaskRegistrationForm implements IsWidget {
             public void onSelection(SelectionEvent<T> event) {
                 Info.display("Developer selected", "You selected "
                         + (event.getSelectedItem() == null ? "nothing" : labelProvider.getLabel(event.getSelectedItem()) + "!"));
-                // TODO: get userDTO and assign as developer
+                assignedDeveloper = (UserDTO)event.getSelectedItem();
             }
         });
     }

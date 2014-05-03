@@ -112,4 +112,8 @@ public interface DScrumService extends RemoteService {
     public Pair<Boolean, String> updateUserStory(UserStoryDTO userStoryDTO);
     // USER STORY //
 
+    // TASK //
+    public Pair<Boolean, String> saveTask(TaskDTO taskDTO, UserStoryDTO userStoryDTO);
+    // TASK //
+
 }
