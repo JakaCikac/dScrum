@@ -34,6 +34,7 @@ import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
 import si.fri.tpo.gwt.client.dto.PriorityDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
+import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
@@ -385,7 +386,8 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
                             else {
                                 MessageBox amb3 = new MessageBox("Message save User Story", result.getSecond().toString());
                                 amb3.show();
-                                center.clear();
+                                UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
+                                center.add(userHomeForm.asWidget());
                                 west.clear();
                                 SessionInfo.projectDTO = null;
                                 ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);

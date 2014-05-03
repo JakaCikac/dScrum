@@ -20,6 +20,7 @@ import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.SprintPKDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
@@ -223,9 +224,10 @@ public class SprintRegistrationForm implements IsWidget {
                             else {
                                 MessageBox amb3 = new MessageBox("Message update Sprint", result.getSecond());
                                 amb3.show();
-                                center.clear();
+                                UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
+                                center.add(userHomeForm.asWidget());
                                 west.clear();
-                                east.clear();//TODO: when home page (wall, sprint backlog etc) create as widget on center, till then just clear.
+                                east.clear();
                                 SessionInfo.projectDTO = null;
                                 if (SessionInfo.userDTO.isAdmin()){
                                     AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);

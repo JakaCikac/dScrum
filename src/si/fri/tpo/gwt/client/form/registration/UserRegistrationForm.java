@@ -23,7 +23,12 @@ import com.sencha.gxt.widget.core.client.form.TextField;
 import com.sencha.gxt.widget.core.client.form.validator.RegExValidator;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.form.home.UserHomeForm;
+import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
+import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
+import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
+import si.fri.tpo.gwt.client.session.SessionInfo;
 import si.fri.tpo.gwt.client.verification.PassHash;
 
 import java.util.ArrayList;
@@ -36,7 +41,7 @@ import java.util.ArrayList;
 public class UserRegistrationForm implements IsWidget {
 
     private DScrumServiceAsync service;
-    private ContentPanel center;
+    private ContentPanel center, north, south, east, west;
     private VerticalPanel vp;
     private UserDTO dto;
     private ListBox lb;
@@ -52,9 +57,13 @@ public class UserRegistrationForm implements IsWidget {
     private HorizontalPanel hp;
 
 
-    public UserRegistrationForm(DScrumServiceAsync service, ContentPanel center) {
+    public UserRegistrationForm(DScrumServiceAsync service, ContentPanel center, ContentPanel north, ContentPanel south, ContentPanel east, ContentPanel west) {
         this.service = service;
         this.center = center;
+        this.north = north;
+        this.south = south;
+        this.east = east;
+        this.west = west;
     }
 
     public Widget asWidget() {
@@ -237,7 +246,20 @@ public class UserRegistrationForm implements IsWidget {
                 else {
                     MessageBox amb3 = new MessageBox("Message save User", result.getSecond());
                     amb3.show();
-                    center.clear();
+                    UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
+                    center.add(userHomeForm.asWidget());
+                    west.clear();
+                    east.clear();
+                    SessionInfo.projectDTO = null;
+                    if (SessionInfo.userDTO.isAdmin()){
+                        AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
+                        east.add(adminNavPanel.asWidget());
+                    } else {
+                        UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east, north, south);
+                        east.add(userNavPanel.asWidget());
+                    }
+                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
+                    west.add(psf.asWidget());
                 }
             }
             @Override

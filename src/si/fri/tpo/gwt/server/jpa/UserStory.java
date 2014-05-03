@@ -58,6 +58,8 @@ public class UserStory implements Serializable {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "estimate_time")
     private Double estimateTime;
+    @Column(name = "comment")
+    private String comment;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userStory")
     private List<Task> taskList;
     @OneToMany(mappedBy = "userStoryStoryId")
@@ -134,6 +136,14 @@ public class UserStory implements Serializable {
 
     public void setEstimateTime(Double estimateTime) {
         this.estimateTime = estimateTime;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public List<Task> getTaskList() {

@@ -21,6 +21,7 @@ import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.TeamDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.search.SingleUserSearchCallback;
@@ -332,7 +333,8 @@ public class ProjectDataEditForm implements IsWidget{
                             MessageBox amb3 = new MessageBox("Message update Project", result.getSecond());
                             amb3.show();
                             // refresh gui
-                            center.clear();//TODO: when home page (wall, sprint backlog etc) create as widget on center, till then just clear.
+                            UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
+                            center.add(userHomeForm.asWidget());
                             west.clear();
                             east.clear();
                             SessionInfo.projectDTO = null;

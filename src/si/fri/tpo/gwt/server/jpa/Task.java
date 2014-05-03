@@ -6,9 +6,19 @@
 
 package si.fri.tpo.gwt.server.jpa;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  *
@@ -17,13 +27,14 @@ import java.util.List;
 @Entity
 @Table(name = "task")
 @NamedQueries({
-    @NamedQuery(name = "Task.findAll", query = "SELECT t FROM Task t"),
-    @NamedQuery(name = "Task.findByTaskId", query = "SELECT t FROM Task t WHERE t.taskPK.taskId = :taskId"),
-    @NamedQuery(name = "Task.findByDescription", query = "SELECT t FROM Task t WHERE t.description = :description"),
-    @NamedQuery(name = "Task.findByTimeRemaining", query = "SELECT t FROM Task t WHERE t.timeRemaining = :timeRemaining"),
-    @NamedQuery(name = "Task.findByEstimatedTime", query = "SELECT t FROM Task t WHERE t.estimatedTime = :estimatedTime"),
-    @NamedQuery(name = "Task.findByStatus", query = "SELECT t FROM Task t WHERE t.status = :status"),
-    @NamedQuery(name = "Task.findByUserStoryStoryId", query = "SELECT t FROM Task t WHERE t.taskPK.userStoryStoryId = :userStoryStoryId")})
+        @NamedQuery(name = "Task.findAll", query = "SELECT t FROM Task t"),
+        @NamedQuery(name = "Task.findByTaskId", query = "SELECT t FROM Task t WHERE t.taskPK.taskId = :taskId"),
+        @NamedQuery(name = "Task.findByDescription", query = "SELECT t FROM Task t WHERE t.description = :description"),
+        @NamedQuery(name = "Task.findByTimeRemaining", query = "SELECT t FROM Task t WHERE t.timeRemaining = :timeRemaining"),
+        @NamedQuery(name = "Task.findByEstimatedTime", query = "SELECT t FROM Task t WHERE t.estimatedTime = :estimatedTime"),
+        @NamedQuery(name = "Task.findByStatus", query = "SELECT t FROM Task t WHERE t.status = :status"),
+        @NamedQuery(name = "Task.findByPreassignedUserId", query = "SELECT t FROM Task t WHERE t.preassignedUserId = :preassignedUserId"),
+        @NamedQuery(name = "Task.findByUserStoryStoryId", query = "SELECT t FROM Task t WHERE t.taskPK.userStoryStoryId = :userStoryStoryId")})
 public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -40,6 +51,8 @@ public class Task implements Serializable {
     @Basic(optional = false)
     @Column(name = "status")
     private String status;
+    @Column(name = "preassigned_user_id")
+    private Integer preassignedUserId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "task")
     private List<Workload> workloadList;
     @JoinColumn(name = "user_story_story_id", referencedColumnName = "story_id", insertable = false, updatable = false)
@@ -108,6 +121,14 @@ public class Task implements Serializable {
         this.status = status;
     }
 
+    public Integer getPreassignedUserId() {
+        return preassignedUserId;
+    }
+
+    public void setPreassignedUserId(Integer preassignedUserId) {
+        this.preassignedUserId = preassignedUserId;
+    }
+
     public List<Workload> getWorkloadList() {
         return workloadList;
     }
@@ -156,5 +177,5 @@ public class Task implements Serializable {
     public String toString() {
         return "si.fri.tpo.gwt.server.jpa.Task[ taskPK=" + taskPK + " ]";
     }
-    
+
 }

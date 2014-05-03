@@ -13,6 +13,7 @@ public class TaskDTO extends BaseModelData {
     //private int timeRemaining;
     //private int estimatedTime;
     //private String status;
+    //private Integer preassignedUserId;
     //private List<Workload> workloadList;
     //private UserStory userStory;
     //private User userUserId;
@@ -58,6 +59,14 @@ public class TaskDTO extends BaseModelData {
 
     public void setStatus(String status) {
         set("status", status);
+    }
+
+    public Integer getPreassignedUserId() {
+        return get("preassignedUserId");
+    }
+
+    public void setPreassignedUserId(Integer preassignedUserId) {
+        set("preassignedUserId", preassignedUserId);
     }
 
     public List<WorkloadDTO> getWorkloadList() {

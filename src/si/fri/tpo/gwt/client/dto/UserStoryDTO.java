@@ -16,6 +16,7 @@ public class UserStoryDTO extends BaseModelData {
     //private Integer businessValue;
     //private String status;
     //private Double estimateTime;
+    //private String comment;
     //private List<Task> taskList;
     //private List<AcceptanceTest> acceptanceTestList;
     //private Sprint sprint;
@@ -71,6 +72,14 @@ public class UserStoryDTO extends BaseModelData {
 
     public void setEstimateTime(Double estimateTime){
         set("estimateTime", estimateTime);
+    }
+
+    public String getComment(){
+        return get("comment");
+    }
+
+    public void setComment(String comment){
+        set("comment", comment);
     }
 
     public List<TaskDTO> getTaskList() {

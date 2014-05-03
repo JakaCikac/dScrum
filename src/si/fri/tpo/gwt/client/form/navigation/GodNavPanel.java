@@ -66,7 +66,7 @@ public class GodNavPanel implements IsWidget {
             @Override
             public void onSelect(SelectEvent event) {
                 // TODO: Append registration form to center panel
-                UserRegistrationForm rgf = new UserRegistrationForm(service, center);
+                UserRegistrationForm rgf = new UserRegistrationForm(service, center, north, south, east, west);
                 center.clear();
                 center.add(rgf.asWidget());
             }
