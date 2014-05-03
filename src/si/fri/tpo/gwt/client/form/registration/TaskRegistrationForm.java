@@ -70,6 +70,8 @@ public class TaskRegistrationForm implements IsWidget {
     private UserStoryDTO userStoryDTO;
     private IntegerField estimateTime;
 
+    private ComboBox<UserDTO> combo;
+
     @Override
     public Widget asWidget() {
         if (vp == null) {
@@ -102,13 +104,10 @@ public class TaskRegistrationForm implements IsWidget {
         description.addValidator(new MinLengthValidator(10));
         p.add(new FieldLabel(description, "Description *"), new VerticalLayoutContainer.VerticalLayoutData(1, 100));
 
-
-
         teamMembers = new ListStore<UserDTO>(getModelKeyProvider());
-        // TODO: fill combo box with users working on project for story
         setMembers(SessionInfo.projectDTO.getTeamTeamId().getUserList());
 
-        ComboBox<UserDTO> combo = new ComboBox<UserDTO>(teamMembers,getUsernameLabelValue() );
+        combo = new ComboBox<UserDTO>(teamMembers,getUsernameLabelValue() );
         addHandlersForEventObservation(combo, getUsernameLabelValue());
 
         combo.setEmptyText("Assign to developer..");
@@ -142,7 +141,9 @@ public class TaskRegistrationForm implements IsWidget {
                 }
 
                 if ( assignedDeveloper != null ) {
-                    taskDTO.setUserUserId(assignedDeveloper);
+                    // TODO: send message to developer so it can accept the task
+                    // LOGIKA ZA POSLAT in SPREJET taasssskkkk SK TASK ASSSSK SKKKKK :D
+                    //taskDTO.setUserUserId(assignedDeveloper);
                 } else {
                     Info.display("Developer not selected.", "Please select the developer.");
                     return;
@@ -178,16 +179,19 @@ public class TaskRegistrationForm implements IsWidget {
             @Override
             public void onSuccess(Pair<Boolean, String> result) {
                 if (result == null) {
-                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing project saving!");
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing task saving!");
                     amb2.show();
                 }
                 else if (!result.getFirst()) {
-                    AlertMessageBox amb2 = new AlertMessageBox("Error saving project!", result.getSecond());
+                    AlertMessageBox amb2 = new AlertMessageBox("Error saving task!", result.getSecond());
                     amb2.show();
                 }
                 else {
-                    MessageBox amb3 = new MessageBox("Message save Project", result.getSecond());
+                    MessageBox amb3 = new MessageBox("Message save task", result.getSecond());
                     amb3.show();
+                    description.clear();
+                    estimateTime.clear();
+                    combo.clear();
                 }
             }
             @Override
@@ -209,8 +213,8 @@ public class TaskRegistrationForm implements IsWidget {
         combo.addValueChangeHandler(new ValueChangeHandler<T>() {
             @Override
             public void onValueChange(ValueChangeEvent<T> event) {
-                Info.display("Value Changed", "New value: "
-                        + (event.getValue() == null ? "nothing" : labelProvider.getLabel(event.getValue()) + "!"));
+                //Info.display("Value Changed", "New value: "
+                //        + (event.getValue() == null ? "nothing" : labelProvider.getLabel(event.getValue()) + "!"));
             }
         });
         combo.addSelectionHandler(new SelectionHandler<T>() {
