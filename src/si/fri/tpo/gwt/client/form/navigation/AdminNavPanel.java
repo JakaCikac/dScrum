@@ -27,6 +27,9 @@ public class AdminNavPanel implements IsWidget {
     private ContentPanel east, north, south;
     private FlowLayoutContainer con;
 
+    private static final int PANEL_WIDTH = 230;
+    private static final int PANEL_HEIGHT = 400;
+
     public AdminNavPanel(ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, DScrumServiceAsync service) {
         this.service = service;
         this.center = center;
@@ -41,8 +44,9 @@ public class AdminNavPanel implements IsWidget {
         panel = new ContentPanel();
         con = new FlowLayoutContainer();
         panel.add(con);
-        panel.setHeadingText("Administrator menu");
         panel.setBodyBorder(false);
+        panel.setHeadingText("Administrator menu");
+        panel.setPosition(1,1);
         createAdminNavPanel();
         return panel;
     }
@@ -126,7 +130,7 @@ public class AdminNavPanel implements IsWidget {
         west.setHeadingText("Project list");
         west.add(psf.asWidget());
 
-        panel.setWidth(160);
+        panel.setWidth(PANEL_WIDTH);
 
     }
 }

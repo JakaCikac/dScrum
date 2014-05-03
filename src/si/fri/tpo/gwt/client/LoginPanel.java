@@ -45,6 +45,12 @@ public class LoginPanel  extends FormPanel implements IsWidget {
     private ContentPanel east;
     private ContentPanel west;
     private ContentPanel center;
+    private int CENTER_WIDTH = 0;
+
+    private static final int PANEL_WIDTH = 230;
+    private static final int PANEL_HEIGHT = 400;
+    private static final int LOGIN_WIDTH = 400;
+    private static final int MARGIN_SIZE = 10;
 
     public LoginPanel(DScrum dscrum, ContentPanel center, ContentPanel north, ContentPanel south, ContentPanel east, ContentPanel west, DScrumServiceAsync service) {
         this.dscrum = dscrum;
@@ -54,13 +60,24 @@ public class LoginPanel  extends FormPanel implements IsWidget {
         this.west = west;
         this.north = north;
         this.center = center;
-
+        int RootSize = this.dscrum.getRootSize();
+        int WestSize = this.dscrum.getWestSize();
+        int EastSize = this.dscrum.getEastSize();
+        //System.out.println(RootSize);
+        //System.out.println(EastSize);
+        //System.out.println(EastSize);
+        CENTER_WIDTH = RootSize - WestSize - EastSize - 100;
     }
 
     public Widget asWidget() {
         if (vp == null) {
             vp = new VerticalPanel();
-            vp.setSpacing(10);
+
+            //poravnaj besedilo
+            vp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+            vp.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+
+            vp.setSpacing(MARGIN_SIZE);
             createLoginForm();
         }
         return vp;
@@ -71,12 +88,17 @@ public class LoginPanel  extends FormPanel implements IsWidget {
     private void createLoginForm() {
         FramedPanel loginForm = new FramedPanel();
         loginForm.setHeadingText("dScrum login form");
-        loginForm.setWidth(350);
+        loginForm.setWidth(LOGIN_WIDTH);
 
         FieldSet fieldSet = new FieldSet();
         fieldSet.setHeadingText("User Information");
         fieldSet.setCollapsible(false);
-        loginForm.add(fieldSet, new MarginData(10));
+        loginForm.add(fieldSet, new MarginData(MARGIN_SIZE));
+        loginForm.setPosition(((CENTER_WIDTH/2)-(LOGIN_WIDTH/2)), MARGIN_SIZE);
+        //System.out.println("Size: " + CENTER_WIDTH);
+
+        loginForm.setBodyBorder(true);
+        loginForm.setBorders(true);
 
         VerticalLayoutContainer p = new VerticalLayoutContainer();
         fieldSet.add(p);
@@ -156,7 +178,6 @@ public class LoginPanel  extends FormPanel implements IsWidget {
         } else {
             // if user is not an admin, display user message
 
-
             String message = "Welcome to dScrum  user " +
                     userDTO.getFirstName() + " " + userDTO.getLastName();
 
@@ -164,8 +185,6 @@ public class LoginPanel  extends FormPanel implements IsWidget {
               UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east, north, south);
               UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
               fillNavigationMainAndHeader(userNavPanel.asWidget(), userHomeForm.asWidget());
-
-
         }
     }
 
@@ -174,7 +193,6 @@ public class LoginPanel  extends FormPanel implements IsWidget {
         vp.clear();
         east.add(navigationPanel);
         center.add(mainPanel);
-
 
         final TextButton logoutButton = new TextButton("Logout");
         logoutButton.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -195,9 +213,3 @@ public class LoginPanel  extends FormPanel implements IsWidget {
         south.add(logoutButton);
     }
 }
-
-
-
-
-
-

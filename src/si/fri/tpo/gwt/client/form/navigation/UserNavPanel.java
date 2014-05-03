@@ -21,6 +21,9 @@ public class UserNavPanel implements IsWidget{
     private ContentPanel west;
     private ContentPanel east, north, south;
 
+    private static final int PANEL_WIDTH = 230;
+    private static final int PANEL_HEIGHT = 400;
+
     public UserNavPanel(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south) {
         this.center = center;
         this.service = service;
@@ -64,7 +67,7 @@ public class UserNavPanel implements IsWidget{
         west.setHeadingText("Project list");
         west.add(psf.asWidget());
 
-        panel.setWidth(270);
+        panel.setWidth(PANEL_WIDTH);
     }
 
 }

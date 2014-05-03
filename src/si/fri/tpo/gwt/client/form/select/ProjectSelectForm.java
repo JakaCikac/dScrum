@@ -72,12 +72,13 @@ public class ProjectSelectForm implements IsWidget {
     public Widget asWidget() {
         if (vp == null) {
             vp = new VerticalPanel();
-            vp.setSpacing(2);
+            vp.setSpacing(1);
             vp.setBorderWidth(0);
 
             FramedPanel panel = new FramedPanel();
             panel.setPixelSize(230, 400);
-            panel.setHeaderVisible(false);
+            panel.setHeaderVisible(true);
+            panel.setHeadingText("Project list");
 
             HorizontalLayoutContainer con = new HorizontalLayoutContainer();
 
@@ -95,7 +96,7 @@ public class ProjectSelectForm implements IsWidget {
             new ListViewDragSource<ProjectDTO>(list1).setGroup("top");
             new ListViewDropTarget<ProjectDTO>(list1).setGroup("top");
 
-            con.add(list1, new HorizontalLayoutContainer.HorizontalLayoutData(.9, 0.8, new Margins(0)));
+            con.add(list1, new HorizontalLayoutContainer.HorizontalLayoutData(1, 1, new Margins(0)));
 
             list1.getSelectionModel().addSelectionHandler(new SelectionHandler<ProjectDTO>() {
                 @Override

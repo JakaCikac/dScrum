@@ -39,12 +39,26 @@ public class DScrum implements IsWidget, EntryPoint {
     private ContentPanel north;
     private ContentPanel west;
 
+    private static final int BORDER_LAYOUT_HEIGHT = 100;
+    private static final int BORDER_LAYOUT_WEIGHT = 234;
+    private static final int MARGIN_SIZE_OUTSIDE = 10;
+    private static final int MARGIN_SIZE_INSIDE = 5;
+
+    private BorderLayoutData northData = new BorderLayoutData(BORDER_LAYOUT_HEIGHT);
+    private BorderLayoutData westData = new BorderLayoutData(BORDER_LAYOUT_WEIGHT);
+    private BorderLayoutData eastData = new BorderLayoutData(BORDER_LAYOUT_WEIGHT);
+    private BorderLayoutData southData = new BorderLayoutData(BORDER_LAYOUT_HEIGHT);
+
+    public int getRootSize = (int) RootPanel.get().getOffsetWidth();
+    public int getWestSize = (int) westData.getSize();
+    public int getEastSize = (int) eastData.getSize();
+
     public Widget asWidget() {
         if (simpleContainer == null) {
             simpleContainer = new SimpleContainer();
 
             final BorderLayoutContainer con = new BorderLayoutContainer();
-            simpleContainer.add(con, new MarginData(10));
+            simpleContainer.add(con, new MarginData(MARGIN_SIZE_OUTSIDE));
             con.setBorders(false);
 
             center = new ContentPanel();
@@ -52,14 +66,13 @@ public class DScrum implements IsWidget, EntryPoint {
             south = new ContentPanel();
             north = new ContentPanel();
             west = new ContentPanel();
+
             FlowLayoutContainer fl = new FlowLayoutContainer();
             fl.getScrollSupport().setScrollMode(ScrollSupport.ScrollMode.AUTO);
             center.add(fl);
             /* TODO: ok, tole ne bo slo skoz, je treba cez v loginPanel in naprej poslat fl
                 ne center, in potem dodajat stvari na fl ... drugace je scroll no go
              */
-
-
 
             west.setCollapsible(false);
             west.setResize(false);
@@ -68,29 +81,28 @@ public class DScrum implements IsWidget, EntryPoint {
             LoginPanel lp = new LoginPanel(this, center, north, south, east, west,  service);
             center.add(lp.asWidget());
             center.setResize(false);
-
-            BorderLayoutData northData = new BorderLayoutData(100);
-            northData.setMargins(new Margins(8));
-            northData.setCollapsible(false);
-            northData.setSplit(false);
-
-            BorderLayoutData westData = new BorderLayoutData(150);
-            westData.setCollapsible(false);
-            westData.setSplit(false);
-            westData.setCollapseMini(false);
-            westData.setMargins(new Margins(0, 8, 0, 5));
-
             MarginData centerData = new MarginData();
 
-            BorderLayoutData eastData = new BorderLayoutData(150);
-            eastData.setMargins(new Margins(0, 5, 0, 8));
-            eastData.setCollapsible(false);
-            eastData.setSplit(false);
+            northData.setMargins(new Margins(MARGIN_SIZE_OUTSIDE));
+            northData.setSplit(false);
+            //northData.setCollapsible(false);
+            north.setHeaderVisible(false);
 
-            BorderLayoutData southData = new BorderLayoutData(100);
-            southData.setMargins(new Margins(8));
+            westData.setCollapsible(false);
+            westData.setSplit(false);
+            //westData.setCollapseMini(false); //omogoča resizanje
+            west.setHeaderVisible(false);
+            westData.setMargins(new Margins(0, MARGIN_SIZE_INSIDE, 0, MARGIN_SIZE_OUTSIDE));
+
+            eastData.setMargins(new Margins(0, MARGIN_SIZE_OUTSIDE, 0, MARGIN_SIZE_INSIDE));
+            eastData.setSplit(false);
+            //eastData.setCollapsible(false); //resize ON
+            east.setHeaderVisible(false);
+
+            southData.setMargins(new Margins(MARGIN_SIZE_OUTSIDE));
             southData.setCollapsible(false);
-            southData.setCollapseMini(false);
+            //southData.setCollapseMini(false);
+            south.setHeaderVisible(false);
 
             con.setNorthWidget(north, northData);
             con.setWestWidget(west, westData);
@@ -419,4 +431,10 @@ public class DScrum implements IsWidget, EntryPoint {
     public ContentPanel getNorth() {
         return this.north;
     }
+
+    public int getRootSize (){ return this.getRootSize; }
+
+    public int getWestSize (){ return this.getWestSize; }
+
+    public int getEastSize (){ return this.getEastSize; }
 }

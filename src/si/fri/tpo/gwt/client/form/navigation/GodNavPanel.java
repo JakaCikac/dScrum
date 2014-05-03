@@ -32,6 +32,9 @@ public class GodNavPanel implements IsWidget {
     private ContentPanel east, north, south;
     private FlowLayoutContainer con;
 
+    private static final int PANEL_WIDTH = 230;
+    private static final int PANEL_HEIGHT = 400;
+
     public GodNavPanel(ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, DScrumServiceAsync service) {
         this.service = service;
         this.center = center;
@@ -234,7 +237,7 @@ public class GodNavPanel implements IsWidget {
         west.setHeadingText("Project list");
         west.add(psf.asWidget());
 
-        panel.setWidth(160);
+        panel.setWidth(PANEL_WIDTH);
 
     }
 }
