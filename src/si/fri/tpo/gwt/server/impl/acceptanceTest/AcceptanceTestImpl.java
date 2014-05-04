@@ -2,9 +2,7 @@ package si.fri.tpo.gwt.server.impl.acceptanceTest;
 
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
-import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.server.jpa.AcceptanceTest;
-import si.fri.tpo.gwt.server.jpa.UserStory;
 import si.fri.tpo.gwt.server.proxy.ProxyManager;
 
 import java.util.ArrayList;
@@ -68,5 +66,30 @@ public class AcceptanceTestImpl {
             }
         }
         return Pair.of(true, insertedAcceptanceTestID);
+    }
+
+    public static Pair<Boolean, String> updateAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList) {
+        try {
+            for (AcceptanceTestDTO acceptanceTestDTO : acceptanceTestDTOList) {
+                try {
+                    AcceptanceTest acceptanceTest = ProxyManager.getAcceptanceTestProxy().findAcceptanceTest(acceptanceTestDTO.getAcceptanceTestId());
+                    acceptanceTest.setContent(acceptanceTestDTO.getContent());
+                    try {
+                        if (acceptanceTest == null)
+                            return Pair.of(false, "Data error.");
+                        ProxyManager.getAcceptanceTestProxy().edit(acceptanceTest);
+                    } catch (Exception e) {
+                        System.err.println("Error: " + e.getMessage());
+                        return Pair.of(false, e.getMessage());
+                    }
+                } catch (NullPointerException e) {
+                    saveAcceptanceTest(acceptanceTestDTO);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return Pair.of(false, e.getMessage());
+                }
+            }
+        } catch(Exception ex) {}
+        return Pair.of(true, "Acceptance tests should be updated.");
     }
 }

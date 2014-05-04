@@ -236,6 +236,11 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     public Pair<Boolean, List<Integer>> saveAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList) {
         return AcceptanceTestImpl.saveAcceptanceTestList(acceptanceTestDTOList);
     }
+
+    @Override
+    public Pair<Boolean, String> updateAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList) {
+        return AcceptanceTestImpl.updateAcceptanceTestList(acceptanceTestDTOList);
+    }
     // ACCEPTANCE TEST //
 
     // USER STORY //
@@ -255,9 +260,15 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     }
 
     @Override
-    public Pair<Boolean, String> saveTask(TaskDTO taskDTO, UserStoryDTO userStoryDTO) {
-        return TaskRegistrationServiceImpl.saveTask(taskDTO, userStoryDTO);
+    public Pair<Boolean, String> deleteUserStory(UserStoryDTO userStoryDTO) {
+        return UserStoryImpl.deleteUserStory(userStoryDTO);
     }
     // USER STORY //
 
+    // TASK //
+    @Override
+    public Pair<Boolean, String> saveTask(TaskDTO taskDTO, UserStoryDTO userStoryDTO) {
+        return TaskRegistrationServiceImpl.saveTask(taskDTO, userStoryDTO);
+    }
+    // TASK //
 }
