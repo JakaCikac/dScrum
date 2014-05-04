@@ -16,10 +16,7 @@ import com.sencha.gxt.widget.core.client.TabPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
-import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
-import com.sencha.gxt.widget.core.client.grid.ColumnModel;
-import com.sencha.gxt.widget.core.client.grid.Grid;
-import com.sencha.gxt.widget.core.client.grid.RowExpander;
+import com.sencha.gxt.widget.core.client.grid.*;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
@@ -30,6 +27,7 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,10 +40,10 @@ public class ProductBacklogForm implements IsWidget {
     private ContentPanel center, west, east, north, south;
     private DScrumServiceAsync service;
     private ListStore<UserStoryDTO> store;
-    private ListStore<UserStoryDTO> ufStore;
+    private ListStore<UserStoryDTO> ufNoSprintStore, ufSprintStore;
     private Grid<UserStoryDTO> grid;
-    private Grid<UserStoryDTO> ufGrid;
-    private TabPanel panel;
+    private Grid<UserStoryDTO> ufNoSprintGrid, ufSprintGrid;
+    private TabPanel tabPane;
 
     public ProductBacklogForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south) {
         this.service = service;
@@ -58,7 +56,7 @@ public class ProductBacklogForm implements IsWidget {
 
     @Override
     public Widget asWidget() {
-        if (panel == null) {
+        if (tabPane == null) {
 
             RowExpander<UserStoryDTO> expander = new RowExpander<UserStoryDTO>(new AbstractCell<UserStoryDTO>() {
                 @Override
@@ -95,7 +93,7 @@ public class ProductBacklogForm implements IsWidget {
                 public void onSelect(SelectEvent event) {
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
-                    UserStoryDTO p = ufStore.get(row);
+                    UserStoryDTO p = ufNoSprintStore.get(row);
                     if ( p.getSprint() == null ) {
                         UserStoryEditDialog sed = new UserStoryEditDialog(service, center, west, east, north, south, p);
                         sed.show();
@@ -112,7 +110,7 @@ public class ProductBacklogForm implements IsWidget {
                 public void onSelect(SelectEvent event) {
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
-                    UserStoryDTO p = ufStore.get(row);
+                    UserStoryDTO p = ufNoSprintStore.get(row);
                     if ( p.getSprint() == null ) {
                         performDeleteUserStory(p);
                     } else {
@@ -130,36 +128,66 @@ public class ProductBacklogForm implements IsWidget {
             l.add(businessValueCol);
             ColumnModel<UserStoryDTO> cm = new ColumnModel<UserStoryDTO>(l);
 
-            List<ColumnConfig<UserStoryDTO, ?>> ufl = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
-            ufl.add(expander);
-            ufl.add(nameCol);
-            ufl.add(priorityCol);
-            ufl.add(estimatedTimeCol);
-            ufl.add(businessValueCol);
-            ufl.add(ufEditColumn);
-            ufl.add(ufDeleteColumn);
-            ColumnModel<UserStoryDTO> ufcm = new ColumnModel<UserStoryDTO>(ufl);
+            List<ColumnConfig<UserStoryDTO, ?>> ufNSl = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
+            ufNSl.add(ufExpander);
+            ufNSl.add(nameCol);
+            ufNSl.add(priorityCol);
+            ufNSl.add(estimatedTimeCol);
+            ufNSl.add(businessValueCol);
+            ufNSl.add(ufEditColumn);
+            ufNSl.add(ufDeleteColumn);
+            ColumnModel<UserStoryDTO> ufNScm = new ColumnModel<UserStoryDTO>(ufNSl);
 
+            List<ColumnConfig<UserStoryDTO, ?>> ufSl = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
+            ufSl.add(ufExpander);
+            ufSl.add(nameCol);
+            ufSl.add(priorityCol);
+            ufSl.add(estimatedTimeCol);
+            ufSl.add(businessValueCol);
+            ColumnModel<UserStoryDTO> ufScm = new ColumnModel<UserStoryDTO>(ufSl);
 
             store= new ListStore<UserStoryDTO>(getModelKeyProvider());
-            ufStore= new ListStore<UserStoryDTO>(getModelKeyProvider());
+            ufNoSprintStore = new ListStore<UserStoryDTO>(getModelKeyProvider());
+            ufSprintStore = new ListStore<UserStoryDTO>(getModelKeyProvider());
             getStoryList();
 
-            panel = new TabPanel();
+            tabPane = new TabPanel();
 
             ContentPanel cp = new ContentPanel();
             cp.setHeaderVisible(false);
             cp.setPixelSize(850, 460);
             cp.addStyleName("margin-10");
-            ufGrid = new Grid<UserStoryDTO>(ufStore, ufcm);
-            ufGrid.getView().setAutoExpandColumn(nameCol);
-            ufGrid.setBorders(true);
-            ufGrid.getView().setStripeRows(true);
-            ufGrid.getView().setColumnLines(true);
-            ufGrid.getView().setForceFit(true);
-            ufExpander.initPlugin(ufGrid);
-            cp.setWidget(ufGrid);
-            panel.add(cp, "Unfinished User Stories");
+
+            // tp je zdej notranji panel, razdelit ga moras na dva, enega ki ima zgodbe v sprintu in enega ki jih nima
+
+            // tp.add(notInSprintGrid);
+            TabPanel tp = new TabPanel();
+            ContentPanel lol = new ContentPanel();
+            ufSprintGrid = new Grid<UserStoryDTO>(ufSprintStore, ufScm);
+            ufSprintGrid.getView().setAutoExpandColumn(nameCol);
+            ufSprintGrid.setBorders(true);
+            ufSprintGrid.getView().setStripeRows(true);
+            ufSprintGrid.getView().setColumnLines(true);
+            ufSprintGrid.getView().setForceFit(true);
+            ufExpander.initPlugin(ufSprintGrid);
+            lol.setWidget(ufSprintGrid);
+            tp.add(lol, "In Sprint");
+
+
+            // tp.add(inSprintGrid);
+            lol = new ContentPanel();
+            ufNoSprintGrid = new Grid<UserStoryDTO>(ufNoSprintStore, ufNScm);
+            ufNoSprintGrid.getView().setAutoExpandColumn(nameCol);
+            ufNoSprintGrid.setBorders(true);
+            ufNoSprintGrid.getView().setStripeRows(true);
+            ufNoSprintGrid.getView().setColumnLines(true);
+            ufNoSprintGrid.getView().setForceFit(true);
+            ufExpander.initPlugin(ufNoSprintGrid);
+            lol.setWidget(ufNoSprintGrid);
+            tp.add(lol, "Not in any sprint");
+
+            cp.add(tp);
+            tabPane.add(cp, "Unfinished User Stories");
 
             cp = new ContentPanel();
             cp.setHeaderVisible(false);
@@ -174,10 +202,10 @@ public class ProductBacklogForm implements IsWidget {
             grid.getView().setForceFit(true);
             expander.initPlugin(grid);
             cp.setWidget(grid);
-            panel.add(cp, "Finished User Stories");
+            tabPane.add(cp, "Finished User Stories");
 
         }
-        return panel;
+        return tabPane;
     }
 
     private void performDeleteUserStory(UserStoryDTO userStoryDTO) {
@@ -236,11 +264,21 @@ public class ProductBacklogForm implements IsWidget {
         AsyncCallback<List<UserStoryDTO>> callback = new AsyncCallback<List<UserStoryDTO>>() {
             @Override
             public void onSuccess(List<UserStoryDTO> result) {
+                store.clear();
+                ufNoSprintStore.clear();
                 for (UserStoryDTO usDTO : result) {
                     if (usDTO.getStatus().equals("Finished")) {
                         store.add(usDTO);
                     } else if (usDTO.getStatus().equals("Unfinished")){
-                        ufStore.add(usDTO);
+                        if (usDTO.getSprint() != null) {
+                            if (usDTO.getSprint().getStartDate().before(new Date()) && usDTO.getSprint().getEndDate().after(new Date()) || usDTO.getSprint().getStartDate().equals(new Date()) || usDTO.getSprint().getEndDate().equals(new Date())) {
+                                ufSprintStore.add(usDTO);
+                            } else {
+                                ufNoSprintStore.add(usDTO);
+                            }
+                        } else {
+                            ufNoSprintStore.add(usDTO);
+                        }
                     }
                 }
             }
