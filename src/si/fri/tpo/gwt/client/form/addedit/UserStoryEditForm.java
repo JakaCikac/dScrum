@@ -42,6 +42,7 @@ import si.fri.tpo.gwt.client.session.SessionInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by t13db on 30.4.2014.
@@ -260,6 +261,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
 
             acceptanceTestStore.clear();
             acceptanceTestStore.addAll(selectedUserStoryDTO.getAcceptanceTestList());
+            acceptanceTestCount = 1 + acceptanceTestStore.size();
         } else System.out.println("Guufdfudf");
 
 
@@ -342,45 +344,96 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
     // 4. te idje uporabis da nafilas user story in ga shranis
     // 5. ko service za user story shrani user story ti vrne id user storyja, da ga lahko das k projektu
     private void performUpdateAcceptanceTestAndUserStory(List<AcceptanceTestDTO> acceptanceTestDTOList, final UserStoryDTO userStoryDTO) {
-        AsyncCallback<Pair<Boolean, String>> updateAcceptanceTestList = new AsyncCallback<Pair<Boolean, String>>() {
+
+        final List<AcceptanceTestDTO> acceptanceTestsForSaving = new ArrayList<AcceptanceTestDTO>();
+        final List<AcceptanceTestDTO> acceptanceTestsForUpdating = new ArrayList<AcceptanceTestDTO>();
+
+        for (AcceptanceTestDTO acceptanceTestDTO : acceptanceTestDTOList) {
+            // ce ima story id null potem je ze v bazi in ga podaj metodi za updatanje, drugace ga podaj metodi za shranjevanje
+            if (acceptanceTestDTO.getUserStoryStoryId() == null) {
+                acceptanceTestsForSaving.add(acceptanceTestDTO);
+            } else {
+                acceptanceTestsForUpdating.add(acceptanceTestDTO);
+            }
+        }
+
+        // workflow: v save acceptance tests notr vgnezdi updatanje, s tem da updatanju podas le shranjene teste, shranjevanju pa le nove
+
+        AsyncCallback<Pair<Boolean, List<Integer>>> saveAcceptanceTestList = new AsyncCallback<Pair<Boolean, List<Integer>>>() {
             @Override
-            public void onSuccess(Pair<Boolean, String> result) {
+            public void onSuccess(Pair<Boolean, List<Integer>> result) {
                 if (result == null) {
-                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing acceptance test updating!");
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing acceptance test saving!");
                     amb2.show();
                 }
                 else if (!result.getFirst()) {
-                    AlertMessageBox amb2 = new AlertMessageBox("Error updating acceptance test!", result.getSecond());
+                    AlertMessageBox amb2 = new AlertMessageBox("Error saving acceptance test!", result.getSecond().toString());
                     amb2.show();
+                } else if (result.getSecond() == null) {
+                    errorMessage("Errorrrrrrrr", "Error while creating acceptance test in database!");
                 } else {
-                    AsyncCallback<Pair<Boolean, String>> updateUserStory = new AsyncCallback<Pair<Boolean, String>>() {
+                    if ( acceptanceTestsForSaving.size() == result.getSecond().size() ) {
+                        ListIterator litr = result.getSecond().listIterator();
+                        for (AcceptanceTestDTO acceptanceTestDTO : acceptanceTestsForSaving){
+                            if (litr.hasNext()) {
+                                acceptanceTestDTO.setAcceptanceTestId((Integer)litr.next());
+                            } else {
+                                errorMessage("Error saving acceptance test!", "There was an error while performing acceptance test saving!");
+                            }
+                        }
+                    } else {
+                        errorMessage("Error saving acceptance test!", "There was an error while performing acceptance test saving!");
+                    }
+                    // posodobi acceptance teste v bazi
+                    AsyncCallback<Pair<Boolean, String>> updateAcceptanceTestList = new AsyncCallback<Pair<Boolean, String>>() {
                         @Override
                         public void onSuccess(Pair<Boolean, String> result) {
+
                             if (result == null) {
-                                AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing user story updating!");
+                                AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing acceptance test updating!");
                                 amb2.show();
                             }
                             else if (!result.getFirst()) {
-                                AlertMessageBox amb2 = new AlertMessageBox("Error updating user story!", result.getSecond());
+                                AlertMessageBox amb2 = new AlertMessageBox("Error updating acceptance test!", result.getSecond());
                                 amb2.show();
-                            }
-                            else {
-                                MessageBox amb3 = new MessageBox("Message update User Story", result.getSecond());
-                                amb3.show();
-                                UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
-                                center.add(userHomeForm.asWidget());
-                                west.clear();
-                                east.clear();
-                                SessionInfo.projectDTO = null;
-                                if (SessionInfo.userDTO.isAdmin()){
-                                    AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
-                                    east.add(adminNavPanel.asWidget());
-                                } else {
-                                    UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east, north, south);
-                                    east.add(userNavPanel.asWidget());
-                                }
-                                ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
-                                west.add(psf.asWidget());
+                            } else {
+                                // posodobi se user storyje
+                                AsyncCallback<Pair<Boolean, String>> updateUserStory = new AsyncCallback<Pair<Boolean, String>>() {
+                                    @Override
+                                    public void onSuccess(Pair<Boolean, String> result) {
+                                        if (result == null) {
+                                            AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing user story updating!");
+                                            amb2.show();
+                                        }
+                                        else if (!result.getFirst()) {
+                                            AlertMessageBox amb2 = new AlertMessageBox("Error updating user story!", result.getSecond());
+                                            amb2.show();
+                                        }
+                                        else {
+                                            MessageBox amb3 = new MessageBox("Message update User Story", result.getSecond());
+                                            amb3.show();
+                                            UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
+                                            center.add(userHomeForm.asWidget());
+                                            west.clear();
+                                            east.clear();
+                                            SessionInfo.projectDTO = null;
+                                            if (SessionInfo.userDTO.isAdmin()){
+                                                AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
+                                                east.add(adminNavPanel.asWidget());
+                                            } else {
+                                                UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east, north, south);
+                                                east.add(userNavPanel.asWidget());
+                                            }
+                                            ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
+                                            west.add(psf.asWidget());
+                                        }
+                                    }
+                                    @Override
+                                    public void onFailure(Throwable caught) {
+                                        Window.alert(caught.getMessage());
+                                    }
+                                };
+                                service.updateUserStory(userStoryDTO, updateUserStory);
                             }
                         }
                         @Override
@@ -388,7 +441,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
                             Window.alert(caught.getMessage());
                         }
                     };
-                    service.updateUserStory(userStoryDTO, updateUserStory);
+                    service.updateAcceptanceTestList(acceptanceTestsForUpdating, updateAcceptanceTestList);
                 }
             }
             @Override
@@ -396,7 +449,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
                 Window.alert(caught.getMessage());
             }
         };
-        service.updateAcceptanceTestList(acceptanceTestDTOList, updateAcceptanceTestList);
+        service.saveAcceptanceTestList(acceptanceTestsForSaving, saveAcceptanceTestList);
     }
 
     private void setEnabledUserStoryGUIComponents(boolean enabled) {

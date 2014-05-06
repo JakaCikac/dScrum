@@ -82,8 +82,6 @@ public class AcceptanceTestImpl {
                         System.err.println("Error: " + e.getMessage());
                         return Pair.of(false, e.getMessage());
                     }
-                } catch (NullPointerException e) {
-                    saveAcceptanceTest(acceptanceTestDTO);
                 } catch (Exception e) {
                     e.printStackTrace();
                     return Pair.of(false, e.getMessage());
