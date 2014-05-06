@@ -241,6 +241,11 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     public Pair<Boolean, String> updateAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList) {
         return AcceptanceTestImpl.updateAcceptanceTestList(acceptanceTestDTOList);
     }
+
+    @Override
+    public Pair<Boolean, String> deleteAcceptanceTest(AcceptanceTestDTO acceptanceTestDTO) {
+        return AcceptanceTestImpl.deleteAcceptanceTest(acceptanceTestDTO);
+    }
     // ACCEPTANCE TEST //
 
     // USER STORY //

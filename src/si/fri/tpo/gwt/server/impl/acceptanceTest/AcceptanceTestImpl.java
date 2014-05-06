@@ -13,7 +13,9 @@ import java.util.List;
  */
 public class AcceptanceTestImpl {
     public static Pair<Boolean, Integer> saveAcceptanceTest(AcceptanceTestDTO acceptanceTestDTO) {
+
         int insertedAcceptanceTestID = -1;
+
         try {
             AcceptanceTest acceptanceTest = new AcceptanceTest();
             acceptanceTest.setContent(acceptanceTestDTO.getContent());
@@ -41,7 +43,9 @@ public class AcceptanceTestImpl {
     }
 
     public static Pair<Boolean, List<Integer>> saveAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList) {
+
         List<Integer> insertedAcceptanceTestID = new ArrayList<Integer>();
+
         for (AcceptanceTestDTO acceptanceTestDTO : acceptanceTestDTOList) {
             try {
                 AcceptanceTest acceptanceTest = new AcceptanceTest();
@@ -53,7 +57,7 @@ public class AcceptanceTestImpl {
                     if (id == -1) {
                         System.out.println("ob vstavljanju s kontrolerjem je AcceptanceTest id ... -1 :(");
                     } else {
-                        System.out.println(id);
+                        System.out.println("id save acc test: " + id);
                         insertedAcceptanceTestID.add(id);
                     }
                 } catch (Exception e) {
@@ -70,6 +74,7 @@ public class AcceptanceTestImpl {
 
     public static Pair<Boolean, String> updateAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList) {
         try {
+            System.out.println("Number of accTest to save: " + acceptanceTestDTOList.size());
             for (AcceptanceTestDTO acceptanceTestDTO : acceptanceTestDTOList) {
                 try {
                     AcceptanceTest acceptanceTest = ProxyManager.getAcceptanceTestProxy().findAcceptanceTest(acceptanceTestDTO.getAcceptanceTestId());
@@ -89,5 +94,17 @@ public class AcceptanceTestImpl {
             }
         } catch(Exception ex) {}
         return Pair.of(true, "Acceptance tests should be updated.");
+    }
+
+    public static Pair<Boolean, String> deleteAcceptanceTest(AcceptanceTestDTO acceptanceTestDTO) {
+        try {
+            if (acceptanceTestDTO == null)
+                return Pair.of(false, "Data error!");
+            ProxyManager.getAcceptanceTestProxy().destroy(acceptanceTestDTO.getAcceptanceTestId());
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            return Pair.of(false, e.getMessage());
+        }
+        return Pair.of(true, "Acceptance test has been deleted successfully.");
     }
 }

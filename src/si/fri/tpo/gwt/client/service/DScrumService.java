@@ -104,6 +104,8 @@ public interface DScrumService extends RemoteService {
     public Pair<Boolean, List<Integer>> saveAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList);
 
     public Pair<Boolean, String> updateAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList);
+
+    public Pair<Boolean, String> deleteAcceptanceTest(AcceptanceTestDTO selectedItem);
     // ACCEPTANCE TEST //
 
     // USER STORY //
@@ -118,6 +120,7 @@ public interface DScrumService extends RemoteService {
 
     // TASK //
     public Pair<Boolean, String> saveTask(TaskDTO taskDTO, UserStoryDTO userStoryDTO);
+
     // TASK //
 
 }

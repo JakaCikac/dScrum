@@ -205,6 +205,28 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
         acceptanceTestDeleteButton = new TextButton("Delete selected row", new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
+                AsyncCallback<Pair<Boolean, String>> deleteAcceptanceTest = new AsyncCallback<Pair<Boolean, String>>() {
+                    @Override
+                    public void onSuccess(Pair<Boolean, String> result) {
+                        if (result == null) {
+                            AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing acceptance test destruction!");
+                            amb2.show();
+                        }
+                        else if (!result.getFirst()) {
+                            AlertMessageBox amb2 = new AlertMessageBox("Error destroying acceptance test!", result.getSecond());
+                            amb2.show();
+                        }
+                        else {
+                            MessageBox amb3 = new MessageBox("Message destroy acceptance test", result.getSecond());
+                            amb3.show();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        Window.alert(caught.getMessage());
+                    }
+                };
+                service.deleteAcceptanceTest(acceptanceTestGrid.getSelectionModel().getSelectedItem(), deleteAcceptanceTest);
                 acceptanceTestStore.remove(acceptanceTestGrid.getSelectionModel().getSelectedItem());
             }
         });
@@ -262,7 +284,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
             acceptanceTestStore.clear();
             acceptanceTestStore.addAll(selectedUserStoryDTO.getAcceptanceTestList());
             acceptanceTestCount = 1 + acceptanceTestStore.size();
-        } else System.out.println("Guufdfudf");
+        } else System.out.println("Jaka");
 
 
         // initialize driver
@@ -350,10 +372,10 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
 
         for (AcceptanceTestDTO acceptanceTestDTO : acceptanceTestDTOList) {
             // ce ima story id null potem je ze v bazi in ga podaj metodi za updatanje, drugace ga podaj metodi za shranjevanje
-            if (acceptanceTestDTO.getUserStoryStoryId() == null) {
-                acceptanceTestsForSaving.add(acceptanceTestDTO);
-            } else {
+            if (acceptanceTestDTO.getUserStoryStoryId() != null) {
                 acceptanceTestsForUpdating.add(acceptanceTestDTO);
+            } else {
+                acceptanceTestsForSaving.add(acceptanceTestDTO);
             }
         }
 
@@ -574,6 +596,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
             AcceptanceTestDTO temp = new AcceptanceTestDTO();
             temp.setAcceptanceTestId(accTestDTO.getAcceptanceTestId());
             temp.setContent(accTestDTO.getContent());
+            temp.setUserStoryStoryId(accTestDTO.getUserStoryStoryId());
             returnTests.add(temp);
         }
         return returnTests;
