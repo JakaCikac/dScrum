@@ -93,13 +93,8 @@ public class ProductBacklogForm implements IsWidget {
                 public void onSelect(SelectEvent event) {
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
-<<<<<<< HEAD
-                    UserStoryDTO p = ufStore.get(row);
-                    if ( p.getSprint() == null) {
-=======
                     UserStoryDTO p = ufNoSprintStore.get(row);
                     if ( p.getSprint() == null ) {
->>>>>>> fixing_backlog
                         UserStoryEditDialog sed = new UserStoryEditDialog(service, center, west, east, north, south, p);
                         sed.show();
                     } else {
@@ -133,20 +128,6 @@ public class ProductBacklogForm implements IsWidget {
             l.add(businessValueCol);
             ColumnModel<UserStoryDTO> cm = new ColumnModel<UserStoryDTO>(l);
 
-<<<<<<< HEAD
-            List<ColumnConfig<UserStoryDTO, ?>> ufl = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
-            ufl.add(expander);
-            ufl.add(nameCol);
-            ufl.add(priorityCol);
-            ufl.add(estimatedTimeCol);
-            ufl.add(businessValueCol);
-            if (isProductOwner() || isScrumMaster()){
-                ufl.add(ufEditColumn);
-                ufl.add(ufDeleteColumn);
-            }
-            ColumnModel<UserStoryDTO> ufcm = new ColumnModel<UserStoryDTO>(ufl);
-
-=======
             List<ColumnConfig<UserStoryDTO, ?>> ufNSl = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
             ufNSl.add(ufExpander);
             ufNSl.add(nameCol);
@@ -164,7 +145,6 @@ public class ProductBacklogForm implements IsWidget {
             ufSl.add(estimatedTimeCol);
             ufSl.add(businessValueCol);
             ColumnModel<UserStoryDTO> ufScm = new ColumnModel<UserStoryDTO>(ufSl);
->>>>>>> fixing_backlog
 
             store= new ListStore<UserStoryDTO>(getModelKeyProvider());
             ufNoSprintStore = new ListStore<UserStoryDTO>(getModelKeyProvider());
