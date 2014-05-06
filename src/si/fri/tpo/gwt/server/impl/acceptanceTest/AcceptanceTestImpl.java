@@ -69,7 +69,6 @@ public class AcceptanceTestImpl {
 
     public static Pair<Boolean, String> updateAcceptanceTestList(List<AcceptanceTestDTO> acceptanceTestDTOList) {
         try {
-            System.out.println("Number of accTest to save: " + acceptanceTestDTOList.size());
             for (AcceptanceTestDTO acceptanceTestDTO : acceptanceTestDTOList) {
                 try {
                     AcceptanceTest acceptanceTest = ProxyManager.getAcceptanceTestProxy().findAcceptanceTest(acceptanceTestDTO.getAcceptanceTestId());

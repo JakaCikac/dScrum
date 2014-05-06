@@ -23,7 +23,9 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.*;
 import com.sencha.gxt.widget.core.client.form.FormPanel;
 import com.sencha.gxt.widget.core.client.form.TextArea;
+import com.sencha.gxt.widget.core.client.form.validator.MaxNumberValidator;
 import com.sencha.gxt.widget.core.client.form.validator.MinLengthValidator;
+import com.sencha.gxt.widget.core.client.form.validator.MinNumberValidator;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
@@ -71,6 +73,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
     private Grid<AcceptanceTestDTO> acceptanceTestGrid;
     private TextButton acceptanceTestDeleteButton;
     private TextButton acceptanceTestCreateButton;
+    private DoubleField estimateTimeDoubleField;
 
     // vars
     static private int acceptanceTestCount;
@@ -78,6 +81,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
     private ListStoreEditor<AcceptanceTestDTO> editAcceptanceTestStore;
     private List<AcceptanceTestDTO> acceptanceTestDTOList;
     private ToggleGroup userStoryPriorityToggleGroup;
+    private UserStoryEditDialog used;
 
     public void setSelectedUserStoryDTO(UserStoryDTO selectedUserStoryDTO) {
         this.selectedUserStoryDTO = selectedUserStoryDTO;
@@ -85,13 +89,14 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
 
     private UserStoryDTO selectedUserStoryDTO;
 
-    public UserStoryEditForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, UserStoryDTO usDTO) {
+    public UserStoryEditForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, UserStoryDTO usDTO, UserStoryEditDialog used) {
         this.service = service;
         this.center = center;
         this.west = west;
         this.east = east;
         this.acceptanceTestCount = 0;
         this.selectedUserStoryDTO = usDTO;
+        this.used = used;
         setSelectedUserStoryDTO(this.selectedUserStoryDTO);
     }
 
@@ -164,6 +169,15 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
         userStoryPriorityToggleGroup.add(shouldHave);
         userStoryPriorityToggleGroup.add(couldHave);
         userStoryPriorityToggleGroup.add(wontHave);
+
+        // prepare estimate time field
+        estimateTimeDoubleField = new DoubleField();
+        estimateTimeDoubleField.setAllowNegative(false);
+        estimateTimeDoubleField.setAllowBlank(true);
+        estimateTimeDoubleField.addValidator(new MinNumberValidator<Double>(0.0));
+        estimateTimeDoubleField.addValidator(new MaxNumberValidator<Double>(365.0));
+        verticalLayoutContainer.add(new FieldLabel(estimateTimeDoubleField, "Estimated time "), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        estimateTimeDoubleField.setEnabled(false);
 
         // prepare acceptance tests grid
         acceptanceTestsContainer = new FlowPanel();
@@ -249,6 +263,12 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
             userStoryName.setValue(selectedUserStoryDTO.getName());
             userStoryContent.setValue(selectedUserStoryDTO.getContent());
             userStoryBusinessValue.setValue(selectedUserStoryDTO.getBusinessValue());
+            if (selectedUserStoryDTO.getSprint() == null) {
+                estimateTimeDoubleField.setEnabled(true);
+                if (selectedUserStoryDTO.getEstimateTime() != null) {
+                    estimateTimeDoubleField.setValue(selectedUserStoryDTO.getEstimateTime());
+                }
+            }
             int priorityID = selectedUserStoryDTO.getPriorityPriorityId().getPriorityId();
             switch (priorityID) {
                 case 1:
@@ -334,8 +354,14 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
                 userStoryDTO.setStatus(selectedUserStoryDTO.getStatus());
                 userStoryDTO.setProjectProjectId(SessionInfo.projectDTO);
                 userStoryDTO.setSprint(selectedUserStoryDTO.getSprint());
-                userStoryDTO.setEstimateTime(selectedUserStoryDTO.getEstimateTime()); // TODO: GUI komponenta za spreminjanje?
 
+                if (estimateTimeDoubleField.getValue() != null) {
+                    double estimatedTime = estimateTimeDoubleField.getValue();
+                    estimatedTime = Math.round(estimatedTime * 10.0) / 10.0;
+                    userStoryDTO.setEstimateTime(estimatedTime);
+                } else {
+                    userStoryDTO.setEstimateTime(null);
+                }
                 driver.edit(userStoryDTO);
 
                 userStoryDTO = driver.flush();
@@ -443,6 +469,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
                                             }
                                             ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                                             west.add(psf.asWidget());
+                                            used.hide();
                                         }
                                     }
                                     @Override

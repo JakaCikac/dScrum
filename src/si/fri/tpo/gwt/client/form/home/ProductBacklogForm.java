@@ -96,7 +96,7 @@ public class ProductBacklogForm implements IsWidget {
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
                     UserStoryDTO p = ufStore.get(row);
-                    if ( p.getSprint() == null ) {
+                    if ( p.getSprint() == null) {
                         UserStoryEditDialog sed = new UserStoryEditDialog(service, center, west, east, north, south, p);
                         sed.show();
                     } else {
@@ -136,8 +136,10 @@ public class ProductBacklogForm implements IsWidget {
             ufl.add(priorityCol);
             ufl.add(estimatedTimeCol);
             ufl.add(businessValueCol);
-            ufl.add(ufEditColumn);
-            ufl.add(ufDeleteColumn);
+            if (isProductOwner() || isScrumMaster()){
+                ufl.add(ufEditColumn);
+                ufl.add(ufDeleteColumn);
+            }
             ColumnModel<UserStoryDTO> ufcm = new ColumnModel<UserStoryDTO>(ufl);
 
 
@@ -178,6 +180,20 @@ public class ProductBacklogForm implements IsWidget {
 
         }
         return panel;
+    }
+
+    private boolean isProductOwner() {
+        if (SessionInfo.projectDTO.getTeamTeamId().getProductOwnerId() == SessionInfo.userDTO.getUserId()){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isScrumMaster() {
+        if (SessionInfo.projectDTO.getTeamTeamId().getScrumMasterId() == SessionInfo.userDTO.getUserId()){
+            return true;
+        }
+        return false;
     }
 
     private void performDeleteUserStory(UserStoryDTO userStoryDTO) {
