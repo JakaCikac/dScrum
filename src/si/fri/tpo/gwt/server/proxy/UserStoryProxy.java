@@ -24,7 +24,7 @@ public class UserStoryProxy extends UserStoryJpaController{
             em = getEntityManager();
             List<UserStory> p;
             try {
-                Query query =  em.createNativeQuery("SELECT * FROM t13_2014.user_story WHERE project_project_id IN (SELECT project_project_id FROM t13_2014.project WHERE project_id = ?)", UserStory.class);
+                Query query =  em.createNativeQuery("SELECT * FROM t13_2014.user_story WHERE project_project_id = ?", UserStory.class);
                 query.setParameter(1, id);
                 p = query.getResultList();
                 return p;
