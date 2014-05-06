@@ -315,17 +315,17 @@ public class UserStoryRegistrationForm implements IsWidget, Editor<UserStoryDTO>
                     }
                     //TODO: Possible error (getter/setter)
                     userStoryDTO.setAcceptanceTestList(acceptanceTestDTOList);
-                    AsyncCallback<Pair<Boolean, Integer>> saveUserStory = new AsyncCallback<Pair<Boolean, Integer>>() {
+                    AsyncCallback<Pair<Boolean, String>> saveUserStory = new AsyncCallback<Pair<Boolean, String>>() {
                         @Override
-                        public void onSuccess(Pair<Boolean, Integer> result) {
+                        public void onSuccess(Pair<Boolean, String> result) {
                             if (result == null) {
                                 AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing user story saving!");
                                 amb2.show();
                             } else if (!result.getFirst()) {
-                                AlertMessageBox amb2 = new AlertMessageBox("Error saving user story!", result.getSecond().toString());
+                                AlertMessageBox amb2 = new AlertMessageBox("Error saving user story!", result.getSecond());
                                 amb2.show();
                             } else {
-                                MessageBox amb3 = new MessageBox("Message save User Story", result.getSecond().toString());
+                                MessageBox amb3 = new MessageBox("Message save User Story", result.getSecond());
                                 amb3.show();
                                 UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
                                 center.add(userHomeForm.asWidget());

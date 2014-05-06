@@ -19,10 +19,6 @@ public class AcceptanceTestImpl {
         try {
             AcceptanceTest acceptanceTest = new AcceptanceTest();
             acceptanceTest.setContent(acceptanceTestDTO.getContent());
-            //UserStoryDTO userStoryDTO = acceptanceTestDTO.getUserStoryStoryId();
-            //UserStory userStory = new UserStory();
-            //userStory.setStoryId(userStoryDTO.getStoryId());
-            //acceptanceTest.setUserStoryStoryId();
             try {
                 if (acceptanceTest == null)
                     return Pair.of(false, -1);
@@ -57,7 +53,6 @@ public class AcceptanceTestImpl {
                     if (id == -1) {
                         System.out.println("ob vstavljanju s kontrolerjem je AcceptanceTest id ... -1 :(");
                     } else {
-                        System.out.println("id save acc test: " + id);
                         insertedAcceptanceTestID.add(id);
                     }
                 } catch (Exception e) {

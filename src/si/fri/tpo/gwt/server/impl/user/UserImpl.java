@@ -81,7 +81,6 @@ public class UserImpl {
                 return userDTO;
             } else return null;
         } catch (Exception e) {
-                System.out.println("Exception while fetching user by username");
                 System.err.println("Error: " + e.getMessage());
         }
         return null;
@@ -124,7 +123,6 @@ public class UserImpl {
                 System.err.println("Error: " + e.getMessage());
                 return Pair.of(false, e.getMessage());
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             return Pair.of(false, e.getMessage());
@@ -141,7 +139,6 @@ public class UserImpl {
                 return userDTO;
             } else return null;
         } catch (Exception e) {
-            System.out.println("Exception while fetching user by id");
             System.err.println("Error: " + e.getMessage());
         }
         return null;

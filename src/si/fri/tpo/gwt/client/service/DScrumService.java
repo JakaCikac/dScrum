@@ -109,7 +109,7 @@ public interface DScrumService extends RemoteService {
     // ACCEPTANCE TEST //
 
     // USER STORY //
-    public Pair<Boolean, Integer> saveUserStory(UserStoryDTO userStoryDTO, ProjectDTO projectDTO);
+    public Pair<Boolean, String> saveUserStory(UserStoryDTO userStoryDTO, ProjectDTO projectDTO);
 
     public List<UserStoryDTO> findAllStoriesByProject(ProjectDTO projectDTO);
 

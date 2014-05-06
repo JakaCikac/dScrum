@@ -68,7 +68,7 @@ public class UserStoryImpl {
         return userStoryDTOList;
     }
 
-    public static Pair<Boolean, Integer> saveUserStory(UserStoryDTO userStoryDTO) {
+    public static Pair<Boolean, String> saveUserStory(UserStoryDTO userStoryDTO) {
 
         UserStory userStory = new UserStory();
         try {
@@ -84,7 +84,7 @@ public class UserStoryImpl {
 
             Project project = ProxyManager.getProjectProxy().findProjectByName(userStoryDTO.getProjectProjectId().getName());
             if (project == null){
-                return Pair.of(false, -1);
+                return Pair.of(false, "Project for this user story does not exist!");
             } else {
                 userStory.setProjectProjectId(project);
             }
@@ -100,19 +100,19 @@ public class UserStoryImpl {
 
             try {
                 if (userStory == null)
-                    return Pair.of(false, -2);
+                    return Pair.of(false, "Data error!");
 
                 ProxyManager.getUserStoryProxy().create(userStory);
 
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
-                return Pair.of(false, -3);
+                return Pair.of(false, "Error creating user story!");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return Pair.of(false, -4);
+            return Pair.of(false, "Unknown error!");
         }
-        return Pair.of(true, 0);
+        return Pair.of(true, "User story was saved successfully! :)");
     }
 
     public static Pair<Boolean, String> updateUserStory(UserStoryDTO userStoryDTO) {

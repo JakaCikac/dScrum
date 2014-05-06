@@ -67,7 +67,6 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
     private Radio shouldHave;
     private Radio mustHave;
     private Radio wontHave;
-    private Grid<UserStoryDTO> userStoryGrid;
     private TextButton submitButton;
     private Grid<AcceptanceTestDTO> acceptanceTestGrid;
     private TextButton acceptanceTestDeleteButton;
@@ -76,11 +75,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
     // vars
     static private int acceptanceTestCount;
     private ListStore<AcceptanceTestDTO> acceptanceTestStore;
-    private ListStore<UserStoryDTO> userStoryStore;
-    private ColumnModel<UserStoryDTO> userStoryColumnModel;
-    private ValueProvider<? super UserStoryDTO, String> priorityValue;
     private ListStoreEditor<AcceptanceTestDTO> editAcceptanceTestStore;
-    private ListStoreEditor<UserStoryDTO> editUserStoryStore;
     private List<AcceptanceTestDTO> acceptanceTestDTOList;
     private ToggleGroup userStoryPriorityToggleGroup;
 
@@ -489,60 +484,6 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
         acceptanceTestDeleteButton.setEnabled(enabled);
     }
 
-    private ValueProvider<UserStoryDTO, String> getUserStoryName() {
-        ValueProvider<UserStoryDTO, String> userStoryNameValueProvider = new ValueProvider<UserStoryDTO, String>() {
-            @Override
-            public String getValue(UserStoryDTO object) {
-                return object.getName();
-            }
-            @Override
-            public void setValue(UserStoryDTO object, String value) {
-
-            }
-            @Override
-            public String getPath() {
-                return null;
-            }
-        };
-        return userStoryNameValueProvider;
-    }
-
-    private ValueProvider<UserStoryDTO, Integer> getBusinessValue() {
-        ValueProvider<UserStoryDTO, Integer> userStoryBusinessValueProvider = new ValueProvider<UserStoryDTO, Integer>() {
-            @Override
-            public Integer getValue(UserStoryDTO object) {
-                return object.getBusinessValue();
-            }
-            @Override
-            public void setValue(UserStoryDTO object, Integer value) {
-
-            }
-            @Override
-            public String getPath() {
-                return null;
-            }
-        };
-        return userStoryBusinessValueProvider;
-    }
-
-    private ValueProvider<UserStoryDTO, String> getPriorityValue() {
-        ValueProvider<UserStoryDTO, String> userStoryPriorityValueProvider = new ValueProvider<UserStoryDTO, String>() {
-            @Override
-            public String getValue(UserStoryDTO object) {
-                return object.getPriorityPriorityId().getName();
-            }
-            @Override
-            public void setValue(UserStoryDTO object, String value) {
-
-            }
-            @Override
-            public String getPath() {
-                return null;
-            }
-        };
-        return userStoryPriorityValueProvider;
-    }
-
     private ValueProvider<AcceptanceTestDTO, String> getAcceptanceTestContentValue() {
         ValueProvider<AcceptanceTestDTO, String> acceptanceTestContentProvider = new ValueProvider<AcceptanceTestDTO, String>() {
             @Override
@@ -572,16 +513,6 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
         return mkp;
     }
 
-    private ModelKeyProvider<UserStoryDTO> getUserStoryModelKeyProvider() {
-        ModelKeyProvider<UserStoryDTO> mkp = new ModelKeyProvider<UserStoryDTO>() {
-            @Override
-            public String getKey(UserStoryDTO item) {
-                return item.getStoryId().toString();
-            }
-        };
-        return mkp;
-    }
-
     private void errorMessage(String s, String s1) {
         AlertMessageBox amb = new AlertMessageBox(s, s1);
         amb.show();
@@ -597,32 +528,6 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
             temp.setAcceptanceTestId(accTestDTO.getAcceptanceTestId());
             temp.setContent(accTestDTO.getContent());
             temp.setUserStoryStoryId(accTestDTO.getUserStoryStoryId());
-            returnTests.add(temp);
-        }
-        return returnTests;
-    }
-
-    public List<UserStoryDTO> getUserStoryDTOList() {
-        List<UserStoryDTO> returnTests = new ArrayList<UserStoryDTO>();
-        for (int i = 0; i < userStoryStore.getAll().size(); i++) {
-            userStoryStore.get(i).setContent(userStoryGrid.getView().getCell(i,1).getInnerText());
-        }
-        for (UserStoryDTO userStoryDTO : userStoryStore.getAll()) {
-
-            UserStoryDTO temp = new UserStoryDTO();
-
-            temp.setStoryId(userStoryDTO.getStoryId());
-            temp.setBusinessValue(userStoryDTO.getBusinessValue());
-            temp.setName(userStoryDTO.getName());
-            temp.setPriorityPriorityId(userStoryDTO.getPriorityPriorityId());
-            temp.setAcceptanceTestList(userStoryDTO.getAcceptanceTestList());
-            temp.setContent(userStoryDTO.getContent());
-            temp.setStatus(userStoryDTO.getStatus());
-            temp.setEstimateTime(userStoryDTO.getEstimateTime());
-            temp.setProjectProjectId(userStoryDTO.getProjectProjectId());
-            temp.setSprint(userStoryDTO.getSprint());
-            temp.setTaskList(userStoryDTO.getTaskList());
-
             returnTests.add(temp);
         }
         return returnTests;

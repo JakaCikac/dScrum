@@ -250,7 +250,7 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
 
     // USER STORY //
     @Override
-    public Pair<Boolean, Integer> saveUserStory(UserStoryDTO userStoryDTO, ProjectDTO projectDTO) {
+    public Pair<Boolean, String> saveUserStory(UserStoryDTO userStoryDTO, ProjectDTO projectDTO) {
         return UserStoryServiceImpl.saveUserStory(userStoryDTO, projectDTO);
     }
 
