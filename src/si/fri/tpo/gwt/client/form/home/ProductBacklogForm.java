@@ -82,7 +82,7 @@ public class ProductBacklogForm implements IsWidget {
 
             ColumnConfig<UserStoryDTO, String> nameCol = new ColumnConfig<UserStoryDTO, String>(getNameValue(), 200, "Name");
             ColumnConfig<UserStoryDTO, String> priorityCol = new ColumnConfig<UserStoryDTO, String>(getPriorityValue(), 100, "Priority");
-            ColumnConfig<UserStoryDTO, Double> estimatedTimeCol = new ColumnConfig<UserStoryDTO, Double>(getEstimatedTimeValue(), 125, "Estimated Time (Pt)");
+            ColumnConfig<UserStoryDTO, String> estimatedTimeCol = new ColumnConfig<UserStoryDTO, String>(getEstimatedTimeValue(), 125, "Estimated Time (Pt)");
             ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 30, "Business Value");
             ColumnConfig<UserStoryDTO, String> ufEditColumn = new ColumnConfig<UserStoryDTO, String>(getEditValue(), 80, "Edit");
             ColumnConfig<UserStoryDTO, String> ufDeleteColumn = new ColumnConfig<UserStoryDTO, String>(getDeleteValue(), 80, "Delete");
@@ -318,16 +318,16 @@ public class ProductBacklogForm implements IsWidget {
         return vpn;
     }
 
-    private ValueProvider<UserStoryDTO, Double> getEstimatedTimeValue() {
-        ValueProvider<UserStoryDTO, Double> vpn = new ValueProvider<UserStoryDTO, Double>() {
+    private ValueProvider<UserStoryDTO, String> getEstimatedTimeValue() {
+        ValueProvider<UserStoryDTO, String> vpn = new ValueProvider<UserStoryDTO, String>() {
             @Override
-            public Double getValue(UserStoryDTO object) {
+            public String getValue(UserStoryDTO object) {
                 if(object.getEstimateTime() != null)
-                    return object.getEstimateTime().doubleValue();
-                else return 0.0;
+                    return object.getEstimateTime().toString();
+                else return "/";
             }
             @Override
-            public void setValue(UserStoryDTO object, Double value) {
+            public void setValue(UserStoryDTO object, String value) {
             }
             @Override
             public String getPath() {
