@@ -81,11 +81,11 @@ public class ProductBacklogForm implements IsWidget {
             });
 
             ColumnConfig<UserStoryDTO, String> nameCol = new ColumnConfig<UserStoryDTO, String>(getNameValue(), 200, "Name");
-            ColumnConfig<UserStoryDTO, String> priorityCol = new ColumnConfig<UserStoryDTO, String>(getPriorityValue(), 100, "Priority");
-            ColumnConfig<UserStoryDTO, String> estimatedTimeCol = new ColumnConfig<UserStoryDTO, String>(getEstimatedTimeValue(), 125, "Estimated Time (Pt)");
-            ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 30, "Business Value");
+            ColumnConfig<UserStoryDTO, String> priorityCol = new ColumnConfig<UserStoryDTO, String>(getPriorityValue(), 70, "Priority");
+            ColumnConfig<UserStoryDTO, String> estimatedTimeCol = new ColumnConfig<UserStoryDTO, String>(getEstimatedTimeValue(), 120, "Estimated Time (Pt)");
+            ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 100, "Business Value");
             ColumnConfig<UserStoryDTO, String> ufEditColumn = new ColumnConfig<UserStoryDTO, String>(getEditValue(), 80, "Edit");
-            ColumnConfig<UserStoryDTO, String> ufDeleteColumn = new ColumnConfig<UserStoryDTO, String>(getDeleteValue(), 80, "Delete");
+            ColumnConfig<UserStoryDTO, String> ufDeleteColumn = new ColumnConfig<UserStoryDTO, String>(getDeleteValue(), 110, "Delete");
 
             TextButtonCell ufEditButton = new TextButtonCell();
             ufEditButton.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -160,9 +160,21 @@ public class ProductBacklogForm implements IsWidget {
 
             // tp je zdej notranji panel, razdelit ga moras na dva, enega ki ima zgodbe v sprintu in enega ki jih nima
 
-            // tp.add(notInSprintGrid);
+            // tp.add(inSprintGrid);
             TabPanel tp = new TabPanel();
             ContentPanel lol = new ContentPanel();
+            ufNoSprintGrid = new Grid<UserStoryDTO>(ufNoSprintStore, ufNScm);
+            ufNoSprintGrid.getView().setAutoExpandColumn(nameCol);
+            ufNoSprintGrid.setBorders(true);
+            ufNoSprintGrid.getView().setStripeRows(true);
+            ufNoSprintGrid.getView().setColumnLines(true);
+            ufNoSprintGrid.getView().setForceFit(true);
+            ufExpander.initPlugin(ufNoSprintGrid);
+            lol.setWidget(ufNoSprintGrid);
+            tp.add(lol, "Not in sprint");
+
+            // tp.add(notInSprintGrid);
+            lol = new ContentPanel();
             ufSprintGrid = new Grid<UserStoryDTO>(ufSprintStore, ufScm);
             ufSprintGrid.getView().setAutoExpandColumn(nameCol);
             ufSprintGrid.setBorders(true);
@@ -174,17 +186,6 @@ public class ProductBacklogForm implements IsWidget {
             tp.add(lol, "In Sprint");
 
 
-            // tp.add(inSprintGrid);
-            lol = new ContentPanel();
-            ufNoSprintGrid = new Grid<UserStoryDTO>(ufNoSprintStore, ufNScm);
-            ufNoSprintGrid.getView().setAutoExpandColumn(nameCol);
-            ufNoSprintGrid.setBorders(true);
-            ufNoSprintGrid.getView().setStripeRows(true);
-            ufNoSprintGrid.getView().setColumnLines(true);
-            ufNoSprintGrid.getView().setForceFit(true);
-            ufExpander.initPlugin(ufNoSprintGrid);
-            lol.setWidget(ufNoSprintGrid);
-            tp.add(lol, "Not in any sprint");
 
             cp.add(tp);
             tabPane.add(cp, "Unfinished User Stories");

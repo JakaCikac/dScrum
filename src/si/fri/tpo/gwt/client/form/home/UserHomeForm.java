@@ -35,7 +35,7 @@ public class UserHomeForm implements IsWidget {
         if (folder == null) {
 
             folder = new TabPanel();
-            folder.setWidth(450);
+            folder.setWidth(600);
 
             ContentPanel cp = new ContentPanel();
             cp.add(new Label("Project wall."));

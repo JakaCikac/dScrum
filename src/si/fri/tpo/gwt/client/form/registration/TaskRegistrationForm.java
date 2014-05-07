@@ -114,7 +114,7 @@ public class TaskRegistrationForm implements IsWidget {
         combo.setWidth(150);
         combo.setTypeAhead(true);
         combo.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
-        p.add(combo);
+        p.add(new FieldLabel(combo, "Assign to"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         combo = new ComboBox<UserDTO>(teamMembers, getUsernameLabelValue(), new AbstractSafeHtmlRenderer<UserDTO>() {
             public SafeHtml render(UserDTO item) {
@@ -125,7 +125,7 @@ public class TaskRegistrationForm implements IsWidget {
         addHandlersForEventObservation(combo, getUsernameLabelValue());
 
         estimateTime = new IntegerField();
-        p.add(new FieldLabel(estimateTime, " Est. time (h) *"), new VerticalLayoutContainer.VerticalLayoutData(1, 100));
+        p.add(new FieldLabel(estimateTime, " Est. time (h) *"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         submitButton = new TextButton("Create");
         submitButton.addSelectHandler(new SelectEvent.SelectHandler() {

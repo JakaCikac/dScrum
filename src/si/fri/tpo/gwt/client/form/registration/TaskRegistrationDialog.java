@@ -27,8 +27,8 @@ public class TaskRegistrationDialog extends Dialog {
         setBodyBorder(false);
         setHeadingText("Task registration form");
 
-        setWidth(400);
-        setHeight(225);
+        setWidth(350);
+        setHeight(350);
         setHideOnButtonClick(true);
 
         FlowLayoutContainer layout = new FlowLayoutContainer();
