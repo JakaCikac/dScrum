@@ -22,6 +22,8 @@ import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.form.addedit.UserStoryEditDialog;
+import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
+import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
@@ -70,6 +72,17 @@ public class ProductBacklogForm implements IsWidget {
             });
 
             RowExpander<UserStoryDTO> ufExpander = new RowExpander<UserStoryDTO>(new AbstractCell<UserStoryDTO>() {
+                @Override
+                public void render(Context context, UserStoryDTO value, SafeHtmlBuilder sb) {
+                    sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Content:</b> " + value.getContent() + "</p>");
+                    sb.appendHtmlConstant("<p style='margin: 5px 5px 5px'><b>Acceptance Tests:</b>" + "</p>");
+                    for (AcceptanceTestDTO atDTO : value.getAcceptanceTestList()) {
+                        sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'> <b> # </b> " + atDTO.getContent() + "</p>");
+                    }
+                }
+            });
+
+            RowExpander<UserStoryDTO> ufNExpander = new RowExpander<UserStoryDTO>(new AbstractCell<UserStoryDTO>() {
                 @Override
                 public void render(Context context, UserStoryDTO value, SafeHtmlBuilder sb) {
                     sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Content:</b> " + value.getContent() + "</p>");
@@ -129,7 +142,7 @@ public class ProductBacklogForm implements IsWidget {
             ColumnModel<UserStoryDTO> cm = new ColumnModel<UserStoryDTO>(l);
 
             List<ColumnConfig<UserStoryDTO, ?>> ufNSl = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
-            ufNSl.add(ufExpander);
+            ufNSl.add(ufNExpander);
             ufNSl.add(nameCol);
             ufNSl.add(priorityCol);
             ufNSl.add(estimatedTimeCol);
@@ -169,7 +182,7 @@ public class ProductBacklogForm implements IsWidget {
             ufNoSprintGrid.getView().setStripeRows(true);
             ufNoSprintGrid.getView().setColumnLines(true);
             ufNoSprintGrid.getView().setForceFit(true);
-            ufExpander.initPlugin(ufNoSprintGrid);
+            ufNExpander.initPlugin(ufNoSprintGrid);
             lol.setWidget(ufNoSprintGrid);
             tp.add(lol, "Not in sprint");
 
@@ -242,8 +255,14 @@ public class ProductBacklogForm implements IsWidget {
                     center.add(userHomeForm.asWidget());
                     west.clear();
                     east.clear();
-                    south.clear();
                     SessionInfo.projectDTO = null;
+                    if (SessionInfo.userDTO.isAdmin()){
+                        AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
+                        east.add(adminNavPanel.asWidget());
+                    } else {
+                        UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east, north, south);
+                        east.add(userNavPanel.asWidget());
+                    }
                     ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                     west.add(psf.asWidget());
                 }
@@ -281,6 +300,7 @@ public class ProductBacklogForm implements IsWidget {
             public void onSuccess(List<UserStoryDTO> result) {
                 store.clear();
                 ufNoSprintStore.clear();
+                ufSprintStore.clear();
                 for (UserStoryDTO usDTO : result) {
                     if (usDTO.getStatus().equals("Finished")) {
                         store.add(usDTO);

@@ -28,11 +28,15 @@ public class TaskRegistrationServiceImpl {
             t.setUserStory(us);
 
             User u;
-            u = ProxyManager.getUserProxy().findUserById(taskDTO.getPreassignedUserId());
-            if (u == null) {
-                return Pair.of(false, "Data error (user doesn't exist!");
+            if (taskDTO.getPreassignedUserId() != null) {
+                u = ProxyManager.getUserProxy().findUserById(taskDTO.getPreassignedUserId());
+                if (u == null) {
+                    return Pair.of(false, "Data error (user doesn't exist!");
+                }
+                t.setPreassignedUserId(taskDTO.getPreassignedUserId());
+            } else {
+                t.setPreassignedUserId(null);
             }
-            t.setPreassignedUserId(taskDTO.getPreassignedUserId());
 
             TaskPK tpk = new TaskPK();
             tpk.setUserStoryStoryId(us.getStoryId());

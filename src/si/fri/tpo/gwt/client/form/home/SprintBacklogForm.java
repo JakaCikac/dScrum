@@ -94,7 +94,7 @@ public class SprintBacklogForm  implements IsWidget{
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
                     UserStoryDTO p = store.get(row);
-                    TaskRegistrationDialog trd = new TaskRegistrationDialog(service, center, west, east, p);
+                    TaskRegistrationDialog trd = new TaskRegistrationDialog(service, center, west, east, north, south, p);
                     trd.show();
 
                 }
@@ -108,7 +108,6 @@ public class SprintBacklogForm  implements IsWidget{
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
                     UserStoryDTO p = store.get(row);
-                    Info.display("Event", "The " + p.getName() + " was clicked.");
                     if (storyCompleted(p)){
                         p.setStatus("Finished");
                         performUpdateUserStory(p);

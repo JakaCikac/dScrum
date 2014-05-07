@@ -144,8 +144,9 @@ public class TaskRegistrationForm implements IsWidget {
                     // TODO: send message to developer so it can accept the task
                     taskDTO.setPreassignedUserId(assignedDeveloper.getUserId());
                 } else {
-                    Info.display("Developer not selected.", "Please select the developer.");
-                    return;
+                    /*Info.display("Developer not selected.", "Please select the developer.");
+                    return;*/
+                    taskDTO.setPreassignedUserId(null);
                 }
 
                 if ( userStoryDTO != null) {
