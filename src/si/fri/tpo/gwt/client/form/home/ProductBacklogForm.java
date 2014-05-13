@@ -82,23 +82,13 @@ public class ProductBacklogForm implements IsWidget {
                 }
             });
 
-            RowExpander<UserStoryDTO> ufNExpander = new RowExpander<UserStoryDTO>(new AbstractCell<UserStoryDTO>() {
-                @Override
-                public void render(Context context, UserStoryDTO value, SafeHtmlBuilder sb) {
-                    sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Content:</b> " + value.getContent() + "</p>");
-                    sb.appendHtmlConstant("<p style='margin: 5px 5px 5px'><b>Acceptance Tests:</b>" + "</p>");
-                    for (AcceptanceTestDTO atDTO : value.getAcceptanceTestList()) {
-                        sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'> <b> # </b> " + atDTO.getContent() + "</p>");
-                    }
-                }
-            });
-
             ColumnConfig<UserStoryDTO, String> nameCol = new ColumnConfig<UserStoryDTO, String>(getNameValue(), 200, "Name");
             ColumnConfig<UserStoryDTO, String> priorityCol = new ColumnConfig<UserStoryDTO, String>(getPriorityValue(), 70, "Priority");
             ColumnConfig<UserStoryDTO, String> estimatedTimeCol = new ColumnConfig<UserStoryDTO, String>(getEstimatedTimeValue(), 120, "Estimated Time (Pt)");
             ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 100, "Business Value");
             ColumnConfig<UserStoryDTO, String> ufEditColumn = new ColumnConfig<UserStoryDTO, String>(getEditValue(), 80, "Edit");
             ColumnConfig<UserStoryDTO, String> ufDeleteColumn = new ColumnConfig<UserStoryDTO, String>(getDeleteValue(), 110, "Delete");
+            ColumnConfig<UserStoryDTO, String> sprintColumn = new ColumnConfig<UserStoryDTO, String>(getSprintValue(), 50, "Sprint");
 
             TextButtonCell ufEditButton = new TextButtonCell();
             ufEditButton.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -139,28 +129,19 @@ public class ProductBacklogForm implements IsWidget {
             l.add(priorityCol);
             l.add(estimatedTimeCol);
             l.add(businessValueCol);
+            l.add(sprintColumn);
             ColumnModel<UserStoryDTO> cm = new ColumnModel<UserStoryDTO>(l);
-
-            List<ColumnConfig<UserStoryDTO, ?>> ufNSl = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
-            ufNSl.add(ufNExpander);
-            ufNSl.add(nameCol);
-            ufNSl.add(priorityCol);
-            ufNSl.add(estimatedTimeCol);
-            ufNSl.add(businessValueCol);
-            ufNSl.add(ufEditColumn);
-            ufNSl.add(ufDeleteColumn);
-            ColumnModel<UserStoryDTO> ufNScm = new ColumnModel<UserStoryDTO>(ufNSl);
 
             List<ColumnConfig<UserStoryDTO, ?>> ufSl = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
             ufSl.add(ufExpander);
             ufSl.add(nameCol);
             ufSl.add(priorityCol);
+            ufSl.add(sprintColumn);
             ufSl.add(estimatedTimeCol);
             ufSl.add(businessValueCol);
             ColumnModel<UserStoryDTO> ufScm = new ColumnModel<UserStoryDTO>(ufSl);
 
             store= new ListStore<UserStoryDTO>(getModelKeyProvider());
-            ufNoSprintStore = new ListStore<UserStoryDTO>(getModelKeyProvider());
             ufSprintStore = new ListStore<UserStoryDTO>(getModelKeyProvider());
             getStoryList();
 
@@ -171,53 +152,42 @@ public class ProductBacklogForm implements IsWidget {
             cp.setPixelSize(850, 460);
             cp.addStyleName("margin-10");
 
-            // tp je zdej notranji panel, razdelit ga moras na dva, enega ki ima zgodbe v sprintu in enega ki jih nima
-
-            // tp.add(inSprintGrid);
-            TabPanel tp = new TabPanel();
+            final GroupingView<UserStoryDTO> viewSprint = new GroupingView<UserStoryDTO>();
+            viewSprint.setForceFit(true);
             ContentPanel lol = new ContentPanel();
-            ufNoSprintGrid = new Grid<UserStoryDTO>(ufNoSprintStore, ufNScm);
-            ufNoSprintGrid.getView().setAutoExpandColumn(nameCol);
-            ufNoSprintGrid.setBorders(true);
-            ufNoSprintGrid.getView().setStripeRows(true);
-            ufNoSprintGrid.getView().setColumnLines(true);
-            ufNoSprintGrid.getView().setForceFit(true);
-            ufNExpander.initPlugin(ufNoSprintGrid);
-            lol.setWidget(ufNoSprintGrid);
-            tp.add(lol, "Not in sprint");
-
-            // tp.add(notInSprintGrid);
-            lol = new ContentPanel();
             ufSprintGrid = new Grid<UserStoryDTO>(ufSprintStore, ufScm);
+            ufSprintGrid.setView(viewSprint);
             ufSprintGrid.getView().setAutoExpandColumn(nameCol);
+            viewSprint.groupBy(sprintColumn);
+            viewSprint.setEnableGroupingMenu(false);
             ufSprintGrid.setBorders(true);
             ufSprintGrid.getView().setStripeRows(true);
             ufSprintGrid.getView().setColumnLines(true);
             ufSprintGrid.getView().setForceFit(true);
             ufExpander.initPlugin(ufSprintGrid);
             lol.setWidget(ufSprintGrid);
-            tp.add(lol, "In Sprint");
-
-
-
-            cp.add(tp);
+            cp.add(lol);
             tabPane.add(cp, "Unfinished User Stories");
+
 
             cp = new ContentPanel();
             cp.setHeaderVisible(false);
             cp.setPixelSize(850, 460);
             cp.addStyleName("margin-10");
 
+            final GroupingView<UserStoryDTO> view = new GroupingView<UserStoryDTO>();
+            view.setForceFit(true);
             grid = new Grid<UserStoryDTO>(store, cm);
+            grid.setView(view);
             grid.getView().setAutoExpandColumn(nameCol);
+            view.groupBy(sprintColumn);
+            view.setEnableGroupingMenu(false);
             grid.setBorders(true);
             grid.getView().setStripeRows(true);
             grid.getView().setColumnLines(true);
-            grid.getView().setForceFit(true);
             expander.initPlugin(grid);
             cp.setWidget(grid);
             tabPane.add(cp, "Finished User Stories");
-
         }
         return tabPane;
     }
@@ -275,45 +245,17 @@ public class ProductBacklogForm implements IsWidget {
         service.deleteUserStory(userStoryDTO, deleteUserStory);
     }
 
-
-    private ValueProvider<UserStoryDTO, String> getDeleteValue() {
-        ValueProvider<UserStoryDTO, String> vpn = new ValueProvider<UserStoryDTO, String>() {
-            @Override
-            public String getValue(UserStoryDTO object) {
-                return "Delete";
-            }
-            @Override
-            public void setValue(UserStoryDTO object, String value) {
-
-            }
-            @Override
-            public String getPath() {
-                return null;
-            }
-        };
-        return vpn;
-    }
-
     private void getStoryList() {
         AsyncCallback<List<UserStoryDTO>> callback = new AsyncCallback<List<UserStoryDTO>>() {
             @Override
             public void onSuccess(List<UserStoryDTO> result) {
                 store.clear();
-                ufNoSprintStore.clear();
                 ufSprintStore.clear();
                 for (UserStoryDTO usDTO : result) {
                     if (usDTO.getStatus().equals("Finished")) {
                         store.add(usDTO);
                     } else if (usDTO.getStatus().equals("Unfinished")){
-                        if (usDTO.getSprint() != null) {
-                            if (usDTO.getSprint().getStartDate().before(new Date()) && usDTO.getSprint().getEndDate().after(new Date()) || usDTO.getSprint().getStartDate().equals(new Date()) || usDTO.getSprint().getEndDate().equals(new Date())) {
-                                ufSprintStore.add(usDTO);
-                            } else {
-                                ufNoSprintStore.add(usDTO);
-                            }
-                        } else {
-                            ufNoSprintStore.add(usDTO);
-                        }
+                        ufSprintStore.add(usDTO);
                     }
                 }
             }
@@ -334,6 +276,48 @@ public class ProductBacklogForm implements IsWidget {
             }
         };
         return mkp;
+    }
+
+    private ValueProvider<UserStoryDTO, String> getSprintValue() {
+        ValueProvider<UserStoryDTO, String> vpn = new ValueProvider<UserStoryDTO, String>() {
+            @Override
+            public String getValue(UserStoryDTO object) {
+                if(object.getSprint() != null){
+                    if(object.getSprint().getSprintPK() != null){
+                        int id = object.getSprint().getSprintPK().getSprintId();
+                        return "Sprint "+id;
+                    }
+                }
+                return "/";
+            }
+            @Override
+            public void setValue(UserStoryDTO object, String value) {
+
+            }
+            @Override
+            public String getPath() {
+                return null;
+            }
+        };
+        return vpn;
+    }
+
+    private ValueProvider<UserStoryDTO, String> getDeleteValue() {
+        ValueProvider<UserStoryDTO, String> vpn = new ValueProvider<UserStoryDTO, String>() {
+            @Override
+            public String getValue(UserStoryDTO object) {
+                return "Delete";
+            }
+            @Override
+            public void setValue(UserStoryDTO object, String value) {
+
+            }
+            @Override
+            public String getPath() {
+                return null;
+            }
+        };
+        return vpn;
     }
 
     private ValueProvider<UserStoryDTO, Integer> getBusinessValue() {

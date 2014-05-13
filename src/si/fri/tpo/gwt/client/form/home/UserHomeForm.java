@@ -21,6 +21,7 @@ public class UserHomeForm implements IsWidget {
     private ContentPanel center, west, east, north, south;
     private DScrumServiceAsync service;
     private TabPanel folder;
+
     public UserHomeForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south) {
         this.service = service;
         this.center = center;
@@ -56,6 +57,7 @@ public class UserHomeForm implements IsWidget {
                     if ((sprintDTO.getStartDate().before(new Date()) && sprintDTO.getEndDate().after(new Date())) ||
                             sprintDTO.getStartDate().equals(new Date()) || sprintDTO.getEndDate().equals(new Date())){
                         folder.add(new SprintBacklogForm(service, center, west, east, north, south, sprintDTO).asWidget(), "Sprint Backlog");
+                        folder.add(new MyTasksForm(service, center, west, east, north, south, sprintDTO).asWidget(), "My tasks");
                         inProgress = true;
                     }
                 }
@@ -64,6 +66,9 @@ public class UserHomeForm implements IsWidget {
                 cp = new ContentPanel();
                 cp.add(new Label("No sprint in progress."));
                 folder.add(cp, "Sprint backlog");
+                cp = new ContentPanel();
+                cp.add(new Label("No sprint in progress."));
+                folder.add(cp, "My tasks");
             }
         }
         return folder;

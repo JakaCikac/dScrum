@@ -21,10 +21,7 @@ import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.RowExpander;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
-import si.fri.tpo.gwt.client.dto.SprintDTO;
-import si.fri.tpo.gwt.client.dto.TaskDTO;
-import si.fri.tpo.gwt.client.dto.UserStoryDTO;
+import si.fri.tpo.gwt.client.dto.*;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
@@ -45,6 +42,7 @@ public class SprintBacklogForm  implements IsWidget{
     private SprintDTO sprintDTO;
     private ListStore<UserStoryDTO> store;
     private Grid<UserStoryDTO> grid;
+    private UserDTO user;
 
     public SprintBacklogForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, SprintDTO sprintDTO) {
         this.service = service;
@@ -72,10 +70,27 @@ public class SprintBacklogForm  implements IsWidget{
                     }
                     // TODO: add "Edit" button
                     if (value.getTaskList() != null) {
-                        sb.appendHtmlConstant("<p style='margin: 12px 5px 5px'><b>Task:</b>" + "</p>");
+                        sb.appendHtmlConstant("<p style='margin: 12px 5px 5px'><table><thead><th><b>Task:</b></th><th><b>Status/action</b></th><th><b>Member</b></th><th><b>Remaining</b></th><tbody>");
+                        int time = 0;
                         for (TaskDTO taskDTO : value.getTaskList()) {
-                            sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'>" + taskDTO.getDescription() + "</p>");
+                            sb.appendHtmlConstant("<tr>");
+                            sb.appendHtmlConstant("<td>" + taskDTO.getDescription() + "</td>");
+                            sb.appendHtmlConstant("<td>" + taskDTO.getStatus() + "</td>");
+                            if(taskDTO.getUserUserId()!=null) {
+                                sb.appendHtmlConstant("<td>" + taskDTO.getUserUserId().getUsername() + "</td>");
+                            } else if(taskDTO.getPreassignedUserId()!=null) {
+                                //TODO: get preassignet user from DB
+                                // findUserById(taskDTO.getPreassignedUserId());
+                                // sb.appendHtmlConstant("<td>" + user.getUsername() + "</td>");
+                                sb.appendHtmlConstant("<td></td>");
+                            } else sb.appendHtmlConstant("<td>/</td>");
+                            sb.appendHtmlConstant("<td>" + taskDTO.getTimeRemaining() + " h</td>");
+                            time += taskDTO.getTimeRemaining();
+                            sb.appendHtmlConstant("</tr>");
                         }
+                        sb.appendHtmlConstant("</tbody>");
+                        sb.appendHtmlConstant("<tfoot><td></td><td></td><td>Sum:</td><td>" + time + " h</td></tfoot>");
+                        sb.appendHtmlConstant("</table></p>");
                     }
                 }
             });
@@ -84,8 +99,8 @@ public class SprintBacklogForm  implements IsWidget{
             ColumnConfig<UserStoryDTO, String> priorityCol = new ColumnConfig<UserStoryDTO, String>(getPriorityValue(), 100, "Priority");
             ColumnConfig<UserStoryDTO, Double> estimatedTimeCol = new ColumnConfig<UserStoryDTO, Double>(getEstimatedTimeValue(), 100, "Estimated Time (Pt)");
             ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 80, "Business Value");
-            ColumnConfig<UserStoryDTO, String> addTaskColumn = new ColumnConfig<UserStoryDTO, String>(getTaskValue(), 80, "Add Task");
-            ColumnConfig<UserStoryDTO, String> confirmColumn = new ColumnConfig<UserStoryDTO, String>(getConfirmValue(), 80, "Confirm");
+            ColumnConfig<UserStoryDTO, String> addTaskColumn = new ColumnConfig<UserStoryDTO, String>(getTaskValue(), 60, "Add Task");
+            ColumnConfig<UserStoryDTO, String> confirmColumn = new ColumnConfig<UserStoryDTO, String>(getConfirmValue(), 60, "Confirm");
 
             TextButtonCell addTaskButton = new TextButtonCell();
             addTaskButton.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -154,6 +169,21 @@ public class SprintBacklogForm  implements IsWidget{
             panel.setWidget(grid);
         }
         return panel;
+    }
+
+    private void findUserById(Integer preassignedUserId) {
+        AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
+            @Override
+            public void onSuccess(UserDTO result) {
+                setUser(result);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.findUserById(preassignedUserId,callback);
     }
 
     private void performUpdateUserStory(final UserStoryDTO userStoryDTO) {
@@ -329,4 +359,7 @@ public class SprintBacklogForm  implements IsWidget{
         return vpn;
     }
 
+    public void setUser(UserDTO user) {
+        this.user = user;
+    }
 }

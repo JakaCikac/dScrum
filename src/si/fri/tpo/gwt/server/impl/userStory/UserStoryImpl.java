@@ -61,8 +61,13 @@ public class UserStoryImpl {
                 sprintDTO.setStatus(sprint.getStatus());
                 sprintDTO.setVelocity(sprint.getVelocity());
                 userStoryDTO.setSprint(sprintDTO);
-            }
+            } else userStoryDTO.setSprint(null);
             //TODO: Possible error, later, when we need all userStoryDTO data from DB
+
+            if(userStory.getTaskList() != null){
+
+            }
+
             userStoryDTOList.add(userStoryDTO);
         }
         return userStoryDTOList;

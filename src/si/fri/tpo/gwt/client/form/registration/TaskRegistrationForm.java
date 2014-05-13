@@ -164,7 +164,9 @@ public class TaskRegistrationForm implements IsWidget {
                     return;
                 }
 
-                taskDTO.setStatus("Assigned");
+                if(taskDTO.getPreassignedUserId() == null) {
+                    taskDTO.setStatus("Not assigned");
+                } else taskDTO.setStatus("Need to confirm");
 
                 performTaskSave();
 
