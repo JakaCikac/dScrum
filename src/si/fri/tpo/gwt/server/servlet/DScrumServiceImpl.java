@@ -275,5 +275,18 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     public Pair<Boolean, String> saveTask(TaskDTO taskDTO, UserStoryDTO userStoryDTO) {
         return TaskRegistrationServiceImpl.saveTask(taskDTO, userStoryDTO);
     }
+
     // TASK //
+
+    // USER_STORY_COMMENT //
+    @Override
+    public Pair<Boolean, String> saveComment(UserStoryDTO userStoryDTO) {
+        return UserStoryImpl.saveComment(userStoryDTO);
+    }
+
+    @Override
+    public Pair<Boolean, String> updateComment(UserStoryDTO userStoryDTO) {
+        return UserStoryImpl.saveComment(userStoryDTO);
+    }
+    // USER_STORY_COMMENT //
 }

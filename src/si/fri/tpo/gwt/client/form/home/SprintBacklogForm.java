@@ -22,6 +22,7 @@ import com.sencha.gxt.widget.core.client.grid.RowExpander;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.*;
+import si.fri.tpo.gwt.client.form.addedit.UserStoryCommentDialog;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
@@ -70,7 +71,7 @@ public class SprintBacklogForm  implements IsWidget{
                     }
                     if(value.getComment() != null && value.getComment().length()!=0) {
                         sb.appendHtmlConstant("<p style='margin: 15px 5px 3px'><b>Comment:</b></p>");
-                        sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'>" + value.getComment() + "</p>");
+                        sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'>" + value.getComment().replaceAll("\n", "</br>") + "</p>");
                     }
                     // TODO: add "Edit" button
                     if (value.getTaskList() != null) {
@@ -104,6 +105,7 @@ public class SprintBacklogForm  implements IsWidget{
             ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 80, "Business Value");
             ColumnConfig<UserStoryDTO, String> addTaskColumn = new ColumnConfig<UserStoryDTO, String>(getTaskValue(), 60, "Add Task");
             ColumnConfig<UserStoryDTO, String> confirmColumn = new ColumnConfig<UserStoryDTO, String>(getConfirmValue(), 60, "Confirm");
+            ColumnConfig<UserStoryDTO, String> ufNoteColumn = new ColumnConfig<UserStoryDTO, String>(getNoteValue(), 100, "Note");
 
             TextButtonCell addTaskButton = new TextButtonCell();
             addTaskButton.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -137,6 +139,18 @@ public class SprintBacklogForm  implements IsWidget{
             });
             confirmColumn.setCell(confirmButton);
 
+            TextButtonCell ufNoteButton = new TextButtonCell();
+            ufNoteButton.addSelectHandler(new SelectEvent.SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+                    Cell.Context c = event.getContext();
+                    int row = c.getIndex();
+                    UserStoryDTO p = store.get(row);
+                    UserStoryCommentDialog uscd = new UserStoryCommentDialog(service, center, west, east, north, south, p);
+                    uscd.show();
+                }
+            });
+            ufNoteColumn.setCell(ufNoteButton);
 
             List<ColumnConfig<UserStoryDTO, ?>> l = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
             l.add(expander);
@@ -145,6 +159,7 @@ public class SprintBacklogForm  implements IsWidget{
             l.add(estimatedTimeCol);
             l.add(businessValueCol);
             l.add(addTaskColumn);
+            l.add(ufNoteColumn);
             if(productOwner) {
                 l.add(confirmColumn);
             }
@@ -228,6 +243,24 @@ public class SprintBacklogForm  implements IsWidget{
                 store.add(userStoryDTO);
             }
         }
+    }
+
+    private ValueProvider<UserStoryDTO, String> getNoteValue() {
+        ValueProvider<UserStoryDTO, String> vpn = new ValueProvider<UserStoryDTO, String>() {
+            @Override
+            public String getValue(UserStoryDTO object) {
+                return "Note";
+            }
+            @Override
+            public void setValue(UserStoryDTO object, String value) {
+
+            }
+            @Override
+            public String getPath() {
+                return null;
+            }
+        };
+        return vpn;
     }
 
     private ValueProvider<UserStoryDTO, String> getTaskValue() {

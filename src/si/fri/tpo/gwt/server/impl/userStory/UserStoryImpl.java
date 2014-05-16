@@ -28,6 +28,7 @@ public class UserStoryImpl {
                 userStoryDTO.setEstimateTime(userStory.getEstimateTime().doubleValue());
             } else userStoryDTO.setEstimateTime(null);
             userStoryDTO.setBusinessValue(userStory.getBusinessValue());
+            userStoryDTO.setComment(userStory.getComment());
 
             PriorityDTO priorityDTO = new PriorityDTO();
             priorityDTO.setPriorityId(userStory.getPriorityPriorityId().getPriorityId());
@@ -191,5 +192,28 @@ public class UserStoryImpl {
             return Pair.of(false, e.getMessage());
         }
         return Pair.of(true, "User story should be deleted.");
+    }
+
+    public static Pair<Boolean, String> saveComment(UserStoryDTO userStoryDTO) {
+        UserStory userStory = ProxyManager.getUserStoryProxy().findUserStory(userStoryDTO.getStoryId());
+        try {
+
+            userStory.setComment(userStoryDTO.getComment());
+
+            try {
+                if (userStory == null)
+                    return Pair.of(false, "Data error!");
+
+                ProxyManager.getUserStoryProxy().edit(userStory);
+
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+                return Pair.of(false, "Error saving user story comment!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Pair.of(false, "Unknown error!");
+        }
+        return Pair.of(true, "Comment saved successfully! :)");
     }
 }

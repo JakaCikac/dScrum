@@ -21,6 +21,7 @@ import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
+import si.fri.tpo.gwt.client.form.addedit.UserStoryCommentDialog;
 import si.fri.tpo.gwt.client.form.addedit.UserStoryEditDialog;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
@@ -71,7 +72,7 @@ public class ProductBacklogForm implements IsWidget {
                     }
                     if(value.getComment() != null && value.getComment().length()!=0) {
                         sb.appendHtmlConstant("<p style='margin: 15px 5px 3px'><b>Comment:</b></p>");
-                        sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'>" + value.getComment() + "</p>");
+                        sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'>" + value.getComment().replaceAll("\n", "</br>") + "</p>");
                     }
                 }
             });
@@ -87,7 +88,7 @@ public class ProductBacklogForm implements IsWidget {
                     }
                     if(value.getComment() != null && value.getComment().length()!=0) {
                         sb.appendHtmlConstant("<p style='margin: 15px 5px 3px'><b>Comment:</b></p>");
-                        sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'>" + value.getComment() + "</p>");
+                        sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'>" + value.getComment().replaceAll("\n", "</br>") + "</p>");
                     }
                 }
             });
@@ -142,7 +143,9 @@ public class ProductBacklogForm implements IsWidget {
                 public void onSelect(SelectEvent event) {
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
-                    // TODO: Add dialog to insert comment
+                    UserStoryDTO p = ufSprintStore.get(row);
+                    UserStoryCommentDialog uscd = new UserStoryCommentDialog(service, center, west, east, north, south, p);
+                    uscd.show();
                 }
             });
             ufNoteColumn.setCell(ufNoteButton);

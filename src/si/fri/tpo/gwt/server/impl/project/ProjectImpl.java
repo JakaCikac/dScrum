@@ -221,6 +221,7 @@ public class ProjectImpl {
                             } else userStoryDTO.setEstimateTime(null);
                             userStoryDTO.setStoryId(userStory.getStoryId());
                             userStoryDTO.setProjectProjectId(projectDTO);
+                            userStoryDTO.setComment(userStory.getComment());
 
                             PriorityDTO priorityDTO = new PriorityDTO();
                             priorityDTO.setPriorityId(userStory.getPriorityPriorityId().getPriorityId());
