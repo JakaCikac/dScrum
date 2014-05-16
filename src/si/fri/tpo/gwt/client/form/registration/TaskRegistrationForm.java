@@ -142,11 +142,11 @@ public class TaskRegistrationForm implements IsWidget {
 
                 if ( assignedDeveloper != null ) {
                     // TODO: send message to developer so it can accept the task
-                    taskDTO.setPreassignedUserId(assignedDeveloper.getUserId());
+                    taskDTO.setPreassignedUserName(assignedDeveloper.getUsername());
                 } else {
                     /*Info.display("Developer not selected.", "Please select the developer.");
                     return;*/
-                    taskDTO.setPreassignedUserId(null);
+                    taskDTO.setPreassignedUserName(null);
                 }
 
                 if ( userStoryDTO != null) {
@@ -164,7 +164,7 @@ public class TaskRegistrationForm implements IsWidget {
                     return;
                 }
 
-                if(taskDTO.getPreassignedUserId() == null) {
+                if(taskDTO.getPreassignedUserName() == null) {
                     taskDTO.setStatus("Not assigned");
                 } else taskDTO.setStatus("Need to confirm");
 

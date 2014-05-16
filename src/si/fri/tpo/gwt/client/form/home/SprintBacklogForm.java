@@ -62,15 +62,19 @@ public class SprintBacklogForm  implements IsWidget{
             RowExpander<UserStoryDTO> expander = new RowExpander<UserStoryDTO>(new AbstractCell<UserStoryDTO>() {
                 @Override
                 public void render(Context context, UserStoryDTO value, SafeHtmlBuilder sb) {
-                    sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'><b>Content:</b> " + value.getContent() + "</p>");
-                    sb.appendHtmlConstant("<p style='margin: 12px 5px 5px'><b>Acceptance Tests:</b>" + "</p>");
-                    // TODO: add acceptance tests lists
+                    sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'><b>Content:</b></p>");
+                    sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'>" + value.getContent().replaceAll("\n", "</br>") + "</p>");
+                    sb.appendHtmlConstant("<p style='margin: 15px 5px 3px'><b>Acceptance Tests:</b></p>");
                     for (AcceptanceTestDTO atDTO : value.getAcceptanceTestList()) {
-                        sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'> <b> # </b> " + atDTO.getContent() + "</p>");
+                        sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'> <b> # </b> " + atDTO.getContent() + "</p>");
+                    }
+                    if(value.getComment() != null && value.getComment().length()!=0) {
+                        sb.appendHtmlConstant("<p style='margin: 15px 5px 3px'><b>Comment:</b></p>");
+                        sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'>" + value.getComment() + "</p>");
                     }
                     // TODO: add "Edit" button
                     if (value.getTaskList() != null) {
-                        sb.appendHtmlConstant("<p style='margin: 12px 5px 5px'><table><thead><th><b>Task:</b></th><th><b>Status/action</b></th><th><b>Member</b></th><th><b>Remaining</b></th><tbody>");
+                        sb.appendHtmlConstant("<table style='margin: 15px 5px 3px'><thead><th><b>Task:</b></th><th><b>Status/action</b></th><th><b>Member</b></th><th><b>Remaining</b></th><tbody>");
                         int time = 0;
                         for (TaskDTO taskDTO : value.getTaskList()) {
                             sb.appendHtmlConstant("<tr>");
@@ -78,11 +82,10 @@ public class SprintBacklogForm  implements IsWidget{
                             sb.appendHtmlConstant("<td>" + taskDTO.getStatus() + "</td>");
                             if(taskDTO.getUserUserId()!=null) {
                                 sb.appendHtmlConstant("<td>" + taskDTO.getUserUserId().getUsername() + "</td>");
-                            } else if(taskDTO.getPreassignedUserId()!=null) {
+                            } else if(taskDTO.getPreassignedUserName()!=null) {
                                 //TODO: get preassignet user from DB
-                                // findUserById(taskDTO.getPreassignedUserId());
-                                // sb.appendHtmlConstant("<td>" + user.getUsername() + "</td>");
-                                sb.appendHtmlConstant("<td></td>");
+                                sb.appendHtmlConstant("<td>" + taskDTO.getPreassignedUserName() + "</td>");
+                                //sb.appendHtmlConstant("<td></td>");
                             } else sb.appendHtmlConstant("<td>/</td>");
                             sb.appendHtmlConstant("<td>" + taskDTO.getTimeRemaining() + " h</td>");
                             time += taskDTO.getTimeRemaining();
@@ -90,7 +93,7 @@ public class SprintBacklogForm  implements IsWidget{
                         }
                         sb.appendHtmlConstant("</tbody>");
                         sb.appendHtmlConstant("<tfoot><td></td><td></td><td>Sum:</td><td>" + time + " h</td></tfoot>");
-                        sb.appendHtmlConstant("</table></p>");
+                        sb.appendHtmlConstant("</table>");
                     }
                 }
             });
@@ -169,21 +172,6 @@ public class SprintBacklogForm  implements IsWidget{
             panel.setWidget(grid);
         }
         return panel;
-    }
-
-    private void findUserById(Integer preassignedUserId) {
-        AsyncCallback<UserDTO> callback = new AsyncCallback<UserDTO>() {
-            @Override
-            public void onSuccess(UserDTO result) {
-                setUser(result);
-            }
-
-            @Override
-            public void onFailure(Throwable caught) {
-                Window.alert(caught.getMessage());
-            }
-        };
-        service.findUserById(preassignedUserId,callback);
     }
 
     private void performUpdateUserStory(final UserStoryDTO userStoryDTO) {

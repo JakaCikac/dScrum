@@ -36,7 +36,7 @@ public class UserHomeForm implements IsWidget {
         if (folder == null) {
 
             folder = new TabPanel();
-            folder.setWidth(600);
+            folder.setWidth(800);
 
             ContentPanel cp = new ContentPanel();
             cp.add(new Label("Project wall."));
@@ -48,7 +48,7 @@ public class UserHomeForm implements IsWidget {
                 folder.add(cp, "Product backlog");
             }
             else {
-                folder.add(new ProductBacklogForm(service, center, west, east, north, south).asWidget(), "Product Backlog");
+                folder.add(new ProductBacklogForm(service, center, west, east, north, south).asWidget(), "Product backlog");
             }
 
             boolean inProgress = false;
@@ -56,7 +56,7 @@ public class UserHomeForm implements IsWidget {
                 for (SprintDTO sprintDTO : SessionInfo.projectDTO.getSprintList()){
                     if ((sprintDTO.getStartDate().before(new Date()) && sprintDTO.getEndDate().after(new Date())) ||
                             sprintDTO.getStartDate().equals(new Date()) || sprintDTO.getEndDate().equals(new Date())){
-                        folder.add(new SprintBacklogForm(service, center, west, east, north, south, sprintDTO).asWidget(), "Sprint Backlog");
+                        folder.add(new SprintBacklogForm(service, center, west, east, north, south, sprintDTO).asWidget(), "Sprint backlog");
                         folder.add(new MyTasksForm(service, center, west, east, north, south, sprintDTO).asWidget(), "My tasks");
                         inProgress = true;
                     }

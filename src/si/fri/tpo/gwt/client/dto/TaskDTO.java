@@ -61,12 +61,12 @@ public class TaskDTO extends BaseModelData {
         set("status", status);
     }
 
-    public Integer getPreassignedUserId() {
-        return get("preassignedUserId");
+    public String getPreassignedUserName() {
+        return get("preassignedUserName");
     }
 
-    public void setPreassignedUserId(Integer preassignedUserId) {
-        set("preassignedUserId", preassignedUserId);
+    public void setPreassignedUserName(String preassignedUserName) {
+        set("preassignedUserName", preassignedUserName);
     }
 
     public List<WorkloadDTO> getWorkloadList() {

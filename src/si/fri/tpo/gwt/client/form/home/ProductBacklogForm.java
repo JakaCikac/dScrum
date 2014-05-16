@@ -42,9 +42,9 @@ public class ProductBacklogForm implements IsWidget {
     private ContentPanel center, west, east, north, south;
     private DScrumServiceAsync service;
     private ListStore<UserStoryDTO> store;
-    private ListStore<UserStoryDTO> ufNoSprintStore, ufSprintStore;
+    private ListStore<UserStoryDTO> ufSprintStore;
     private Grid<UserStoryDTO> grid;
-    private Grid<UserStoryDTO> ufNoSprintGrid, ufSprintGrid;
+    private Grid<UserStoryDTO> ufSprintGrid;
     private TabPanel tabPane;
 
     public ProductBacklogForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south) {
@@ -63,10 +63,15 @@ public class ProductBacklogForm implements IsWidget {
             RowExpander<UserStoryDTO> expander = new RowExpander<UserStoryDTO>(new AbstractCell<UserStoryDTO>() {
                 @Override
                 public void render(Context context, UserStoryDTO value, SafeHtmlBuilder sb) {
-                    sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Content:</b> " + value.getContent() + "</p>");
-                    sb.appendHtmlConstant("<p style='margin: 5px 5px 5px'><b>Acceptance Tests:</b>" + "</p>");
+                    sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'><b>Content:</b></p>");
+                    sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'>" + value.getContent().replaceAll("\n", "</br>") + "</p>");
+                    sb.appendHtmlConstant("<p style='margin: 15px 5px 3px'><b>Acceptance Tests:</b></p>");
                     for (AcceptanceTestDTO atDTO : value.getAcceptanceTestList()) {
-                        sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'> <b> # </b> " + atDTO.getContent() + "</p>");
+                        sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'> <b> # </b> " + atDTO.getContent() + "</p>");
+                    }
+                    if(value.getComment() != null && value.getComment().length()!=0) {
+                        sb.appendHtmlConstant("<p style='margin: 15px 5px 3px'><b>Comment:</b></p>");
+                        sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'>" + value.getComment() + "</p>");
                     }
                 }
             });
@@ -74,10 +79,15 @@ public class ProductBacklogForm implements IsWidget {
             RowExpander<UserStoryDTO> ufExpander = new RowExpander<UserStoryDTO>(new AbstractCell<UserStoryDTO>() {
                 @Override
                 public void render(Context context, UserStoryDTO value, SafeHtmlBuilder sb) {
-                    sb.appendHtmlConstant("<p style='margin: 5px 5px 10px'><b>Content:</b> " + value.getContent() + "</p>");
-                    sb.appendHtmlConstant("<p style='margin: 5px 5px 5px'><b>Acceptance Tests:</b>" + "</p>");
+                    sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'><b>Content:</b></p>");
+                    sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'>" + value.getContent().replaceAll("\n", "</br>") + "</p>");
+                    sb.appendHtmlConstant("<p style='margin: 15px 5px 3px'><b>Acceptance Tests:</b></p>");
                     for (AcceptanceTestDTO atDTO : value.getAcceptanceTestList()) {
-                        sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'> <b> # </b> " + atDTO.getContent() + "</p>");
+                        sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'> <b> # </b> " + atDTO.getContent() + "</p>");
+                    }
+                    if(value.getComment() != null && value.getComment().length()!=0) {
+                        sb.appendHtmlConstant("<p style='margin: 15px 5px 3px'><b>Comment:</b></p>");
+                        sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'>" + value.getComment() + "</p>");
                     }
                 }
             });
@@ -86,8 +96,9 @@ public class ProductBacklogForm implements IsWidget {
             ColumnConfig<UserStoryDTO, String> priorityCol = new ColumnConfig<UserStoryDTO, String>(getPriorityValue(), 70, "Priority");
             ColumnConfig<UserStoryDTO, String> estimatedTimeCol = new ColumnConfig<UserStoryDTO, String>(getEstimatedTimeValue(), 120, "Estimated Time (Pt)");
             ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 100, "Business Value");
-            ColumnConfig<UserStoryDTO, String> ufEditColumn = new ColumnConfig<UserStoryDTO, String>(getEditValue(), 80, "Edit");
-            ColumnConfig<UserStoryDTO, String> ufDeleteColumn = new ColumnConfig<UserStoryDTO, String>(getDeleteValue(), 110, "Delete");
+            ColumnConfig<UserStoryDTO, String> ufEditColumn = new ColumnConfig<UserStoryDTO, String>(getEditValue(), 90, "Edit");
+            ColumnConfig<UserStoryDTO, String> ufDeleteColumn = new ColumnConfig<UserStoryDTO, String>(getDeleteValue(), 130, "Delete");
+            ColumnConfig<UserStoryDTO, String> ufNoteColumn = new ColumnConfig<UserStoryDTO, String>(getNoteValue(), 100, "Note");
             ColumnConfig<UserStoryDTO, String> sprintColumn = new ColumnConfig<UserStoryDTO, String>(getSprintValue(), 50, "Sprint");
 
             TextButtonCell ufEditButton = new TextButtonCell();
@@ -96,12 +107,13 @@ public class ProductBacklogForm implements IsWidget {
                 public void onSelect(SelectEvent event) {
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
-                    UserStoryDTO p = ufNoSprintStore.get(row);
-                    if ( p.getSprint() == null ) {
+                    UserStoryDTO p = ufSprintStore.get(row);
+                    if ( p.getSprint().getStartDate().equals(new Date()) || p.getSprint().getEndDate().equals(new Date()) ||
+                    p.getSprint().getStartDate().before(new Date()) && p.getSprint().getEndDate().after(new Date())) {
+                        Info.display("User story", "The user story " + p.getName() + " cannot be edited because it is in active sprint.");
+                    } else {
                         UserStoryEditDialog sed = new UserStoryEditDialog(service, center, west, east, north, south, p);
                         sed.show();
-                    } else {
-                        Info.display("User story", "The user story " + p.getName() + " cannot be edited because it is in active sprint.");
                     }
                 }
             });
@@ -113,15 +125,27 @@ public class ProductBacklogForm implements IsWidget {
                 public void onSelect(SelectEvent event) {
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
-                    UserStoryDTO p = ufNoSprintStore.get(row);
-                    if ( p.getSprint() == null ) {
-                        performDeleteUserStory(p);
-                    } else {
+                    UserStoryDTO p = ufSprintStore.get(row);
+                    if ( p.getSprint().getStartDate().equals(new Date()) || p.getSprint().getEndDate().equals(new Date()) ||
+                            p.getSprint().getStartDate().before(new Date()) && p.getSprint().getEndDate().after(new Date())) {
                         Info.display("User story", "The user story " + p.getName() + " cannot be deleted because it is in active sprint.");
+                    } else {
+                        performDeleteUserStory(p);
                     }
                 }
             });
             ufDeleteColumn.setCell(ufDeleteButton);
+
+            TextButtonCell ufNoteButton = new TextButtonCell();
+            ufNoteButton.addSelectHandler(new SelectEvent.SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+                    Cell.Context c = event.getContext();
+                    int row = c.getIndex();
+                    // TODO: Add dialog to insert comment
+                }
+            });
+            ufNoteColumn.setCell(ufNoteButton);
 
             List<ColumnConfig<UserStoryDTO, ?>> l = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
             l.add(expander);
@@ -139,6 +163,11 @@ public class ProductBacklogForm implements IsWidget {
             ufSl.add(sprintColumn);
             ufSl.add(estimatedTimeCol);
             ufSl.add(businessValueCol);
+            ufSl.add(ufNoteColumn);
+            if(isProductOwner() || isScrumMaster()) {
+                ufSl.add(ufEditColumn);
+                ufSl.add(ufDeleteColumn);
+            }
             ColumnModel<UserStoryDTO> ufScm = new ColumnModel<UserStoryDTO>(ufSl);
 
             store= new ListStore<UserStoryDTO>(getModelKeyProvider());
@@ -276,6 +305,24 @@ public class ProductBacklogForm implements IsWidget {
             }
         };
         return mkp;
+    }
+
+    private ValueProvider<UserStoryDTO, String> getNoteValue() {
+        ValueProvider<UserStoryDTO, String> vpn = new ValueProvider<UserStoryDTO, String>() {
+            @Override
+            public String getValue(UserStoryDTO object) {
+                return "Note";
+            }
+            @Override
+            public void setValue(UserStoryDTO object, String value) {
+
+            }
+            @Override
+            public String getPath() {
+                return null;
+            }
+        };
+        return vpn;
     }
 
     private ValueProvider<UserStoryDTO, String> getSprintValue() {

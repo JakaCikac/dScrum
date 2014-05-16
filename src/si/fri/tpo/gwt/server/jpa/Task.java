@@ -33,7 +33,7 @@ import javax.persistence.Table;
         @NamedQuery(name = "Task.findByTimeRemaining", query = "SELECT t FROM Task t WHERE t.timeRemaining = :timeRemaining"),
         @NamedQuery(name = "Task.findByEstimatedTime", query = "SELECT t FROM Task t WHERE t.estimatedTime = :estimatedTime"),
         @NamedQuery(name = "Task.findByStatus", query = "SELECT t FROM Task t WHERE t.status = :status"),
-        @NamedQuery(name = "Task.findByPreassignedUserId", query = "SELECT t FROM Task t WHERE t.preassignedUserId = :preassignedUserId"),
+        @NamedQuery(name = "Task.findByPreassignedUserName", query = "SELECT t FROM Task t WHERE t.preassignedUserName = :preassignedUserName"),
         @NamedQuery(name = "Task.findByUserStoryStoryId", query = "SELECT t FROM Task t WHERE t.taskPK.userStoryStoryId = :userStoryStoryId")})
 public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -51,8 +51,8 @@ public class Task implements Serializable {
     @Basic(optional = false)
     @Column(name = "status")
     private String status;
-    @Column(name = "preassigned_user_id")
-    private Integer preassignedUserId;
+    @Column(name = "preassigned_user_name")
+    private String preassignedUserName;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "task")
     private List<Workload> workloadList;
     @JoinColumn(name = "user_story_story_id", referencedColumnName = "story_id", insertable = false, updatable = false)
@@ -121,12 +121,12 @@ public class Task implements Serializable {
         this.status = status;
     }
 
-    public Integer getPreassignedUserId() {
-        return preassignedUserId;
+    public String getPreassignedUserName() {
+        return preassignedUserName;
     }
 
-    public void setPreassignedUserId(Integer preassignedUserId) {
-        this.preassignedUserId = preassignedUserId;
+    public void setPreassignedUserName(String preassignedUserName) {
+        this.preassignedUserName = preassignedUserName;
     }
 
     public List<Workload> getWorkloadList() {
