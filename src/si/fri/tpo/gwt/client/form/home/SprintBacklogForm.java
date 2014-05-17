@@ -22,6 +22,7 @@ import com.sencha.gxt.widget.core.client.grid.RowExpander;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.*;
+import si.fri.tpo.gwt.client.form.addedit.AcceptEditTasksDialog;
 import si.fri.tpo.gwt.client.form.addedit.UserStoryCommentDialog;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
@@ -101,11 +102,12 @@ public class SprintBacklogForm  implements IsWidget{
 
             ColumnConfig<UserStoryDTO, String> nameCol = new ColumnConfig<UserStoryDTO, String>(getNameValue(), 100, "Name");
             ColumnConfig<UserStoryDTO, String> priorityCol = new ColumnConfig<UserStoryDTO, String>(getPriorityValue(), 100, "Priority");
-            ColumnConfig<UserStoryDTO, Double> estimatedTimeCol = new ColumnConfig<UserStoryDTO, Double>(getEstimatedTimeValue(), 100, "Estimated Time (Pt)");
-            ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 80, "Business Value");
+            ColumnConfig<UserStoryDTO, Double> estimatedTimeCol = new ColumnConfig<UserStoryDTO, Double>(getEstimatedTimeValue(), 50, "Estimated Time (Pt)");
+            ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 40, "Business Value");
             ColumnConfig<UserStoryDTO, String> addTaskColumn = new ColumnConfig<UserStoryDTO, String>(getTaskValue(), 60, "Add Task");
             ColumnConfig<UserStoryDTO, String> confirmColumn = new ColumnConfig<UserStoryDTO, String>(getConfirmValue(), 60, "Confirm");
-            ColumnConfig<UserStoryDTO, String> ufNoteColumn = new ColumnConfig<UserStoryDTO, String>(getNoteValue(), 100, "Note");
+            ColumnConfig<UserStoryDTO, String> ufNoteColumn = new ColumnConfig<UserStoryDTO, String>(getNoteValue(), 40, "Note");
+            ColumnConfig<UserStoryDTO, String> acceptEditTasksColumn = new ColumnConfig<UserStoryDTO, String>(getAcceptEditTasksValue(), 70, "Accept/Edit tasks");
 
             TextButtonCell addTaskButton = new TextButtonCell();
             addTaskButton.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -152,6 +154,21 @@ public class SprintBacklogForm  implements IsWidget{
             });
             ufNoteColumn.setCell(ufNoteButton);
 
+            TextButtonCell acceptEditTasksButton = new TextButtonCell();
+            acceptEditTasksButton.addSelectHandler(new SelectEvent.SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+                    Cell.Context c = event.getContext();
+                    int row = c.getIndex();
+                    UserStoryDTO p = store.get(row);
+                    AcceptEditTasksDialog eatd = new AcceptEditTasksDialog(service, center, west, east, north, south, p);
+                    eatd.show();
+                    //UserStoryCommentDialog uscd = new UserStoryCommentDialog(service, center, west, east, north, south, p);
+                    //uscd.show();
+                }
+            });
+            acceptEditTasksColumn.setCell(acceptEditTasksButton);
+
             List<ColumnConfig<UserStoryDTO, ?>> l = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
             l.add(expander);
             l.add(nameCol);
@@ -160,6 +177,7 @@ public class SprintBacklogForm  implements IsWidget{
             l.add(businessValueCol);
             l.add(addTaskColumn);
             l.add(ufNoteColumn);
+            l.add(acceptEditTasksColumn);
             if(productOwner) {
                 l.add(confirmColumn);
             }
@@ -250,6 +268,24 @@ public class SprintBacklogForm  implements IsWidget{
             @Override
             public String getValue(UserStoryDTO object) {
                 return "Note";
+            }
+            @Override
+            public void setValue(UserStoryDTO object, String value) {
+
+            }
+            @Override
+            public String getPath() {
+                return null;
+            }
+        };
+        return vpn;
+    }
+
+    private ValueProvider<UserStoryDTO, String> getAcceptEditTasksValue() {
+        ValueProvider<UserStoryDTO, String> vpn = new ValueProvider<UserStoryDTO, String>() {
+            @Override
+            public String getValue(UserStoryDTO object) {
+                return "Accept/Edit tasks";
             }
             @Override
             public void setValue(UserStoryDTO object, String value) {
