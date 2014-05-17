@@ -155,6 +155,8 @@ public class UserStoryImpl {
                 sprintPK.setProjectProjectId(sprintPKDTO.getProjectProjectId());
                 Sprint sprint = ProxyManager.getSprintProxy().findSprint(sprintPK);
                 userStory.setSprint(sprint);
+            } else {
+                userStory.setSprint(null);
             }
 
             try {
