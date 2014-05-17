@@ -2,9 +2,12 @@ package si.fri.tpo.gwt.client.form.navigation;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.core.client.util.Padding;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.VBoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
@@ -20,6 +23,7 @@ public class UserNavPanel implements IsWidget{
     private FlowLayoutContainer con;
     private ContentPanel west;
     private ContentPanel east, north, south;
+    private ContentPanel panel;
 
     private static final int PANEL_WIDTH = 230;
     private static final int PANEL_HEIGHT = 400;
@@ -33,18 +37,26 @@ public class UserNavPanel implements IsWidget{
         this.south = south;
     }
 
-    private ContentPanel panel;
     public Widget asWidget() {
         panel = new ContentPanel();
-        con = new FlowLayoutContainer();
-        panel.add(con);
+        //con = new FlowLayoutContainer();
+        //panel.add(con);
         panel.setHeadingText("User menu");
         panel.setBodyBorder(false);
+
+        BorderLayoutContainer border = new BorderLayoutContainer();
+        panel.setWidget(border);
+
         createUserNavPanel();
         return panel;
     }
 
     private void createUserNavPanel() {
+
+        VBoxLayoutContainer lcwest = new VBoxLayoutContainer();
+        //lcwest.addStyleName("x-toolbar-mark");
+        lcwest.setPadding(new Padding(5));
+        lcwest.setVBoxLayoutAlign(VBoxLayoutContainer.VBoxLayoutAlign.STRETCH);
 
         ContentPanel cp = new ContentPanel();
         cp.setHeaderVisible(false);
