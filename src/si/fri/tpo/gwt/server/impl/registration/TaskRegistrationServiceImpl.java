@@ -67,7 +67,13 @@ public class TaskRegistrationServiceImpl {
             taskPK.setUserStoryStoryId(taskDTO.getTaskPK().getUserStoryStoryId());
             Task t = ProxyManager.getTaskProxy().findTask(taskPK);
             t.setStatus(taskDTO.getStatus());
+<<<<<<< HEAD
             t.setAssignedDate(taskDTO.getAssignedDate());
+=======
+            t.setDescription(taskDTO.getDescription());
+            t.setEstimatedTime(taskDTO.getEstimatedTime());
+            t.setPreassignedUserName(taskDTO.getPreassignedUserName());
+>>>>>>> accept_task
 
             User u;
             if (taskDTO.getPreassignedUserName() != null) {
@@ -106,5 +112,29 @@ public class TaskRegistrationServiceImpl {
             return Pair.of(false, e.getMessage());
         }
         return Pair.of(true, "Task updated successfully");
+    }
+
+    public static Pair<Boolean, String> deleteTask(TaskDTO taskDTO) {
+        try {
+            TaskPK taskPK = new TaskPK();
+            taskPK.setTaskId(taskDTO.getTaskPK().getTaskId());
+            taskPK.setUserStoryStoryId(taskDTO.getTaskPK().getUserStoryStoryId());
+            Task t = ProxyManager.getTaskProxy().findTask(taskPK);
+            try {
+                if (t == null)
+                    return Pair.of(false, "Data error!");
+
+                ProxyManager.getTaskProxy().destroy(t.getTaskPK());
+
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+                return Pair.of(false, e.getMessage());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Pair.of(false, e.getMessage());
+        }
+        return Pair.of(true, "Task deleted successfully");
     }
 }

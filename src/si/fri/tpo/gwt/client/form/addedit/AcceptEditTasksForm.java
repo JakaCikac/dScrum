@@ -28,6 +28,7 @@ import com.sencha.gxt.widget.core.client.form.FormPanel;
 import com.sencha.gxt.widget.core.client.form.validator.MinLengthValidator;
 import com.sencha.gxt.widget.core.client.grid.*;
 import com.sencha.gxt.widget.core.client.grid.Grid;
+import com.sencha.gxt.widget.core.client.grid.editing.GridEditing;
 import com.sencha.gxt.widget.core.client.grid.editing.GridInlineEditing;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
@@ -46,9 +47,6 @@ import java.util.List;
  */
 public class AcceptEditTasksForm implements IsWidget, Editor<TaskDTO> {
 
-    interface Driver extends SimpleBeanEditorDriver<TaskDTO, AcceptEditTasksForm> {}
-    private Driver driver = GWT.create(Driver.class);
-
     private ContentPanel center, west, east, north, south;
     private DScrumServiceAsync service;
     private AcceptEditTasksDialog aetd;
@@ -56,7 +54,6 @@ public class AcceptEditTasksForm implements IsWidget, Editor<TaskDTO> {
     private VerticalPanel verticalPanel;
     private FlowPanel container;
     private ListStore<TaskDTO> store;
-    private ListStoreEditor<TaskDTO> editStore;
     private Grid<TaskDTO> grid;
     private UserStoryDTO selectedUserStoryDTO;
 
@@ -69,7 +66,6 @@ public class AcceptEditTasksForm implements IsWidget, Editor<TaskDTO> {
         this.center = center;
         this.west = west;
         this.east = east;
-       // this.acceptanceTestCount = 0;
         this.selectedUserStoryDTO = usDTO;
         this.aetd = aetd;
         setSelectedUserStoryDTO(this.selectedUserStoryDTO);
@@ -103,6 +99,7 @@ public class AcceptEditTasksForm implements IsWidget, Editor<TaskDTO> {
         ColumnConfig<TaskDTO, String> taskAssigned = new ColumnConfig<TaskDTO, String>(getAssignedUserNameValue(), 70, "Assigned");
         ColumnConfig<TaskDTO, String> acceptButtonColumn = new ColumnConfig<TaskDTO, String>(getAcceptValue(), 70, "Accept Task");
         ColumnConfig<TaskDTO, String> releaseButtonColumn = new ColumnConfig<TaskDTO, String>(getReleaseValue(), 70, "Release Task");
+        ColumnConfig<TaskDTO, String> editButtonColumn = new ColumnConfig<TaskDTO, String>(getEditValue(), 40, "Edit");
 
         final TextButtonCell acceptButton = new TextButtonCell();
         acceptButton.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -164,6 +161,31 @@ public class AcceptEditTasksForm implements IsWidget, Editor<TaskDTO> {
         });
         releaseButtonColumn.setCell(releaseButton);
 
+        TextButtonCell editButton = new TextButtonCell();
+        editButton.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                Cell.Context c = event.getContext();
+                int row = c.getIndex();
+                TaskDTO p = store.get(row);
+                // shrani v bazo, refresh girduslus
+                if(p.getUserUserId() == null && (p.getPreassignedUserName()) == null || (p.getPreassignedUserName()!= null && p.getPreassignedUserName().equals(SessionInfo.userDTO.getUsername()))){
+                    aetd.hide();
+                    TaskEditDialog ted = new TaskEditDialog(service, center, west, east, north, south, p);
+                    ted.show();
+                } else {
+                    if (p.getUserUserId() != null && p.getUserUserId().getUsername().equals(SessionInfo.userDTO.getUsername())){
+                        AlertMessageBox amb2 = new AlertMessageBox("Task already assigned!", "This task is assigned to you and cannot be edited.");
+                        amb2.show();
+                    } else {
+                        AlertMessageBox amb2 = new AlertMessageBox("Task already assigned!", "This task cannot be edited.");
+                        amb2.show();
+                    }
+                }
+            }
+        });
+        editButtonColumn.setCell(editButton);
+
         List<ColumnConfig<TaskDTO, ?>> l = new ArrayList<ColumnConfig<TaskDTO, ?>>();
         l.add(numberer);
         l.add(taskContent);
@@ -172,20 +194,17 @@ public class AcceptEditTasksForm implements IsWidget, Editor<TaskDTO> {
         l.add(taskAssigned);
         l.add(acceptButtonColumn);
         l.add(releaseButtonColumn);
+        l.add(editButtonColumn);
 
         ColumnModel<TaskDTO> cm = new ColumnModel<TaskDTO>(l);
         store = new ListStore<TaskDTO>(getModelKeyProvider());
-        editStore = new ListStoreEditor<TaskDTO>(store);
         store.addAll(selectedUserStoryDTO.getTaskList());
 
-        grid = new com.sencha.gxt.widget.core.client.grid.Grid<TaskDTO>(store, cm);
+        grid = new Grid<TaskDTO>(store, cm);
         grid.getView().setAutoExpandColumn(taskContent);
         grid.getSelectionModel().setSelectionMode(Style.SelectionMode.SINGLE);
         grid.setBorders(true);
         grid.getView().setForceFit(true);
-
-        GridInlineEditing<TaskDTO> inlineEditor = new GridInlineEditing<TaskDTO>(grid);
-        inlineEditor.addEditor(taskContent, new TextField());
 
         grid.setWidth(650);
         grid.setHeight(300);
@@ -202,6 +221,7 @@ public class AcceptEditTasksForm implements IsWidget, Editor<TaskDTO> {
                 if (grid.getSelectionModel().getSelectedItem().getUserUserId() != null) {
                     Info.display("No go deleto", "Can't delete task because it's assigned!");
                 } else {
+                    performDeleteTask(grid.getSelectionModel().getSelectedItem());
                     store.remove(grid.getSelectionModel().getSelectedItem());
                 }
             }
@@ -212,10 +232,33 @@ public class AcceptEditTasksForm implements IsWidget, Editor<TaskDTO> {
         container.add(buttons);
         p.add(container);
 
-        driver.initialize(this);
-
         verticalPanel.add(p);
 
+    }
+
+    private void performDeleteTask(TaskDTO taskDTO) {
+        AsyncCallback<Pair<Boolean, String>> deleteTask = new AsyncCallback<Pair<Boolean, String>>() {
+            @Override
+            public void onSuccess(Pair<Boolean, String> result) {
+                if (result == null) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing task deleting!");
+                    amb2.show();
+                }
+                else if (!result.getFirst()) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error deleting task!", result.getSecond());
+                    amb2.show();
+                }
+                else {
+                    MessageBox amb3 = new MessageBox("Message delete task", result.getSecond());
+                    amb3.show();
+                }
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.deleteTask(taskDTO, deleteTask);
     }
 
     private void performUpdateTask(TaskDTO p) {
@@ -349,6 +392,23 @@ public class AcceptEditTasksForm implements IsWidget, Editor<TaskDTO> {
             @Override
             public String getValue(TaskDTO object) {
                 return "Release Task";
+            }
+            @Override
+            public void setValue(TaskDTO object, String value) {
+            }
+            @Override
+            public String getPath() {
+                return null;
+            }
+        };
+        return vpc;
+    }
+
+    private ValueProvider<TaskDTO, String> getEditValue() {
+        ValueProvider<TaskDTO, String> vpc = new ValueProvider<TaskDTO, String>() {
+            @Override
+            public String getValue(TaskDTO object) {
+                return "Edit";
             }
             @Override
             public void setValue(TaskDTO object, String value) {
