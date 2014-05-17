@@ -166,9 +166,10 @@ public class AcceptEditTasksForm implements IsWidget, Editor<TaskDTO> {
                 int row = c.getIndex();
                 TaskDTO p = store.get(row);
                 // shrani v bazo, refresh girduslus
-                if(p.getUserUserId() == null || p.getPreassignedUserName()!= null && p.getPreassignedUserName().equals(SessionInfo.userDTO.getUsername())){
-                    //TODO: Dialog za urejanje taskov, ker editiranje ne dela :P
-                    System.out.println("lahko ureja");
+                if(p.getUserUserId() == null && (p.getPreassignedUserName()) == null || (p.getPreassignedUserName()!= null && p.getPreassignedUserName().equals(SessionInfo.userDTO.getUsername()))){
+                    aetd.hide();
+                    TaskEditDialog ted = new TaskEditDialog(service, center, west, east, north, south, p);
+                    ted.show();
                 } else {
                     if (p.getUserUserId() != null && p.getUserUserId().getUsername().equals(SessionInfo.userDTO.getUsername())){
                         AlertMessageBox amb2 = new AlertMessageBox("Task already assigned!", "This task is assigned to you and cannot be edited.");
