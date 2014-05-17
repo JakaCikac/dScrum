@@ -1,6 +1,8 @@
 package si.fri.tpo.gwt.client.dto;
 
 import com.sencha.gxt.legacy.client.data.BaseModelData;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,6 +15,7 @@ public class TaskDTO extends BaseModelData {
     //private int timeRemaining;
     //private int estimatedTime;
     //private String status;
+    //private Date assignedDate;
     //private Integer preassignedUserId;
     //private List<Workload> workloadList;
     //private UserStory userStory;
@@ -59,6 +62,14 @@ public class TaskDTO extends BaseModelData {
 
     public void setStatus(String status) {
         set("status", status);
+    }
+
+    public Date getAssignedDate() {
+        return get("assignedDate");
+    }
+
+    public void setAssignedDate(Date assignedDate) {
+        set("assignedDate", assignedDate);
     }
 
     public String getPreassignedUserName() {

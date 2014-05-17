@@ -38,6 +38,7 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -115,6 +116,7 @@ public class AcceptEditTasksForm implements IsWidget, Editor<TaskDTO> {
                         && p.getUserUserId() == null){
                     p.setUserUserId(SessionInfo.userDTO);
                     p.setStatus("Assigned");
+                    p.setAssignedDate(new Date());
                     performUpdateTask(p);
                     store.update(p);
                 } else {
@@ -146,6 +148,7 @@ public class AcceptEditTasksForm implements IsWidget, Editor<TaskDTO> {
                     p.setUserUserId(null);
                     p.setPreassignedUserName(null);
                     p.setStatus("Not assigned");
+                    p.setAssignedDate(null);
                     performUpdateTask(p);
                     store.update(p);
                 } else {

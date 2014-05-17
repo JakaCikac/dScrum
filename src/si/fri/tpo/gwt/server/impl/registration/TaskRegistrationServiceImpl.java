@@ -67,6 +67,7 @@ public class TaskRegistrationServiceImpl {
             taskPK.setUserStoryStoryId(taskDTO.getTaskPK().getUserStoryStoryId());
             Task t = ProxyManager.getTaskProxy().findTask(taskPK);
             t.setStatus(taskDTO.getStatus());
+            t.setAssignedDate(taskDTO.getAssignedDate());
 
             User u;
             if (taskDTO.getPreassignedUserName() != null) {

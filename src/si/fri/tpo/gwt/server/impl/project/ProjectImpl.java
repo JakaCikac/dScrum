@@ -246,6 +246,7 @@ public class ProjectImpl {
                                     taskDTO.setEstimatedTime(task.getEstimatedTime());
                                     taskDTO.setStatus(task.getStatus());
                                     taskDTO.setPreassignedUserName(task.getPreassignedUserName());
+                                    taskDTO.setAssignedDate(task.getAssignedDate());
 
                                     taskDTO.setUserStory(userStoryDTO);
 
