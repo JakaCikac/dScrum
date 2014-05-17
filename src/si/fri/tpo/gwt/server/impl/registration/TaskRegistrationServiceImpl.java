@@ -106,4 +106,28 @@ public class TaskRegistrationServiceImpl {
         }
         return Pair.of(true, "Task updated successfully");
     }
+
+    public static Pair<Boolean, String> deleteTask(TaskDTO taskDTO) {
+        try {
+            TaskPK taskPK = new TaskPK();
+            taskPK.setTaskId(taskDTO.getTaskPK().getTaskId());
+            taskPK.setUserStoryStoryId(taskDTO.getTaskPK().getUserStoryStoryId());
+            Task t = ProxyManager.getTaskProxy().findTask(taskPK);
+            try {
+                if (t == null)
+                    return Pair.of(false, "Data error!");
+
+                ProxyManager.getTaskProxy().destroy(t.getTaskPK());
+
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+                return Pair.of(false, e.getMessage());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Pair.of(false, e.getMessage());
+        }
+        return Pair.of(true, "Task deleted successfully");
+    }
 }

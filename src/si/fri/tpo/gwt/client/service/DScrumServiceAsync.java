@@ -119,6 +119,8 @@ public interface DScrumServiceAsync {
     void saveTask(TaskDTO taskDTO, UserStoryDTO userStoryDTO, AsyncCallback<Pair<Boolean, String>> saveTask);
 
     void updateTask(TaskDTO p, AsyncCallback<Pair<Boolean,String>> updateTask);
+
+    void deleteTask(TaskDTO taskDTO, AsyncCallback<Pair<Boolean, String>> deleteTask);
     // TASK //
 
     // USER_STORY_COMMENT //
