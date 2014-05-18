@@ -15,15 +15,15 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
 /**
- * Created by anze on 16. 05. 14.
+ * Created by nanorax on 17/05/14.
  */
-public class UserStoryCommentDialog extends Dialog {
+public class AcceptEditTasksDialog extends Dialog {
 
     private DScrumServiceAsync service;
     private ContentPanel center, west, east, north, south;
     private UserStoryDTO usDTO;
 
-    public UserStoryCommentDialog(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, UserStoryDTO usDTO) {
+    public AcceptEditTasksDialog(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, UserStoryDTO usDTO) {
         this.service = service;
         this.center = center;
         this.west = west;
@@ -34,24 +34,23 @@ public class UserStoryCommentDialog extends Dialog {
 
         // Layout
         setBodyBorder(false);
-        setHeadingText("Comment form");
+        setHeadingText("Accept or edit tasks");
 
-        setWidth(350);
-        setHeight(350);
+        setWidth(670);
+        setHeight(455);
         setHideOnButtonClick(true);
 
         ClearPanels();
 
         FlowLayoutContainer layout = new FlowLayoutContainer();
         add(layout);
-        UserStoryCommentAddForm caf = new UserStoryCommentAddForm(this.service, this.center, this.west, this.east, this.usDTO);
+        AcceptEditTasksForm aetf = new AcceptEditTasksForm(this.service, this.center, this.west, this.east, this.usDTO, this);
+        layout.add(aetf.asWidget());
         center.disable();
         east.disable();
         west.disable();
-        if(north!=null)north.disable();
+        north.disable();
         south.disable();
-        layout.add(caf.asWidget());
-
 
     }
 

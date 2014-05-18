@@ -6,6 +6,7 @@ import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import si.fri.tpo.gwt.client.dto.TaskDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
@@ -15,26 +16,28 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
 /**
- * Created by anze on 16. 05. 14.
+ * Created by anze on 18. 05. 14.
  */
-public class UserStoryCommentDialog extends Dialog {
+public class TaskEditDialog extends Dialog {
 
     private DScrumServiceAsync service;
     private ContentPanel center, west, east, north, south;
-    private UserStoryDTO usDTO;
+    private TaskDTO taskDTO;
+    private AcceptEditTasksDialog aetd;
 
-    public UserStoryCommentDialog(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, UserStoryDTO usDTO) {
+    public TaskEditDialog(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, TaskDTO taskDTO, AcceptEditTasksDialog aetd) {
         this.service = service;
         this.center = center;
         this.west = west;
         this.east = east;
         this.north = north;
         this.south = south;
-        this.usDTO = usDTO;
+        this.taskDTO = taskDTO;
+        this.aetd = aetd;
 
         // Layout
         setBodyBorder(false);
-        setHeadingText("Comment form");
+        setHeadingText("Edit task");
 
         setWidth(350);
         setHeight(350);
@@ -44,14 +47,14 @@ public class UserStoryCommentDialog extends Dialog {
 
         FlowLayoutContainer layout = new FlowLayoutContainer();
         add(layout);
-        UserStoryCommentAddForm caf = new UserStoryCommentAddForm(this.service, this.center, this.west, this.east, this.usDTO);
-        center.disable();
+        TaskEditForm tef = new TaskEditForm(this.service, this.center, this.west, this.east, this.taskDTO);
+        layout.add(tef.asWidget());
+        aetd.disable();
+        /*center.disable();
         east.disable();
         west.disable();
-        if(north!=null)north.disable();
-        south.disable();
-        layout.add(caf.asWidget());
-
+        north.disable();
+        south.disable();*/
 
     }
 
@@ -78,11 +81,12 @@ public class UserStoryCommentDialog extends Dialog {
         addHideHandler(new HideEvent.HideHandler() {
             @Override
             public void onHide(HideEvent event) {
+                aetd.hide();
                 center.enable();
                 east.enable();
                 west.enable();
-                north.enable();
-                south.enable();
+                if(north!=null)north.enable();
+                if(south!=null)south.enable();
             }
         });
     }

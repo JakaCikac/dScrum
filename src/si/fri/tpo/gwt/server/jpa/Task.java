@@ -7,18 +7,9 @@
 package si.fri.tpo.gwt.server.jpa;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  *
@@ -34,7 +25,8 @@ import javax.persistence.Table;
         @NamedQuery(name = "Task.findByEstimatedTime", query = "SELECT t FROM Task t WHERE t.estimatedTime = :estimatedTime"),
         @NamedQuery(name = "Task.findByStatus", query = "SELECT t FROM Task t WHERE t.status = :status"),
         @NamedQuery(name = "Task.findByPreassignedUserName", query = "SELECT t FROM Task t WHERE t.preassignedUserName = :preassignedUserName"),
-        @NamedQuery(name = "Task.findByUserStoryStoryId", query = "SELECT t FROM Task t WHERE t.taskPK.userStoryStoryId = :userStoryStoryId")})
+        @NamedQuery(name = "Task.findByUserStoryStoryId", query = "SELECT t FROM Task t WHERE t.taskPK.userStoryStoryId = :userStoryStoryId"),
+        @NamedQuery(name = "Task.findByAssignedTime", query = "SELECT t FROM Task t WHERE t.assignedDate = :assignedDate")})
 public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
@@ -51,6 +43,9 @@ public class Task implements Serializable {
     @Basic(optional = false)
     @Column(name = "status")
     private String status;
+    @Column(name = "assigned_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date assignedDate;
     @Column(name = "preassigned_user_name")
     private String preassignedUserName;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "task")
@@ -119,6 +114,14 @@ public class Task implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Date getAssignedDate() {
+        return assignedDate;
+    }
+
+    public void setAssignedDate(Date assignedDate) {
+        this.assignedDate = assignedDate;
     }
 
     public String getPreassignedUserName() {

@@ -2,7 +2,6 @@ package si.fri.tpo.gwt.server.impl.project;
 
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.*;
-import si.fri.tpo.gwt.server.impl.fill.FillDTO;
 import si.fri.tpo.gwt.server.jpa.*;
 import si.fri.tpo.gwt.server.proxy.ProxyManager;
 
@@ -247,6 +246,9 @@ public class ProjectImpl {
                                     taskDTO.setEstimatedTime(task.getEstimatedTime());
                                     taskDTO.setStatus(task.getStatus());
                                     taskDTO.setPreassignedUserName(task.getPreassignedUserName());
+                                    taskDTO.setAssignedDate(task.getAssignedDate());
+
+                                    taskDTO.setUserStory(userStoryDTO);
 
                                     TaskPKDTO taskPKDTO = new TaskPKDTO();
                                     taskPKDTO.setTaskId(task.getTaskPK().getTaskId());

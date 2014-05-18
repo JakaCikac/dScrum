@@ -19,14 +19,14 @@ import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.RowExpander;
-import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.*;
+import si.fri.tpo.gwt.client.form.addedit.AcceptEditTasksDialog;
 import si.fri.tpo.gwt.client.form.addedit.UserStoryCommentDialog;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
-import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.form.registration.TaskRegistrationDialog;
+import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
@@ -101,11 +101,13 @@ public class SprintBacklogForm  implements IsWidget{
 
             ColumnConfig<UserStoryDTO, String> nameCol = new ColumnConfig<UserStoryDTO, String>(getNameValue(), 100, "Name");
             ColumnConfig<UserStoryDTO, String> priorityCol = new ColumnConfig<UserStoryDTO, String>(getPriorityValue(), 100, "Priority");
-            ColumnConfig<UserStoryDTO, Double> estimatedTimeCol = new ColumnConfig<UserStoryDTO, Double>(getEstimatedTimeValue(), 100, "Estimated Time (Pt)");
-            ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 80, "Business Value");
+            ColumnConfig<UserStoryDTO, Double> estimatedTimeCol = new ColumnConfig<UserStoryDTO, Double>(getEstimatedTimeValue(), 50, "Estimated Time (Pt)");
+            ColumnConfig<UserStoryDTO, Integer> businessValueCol = new ColumnConfig<UserStoryDTO, Integer>(getBusinessValue(), 40, "Business Value");
             ColumnConfig<UserStoryDTO, String> addTaskColumn = new ColumnConfig<UserStoryDTO, String>(getTaskValue(), 60, "Add Task");
             ColumnConfig<UserStoryDTO, String> confirmColumn = new ColumnConfig<UserStoryDTO, String>(getConfirmValue(), 60, "Confirm");
-            ColumnConfig<UserStoryDTO, String> ufNoteColumn = new ColumnConfig<UserStoryDTO, String>(getNoteValue(), 100, "Note");
+            ColumnConfig<UserStoryDTO, String> rejectColumn = new ColumnConfig<UserStoryDTO, String>(getRejectValue(), 60, "Reject");
+            ColumnConfig<UserStoryDTO, String> ufNoteColumn = new ColumnConfig<UserStoryDTO, String>(getNoteValue(), 40, "Note");
+            ColumnConfig<UserStoryDTO, String> acceptEditTasksColumn = new ColumnConfig<UserStoryDTO, String>(getAcceptEditTasksValue(), 70, "Accept/Edit tasks");
 
             TextButtonCell addTaskButton = new TextButtonCell();
             addTaskButton.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -139,6 +141,19 @@ public class SprintBacklogForm  implements IsWidget{
             });
             confirmColumn.setCell(confirmButton);
 
+            TextButtonCell rejectButton = new TextButtonCell();
+            rejectButton.addSelectHandler(new SelectEvent.SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+                    Cell.Context c = event.getContext();
+                    int row = c.getIndex();
+                    UserStoryDTO p = store.get(row);
+                    p.setSprint(null); // Odvzemi zgodbo iz sprinta.
+                    performUpdateUserStory(p);
+                }
+            });
+            rejectColumn.setCell(rejectButton);
+
             TextButtonCell ufNoteButton = new TextButtonCell();
             ufNoteButton.addSelectHandler(new SelectEvent.SelectHandler() {
                 @Override
@@ -152,6 +167,21 @@ public class SprintBacklogForm  implements IsWidget{
             });
             ufNoteColumn.setCell(ufNoteButton);
 
+            TextButtonCell acceptEditTasksButton = new TextButtonCell();
+            acceptEditTasksButton.addSelectHandler(new SelectEvent.SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+                    Cell.Context c = event.getContext();
+                    int row = c.getIndex();
+                    UserStoryDTO p = store.get(row);
+                    AcceptEditTasksDialog eatd = new AcceptEditTasksDialog(service, center, west, east, north, south, p);
+                    eatd.show();
+                    //UserStoryCommentDialog uscd = new UserStoryCommentDialog(service, center, west, east, north, south, p);
+                    //uscd.show();
+                }
+            });
+            acceptEditTasksColumn.setCell(acceptEditTasksButton);
+
             List<ColumnConfig<UserStoryDTO, ?>> l = new ArrayList<ColumnConfig<UserStoryDTO, ?>>();
             l.add(expander);
             l.add(nameCol);
@@ -160,8 +190,10 @@ public class SprintBacklogForm  implements IsWidget{
             l.add(businessValueCol);
             l.add(addTaskColumn);
             l.add(ufNoteColumn);
+            l.add(acceptEditTasksColumn);
             if(productOwner) {
                 l.add(confirmColumn);
+                l.add(rejectColumn);
             }
             ColumnModel<UserStoryDTO> cm = new ColumnModel<UserStoryDTO>(l);
 
@@ -202,22 +234,29 @@ public class SprintBacklogForm  implements IsWidget{
                     amb2.show();
                 }
                 else {
-                    MessageBox amb3 = new MessageBox("Message update User Story", "User story " + userStoryDTO.getName() +"is finished.");
-                    amb3.show();
-                    UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
-                    center.add(userHomeForm.asWidget());
-                    west.clear();
-                    east.clear();
-                    SessionInfo.projectDTO = null;
-                    if (SessionInfo.userDTO.isAdmin()){
-                        AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
-                        east.add(adminNavPanel.asWidget());
+                    if (userStoryDTO.getSprint() == null){
+                        MessageBox amb3 = new MessageBox("Message update User Story", "User story " + userStoryDTO.getName() +"is rejected.");
+                        amb3.show();
+                        UserStoryCommentDialog uscd = new UserStoryCommentDialog(service, center, west, east, north, south, userStoryDTO); // Omogoci PO da doda komentar pri rejectu.
+                        uscd.show();
                     } else {
-                        UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east, north, south);
-                        east.add(userNavPanel.asWidget());
+                        MessageBox amb3 = new MessageBox("Message update User Story", "User story " + userStoryDTO.getName() +"is finished.");
+                        amb3.show();
+                        UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
+                        center.add(userHomeForm.asWidget());
+                        west.clear();
+                        east.clear();
+                        SessionInfo.projectDTO = null;
+                        if (SessionInfo.userDTO.isAdmin()) {
+                            AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
+                            east.add(adminNavPanel.asWidget());
+                        } else {
+                            UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east, north, south);
+                            east.add(userNavPanel.asWidget());
+                        }
+                        ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
+                        west.add(psf.asWidget());
                     }
-                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
-                    west.add(psf.asWidget());
                 }
             }
             @Override
@@ -250,6 +289,24 @@ public class SprintBacklogForm  implements IsWidget{
             @Override
             public String getValue(UserStoryDTO object) {
                 return "Note";
+            }
+            @Override
+            public void setValue(UserStoryDTO object, String value) {
+
+            }
+            @Override
+            public String getPath() {
+                return null;
+            }
+        };
+        return vpn;
+    }
+
+    private ValueProvider<UserStoryDTO, String> getAcceptEditTasksValue() {
+        ValueProvider<UserStoryDTO, String> vpn = new ValueProvider<UserStoryDTO, String>() {
+            @Override
+            public String getValue(UserStoryDTO object) {
+                return "Accept/Edit tasks";
             }
             @Override
             public void setValue(UserStoryDTO object, String value) {
@@ -350,6 +407,24 @@ public class SprintBacklogForm  implements IsWidget{
             @Override
             public String getValue(UserStoryDTO object) {
                 return "Confirm";
+            }
+            @Override
+            public void setValue(UserStoryDTO object, String value) {
+
+            }
+            @Override
+            public String getPath() {
+                return null;
+            }
+        };
+        return vpn;
+    }
+
+    private ValueProvider<UserStoryDTO, String> getRejectValue() {
+        ValueProvider<UserStoryDTO, String> vpn = new ValueProvider<UserStoryDTO, String>() {
+            @Override
+            public String getValue(UserStoryDTO object) {
+                return "Reject";
             }
             @Override
             public void setValue(UserStoryDTO object, String value) {
