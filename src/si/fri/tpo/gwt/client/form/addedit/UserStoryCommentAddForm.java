@@ -20,7 +20,7 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 /**
  * Created by anze on 16. 05. 14.
  */
-public class CommentAddForm implements IsWidget {
+public class UserStoryCommentAddForm implements IsWidget {
     private DScrumServiceAsync service;
     private ContentPanel center, west, east;
     private VerticalPanel vp;
@@ -39,7 +39,7 @@ public class CommentAddForm implements IsWidget {
         return vp;
     }
 
-    public CommentAddForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, UserStoryDTO userStoryDTO) {
+    public UserStoryCommentAddForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, UserStoryDTO userStoryDTO) {
         this.service = service;
         this.center = center;
         this.west = west;

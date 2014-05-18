@@ -4,6 +4,8 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
+import com.sencha.gxt.widget.core.client.event.HideEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
@@ -38,18 +40,24 @@ public class AcceptEditTasksDialog extends Dialog {
         setHeight(455);
         setHideOnButtonClick(true);
 
-
+        ClearPanels();
 
         FlowLayoutContainer layout = new FlowLayoutContainer();
         add(layout);
         AcceptEditTasksForm aetf = new AcceptEditTasksForm(this.service, this.center, this.west, this.east, this.usDTO, this);
         layout.add(aetf.asWidget());
+        center.disable();
+        east.disable();
+        west.disable();
+        north.disable();
+        south.disable();
+
     }
 
-    /*private void ClearPanels(){
-        addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
+    private void ClearPanels(){
+        getButton(this.getPredefinedButtons().get(0)).addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
-            public void onDialogHide(DialogHideEvent event) {
+            public void onSelect(SelectEvent event) {
                 UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
                 center.add(userHomeForm.asWidget());
                 west.clear();
@@ -66,5 +74,15 @@ public class AcceptEditTasksDialog extends Dialog {
                 west.add(psf.asWidget());
             }
         });
-    }*/
+        addHideHandler(new HideEvent.HideHandler() {
+            @Override
+            public void onHide(HideEvent event) {
+                center.enable();
+                east.enable();
+                west.enable();
+                north.enable();
+                south.enable();
+            }
+        });
+    }
 }

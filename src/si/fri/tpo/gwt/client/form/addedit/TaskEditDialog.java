@@ -4,6 +4,8 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
+import com.sencha.gxt.widget.core.client.event.HideEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
@@ -21,8 +23,9 @@ public class TaskEditDialog extends Dialog {
     private DScrumServiceAsync service;
     private ContentPanel center, west, east, north, south;
     private TaskDTO taskDTO;
+    private AcceptEditTasksDialog aetd;
 
-    public TaskEditDialog(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, TaskDTO taskDTO) {
+    public TaskEditDialog(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, TaskDTO taskDTO, AcceptEditTasksDialog aetd) {
         this.service = service;
         this.center = center;
         this.west = west;
@@ -30,6 +33,7 @@ public class TaskEditDialog extends Dialog {
         this.north = north;
         this.south = south;
         this.taskDTO = taskDTO;
+        this.aetd = aetd;
 
         // Layout
         setBodyBorder(false);
@@ -45,12 +49,19 @@ public class TaskEditDialog extends Dialog {
         add(layout);
         TaskEditForm tef = new TaskEditForm(this.service, this.center, this.west, this.east, this.taskDTO);
         layout.add(tef.asWidget());
+        aetd.disable();
+        /*center.disable();
+        east.disable();
+        west.disable();
+        north.disable();
+        south.disable();*/
+
     }
 
     private void ClearPanels(){
-        addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
+        getButton(this.getPredefinedButtons().get(0)).addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
-            public void onDialogHide(DialogHideEvent event) {
+            public void onSelect(SelectEvent event) {
                 UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
                 center.add(userHomeForm.asWidget());
                 west.clear();
@@ -65,6 +76,17 @@ public class TaskEditDialog extends Dialog {
                 }
                 ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                 west.add(psf.asWidget());
+            }
+        });
+        addHideHandler(new HideEvent.HideHandler() {
+            @Override
+            public void onHide(HideEvent event) {
+                aetd.hide();
+                center.enable();
+                east.enable();
+                west.enable();
+                if(north!=null)north.enable();
+                if(south!=null)south.enable();
             }
         });
     }

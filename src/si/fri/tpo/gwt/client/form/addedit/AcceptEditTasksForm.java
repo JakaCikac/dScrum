@@ -1,18 +1,13 @@
 package si.fri.tpo.gwt.client.form.addedit;
 
 import com.google.gwt.cell.client.Cell;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dev.ModuleTabPanel;
 import com.google.gwt.editor.client.Editor;
-import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.cell.core.client.TextButtonCell;
 import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.ValueProvider;
-import com.sencha.gxt.core.client.util.ToggleGroup;
-import com.sencha.gxt.data.client.editor.ListStoreEditor;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
@@ -25,14 +20,10 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.*;
 import com.sencha.gxt.widget.core.client.form.FormPanel;
-import com.sencha.gxt.widget.core.client.form.validator.MinLengthValidator;
 import com.sencha.gxt.widget.core.client.grid.*;
 import com.sencha.gxt.widget.core.client.grid.Grid;
-import com.sencha.gxt.widget.core.client.grid.editing.GridEditing;
-import com.sencha.gxt.widget.core.client.grid.editing.GridInlineEditing;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
@@ -170,8 +161,7 @@ public class AcceptEditTasksForm implements IsWidget, Editor<TaskDTO> {
                 TaskDTO p = store.get(row);
                 // shrani v bazo, refresh girduslus
                 if(p.getUserUserId() == null && (p.getPreassignedUserName()) == null || (p.getPreassignedUserName()!= null && p.getPreassignedUserName().equals(SessionInfo.userDTO.getUsername()))){
-                    aetd.hide();
-                    TaskEditDialog ted = new TaskEditDialog(service, center, west, east, north, south, p);
+                    TaskEditDialog ted = new TaskEditDialog(service, center, west, east, north, south, p, aetd);
                     ted.show();
                 } else {
                     if (p.getUserUserId() != null && p.getUserUserId().getUsername().equals(SessionInfo.userDTO.getUsername())){

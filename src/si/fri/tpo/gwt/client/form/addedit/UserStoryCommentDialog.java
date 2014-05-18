@@ -4,11 +4,12 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
+import com.sencha.gxt.widget.core.client.event.HideEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
-import si.fri.tpo.gwt.client.form.registration.TaskRegistrationForm;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
@@ -43,16 +44,21 @@ public class UserStoryCommentDialog extends Dialog {
 
         FlowLayoutContainer layout = new FlowLayoutContainer();
         add(layout);
-        CommentAddForm caf = new CommentAddForm(this.service, this.center, this.west, this.east, this.usDTO);
+        UserStoryCommentAddForm caf = new UserStoryCommentAddForm(this.service, this.center, this.west, this.east, this.usDTO);
+        center.disable();
+        east.disable();
+        west.disable();
+        if(north!=null)north.disable();
+        south.disable();
         layout.add(caf.asWidget());
 
 
     }
 
     private void ClearPanels(){
-        addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
+        getButton(this.getPredefinedButtons().get(0)).addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
-            public void onDialogHide(DialogHideEvent event) {
+            public void onSelect(SelectEvent event) {
                 UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
                 center.add(userHomeForm.asWidget());
                 west.clear();
@@ -67,6 +73,16 @@ public class UserStoryCommentDialog extends Dialog {
                 }
                 ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                 west.add(psf.asWidget());
+            }
+        });
+        addHideHandler(new HideEvent.HideHandler() {
+            @Override
+            public void onHide(HideEvent event) {
+                center.enable();
+                east.enable();
+                west.enable();
+                north.enable();
+                south.enable();
             }
         });
     }
