@@ -3,11 +3,9 @@ package si.fri.tpo.gwt.client.form.addedit;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
-import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
-import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
@@ -50,12 +48,6 @@ public class TaskEditDialog extends Dialog {
         TaskEditForm tef = new TaskEditForm(this.service, this.center, this.west, this.east, this.taskDTO);
         layout.add(tef.asWidget());
         aetd.disable();
-        /*center.disable();
-        east.disable();
-        west.disable();
-        north.disable();
-        south.disable();*/
-
     }
 
     private void ClearPanels(){

@@ -1,18 +1,12 @@
 package si.fri.tpo.gwt.client.form.search;
 
-import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.dto.UserDTO;
-import si.fri.tpo.gwt.client.form.home.UserHomeForm;
-import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
-import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
-import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
-import si.fri.tpo.gwt.client.session.SessionInfo;
 
 /**
  * Created by nanorax on 12/04/14.

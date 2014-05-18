@@ -3,7 +3,6 @@ package si.fri.tpo.gwt.client.form.addedit;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
-import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;

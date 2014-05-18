@@ -16,7 +16,6 @@ import com.sencha.gxt.widget.core.client.form.IntegerField;
 import com.sencha.gxt.widget.core.client.form.validator.MaxNumberValidator;
 import com.sencha.gxt.widget.core.client.form.validator.MinDateValidator;
 import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.SprintPKDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
@@ -26,7 +25,6 @@ import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
-import si.fri.tpo.gwt.server.jpa.SprintPK;
 
 import java.util.ArrayList;
 import java.util.Date;

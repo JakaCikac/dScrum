@@ -15,7 +15,6 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
-import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.RowClickEvent;
 import com.sencha.gxt.widget.core.client.grid.CheckBoxSelectionModel;
@@ -26,7 +25,6 @@ import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
-import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
@@ -116,7 +114,6 @@ public class AddStoryToSprintForm implements IsWidget{
         ContentPanel panel1 = new ContentPanel();
         panel1.setHeaderVisible(true);
         panel1.setHeadingText("Select Sprint");
-        //panel1.setPixelSize(200, 200);
         panel1.setSize("360", "100");
 
         panel1.setWidget(grid);
@@ -141,8 +138,6 @@ public class AddStoryToSprintForm implements IsWidget{
                 }
             }
         });
-
-        //final NumberFormat number = NumberFormat.getFormat("0.00");
 
         IdentityValueProvider<UserStoryDTO> identityUS = new IdentityValueProvider<UserStoryDTO>();
         smUS = new CheckBoxSelectionModel<UserStoryDTO>(identityUS);

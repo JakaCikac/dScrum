@@ -9,17 +9,11 @@ import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
-import com.sencha.gxt.widget.core.client.FramedPanel;
-import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.form.DualListField;
-import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.validator.EmptyValidator;
-import com.sencha.gxt.widget.core.client.grid.ColumnModel;
-import com.sencha.gxt.widget.core.client.grid.Grid;
 import si.fri.tpo.gwt.client.dto.UserDTO;
-import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 import java.util.ArrayList;
