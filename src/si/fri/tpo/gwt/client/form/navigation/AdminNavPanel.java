@@ -2,13 +2,17 @@ package si.fri.tpo.gwt.client.form.navigation;
 
 /**
  * Created by nanorax on 04/04/14.
+ * Modified by Anze
  */
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.core.client.util.Margins;
+import com.sencha.gxt.core.client.util.Padding;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.VBoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.form.addedit.AdminUserDataEditForm;
@@ -25,7 +29,6 @@ public class AdminNavPanel implements IsWidget {
     private ContentPanel center;
     private ContentPanel west;
     private ContentPanel east, north, south;
-    private FlowLayoutContainer con;
 
     private static final int PANEL_WIDTH = 230;
     private static final int PANEL_HEIGHT = 400;
@@ -42,8 +45,6 @@ public class AdminNavPanel implements IsWidget {
     private ContentPanel panel;
     public Widget asWidget() {
         panel = new ContentPanel();
-        con = new FlowLayoutContainer();
-        panel.add(con);
         panel.setBodyBorder(false);
         panel.setHeadingText("Administrator menu");
         panel.setPosition(1,1);
@@ -53,10 +54,15 @@ public class AdminNavPanel implements IsWidget {
 
     private void createAdminNavPanel() {
 
-        ContentPanel cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
+        VBoxLayoutContainer lcwest = new VBoxLayoutContainer();
+        //lcwest.addStyleName("x-toolbar-mark");
+        lcwest.setPadding(new Padding(5));
+        lcwest.setVBoxLayoutAlign(VBoxLayoutContainer.VBoxLayoutAlign.STRETCH);
+
+        panel.setWidget(lcwest);
+
+        BoxLayoutContainer.BoxLayoutData vBoxData = new BoxLayoutContainer.BoxLayoutData(new Margins(5, 5, 5, 5));
+        vBoxData.setFlex(1);
 
         final TextButton users = new TextButton("User Management");
         users.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -68,30 +74,7 @@ public class AdminNavPanel implements IsWidget {
                 center.add(rgf.asWidget());
             }
         });
-        cp.add(users);
-        con.add(cp);
-
-        cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
-
-        final TextButton projectManagement = new TextButton("Project Management");
-        projectManagement.addSelectHandler(new SelectEvent.SelectHandler() {
-            @Override
-            public void onSelect(SelectEvent event) {
-                ProjectRegistrationForm pgf = new ProjectRegistrationForm(service, center, west, east, north, south);
-                center.clear();
-                center.add(pgf.asWidget());
-            }
-        });
-        cp.add(projectManagement);
-        con.add(cp);
-
-        cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
+        lcwest.add(users);
 
         final TextButton userEditing = new TextButton("User Editing");
         userEditing.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -102,13 +85,18 @@ public class AdminNavPanel implements IsWidget {
                 center.add(audf.asWidget());
             }
         });
-        cp.add(userEditing);
-        con.add(cp);
+        lcwest.add(userEditing);
 
-        cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
+        final TextButton projectManagement = new TextButton("Project Management");
+        projectManagement.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                ProjectRegistrationForm pgf = new ProjectRegistrationForm(service, center, west, east, north, south);
+                center.clear();
+                center.add(pgf.asWidget());
+            }
+        });
+        lcwest.add(projectManagement);
 
         final TextButton projectEditing = new TextButton("Project Editing");
         projectEditing.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -123,8 +111,7 @@ public class AdminNavPanel implements IsWidget {
                 }
             }
         });
-        cp.add(projectEditing);
-        con.add(cp);
+        lcwest.add(projectEditing);
 
         ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
         west.setHeadingText("Project list");

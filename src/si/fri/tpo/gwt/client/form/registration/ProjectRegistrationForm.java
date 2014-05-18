@@ -146,7 +146,7 @@ public class ProjectRegistrationForm implements IsWidget {
                             selScrumMaster.setText(scrumMasterDTO.getUsername());
                         } else Info.display("Warning", "Scrum Master can not be the same person as Product Owner!");
                     }
-                });
+                }, center, west, east, north, south);
                 sus.show();
             }
         });
@@ -162,7 +162,7 @@ public class ProjectRegistrationForm implements IsWidget {
                             selProductOwner.setText(productOwnerDTO.getUsername());
                         } else Info.display("Warning", "Product Owner can not be the same person as Scrum Master!");
                     }
-                });
+                }, center, west, east, north, south);
                 sus.show();
             }
         });

@@ -4,6 +4,8 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
+import com.sencha.gxt.widget.core.client.event.HideEvent;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.form.addedit.UserStoryEditForm;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
@@ -45,14 +47,18 @@ public class TaskRegistrationDialog extends Dialog {
         add(layout);
         TaskRegistrationForm trf = new TaskRegistrationForm(this.service, this.center, this.west, this.east, this.usDTO);
         layout.add(trf.asWidget());
-
+        center.disable();
+        east.disable();
+        west.disable();
+        if(north!=null)north.disable();
+        if(south!=null)south.disable();
 
     }
 
     private void ClearPanels(){
-        addDialogHideHandler(new DialogHideEvent.DialogHideHandler() {
+        getButton(this.getPredefinedButtons().get(0)).addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
-            public void onDialogHide(DialogHideEvent event) {
+            public void onSelect(SelectEvent event) {
                 UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
                 center.add(userHomeForm.asWidget());
                 west.clear();
@@ -67,6 +73,16 @@ public class TaskRegistrationDialog extends Dialog {
                 }
                 ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                 west.add(psf.asWidget());
+            }
+        });
+        addHideHandler(new HideEvent.HideHandler() {
+            @Override
+            public void onHide(HideEvent event) {
+                center.enable();
+                east.enable();
+                west.enable();
+                if (north != null) north.enable();
+                if (south != null) south.enable();
             }
         });
     }

@@ -2,11 +2,12 @@ package si.fri.tpo.gwt.client.form.navigation;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.core.client.util.Padding;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
-import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VBoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.form.addedit.UserDataEditForm;
@@ -15,12 +16,11 @@ import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 /**
  * Created by nanorax on 06/04/14.
- * Modified by t13as
+ * Modified by Anze
  */
 public class UserNavPanel implements IsWidget{
     private DScrumServiceAsync service;
     private ContentPanel center;
-    private FlowLayoutContainer con;
     private ContentPanel west;
     private ContentPanel east, north, south;
     private ContentPanel panel;
@@ -39,8 +39,6 @@ public class UserNavPanel implements IsWidget{
 
     public Widget asWidget() {
         panel = new ContentPanel();
-        //con = new FlowLayoutContainer();
-        //panel.add(con);
         panel.setHeadingText("User menu");
         panel.setBodyBorder(false);
 
@@ -58,10 +56,10 @@ public class UserNavPanel implements IsWidget{
         lcwest.setPadding(new Padding(5));
         lcwest.setVBoxLayoutAlign(VBoxLayoutContainer.VBoxLayoutAlign.STRETCH);
 
-        ContentPanel cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
+        panel.setWidget(lcwest);
+
+        BoxLayoutContainer.BoxLayoutData vBoxData = new BoxLayoutContainer.BoxLayoutData(new Margins(5, 5, 5, 5));
+        vBoxData.setFlex(1);
 
         TextButton userDataEditB = new TextButton("User Edit");
         userDataEditB.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -72,8 +70,7 @@ public class UserNavPanel implements IsWidget{
                 center.add(udef.asWidget());
             }
         });
-        cp.add(userDataEditB);
-        con.add(cp);
+        lcwest.add(userDataEditB);
 
         ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
         west.setHeadingText("Project list");

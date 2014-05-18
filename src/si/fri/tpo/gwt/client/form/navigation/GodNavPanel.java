@@ -2,13 +2,17 @@ package si.fri.tpo.gwt.client.form.navigation;
 
 /**
  * Created by nanorax on 04/04/14.
+ * Modified by Anze
  */
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.core.client.util.Margins;
+import com.sencha.gxt.core.client.util.Padding;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.VBoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.form.addedit.AdminUserDataEditForm;
@@ -30,7 +34,6 @@ public class GodNavPanel implements IsWidget {
     private ContentPanel center;
     private ContentPanel west;
     private ContentPanel east, north, south;
-    private FlowLayoutContainer con;
 
     private static final int PANEL_WIDTH = 230;
     private static final int PANEL_HEIGHT = 400;
@@ -47,22 +50,23 @@ public class GodNavPanel implements IsWidget {
     private ContentPanel panel;
     public Widget asWidget() {
         panel = new ContentPanel();
-        con = new FlowLayoutContainer();
-        panel.add(con);
         panel.setHeadingText("Admin / Scrum Master menu");
         panel.setBodyBorder(false);
-        createAdminNavPanel();
+        createGodNavPanel();
         return panel;
     }
 
-    private void createAdminNavPanel() {
+    private void createGodNavPanel() {
 
-        ContentPanel cp;
+        VBoxLayoutContainer lcwest = new VBoxLayoutContainer();
+        //lcwest.addStyleName("x-toolbar-mark");
+        lcwest.setPadding(new Padding(5));
+        lcwest.setVBoxLayoutAlign(VBoxLayoutContainer.VBoxLayoutAlign.STRETCH);
 
-        cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
+        panel.setWidget(lcwest);
+
+        BoxLayoutContainer.BoxLayoutData vBoxData = new BoxLayoutContainer.BoxLayoutData(new Margins(5, 5, 5, 5));
+        vBoxData.setFlex(1);
 
         final TextButton users = new TextButton("User Management");
         users.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -74,13 +78,7 @@ public class GodNavPanel implements IsWidget {
                 center.add(rgf.asWidget());
             }
         });
-        cp.add(users);
-        con.add(cp);
-
-        cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
+        lcwest.add(users);
 
         final TextButton userDataEditB = new TextButton("Edit me");
         userDataEditB.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -91,13 +89,7 @@ public class GodNavPanel implements IsWidget {
                 center.add(udef.asWidget());
             }
         });
-        cp.add(userDataEditB);
-        con.add(cp);
-
-        cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
+        lcwest.add(userDataEditB);
 
         final TextButton userEditing = new TextButton("Users Editing");
         userEditing.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -108,13 +100,7 @@ public class GodNavPanel implements IsWidget {
                 center.add(audf.asWidget());
             }
         });
-        cp.add(userEditing);
-        con.add(cp);
-
-        cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
+        lcwest.add(userEditing);
 
         final TextButton projectManagement = new TextButton("Project Management");
         projectManagement.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -125,13 +111,7 @@ public class GodNavPanel implements IsWidget {
                 center.add(pgf.asWidget());
             }
         });
-        cp.add(projectManagement);
-        con.add(cp);
-
-        cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
+        lcwest.add(projectManagement);
 
         final TextButton projectEditing = new TextButton("Project Editing");
         projectEditing.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -146,13 +126,7 @@ public class GodNavPanel implements IsWidget {
                 }
             }
         });
-        cp.add(projectEditing);
-        con.add(cp);
-
-        cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
+        lcwest.add(projectEditing);
 
         final TextButton sprintRegistrationB = new TextButton("Sprint Management");
         sprintRegistrationB.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -167,13 +141,7 @@ public class GodNavPanel implements IsWidget {
                 }
             }
         });
-        cp.add(sprintRegistrationB);
-        con.add(cp);
-
-        cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
+        lcwest.add(sprintRegistrationB);
 
         final TextButton sprintDataEditB = new TextButton("Sprint Edit");
         sprintDataEditB.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -188,13 +156,7 @@ public class GodNavPanel implements IsWidget {
                 }
             }
         });
-        cp.add(sprintDataEditB);
-        con.add(cp);
-
-        cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
+        lcwest.add(sprintDataEditB);
 
         final TextButton userStoryManagement = new TextButton("User Story Management");
         userStoryManagement.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -209,13 +171,7 @@ public class GodNavPanel implements IsWidget {
                 }
             }
         });
-        cp.add(userStoryManagement);
-        con.add(cp);
-
-        cp = new ContentPanel();
-        cp.setHeaderVisible(false);
-        cp.setAnimCollapse(false);
-        cp.setBodyStyleName("pad-text");
+        lcwest.add(userStoryManagement);
 
         final TextButton addStoryToSprintManagement = new TextButton("Add User Story to Sprint");
         addStoryToSprintManagement.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -230,8 +186,7 @@ public class GodNavPanel implements IsWidget {
                 }
             }
         });
-        cp.add(addStoryToSprintManagement);
-        con.add(cp);
+        lcwest.add(addStoryToSprintManagement);
 
         ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
         west.setHeadingText("Project list");

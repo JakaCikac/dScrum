@@ -98,7 +98,7 @@ public class AdminUserDataEditForm implements IsWidget{
                         selectedUser.setText(userDTO.getUsername());
                         fillUserForm(userDTO);
                     }
-                });
+                }, center, west, east, north, south);
                 sus.show();
             }
         });
