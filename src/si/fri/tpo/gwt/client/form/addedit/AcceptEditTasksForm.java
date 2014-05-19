@@ -225,6 +225,7 @@ public class AcceptEditTasksForm implements IsWidget, Editor<TaskDTO> {
         verticalPanel.add(p);
 
     }
+    //end createTaskForm()
 
     private void performDeleteTask(TaskDTO taskDTO) {
         AsyncCallback<Pair<Boolean, String>> deleteTask = new AsyncCallback<Pair<Boolean, String>>() {

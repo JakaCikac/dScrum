@@ -1,11 +1,14 @@
 package si.fri.tpo.gwt.client.form.home;
 
+import com.google.gwt.cell.client.Cell;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.cell.core.client.TextButtonCell;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
@@ -13,6 +16,7 @@ import com.sencha.gxt.widget.core.client.grid.GroupingView;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
+import si.fri.tpo.gwt.client.form.addedit.WorkHistoryDialog;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
@@ -52,12 +56,27 @@ public class MyTasksForm implements IsWidget{
             ColumnConfig<TaskDTO, String> statusCol = new ColumnConfig<TaskDTO, String>(getStatusValue(), 200, "Status");
             ColumnConfig<TaskDTO, String> descriptionCol = new ColumnConfig<TaskDTO, String>(getDescriptionValue(), 200, "Description");
             ColumnConfig<TaskDTO, String> userStoryCol = new ColumnConfig<TaskDTO, String>(getUserStoryValue(), 200, "User Story");
+            ColumnConfig<TaskDTO, String> workHistoryCol = new ColumnConfig<TaskDTO, String>(getWorkHistoryValue(), 100, "Work History");
 
             List<ColumnConfig<TaskDTO, ?>> l = new ArrayList<ColumnConfig<TaskDTO, ?>>();
             l.add(descriptionCol);
             l.add(statusCol);
             l.add(userStoryCol);
+            l.add(workHistoryCol);
             ColumnModel<TaskDTO> cm = new ColumnModel<TaskDTO>(l);
+
+            TextButtonCell workHistoryButton = new TextButtonCell();
+            workHistoryButton.addSelectHandler(new SelectEvent.SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+                    Cell.Context c = event.getContext();
+                    int row = c.getIndex();
+                    TaskDTO t = store.get(row);
+                    WorkHistoryDialog whd = new WorkHistoryDialog(service, center, west, east, north, south, t);
+                    whd.show();
+                }
+            });
+            workHistoryCol.setCell(workHistoryButton);
 
             store = new ListStore<TaskDTO>(getModelKeyProvider());
             getTaskList();
@@ -158,4 +177,22 @@ public class MyTasksForm implements IsWidget{
         return mkp;
     }
 
+    //TO DO !!!!
+    private ValueProvider<TaskDTO, String> getWorkHistoryValue() {
+        ValueProvider<TaskDTO, String> vpn = new ValueProvider<TaskDTO, String>() {
+            @Override
+            public String getValue(TaskDTO object) {
+                return "Work History";
+            }
+            @Override
+            public void setValue(TaskDTO object, String value) {
+
+            }
+            @Override
+            public String getPath() {
+                return null;
+            }
+        };
+        return vpn;
+    }
 }
