@@ -127,7 +127,14 @@ public interface DScrumServiceAsync {
     void saveComment(UserStoryDTO userStoryDTO, AsyncCallback<Pair<Boolean,String>> saveComment);
 
     void updateComment(UserStoryDTO userStoryDTO, AsyncCallback<Pair<Boolean,String>> updateComment);
+
     // USER_STORY_COMMENT //
+
+    // DISCUSSION //
+    void findAllDiscussionsByProject(ProjectDTO projectDTO, AsyncCallback<List<DiscussionDTO>> callback);
+
+    void saveDiscussion(DiscussionDTO discussionDTO, ProjectDTO projectDTO, AsyncCallback<Pair<Boolean,String>> callback);
+    // DISCUSSION //
 
 }
 
