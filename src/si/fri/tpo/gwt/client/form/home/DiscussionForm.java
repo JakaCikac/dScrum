@@ -113,14 +113,38 @@ public class DiscussionForm implements IsWidget {
             fp.add(fpp);
             vp.add(fp);
 
+
+            RowExpander<DiscussionDTO> expander = new RowExpander<DiscussionDTO>(new AbstractCell<DiscussionDTO>() {
+                @Override
+                public void render(Context context, DiscussionDTO value, SafeHtmlBuilder sb) {
+                    sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'><b>Content:</b></p>");
+                    sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'>" + value.getContent().replaceAll("\n", "</br>") + "</p>");
+                    sb.appendHtmlConstant("<p style='margin: 15px 5px 3px'><b>Comments:</b></p>");
+                }
+            });
+
             ColumnConfig<DiscussionDTO, String> timestampCol = new ColumnConfig<DiscussionDTO, String>(getTimestampValue(), 150, "Date/Time");
             ColumnConfig<DiscussionDTO, String> contentCol = new ColumnConfig<DiscussionDTO, String>(getContentValue(), 250, "Content");
             ColumnConfig<DiscussionDTO, String> authorCol = new ColumnConfig<DiscussionDTO, String>(getAuthorValue(), 160, "Author");
+            ColumnConfig<DiscussionDTO, String> addCommentButtonCol = new ColumnConfig<DiscussionDTO, String>(getAddCommentValue(), 160, "Comment");
 
             List<ColumnConfig<DiscussionDTO, ?>> l = new ArrayList<ColumnConfig<DiscussionDTO, ?>>();
+            l.add(expander);
             l.add(timestampCol);
             l.add(authorCol);
             l.add(contentCol);
+            l.add(addCommentButtonCol);
+
+            TextButtonCell addCommentButton = new TextButtonCell();
+            addCommentButton.addSelectHandler(new SelectEvent.SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+                    Cell.Context c = event.getContext();
+                    int row = c.getIndex();
+
+                }
+            });
+            addCommentButtonCol.setCell(addCommentButton);
 
             ColumnModel<DiscussionDTO> cm = new ColumnModel<DiscussionDTO>(l);
 
@@ -134,18 +158,19 @@ public class DiscussionForm implements IsWidget {
             cp.setPixelSize(850, 460);
             cp.addStyleName("margin-10");
 
-            final GroupingView<DiscussionDTO> viewSprint = new GroupingView<DiscussionDTO>();
-            viewSprint.setForceFit(true);
+            final GroupingView<DiscussionDTO> viewDiscussion = new GroupingView<DiscussionDTO>();
+            viewDiscussion.setForceFit(true);
             ContentPanel lol = new ContentPanel();
             grid = new Grid<DiscussionDTO>(store, cm);
-            grid.setView(viewSprint);
-            //grid.getView().setAutoExpandColumn(nameCol);
-            //viewSprint.groupBy(sprintColumn);
-            //viewSprint.setEnableGroupingMenu(false);
+            grid.setView(viewDiscussion);
+            grid.getView().setAutoExpandColumn(timestampCol);
+            //viewDiscussion.groupBy(contentCol);
+            viewDiscussion.setEnableGroupingMenu(false);
             grid.setBorders(true);
             grid.getView().setStripeRows(true);
             grid.getView().setColumnLines(true);
             grid.getView().setForceFit(true);
+            expander.initPlugin(grid);
             lol.setWidget(grid);
             cp.add(lol);
             tabPane.add(cp, "Discussion");
@@ -233,6 +258,23 @@ public class DiscussionForm implements IsWidget {
             @Override
             public String getValue(DiscussionDTO object) {
                 return object.getCreatetime().toString();
+            }
+            @Override
+            public void setValue(DiscussionDTO object, String value) {
+            }
+            @Override
+            public String getPath() {
+                return null;
+            }
+        };
+        return vpn;
+    }
+
+    private ValueProvider<DiscussionDTO, String> getAddCommentValue() {
+        ValueProvider<DiscussionDTO, String> vpn = new ValueProvider<DiscussionDTO, String>() {
+            @Override
+            public String getValue(DiscussionDTO object) {
+                return "Comment";
             }
             @Override
             public void setValue(DiscussionDTO object, String value) {
