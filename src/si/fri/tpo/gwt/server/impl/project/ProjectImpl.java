@@ -273,9 +273,62 @@ public class ProjectImpl {
 
                                     List<WorkloadDTO> workloadDTOList = new ArrayList<WorkloadDTO>();
                                     for(Workload workload : task.getWorkloadList()){
+                                        workload = ProxyManager.getWorkloadProxy().findWorkload(workload.getWorkloadPK());
                                         WorkloadDTO workloadDTO = new WorkloadDTO();
-                                        
+                                        workloadDTO.setDay(workload.getDay());
+                                        workloadDTO.setTimeRemaining(workload.getTimeRemaining());
+                                        workloadDTO.setTimeSpent(workload.getTimeSpent());
+
+                                        User user = ProxyManager.getUserProxy().findUser(workload.getUser().getUserId());
+                                        UserDTO userDTO = new UserDTO();
+                                        userDTO.setUserId(user.getUserId());
+                                        userDTO.setUsername(user.getUsername());
+                                        userDTO.setPassword(user.getPassword());
+                                        userDTO.setFirstName(user.getFirstName());
+                                        userDTO.setLastName(user.getLastName());
+                                        userDTO.setEmail(user.getEmail());
+                                        userDTO.setAdmin(user.getIsAdmin());
+                                        userDTO.setSalt(user.getSalt());
+                                        userDTO.setActive(user.getIsActive());
+                                        userDTO.setTimeCreated(user.getTimeCreated());
+                                        taskDTO.setUserUserId(userDTO);
+                                        workloadDTO.setUser(userDTO);
+
+                                        workloadDTO.setTask(taskDTO);
+
+                                        WorkloadPKDTO workloadPKDTO = new WorkloadPKDTO();
+                                        WorkloadPK workloadPK = workload.getWorkloadPK();
+                                        workloadPKDTO.setTaskTaskId(workloadPK.getTaskTaskId());
+                                        workloadPKDTO.setTaskUserStoryStoryId(workloadPK.getTaskUserStoryStoryId());
+                                        workloadPKDTO.setUserUserId(workloadPK.getUserUserId());
+                                        workloadPKDTO.setWorkloadId(workloadPK.getWorkloadId());
+                                        workloadDTO.setWorkloadPK(workloadPKDTO);
+
+                                        List<WorkblockDTO> workblockDTOList = new ArrayList<WorkblockDTO>();
+                                        for(Workblock workblock : workload.getWorkblockList()){
+                                            workblock = ProxyManager.getWorkblockProxy().findWorkblock(workblock.getWorkblockPK());
+                                            WorkblockDTO workblockDTO = new WorkblockDTO();
+                                            workblockDTO.setTimeStart(workblock.getTimeStart());
+                                            workblockDTO.setTimeStop(workblock.getTimeStop());
+
+                                            workblockDTO.setWorkload(workloadDTO);
+
+                                            WorkblockPKDTO workblockPKDTO = new WorkblockPKDTO();
+                                            WorkblockPK workblockPK = workblock.getWorkblockPK();
+                                            workloadPKDTO.setWorkloadId(workblockPK.getWorkloadWorkloadId());
+                                            workblockPKDTO.setWorkloadTaskTaskId(workloadPK.getTaskTaskId());
+                                            workblockPKDTO.setWorkloadTaskUserStoryStoryId(workblockPK.getWorkloadTaskUserStoryStoryId());
+                                            workblockPKDTO.setWorkloadUserUserId(workblockPK.getWorkloadUserUserId());
+                                            workblockPKDTO.setWorkloadWorkloadId(workblockPK.getWorkloadWorkloadId());
+                                            workblockDTO.setWorkblockPK(workblockPKDTO);
+
+                                            workblockDTOList.add(workblockDTO);
+                                        }
+                                        workloadDTO.setWorkblockList(workblockDTOList);
+
+                                        workloadDTOList.add(workloadDTO);
                                     }
+                                    taskDTO.setWorkloadList(workloadDTOList);
 
                                     taskDTOList.add(taskDTO);
                                 }
