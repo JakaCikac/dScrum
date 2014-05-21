@@ -82,6 +82,7 @@ public class SprintDataEditForm implements IsWidget {
         return vp;
     }
 
+    @Deprecated
     private void createSprintForm() {
         FramedPanel panel = new FramedPanel();
         panel.setHeadingText("Sprint Creation Form");
@@ -375,6 +376,7 @@ public class SprintDataEditForm implements IsWidget {
         return vpsn;
     }
 
+    @Deprecated
     private ValueProvider<SprintDTO, String> getStartDateValue() {
         ValueProvider<SprintDTO, String> vpsd = new ValueProvider<SprintDTO, String>() {
             @Override
@@ -393,6 +395,7 @@ public class SprintDataEditForm implements IsWidget {
         return vpsd;
     }
 
+    @Deprecated
     private ValueProvider<SprintDTO, String> getEndDateValue() {
         ValueProvider<SprintDTO, String> vped = new ValueProvider<SprintDTO, String>() {
             @Override

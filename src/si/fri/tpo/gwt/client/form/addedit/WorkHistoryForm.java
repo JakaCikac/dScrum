@@ -5,21 +5,23 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.FormPanel;
+import com.sencha.gxt.widget.core.client.form.IntegerField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.RowNumberer;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
-import si.fri.tpo.gwt.client.dto.WorkblockDTO;
 import si.fri.tpo.gwt.client.dto.WorkloadDTO;
 import com.google.gwt.editor.client.Editor;
-import si.fri.tpo.gwt.client.dto.WorkloadDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
 import java.util.ArrayList;
@@ -40,9 +42,11 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
     private FlowPanel container;
     private TaskDTO selectedTaskDTO;
     private WorkloadDTO selectedWorkloadDTO;
-    private WorkblockDTO selectedWorkblockDTO;
     private ListStore<WorkloadDTO> store;
     private Grid<WorkloadDTO> grid;
+
+    private IntegerField workSpent;
+    private IntegerField workRemaining;
 
     public WorkHistoryForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, TaskDTO tDTO, WorkHistoryDialog whd) {
         this.service = service;
@@ -73,7 +77,11 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
         panel.add(p);
 
         // create store and grid for acceptance tests
+        container = new FlowPanel();
+
+        // create store and grid for acceptance tests
         RowNumberer<WorkloadDTO> numberer = new RowNumberer<WorkloadDTO>();
+        @Deprecated
         ColumnConfig<WorkloadDTO, String> taskCreationDateCol = new ColumnConfig<WorkloadDTO, String>(getTaskCreationDate(), 100, "Date");
         ColumnConfig<WorkloadDTO, String> hoursSpenCol = new ColumnConfig<WorkloadDTO, String>(getHoursSpent(), 60, "Work spent (h)");
         ColumnConfig<WorkloadDTO, Integer> hoursRemainingCol = new ColumnConfig<WorkloadDTO, Integer>(getHoursRemaining(), 60, "Remaining (h)");
@@ -85,8 +93,37 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
 
         cm = new ColumnModel<WorkloadDTO>(l);
         store = new ListStore<WorkloadDTO>(getModelKeyProvider());
-        //store.addAll(selectedTaskDTO.getWorkloadList());
+        store.addAll(selectedTaskDTO.getWorkloadList());
         System.out.println("Test---------------------------Test");
+
+        grid = new Grid<WorkloadDTO>(store, cm);
+        grid.getView().setAutoExpandColumn(taskCreationDateCol);
+        grid.getSelectionModel().setSelectionMode(Style.SelectionMode.SINGLE);
+        grid.setBorders(true);
+        grid.getView().setForceFit(true);
+
+        grid.setWidth(650);
+        grid.setHeight(150);
+
+        FieldLabel taskContainer = new FieldLabel();
+        taskContainer.setText("Workload");
+        taskContainer.setLabelAlign(FormPanel.LabelAlign.TOP);
+        taskContainer.setWidget(grid);
+
+        container.add(taskContainer);
+        p.add(container);
+
+        workSpent = new IntegerField();
+        workSpent.setEnabled(false);
+        workSpent.setAllowBlank(false);
+        workSpent.setAllowNegative(false);
+        p.add(new FieldLabel(workSpent, "Time spent"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+
+        workRemaining = new IntegerField();
+        workRemaining.setEnabled(false);
+        workRemaining.setAllowBlank(false);
+        workRemaining.setAllowNegative(false);
+        p.add(new FieldLabel(workRemaining, "Time remaining"), new VerticalLayoutContainer.VerticalLayoutData(1, 1));
 
         verticalPanel.add(panel);
     }
@@ -98,12 +135,12 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
             public String getKey(WorkloadDTO item) {
                 System.out.println("itemWokrloadPK: " +item.getWorkloadPK().getWorkloadId());
                 return item.getWorkloadPK().getWorkloadId() + "";
-                //return item.getTaskPK().getTaskId() + "";
             }
         };
         return mkp;
     }
 
+    @Deprecated
     private ValueProvider<WorkloadDTO, String> getTaskCreationDate() {
         ValueProvider<WorkloadDTO, String> vpcd = new ValueProvider<WorkloadDTO, String>() {
             @Override

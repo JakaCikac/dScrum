@@ -410,6 +410,7 @@ public class AddStoryToSprintForm implements IsWidget{
         return vpsn;
     }
 
+    @Deprecated
     private ValueProvider<SprintDTO, String> getStartDateValue() {
         ValueProvider<SprintDTO, String> vpsd = new ValueProvider<SprintDTO, String>() {
             @Override
@@ -428,6 +429,7 @@ public class AddStoryToSprintForm implements IsWidget{
         return vpsd;
     }
 
+    @Deprecated
     private ValueProvider<SprintDTO, String> getEndDateValue() {
         ValueProvider<SprintDTO, String> vped = new ValueProvider<SprintDTO, String>() {
             @Override

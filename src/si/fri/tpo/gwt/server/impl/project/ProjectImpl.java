@@ -270,6 +270,13 @@ public class ProjectImpl {
                                         userDTO.setTimeCreated(user.getTimeCreated());
                                         taskDTO.setUserUserId(userDTO);
                                     }
+
+                                    List<WorkloadDTO> workloadDTOList = new ArrayList<WorkloadDTO>();
+                                    for(Workload workload : task.getWorkloadList()){
+                                        WorkloadDTO workloadDTO = new WorkloadDTO();
+                                        
+                                    }
+
                                     taskDTOList.add(taskDTO);
                                 }
                                 userStoryDTO.setTaskList(taskDTOList);
