@@ -411,5 +411,4 @@ public class AcceptEditTasksForm implements IsWidget, Editor<TaskDTO> {
         };
         return vpc;
     }
-
 }

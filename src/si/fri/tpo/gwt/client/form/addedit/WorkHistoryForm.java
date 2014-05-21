@@ -16,6 +16,7 @@ import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.RowNumberer;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
+import si.fri.tpo.gwt.client.dto.WorkblockDTO;
 import si.fri.tpo.gwt.client.dto.WorkloadDTO;
 import com.google.gwt.editor.client.Editor;
 import si.fri.tpo.gwt.client.dto.WorkloadDTO;
@@ -38,6 +39,8 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
     private VerticalPanel verticalPanel;
     private FlowPanel container;
     private TaskDTO selectedTaskDTO;
+    private WorkloadDTO selectedWorkloadDTO;
+    private WorkblockDTO selectedWorkblockDTO;
     private ListStore<WorkloadDTO> store;
     private Grid<WorkloadDTO> grid;
 
@@ -82,7 +85,8 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
 
         cm = new ColumnModel<WorkloadDTO>(l);
         store = new ListStore<WorkloadDTO>(getModelKeyProvider());
-        store.addAll(selectedTaskDTO.getWorkloadList());
+        //store.addAll(selectedTaskDTO.getWorkloadList());
+        System.out.println("Test---------------------------Test");
 
         verticalPanel.add(panel);
     }
@@ -92,6 +96,7 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
         ModelKeyProvider<WorkloadDTO> mkp = new ModelKeyProvider<WorkloadDTO>() {
             @Override
             public String getKey(WorkloadDTO item) {
+                System.out.println("itemWokrloadPK: " +item.getWorkloadPK().getWorkloadId());
                 return item.getWorkloadPK().getWorkloadId() + "";
                 //return item.getTaskPK().getTaskId() + "";
             }
@@ -103,6 +108,7 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
         ValueProvider<WorkloadDTO, String> vpcd = new ValueProvider<WorkloadDTO, String>() {
             @Override
             public String getValue(WorkloadDTO object) {
+                System.out.println("DateTimFormat-assignedDate: "+DateTimeFormat.getShortDateFormat().format(object.getTask().getAssignedDate()));
                 return DateTimeFormat.getShortDateFormat().format(object.getTask().getAssignedDate());
             }
             @Override
@@ -121,6 +127,7 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
         ValueProvider<WorkloadDTO, String> vphs = new ValueProvider<WorkloadDTO, String>() {
             @Override
             public String getValue(WorkloadDTO object) {
+                System.out.println("Time spent: "+object.getTimeSpent());
                 return object.getTimeSpent();
             }
             @Override
@@ -139,6 +146,8 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
         ValueProvider<WorkloadDTO, Integer> vphr = new ValueProvider<WorkloadDTO, Integer>() {
             @Override
             public Integer getValue(WorkloadDTO object) {
+                //NAROBE! WORKLOAD! in ne task!!!
+                System.out.println("Time remaining: "+object.getTask().getTimeRemaining());
                 return object.getTask().getTimeRemaining();
             }
             @Override
