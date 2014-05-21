@@ -2,6 +2,7 @@ package si.fri.tpo.gwt.client.dto;
 
 import com.sencha.gxt.legacy.client.data.BaseModelData;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -12,6 +13,7 @@ public class WorkloadDTO extends BaseModelData {
     //protected WorkloadPK workloadPK;
     //private String timeSpent;
     //private String timeRemaining;
+    //private Date day;
     //private User user;
     //private Task task;
     //private List<Workblock> workblockList;
@@ -41,6 +43,14 @@ public class WorkloadDTO extends BaseModelData {
 
     public void setTimeRemaining(String timeRemaining) {
         set("timeRemaining", timeRemaining);
+    }
+
+    public Date getDay() {
+        return get("day");
+    }
+
+    public void setDay(Date day) {
+        set("day", day);
     }
 
     public UserDTO getUser() {
