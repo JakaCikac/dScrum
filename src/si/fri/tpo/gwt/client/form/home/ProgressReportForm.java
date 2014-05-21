@@ -3,10 +3,11 @@ package si.fri.tpo.gwt.client.form.home;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.chart.client.chart.Chart;
+import com.sencha.gxt.chart.client.chart.axis.NumericAxis;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
-import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.dto.WorkloadDTO;
@@ -25,23 +26,12 @@ public class ProgressReportForm implements IsWidget {
 
     class BurndownData {
 
-        private Date date;
+        private int seqNumber;
         private int hrsRemaining;
         private int hrsSpent;
 
-        public BurndownData(Date date, int hrsRemaining, int hrsSpent) {
-            this.date = date;
-            this.hrsRemaining = hrsRemaining;
-            this.hrsSpent = hrsSpent;
-        }
-    }
-
-    class BurndownData2 {
-
-        private int hrsRemaining;
-        private int hrsSpent;
-
-        public BurndownData2(int hrsRemaining, int hrsSpent) {
+        public BurndownData(int seqNumber, int hrsRemaining, int hrsSpent) {
+            this.seqNumber = seqNumber;
             this.hrsRemaining = hrsRemaining;
             this.hrsSpent = hrsSpent;
         }
@@ -72,17 +62,23 @@ public class ProgressReportForm implements IsWidget {
 
     private void createBurnDownForm() {
 
-
-
         final ListStore<BurndownData> store = new ListStore<BurndownData>(getModelKeyProvider());
-        //store.addAll();
+        store.addAll(fillBurndownData());
+
+        final Chart<BurndownData> chart = new Chart<BurndownData>();
+        chart.setStore(store);
+        chart.setShadowChart(false);
+
+        NumericAxis<BurndownData> axis = new NumericAxis<BurndownData>();
+        axis.setPosition(Chart.Position.LEFT);
+        // TODO: CONTINUE HERE!!!!
     }
 
     private ModelKeyProvider<BurndownData> getModelKeyProvider() {
         ModelKeyProvider<BurndownData> mkp = new ModelKeyProvider<BurndownData>() {
             @Override
             public String getKey(BurndownData item) {
-                return item.date.toString();
+                return item.seqNumber + "";
             }
         };
         return mkp;
@@ -91,10 +87,11 @@ public class ProgressReportForm implements IsWidget {
     private List<BurndownData> fillBurndownData() {
 
         List<BurndownData> burndownDataList = new ArrayList<BurndownData>();
+        TreeMap<Date, BurndownData> temp = new TreeMap<Date, BurndownData>();
+
+        /* za najti zacetni datum projekta, se izkazalo kot nepotrebno ker na grafu ni datumov ampak cifro
         Date startDate = null;
         Date endDate = new Date();
-
-        TreeMap<Date, BurndownData2> temp = new TreeMap<Date, BurndownData2>();
 
         // get/find start date
         for (SprintDTO sprintDTO : SessionInfo.projectDTO.getSprintList()) {
@@ -102,18 +99,35 @@ public class ProgressReportForm implements IsWidget {
                 startDate = sprintDTO.getStartDate();
             }
         }
+        */
 
         // fetch/accumulate data
         for (UserStoryDTO userStoryDTO : SessionInfo.projectDTO.getUserStoryList()) {
             for (TaskDTO taskDTO : userStoryDTO.getTaskList()) {
                 for (WorkloadDTO workloadDTO : taskDTO.getWorkloadList()) {
+
+                    Date key = workloadDTO.getDay();
                     int timeRemaining = Integer.parseInt(workloadDTO.getTimeRemaining());
                     int timeSpent = Integer.parseInt(workloadDTO.getTimeSpent());
-                    Date date = new Date();// = workloadDTO.getDate();
-                    BurndownData2 timeParams = new BurndownData2(timeRemaining, timeSpent);
-                    temp.put(date, timeParams);
+                    BurndownData value = temp.get(key);
+
+                    if (value != null) {
+                        value.hrsRemaining += timeRemaining;
+                        value.hrsSpent += timeSpent;
+                    } else {
+                        value = new BurndownData(0, timeRemaining, timeSpent);
+                    }
+
+                    temp.put(key, value);
                 }
             }
+        }
+
+        int i = 1;
+        for (BurndownData bd : temp.values()) {
+            bd.seqNumber = i;
+            burndownDataList.add(bd);
+            i++;
         }
 
         return burndownDataList;
