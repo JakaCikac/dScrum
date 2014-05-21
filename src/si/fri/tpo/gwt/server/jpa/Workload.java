@@ -8,6 +8,7 @@ package si.fri.tpo.gwt.server.jpa;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,6 +33,9 @@ public class Workload implements Serializable {
     @Lob
     @Column(name = "time_remaining")
     private String timeRemaining;
+    @Column(name = "day")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date day;
     @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private User user;
@@ -76,6 +80,14 @@ public class Workload implements Serializable {
 
     public void setTimeRemaining(String timeRemaining) {
         this.timeRemaining = timeRemaining;
+    }
+
+    public Date getDay() {
+        return day;
+    }
+
+    public void setDay(Date day) {
+        this.day = day;
     }
 
     public User getUser() {
