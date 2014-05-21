@@ -29,6 +29,9 @@ public class Workload implements Serializable {
     @Lob
     @Column(name = "time_spent")
     private String timeSpent;
+    @Lob
+    @Column(name = "time_remaining")
+    private String timeRemaining;
     @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private User user;
@@ -65,6 +68,14 @@ public class Workload implements Serializable {
 
     public void setTimeSpent(String timeSpent) {
         this.timeSpent = timeSpent;
+    }
+
+    public String getTimeRemaining() {
+        return timeRemaining;
+    }
+
+    public void setTimeRemaining(String timeRemaining) {
+        this.timeRemaining = timeRemaining;
     }
 
     public User getUser() {
