@@ -39,8 +39,13 @@ public class UserHomeForm implements IsWidget {
             folder.setWidth(800);
 
             ContentPanel cp = new ContentPanel();
-            cp.add(new Label("Project wall."));
-            folder.add(cp, "Project wall");
+            if (SessionInfo.projectDTO == null) {
+                cp.add(new Label("Project wall."));
+                folder.add(cp, "Project wall");
+            }
+            else {
+                folder.add(new DiscussionForm(service, center, west, east, north, south).asWidget(), "Project wall");
+            }
 
             if (SessionInfo.projectDTO == null) {
                 cp = new ContentPanel();

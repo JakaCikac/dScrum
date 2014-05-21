@@ -11,6 +11,7 @@ public class WorkloadDTO extends BaseModelData {
 
     //protected WorkloadPK workloadPK;
     //private String timeSpent;
+    //private String timeRemaining;
     //private User user;
     //private Task task;
     //private List<Workblock> workblockList;
@@ -32,6 +33,14 @@ public class WorkloadDTO extends BaseModelData {
 
     public void setTimeSpent(String timeSpent) {
         set("timeSpent", timeSpent);
+    }
+
+    public String getTimeRemaining() {
+        return get("timeRemaining");
+    }
+
+    public void setTimeRemaining(String timeRemaining) {
+        set("timeRemaining", timeRemaining);
     }
 
     public UserDTO getUser() {

@@ -5,6 +5,7 @@ import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.*;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.server.impl.acceptanceTest.AcceptanceTestImpl;
+import si.fri.tpo.gwt.server.impl.discussion.DiscussionImpl;
 import si.fri.tpo.gwt.server.impl.login.LoginServiceImpl;
 import si.fri.tpo.gwt.server.impl.project.ProjectImpl;
 import si.fri.tpo.gwt.server.impl.registration.*;
@@ -12,6 +13,7 @@ import si.fri.tpo.gwt.server.impl.sprint.SprintImpl;
 import si.fri.tpo.gwt.server.impl.team.TeamImpl;
 import si.fri.tpo.gwt.server.impl.user.UserImpl;
 import si.fri.tpo.gwt.server.impl.userStory.UserStoryImpl;
+import si.fri.tpo.gwt.server.jpa.Discussion;
 
 import java.util.List;
 
@@ -296,6 +298,16 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     @Override
     public Pair<Boolean, String> updateComment(UserStoryDTO userStoryDTO) {
         return UserStoryImpl.saveComment(userStoryDTO);
+    }
+
+    @Override
+    public List<DiscussionDTO> findAllDiscussionsByProject(ProjectDTO projectDTO) {
+        return DiscussionImpl.getAllDiscussionOfProject(projectDTO);
+    }
+
+    @Override
+    public Pair<Boolean, String> saveDiscussion(DiscussionDTO discussionDTO, ProjectDTO projectDTO) {
+        return DiscussionImpl.saveDiscussion(discussionDTO, projectDTO);
     }
     // USER_STORY_COMMENT //
 }

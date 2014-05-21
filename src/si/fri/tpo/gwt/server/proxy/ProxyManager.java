@@ -1,5 +1,6 @@
 package si.fri.tpo.gwt.server.proxy;
 
+import si.fri.tpo.gwt.server.controllers.DiscussionJpaController;
 import si.fri.tpo.gwt.server.jpa.UserStory;
 
 import javax.persistence.EntityManagerFactory;
@@ -21,6 +22,8 @@ public class ProxyManager {
     private static UserStoryProxy userStoryProxy = null;
     private static PriorityProxy priorityProxy = null;
     private static TaskProxy taskProxy = null;
+    private static DiscussionProxy discussionProxy;
+    private static CommentProxy commentProxy = null;
 
     public static EntityManagerFactory getEmf() {
         if (emf == null) {
@@ -86,5 +89,19 @@ public class ProxyManager {
             taskProxy = new TaskProxy(getEmf());
         }
         return taskProxy;
+    }
+
+    public static DiscussionProxy getDiscussionProxy() {
+        if (discussionProxy == null) {
+            discussionProxy = new DiscussionProxy(getEmf());
+        }
+        return discussionProxy;
+    }
+
+    public static CommentProxy getCommentProxy() {
+        if (commentProxy == null) {
+            commentProxy = new CommentProxy(getEmf());
+        }
+        return commentProxy;
     }
 }
