@@ -5,8 +5,10 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.TextArea;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.cell.core.client.TextButtonCell;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
@@ -14,28 +16,16 @@ import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.TabPanel;
-import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
-import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.grid.*;
-import com.sencha.gxt.widget.core.client.grid.Grid;
-import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.dto.*;
-import si.fri.tpo.gwt.client.form.addedit.UserStoryCommentDialog;
-import si.fri.tpo.gwt.client.form.addedit.UserStoryEditDialog;
-import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
-import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
-import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
+import si.fri.tpo.gwt.client.dto.DiscussionDTO;
+import si.fri.tpo.gwt.client.form.addedit.DiscussionCommentDialog;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
-import si.fri.tpo.gwt.server.jpa.Comment;
-import si.fri.tpo.gwt.server.jpa.User;
-import si.fri.tpo.gwt.server.proxy.ProxyManager;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -141,7 +131,7 @@ public class DiscussionForm implements IsWidget {
                 public void onSelect(SelectEvent event) {
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
-
+                    DiscussionCommentDialog dcd = new DiscussionCommentDialog(service, center, west, east, north, south, store.get(row));
                 }
             });
             addCommentButtonCol.setCell(addCommentButton);

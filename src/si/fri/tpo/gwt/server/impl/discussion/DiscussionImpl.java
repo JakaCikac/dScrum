@@ -3,7 +3,6 @@ package si.fri.tpo.gwt.server.impl.discussion;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.*;
 import si.fri.tpo.gwt.server.jpa.*;
-import si.fri.tpo.gwt.server.proxy.DiscussionProxy;
 import si.fri.tpo.gwt.server.proxy.ProxyManager;
 
 import java.util.ArrayList;
@@ -100,42 +99,31 @@ public class DiscussionImpl {
         return Pair.of(true, "");
     }
 
-    public static Pair<Boolean, String> saveTask(TaskDTO taskDTO, UserStoryDTO userStoryDTO) {
+    public static Pair<Boolean, String> updateDiscussion(DiscussionDTO discussionDTO) {
         try {
+            Discussion d = ProxyManager.getDiscussionProxy().findDiscussion(discussionDTO.getDiscussionPK().getDiscussionId());
+            d.setContent(discussionDTO.getContent());
+            d.setCreatetime(discussionDTO.getCreatetime());
 
-            Task t = new Task();
-            t.setStatus(taskDTO.getStatus());
-            t.setDescription(taskDTO.getDescription());
-            t.setTimeRemaining(taskDTO.getTimeRemaining());
-            t.setEstimatedTime(taskDTO.getEstimatedTime());
+            List<Comment> commentList = d.getCommentList();
+            for(CommentDTO commentDTO : discussionDTO.getCommentList()){
+                CommentPK commentPK = new CommentPK();
+                commentPK.setCommentId(commentDTO.getCommentPK().getCommentId());
+                commentPK.setDiscussionDiscussionId(commentDTO.getCommentPK().getDiscussionDiscussionId());
+                commentPK.setDiscussionProjectProjectId(commentDTO.getCommentPK().getDiscussionProjectProjectId());
+                commentPK.setDiscussionUserUserId(commentDTO.getCommentPK().getDiscussionUserUserId());
+                commentPK.setUserUserId(commentDTO.getCommentPK().getUserUserId());
+                Comment comment = ProxyManager.getCommentProxy().findComment(commentPK);
 
-            UserStory us;
-            us = ProxyManager.getUserStoryProxy().findUserStory(userStoryDTO.getStoryId());
-            if (us == null) {
-                return Pair.of(false, "Data error (user story doesn't exist!");
+                commentList.add(comment);
             }
-            t.setUserStory(us);
-
-            User u;
-            if (taskDTO.getPreassignedUserName() != null) {
-                u = ProxyManager.getUserProxy().findUserByUsername(taskDTO.getPreassignedUserName());
-                if (u == null) {
-                    return Pair.of(false, "Data error (user doesn't exist!");
-                }
-                t.setPreassignedUserName(taskDTO.getPreassignedUserName());
-            } else {
-                t.setPreassignedUserName(null);
-            }
-
-            TaskPK tpk = new TaskPK();
-            tpk.setUserStoryStoryId(us.getStoryId());
-            t.setTaskPK(tpk);
+            d.setCommentList(commentList);
 
             try {
-                if (t == null)
+                if (d == null)
                     return Pair.of(false, "Data error!");
 
-                ProxyManager.getTaskProxy().create(t);
+                ProxyManager.getDiscussionProxy().edit(d);
 
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());

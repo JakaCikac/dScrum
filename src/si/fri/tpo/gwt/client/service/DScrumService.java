@@ -136,9 +136,13 @@ public interface DScrumService extends RemoteService {
     public List<DiscussionDTO> findAllDiscussionsByProject(ProjectDTO projectDTO);
 
     public Pair<Boolean, String> saveDiscussion(DiscussionDTO discussionDTO, ProjectDTO projectDTO);
+
+    public Pair<Boolean, String> updateDiscussion(DiscussionDTO discussionDTO);
+
     // DISCUSSION //
 
     // WORKLOAD //
     public Pair<Boolean, String> updateWorkload(WorkloadDTO workloadDTO);
+
     // WORKLOAD //
 }

@@ -134,10 +134,14 @@ public interface DScrumServiceAsync {
     void findAllDiscussionsByProject(ProjectDTO projectDTO, AsyncCallback<List<DiscussionDTO>> callback);
 
     void saveDiscussion(DiscussionDTO discussionDTO, ProjectDTO projectDTO, AsyncCallback<Pair<Boolean,String>> callback);
+
+    void updateDiscussion(DiscussionDTO discussionDTO, AsyncCallback<Pair<Boolean,String>> updateDiscussion);
+
     // DISCUSSION //
 
     // WORKLOAD //
     void updateWorkload(WorkloadDTO workloadDTO, AsyncCallback<Pair<Boolean,String>> updateWorkload);
+
     // WORKLOAD //
 }
 

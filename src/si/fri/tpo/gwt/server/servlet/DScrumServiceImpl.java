@@ -14,7 +14,6 @@ import si.fri.tpo.gwt.server.impl.team.TeamImpl;
 import si.fri.tpo.gwt.server.impl.user.UserImpl;
 import si.fri.tpo.gwt.server.impl.userStory.UserStoryImpl;
 import si.fri.tpo.gwt.server.impl.workload.WorkloadImpl;
-import si.fri.tpo.gwt.server.jpa.Discussion;
 
 import java.util.List;
 
@@ -311,6 +310,11 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     @Override
     public Pair<Boolean, String> saveDiscussion(DiscussionDTO discussionDTO, ProjectDTO projectDTO) {
         return DiscussionImpl.saveDiscussion(discussionDTO, projectDTO);
+    }
+
+    @Override
+    public Pair<Boolean, String> updateDiscussion(DiscussionDTO discussionDTO) {
+        return DiscussionImpl.updateDiscussion(discussionDTO);
     }
     // DISCUSION //
 

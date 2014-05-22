@@ -10,6 +10,8 @@ public class CommentPKDTO extends BaseModelData {
     //private int commentId;
     //private int discussionDiscussionId;
     //private int userUserId;
+    //private int discussionUserUserId;
+    //private int discussionProjectProjectId;
 
     public CommentPKDTO() {
     }
@@ -36,5 +38,21 @@ public class CommentPKDTO extends BaseModelData {
 
     public void setUserUserId(int userUserId) {
         set("userUserId", userUserId);
+    }
+
+    public int getDiscussionUserUserId() {
+        return get("discussionUserUserId");
+    }
+
+    public void setDiscussionUserUserId(int discussionUserUserId) {
+        set("discussionUserUserId", discussionUserUserId);
+    }
+
+    public int getDiscussionProjectProjectId() {
+        return get("discussionProjectProjectId");
+    }
+
+    public void setDiscussionProjectProjectId(int discussionProjectProjectId) {
+        set("discussionProjectProjectId", discussionProjectProjectId);
     }
 }
