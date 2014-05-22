@@ -71,7 +71,7 @@ public class TaskRegistrationServiceImpl {
             t.setDescription(taskDTO.getDescription());
             t.setEstimatedTime(taskDTO.getEstimatedTime());
             t.setPreassignedUserName(taskDTO.getPreassignedUserName());
-
+            t.setTimeRemaining(taskDTO.getTimeRemaining());
 
             User u;
             if (taskDTO.getPreassignedUserName() != null) {

@@ -209,6 +209,23 @@ public class WorkHistoryForm implements IsWidget  {
                     return;
                 }
 
+                //if workRemaining==0 -> you have finished your work! :)
+                if (selectedTaskDTO.getEstimatedTime()!=0 && (workRemaining.getValue())==0){
+                    //System.out.println("ID taska:" + selectedTaskDTO.getTaskPK().getTaskId());
+                    selectedTaskDTO.setStatus("Completed");
+                    selectedTaskDTO.setTimeRemaining(0);
+                    MessageBox d = new MessageBox("Congratz!", "You just finished your task!");
+                    performUpdateTask(selectedTaskDTO);
+                    d.show();
+                }
+
+                //if workRemaining!=0 -> taskStatus == Assigned
+                if (selectedTaskDTO.getEstimatedTime()!=0 && (workRemaining.getValue())!=0){
+                    System.out.println("ID taska:" + selectedTaskDTO.getTaskPK().getTaskId());
+                    selectedTaskDTO.setStatus("Assigned");
+                    performUpdateTask(selectedTaskDTO);
+                }
+
                 /* ----------------------------- END VALIDATORS ------------------------------- */
 
                 //round to 1decimal number and save to base
@@ -272,6 +289,19 @@ public class WorkHistoryForm implements IsWidget  {
             }
         };
         service.updateWorkload(workloadDTO, updateWorkload);
+    }
+
+    private void performUpdateTask(TaskDTO p) {
+        AsyncCallback<Pair<Boolean, String>> updateTask = new AsyncCallback<Pair<Boolean, String>>() {
+            @Override
+            public void onSuccess(Pair<Boolean, String> result) {
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.updateTask(p, updateTask);
     }
 
     public void emptyForm() {
