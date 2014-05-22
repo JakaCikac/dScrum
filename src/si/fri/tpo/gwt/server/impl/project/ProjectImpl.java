@@ -204,7 +204,6 @@ public class ProjectImpl {
                     sprintDTO.setStartDate(s.getStartDate());
                     sprintDTO.setEndDate(s.getEndDate());
                     sprintDTO.setVelocity(s.getVelocity());
-                    //TODO: Set userStoryDTOList to sprintDTO
                     if (s.getUserStoryList() != null) {
                         List<UserStoryDTO> userStoryDTOList = new ArrayList<UserStoryDTO>();
                         for (UserStory userStory : s.getUserStoryList()) {
@@ -373,7 +372,103 @@ public class ProjectImpl {
                     userStoryDTO.setAcceptanceTestList(acceptanceTestDTOList);
 
                     //TODO: Set taskList to userStoryDTO
-                    //userStoryDTO.setTaskList();
+                    if (us.getTaskList() != null) {
+                        List<TaskDTO> taskDTOList = new ArrayList<TaskDTO>();
+                        for (Task task : us.getTaskList()) {
+                            task = ProxyManager.getTaskProxy().findTask(task.getTaskPK());
+                            TaskDTO taskDTO = new TaskDTO();
+                            taskDTO.setDescription(task.getDescription());
+                            taskDTO.setTimeRemaining(task.getTimeRemaining());
+                            taskDTO.setEstimatedTime(task.getEstimatedTime());
+                            taskDTO.setStatus(task.getStatus());
+                            taskDTO.setPreassignedUserName(task.getPreassignedUserName());
+                            taskDTO.setAssignedDate(task.getAssignedDate());
+
+                            taskDTO.setUserStory(userStoryDTO);
+
+                            TaskPKDTO taskPKDTO = new TaskPKDTO();
+                            taskPKDTO.setTaskId(task.getTaskPK().getTaskId());
+                            taskPKDTO.setUserStoryStoryId(task.getTaskPK().getUserStoryStoryId());
+                            taskDTO.setTaskPK(taskPKDTO);
+
+                            if (task.getUserUserId() != null) {
+                                User user = ProxyManager.getUserProxy().findUser(task.getUserUserId().getUserId());
+                                UserDTO userDTO = new UserDTO();
+                                userDTO.setUserId(user.getUserId());
+                                userDTO.setUsername(user.getUsername());
+                                userDTO.setPassword(user.getPassword());
+                                userDTO.setFirstName(user.getFirstName());
+                                userDTO.setLastName(user.getLastName());
+                                userDTO.setEmail(user.getEmail());
+                                userDTO.setAdmin(user.getIsAdmin());
+                                userDTO.setSalt(user.getSalt());
+                                userDTO.setActive(user.getIsActive());
+                                userDTO.setTimeCreated(user.getTimeCreated());
+                                taskDTO.setUserUserId(userDTO);
+                            }
+
+                            List<WorkloadDTO> workloadDTOList = new ArrayList<WorkloadDTO>();
+                            for(Workload workload : task.getWorkloadList()){
+                                workload = ProxyManager.getWorkloadProxy().findWorkload(workload.getWorkloadPK());
+                                WorkloadDTO workloadDTO = new WorkloadDTO();
+                                workloadDTO.setDay(workload.getDay());
+                                workloadDTO.setTimeRemaining(workload.getTimeRemaining());
+                                workloadDTO.setTimeSpent(workload.getTimeSpent());
+
+                                User user = ProxyManager.getUserProxy().findUser(workload.getUser().getUserId());
+                                UserDTO userDTO = new UserDTO();
+                                userDTO.setUserId(user.getUserId());
+                                userDTO.setUsername(user.getUsername());
+                                userDTO.setPassword(user.getPassword());
+                                userDTO.setFirstName(user.getFirstName());
+                                userDTO.setLastName(user.getLastName());
+                                userDTO.setEmail(user.getEmail());
+                                userDTO.setAdmin(user.getIsAdmin());
+                                userDTO.setSalt(user.getSalt());
+                                userDTO.setActive(user.getIsActive());
+                                userDTO.setTimeCreated(user.getTimeCreated());
+                                workloadDTO.setUser(userDTO);
+
+                                workloadDTO.setTask(taskDTO);
+
+                                WorkloadPKDTO workloadPKDTO = new WorkloadPKDTO();
+                                WorkloadPK workloadPK = workload.getWorkloadPK();
+                                workloadPKDTO.setTaskTaskId(workloadPK.getTaskTaskId());
+                                workloadPKDTO.setTaskUserStoryStoryId(workloadPK.getTaskUserStoryStoryId());
+                                workloadPKDTO.setUserUserId(workloadPK.getUserUserId());
+                                workloadPKDTO.setWorkloadId(workloadPK.getWorkloadId());
+                                workloadDTO.setWorkloadPK(workloadPKDTO);
+
+                                List<WorkblockDTO> workblockDTOList = new ArrayList<WorkblockDTO>();
+                                for(Workblock workblock : workload.getWorkblockList()){
+                                    workblock = ProxyManager.getWorkblockProxy().findWorkblock(workblock.getWorkblockPK());
+                                    WorkblockDTO workblockDTO = new WorkblockDTO();
+                                    workblockDTO.setTimeStart(workblock.getTimeStart());
+                                    workblockDTO.setTimeStop(workblock.getTimeStop());
+
+                                    workblockDTO.setWorkload(workloadDTO);
+
+                                    WorkblockPKDTO workblockPKDTO = new WorkblockPKDTO();
+                                    WorkblockPK workblockPK = workblock.getWorkblockPK();
+                                    workloadPKDTO.setWorkloadId(workblockPK.getWorkloadWorkloadId());
+                                    workblockPKDTO.setWorkloadTaskTaskId(workloadPK.getTaskTaskId());
+                                    workblockPKDTO.setWorkloadTaskUserStoryStoryId(workblockPK.getWorkloadTaskUserStoryStoryId());
+                                    workblockPKDTO.setWorkloadUserUserId(workblockPK.getWorkloadUserUserId());
+                                    workblockPKDTO.setWorkloadWorkloadId(workblockPK.getWorkloadWorkloadId());
+                                    workblockDTO.setWorkblockPK(workblockPKDTO);
+
+                                    workblockDTOList.add(workblockDTO);
+                                }
+                                workloadDTO.setWorkblockList(workblockDTOList);
+
+                                workloadDTOList.add(workloadDTO);
+                            }
+                            taskDTO.setWorkloadList(workloadDTOList);
+
+                            taskDTOList.add(taskDTO);
+                        }
+                        userStoryDTO.setTaskList(taskDTOList);
+                    } else userStoryDTO.setTaskList(null);
 
                     SprintDTO sprintDTO = new SprintDTO();
                     if (us.getSprint() != null) {
