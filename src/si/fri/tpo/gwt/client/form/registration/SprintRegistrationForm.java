@@ -66,6 +66,7 @@ public class SprintRegistrationForm implements IsWidget {
         return vp;
     }
 
+    @Deprecated
     private void createSprintForm() {
         FramedPanel panel = new FramedPanel();
         panel.setHeadingText("Sprint Creation Form");

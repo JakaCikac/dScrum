@@ -291,7 +291,6 @@ public class ProjectImpl {
                                         userDTO.setSalt(user.getSalt());
                                         userDTO.setActive(user.getIsActive());
                                         userDTO.setTimeCreated(user.getTimeCreated());
-                                        taskDTO.setUserUserId(userDTO);
                                         workloadDTO.setUser(userDTO);
 
                                         workloadDTO.setTask(taskDTO);
