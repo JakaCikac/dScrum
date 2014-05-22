@@ -42,17 +42,11 @@ public class UserHomeForm implements IsWidget {
             if (SessionInfo.projectDTO == null) {
                 cp.add(new Label("Project wall."));
                 folder.add(cp, "Project wall");
-            }
-            else {
-                folder.add(new DiscussionForm(service, center, west, east, north, south).asWidget(), "Project wall");
-            }
-
-            if (SessionInfo.projectDTO == null) {
                 cp = new ContentPanel();
                 cp.add(new Label("No project selected :)"));
                 folder.add(cp, "Product backlog");
-            }
-            else {
+            } else {
+                folder.add(new DiscussionForm(service, center, west, east, north, south).asWidget(), "Project wall");
                 folder.add(new ProductBacklogForm(service, center, west, east, north, south).asWidget(), "Product backlog");
             }
 
@@ -63,7 +57,6 @@ public class UserHomeForm implements IsWidget {
                             sprintDTO.getStartDate().equals(new Date()) || sprintDTO.getEndDate().equals(new Date())){
                         folder.add(new SprintBacklogForm(service, center, west, east, north, south, sprintDTO).asWidget(), "Sprint backlog");
                         folder.add(new MyTasksForm(service, center, west, east, north, south, sprintDTO).asWidget(), "My tasks");
-                        folder.add(new ProgressReportForm(service, center, west, east, north, south).asWidget(), "Progress report");
                         inProgress = true;
                     }
                 }
@@ -75,9 +68,13 @@ public class UserHomeForm implements IsWidget {
                 cp = new ContentPanel();
                 cp.add(new Label("No sprint in progress."));
                 folder.add(cp, "My tasks");
-                cp = new ContentPanel();
+            }
+
+            if (SessionInfo.projectDTO == null) {
                 cp.add(new Label("Progress report"));
                 folder.add(cp, "Progress report");
+            } else {
+                folder.add(new ProgressReportForm(service, center, west, east, north, south).asWidget(), "Progress report");
             }
         }
         return folder;
