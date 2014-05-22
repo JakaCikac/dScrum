@@ -99,7 +99,7 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
         @Deprecated
         ColumnConfig<WorkloadDTO, String> taskCreationDateCol = new ColumnConfig<WorkloadDTO, String>(getTaskCreationDate(), 100, "Date");
         ColumnConfig<WorkloadDTO, String> hoursSpenCol = new ColumnConfig<WorkloadDTO, String>(getHoursSpent(), 60, "Work spent (h)");
-        ColumnConfig<WorkloadDTO, Integer> hoursRemainingCol = new ColumnConfig<WorkloadDTO, Integer>(getHoursRemaining(), 60, "Remaining (h)");
+        ColumnConfig<WorkloadDTO, String> hoursRemainingCol = new ColumnConfig<WorkloadDTO, String>(getHoursRemaining(), 60, "Remaining (h)");
 
         List<ColumnConfig<WorkloadDTO, ?>> l = new ArrayList<ColumnConfig<WorkloadDTO, ?>>();
         l.add(taskCreationDateCol);
@@ -125,8 +125,8 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
                 workSpent.setEnabled(true);
                 workRemaining.setEnabled(true);
                 workloadDTO = grid.getSelectionModel().getSelectedItem();
-                System.out.println("spent: " +workloadDTO.getTimeSpent());
-                System.out.println("rem: " +workloadDTO.getTimeRemaining());
+                //System.out.println("spent: " +workloadDTO.getTimeSpent());
+                //System.out.println("rem: " +workloadDTO.getTimeRemaining());
 
                 if (workloadDTO.getTimeRemaining() == null){
                     workRemaining.setValue(Double.parseDouble(("0.0")));
@@ -145,7 +145,7 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
             }
         });
 
-        FieldLabel taskContainer = new FieldLabel();
+        final FieldLabel taskContainer = new FieldLabel();
         taskContainer.setText("Workload");
         taskContainer.setLabelAlign(FormPanel.LabelAlign.TOP);
         taskContainer.setWidget(grid);
@@ -188,6 +188,12 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
                     d.show();
                     return;
                 }
+
+//                if (res > 0){
+//                    AlertMessageBox d = new AlertMessageBox("Estimated time is " + estimated + ".", "Write smaller number!");
+//                    d.show();
+//                    return;
+//                }
                 /* ----------------------------- END VALIDATORS ------------------------------- */
 
                 workloadDTO.setTimeSpent(String.valueOf(workSpent.getValue()));
@@ -197,7 +203,9 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
                 System.out.println("updated spent: " +workloadDTO.getTimeSpent());
                 System.out.println("updated rem: " +workloadDTO.getTimeRemaining());
 
+
                 performUpdateWorkload(workloadDTO);
+                System.out.println("--------UPDATE CLICK------------------");
             //end OnClick
             }
         //end addClickHandler
@@ -306,16 +314,15 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
         return vphs;
     }
 
-    private ValueProvider<WorkloadDTO, Integer> getHoursRemaining() {
-        ValueProvider<WorkloadDTO, Integer> vphr = new ValueProvider<WorkloadDTO, Integer>() {
+    private ValueProvider<WorkloadDTO, String> getHoursRemaining() {
+        ValueProvider<WorkloadDTO, String> vphr = new ValueProvider<WorkloadDTO, String>() {
             @Override
-            public Integer getValue(WorkloadDTO object) {
-                //NAROBE! WORKLOAD! in ne task!!!
+            public String getValue(WorkloadDTO object) {
                 //System.out.println("Time remaining: "+object.getTask().getTimeRemaining());
-                return object.getTask().getTimeRemaining();
+                return object.getTimeRemaining();
             }
             @Override
-            public void setValue(WorkloadDTO object, Integer value) {
+            public void setValue(WorkloadDTO object, String value) {
 
             }
             @Override
