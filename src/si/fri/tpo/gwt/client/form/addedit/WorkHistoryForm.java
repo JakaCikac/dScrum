@@ -139,8 +139,6 @@ public class WorkHistoryForm implements IsWidget  {
                 workSpent.setEnabled(true);
                 workRemaining.setEnabled(true);
                 workloadDTO = grid.getSelectionModel().getSelectedItem();
-                //System.out.println("spent: " +workloadDTO.getTimeSpent());
-                //System.out.println("rem: " +workloadDTO.getTimeRemaining());
 
                 if (workloadDTO.getTimeRemaining() == null){
                     workRemaining.setValue(Double.parseDouble(("0.0")));
@@ -210,6 +208,7 @@ public class WorkHistoryForm implements IsWidget  {
                     d.show();
                     return;
                 }
+
                 /* ----------------------------- END VALIDATORS ------------------------------- */
 
                 //round to 1decimal number and save to base
@@ -224,20 +223,13 @@ public class WorkHistoryForm implements IsWidget  {
                 workloadDTO.setTimeSpent(String.valueOf(wSpent));
                 workloadDTO.setTimeRemaining(String.valueOf(wRemaining));
 
-
-                System.out.println("updated spent: " +workloadDTO.getTimeSpent());
-                System.out.println("updated rem: " +workloadDTO.getTimeRemaining());
-
-
                 performUpdateWorkload(workloadDTO);
-                System.out.println("--------UPDATE CLICK------------------");
                 store.update(workloadDTO);
             //end OnClick
             }
         //end addClickHandler
         });
         panel.addButton(submitButton);
-        System.out.println("--------end_of_createWorkHistory-------------");
         verticalPanel.add(panel);
     }
 
@@ -367,7 +359,6 @@ class WBSortByDate implements Comparator<WorkloadDTO> {
     public int compare(WorkloadDTO a, WorkloadDTO b) {
 
         int i = a.getDay().compareTo(b.getDay());
-        System.out.println("izpisujem i: " +i);
         return i;
     }
 }
