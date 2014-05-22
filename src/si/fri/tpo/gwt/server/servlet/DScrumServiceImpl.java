@@ -13,6 +13,7 @@ import si.fri.tpo.gwt.server.impl.sprint.SprintImpl;
 import si.fri.tpo.gwt.server.impl.team.TeamImpl;
 import si.fri.tpo.gwt.server.impl.user.UserImpl;
 import si.fri.tpo.gwt.server.impl.userStory.UserStoryImpl;
+import si.fri.tpo.gwt.server.impl.workload.WorkloadImpl;
 import si.fri.tpo.gwt.server.jpa.Discussion;
 
 import java.util.List;
@@ -299,7 +300,9 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     public Pair<Boolean, String> updateComment(UserStoryDTO userStoryDTO) {
         return UserStoryImpl.saveComment(userStoryDTO);
     }
+    // USER_STORY_COMMENT //
 
+    // DISCUSSION //
     @Override
     public List<DiscussionDTO> findAllDiscussionsByProject(ProjectDTO projectDTO) {
         return DiscussionImpl.getAllDiscussionOfProject(projectDTO);
@@ -309,5 +312,12 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     public Pair<Boolean, String> saveDiscussion(DiscussionDTO discussionDTO, ProjectDTO projectDTO) {
         return DiscussionImpl.saveDiscussion(discussionDTO, projectDTO);
     }
-    // USER_STORY_COMMENT //
+    // DISCUSION //
+
+    // WORKLOAD //
+    @Override
+    public Pair<Boolean, String> updateWorkload(WorkloadDTO workloadDTO) {
+        return WorkloadImpl.updateWorkload(workloadDTO);
+    }
+    // WORKLOAD //
 }

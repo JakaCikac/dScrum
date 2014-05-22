@@ -2,6 +2,7 @@ package si.fri.tpo.gwt.server.proxy;
 
 import si.fri.tpo.gwt.server.controllers.DiscussionJpaController;
 import si.fri.tpo.gwt.server.jpa.UserStory;
+import si.fri.tpo.gwt.server.jpa.Workblock;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -24,6 +25,8 @@ public class ProxyManager {
     private static TaskProxy taskProxy = null;
     private static DiscussionProxy discussionProxy;
     private static CommentProxy commentProxy = null;
+    private static WorkloadProxy workloadProxy = null;
+    private static WorkblockProxy workblockProxy = null;
 
     public static EntityManagerFactory getEmf() {
         if (emf == null) {
@@ -103,5 +106,19 @@ public class ProxyManager {
             commentProxy = new CommentProxy(getEmf());
         }
         return commentProxy;
+    }
+
+    public static WorkloadProxy getWorkloadProxy() {
+        if (workloadProxy == null) {
+            workloadProxy = new WorkloadProxy(getEmf());
+        }
+        return workloadProxy;
+    }
+
+    public static WorkblockProxy getWorkblockProxy() {
+        if (workblockProxy == null) {
+            workblockProxy = new WorkblockProxy(getEmf());
+        }
+        return workblockProxy;
     }
 }
