@@ -136,5 +136,8 @@ public interface DScrumServiceAsync {
     void saveDiscussion(DiscussionDTO discussionDTO, ProjectDTO projectDTO, AsyncCallback<Pair<Boolean,String>> callback);
     // DISCUSSION //
 
+    // WORKLOAD //
+    void updateWorkload(WorkloadDTO workloadDTO, AsyncCallback<Pair<Boolean,String>> updateWorkload);
+    // WORKLOAD //
 }
 

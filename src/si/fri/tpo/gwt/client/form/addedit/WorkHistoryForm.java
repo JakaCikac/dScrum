@@ -258,7 +258,7 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
                 Window.alert(caught.getMessage());
             }
         };
-
+        service.updateWorkload(workloadDTO, updateWorkload);
     }
 
     public void emptyForm() {
