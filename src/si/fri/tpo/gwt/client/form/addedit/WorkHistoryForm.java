@@ -1,15 +1,11 @@
 package si.fri.tpo.gwt.client.form.addedit;
 
-import com.google.gwt.dev.ModuleTabPanel;
-import com.google.gwt.dev.util.collect.Lists;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.view.client.ListDataProvider;
 import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
@@ -23,26 +19,21 @@ import com.sencha.gxt.widget.core.client.event.RowClickEvent;
 import com.sencha.gxt.widget.core.client.form.DoubleField;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.FormPanel;
-import com.sencha.gxt.widget.core.client.form.IntegerField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.RowNumberer;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
-import si.fri.tpo.gwt.client.dto.WorkblockDTO;
 import si.fri.tpo.gwt.client.dto.WorkloadDTO;
-import com.google.gwt.editor.client.Editor;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
-import si.fri.tpo.gwt.server.jpa.Workblock;
 import si.fri.tpo.gwt.server.jpa.Workload;
 
-import java.sql.Date;
 import java.util.*;
 
 
@@ -123,6 +114,8 @@ public class WorkHistoryForm implements IsWidget  {
         List<WorkloadDTO> workloadDTOList = selectedTaskDTO.getWorkloadList();
         Collections.sort(workloadDTOList, wbSortByDate);
         store.addAll(workloadDTOList);
+        final WorkloadDTO lastElement = workloadDTOList.get(workloadDTOList.size() - 1);
+        System.out.println("last element Time" + lastElement.getTimeRemaining());
 
         grid = new Grid<WorkloadDTO>(store, cm);
         grid.getView().setAutoExpandColumn(taskCreationDateCol);
@@ -228,6 +221,12 @@ public class WorkHistoryForm implements IsWidget  {
 
                 /* ----------------------------- END VALIDATORS ------------------------------- */
 
+                //update remaining time @ task
+                int lastTimeRemaining;
+                double doubleLastTimeRemaining;
+                doubleLastTimeRemaining = Double.parseDouble(lastElement.getTimeRemaining());
+                lastTimeRemaining = (int)doubleLastTimeRemaining;
+
                 //round to 1decimal number and save to base
                 double wSpent = workSpent.getValue()*10;
                 wSpent = Math.round(wSpent);
@@ -237,9 +236,18 @@ public class WorkHistoryForm implements IsWidget  {
                 wRemaining = Math.round(wRemaining);
                 wRemaining = wRemaining/10;
 
+                if (workloadDTO.getDay().compareTo(lastElement.getDay())==0){
+                    System.out.println("----------zadnji dan!--------------");
+                    lastTimeRemaining = (int)wRemaining;
+                }
+                System.out.println("Time "+lastTimeRemaining);
+
+                selectedTaskDTO.setTimeRemaining(lastTimeRemaining);
+
                 workloadDTO.setTimeSpent(String.valueOf(wSpent));
                 workloadDTO.setTimeRemaining(String.valueOf(wRemaining));
 
+                performUpdateTask(selectedTaskDTO);
                 performUpdateWorkload(workloadDTO);
                 store.update(workloadDTO);
             //end OnClick
