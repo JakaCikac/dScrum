@@ -35,8 +35,12 @@ import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
+import si.fri.tpo.gwt.server.jpa.Workload;
 
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -206,12 +210,13 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
 
                 performUpdateWorkload(workloadDTO);
                 System.out.println("--------UPDATE CLICK------------------");
+                store.update(workloadDTO);
             //end OnClick
             }
         //end addClickHandler
         });
         panel.addButton(submitButton);
-
+        System.out.println("--------end_of_createWorkHistory-------------");
         verticalPanel.add(panel);
     }
 
