@@ -1,12 +1,15 @@
 package si.fri.tpo.gwt.client.form.addedit;
 
 import com.google.gwt.dev.ModuleTabPanel;
+import com.google.gwt.dev.util.collect.Lists;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.view.client.ListDataProvider;
 import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
@@ -27,6 +30,7 @@ import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.RowNumberer;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
+import si.fri.tpo.gwt.client.dto.WorkblockDTO;
 import si.fri.tpo.gwt.client.dto.WorkloadDTO;
 import com.google.gwt.editor.client.Editor;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
@@ -35,19 +39,17 @@ import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
+import si.fri.tpo.gwt.server.jpa.Workblock;
 import si.fri.tpo.gwt.server.jpa.Workload;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 
 /**
  * Created by Administrator on 5/18/2014.
  */
-public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
+public class WorkHistoryForm implements IsWidget  {
 
     private ContentPanel center, west, east, north, south;
     private DScrumServiceAsync service;
@@ -86,6 +88,7 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
         return verticalPanel;
     }
 
+
     public void createWorkHistory() {
         FramedPanel panel = new FramedPanel();
         panel.setHeaderVisible(false);
@@ -102,6 +105,7 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
         RowNumberer<WorkloadDTO> numberer = new RowNumberer<WorkloadDTO>();
         @Deprecated
         ColumnConfig<WorkloadDTO, String> taskCreationDateCol = new ColumnConfig<WorkloadDTO, String>(getTaskCreationDate(), 100, "Date");
+        taskCreationDateCol.setSortable(true);
         ColumnConfig<WorkloadDTO, String> hoursSpenCol = new ColumnConfig<WorkloadDTO, String>(getHoursSpent(), 60, "Work spent (h)");
         ColumnConfig<WorkloadDTO, String> hoursRemainingCol = new ColumnConfig<WorkloadDTO, String>(getHoursRemaining(), 60, "Remaining (h)");
 
@@ -110,9 +114,15 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
         l.add(hoursSpenCol);
         l.add(hoursRemainingCol);
 
+        Comparator<WorkloadDTO> wbSortByDate = new WBSortByDate();
+
         cm = new ColumnModel<WorkloadDTO>(l);
         store = new ListStore<WorkloadDTO>(getModelKeyProvider());
-        store.addAll(selectedTaskDTO.getWorkloadList());
+
+        //list for sorting date in a workload
+        List<WorkloadDTO> workloadDTOList = selectedTaskDTO.getWorkloadList();
+        Collections.sort(workloadDTOList, wbSortByDate);
+        store.addAll(workloadDTOList);
 
         grid = new Grid<WorkloadDTO>(store, cm);
         grid.getView().setAutoExpandColumn(taskCreationDateCol);
@@ -192,16 +202,27 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
                     d.show();
                     return;
                 }
-
-//                if (res > 0){
-//                    AlertMessageBox d = new AlertMessageBox("Estimated time is " + estimated + ".", "Write smaller number!");
-//                    d.show();
-//                    return;
-//                }
+                double est = (double)selectedTaskDTO.getEstimatedTime();
+                double rem = workRemaining.getValue();
+                int res = Double.compare(est,rem);
+                if (res<0) {
+                    AlertMessageBox d = new AlertMessageBox("Error!", "Estimated time is " + (est) + ". Write smaller number!");
+                    d.show();
+                    return;
+                }
                 /* ----------------------------- END VALIDATORS ------------------------------- */
 
-                workloadDTO.setTimeSpent(String.valueOf(workSpent.getValue()));
-                workloadDTO.setTimeRemaining(String.valueOf(workRemaining.getValue()));
+                //round to 1decimal number and save to base
+                double wSpent = workSpent.getValue()*10;
+                wSpent = Math.round(wSpent);
+                wSpent = wSpent/10;
+
+                double wRemaining = workRemaining.getValue()*10;
+                wRemaining = Math.round(wRemaining);
+                wRemaining = wRemaining/10;
+
+                workloadDTO.setTimeSpent(String.valueOf(wSpent));
+                workloadDTO.setTimeRemaining(String.valueOf(wRemaining));
 
 
                 System.out.println("updated spent: " +workloadDTO.getTimeSpent());
@@ -336,5 +357,17 @@ public class WorkHistoryForm implements IsWidget, Editor<WorkloadDTO>  {
             }
         };
         return vphr;
+    }
+}
+
+//sort dates
+class WBSortByDate implements Comparator<WorkloadDTO> {
+
+    @Override
+    public int compare(WorkloadDTO a, WorkloadDTO b) {
+
+        int i = a.getDay().compareTo(b.getDay());
+        System.out.println("izpisujem i: " +i);
+        return i;
     }
 }
