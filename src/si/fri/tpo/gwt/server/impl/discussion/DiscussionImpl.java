@@ -45,6 +45,13 @@ public class DiscussionImpl {
                 for (Comment comment : commentList)
                     if (comment.getCommentPK().getDiscussionDiscussionId() == discussion.getDiscussionPK().getDiscussionId()) {
                         CommentDTO commentDTO = new CommentDTO();
+                        CommentPKDTO commentPKDTO = new CommentPKDTO();
+                        commentPKDTO.setUserUserId(comment.getCommentPK().getUserUserId());
+                        commentPKDTO.setCommentId(comment.getCommentPK().getCommentId());
+                        commentPKDTO.setDiscussionDiscussionId(comment.getCommentPK().getDiscussionDiscussionId());
+                        commentPKDTO.setDiscussionProjectProjectId(comment.getCommentPK().getDiscussionProjectProjectId());
+                        commentPKDTO.setDiscussionUserUserId(comment.getCommentPK().getDiscussionUserUserId());
+                        commentDTO.setCommentPK(commentPKDTO);
                         commentDTO.setContent(comment.getContent());
                         commentDTOList.add(commentDTO);
                     } else continue;
@@ -111,8 +118,24 @@ public class DiscussionImpl {
             d.setContent(discussionDTO.getContent());
             d.setCreatetime(discussionDTO.getCreatetime());
 
+            Project p = ProxyManager.getProjectProxy().findProjectByName(discussionDTO.getProject().getName());
+            if (p == null ){
+                return Pair.of(false, "Project doesnt exist.");
+            }
+            d.setProject(p);
+
+            User u = ProxyManager.getUserProxy().findUserById(discussionDTO.getUser().getUserId());
+            if (u == null ){
+                return Pair.of(false, "User doesnt exist.");
+            }
+            d.setUser(u);
+
             List<Comment> commentList = d.getCommentList();
             for (CommentDTO commentDTO : discussionDTO.getCommentList()) {
+                System.out.println("Comment list size, inside impl: " + discussionDTO.getCommentList().size());
+                System.out.println("CommentDTO: " + commentDTO);
+                System.out.println("Comment PK: " + commentDTO.getCommentPK());
+                System.out.println("Comment PK ID " + commentDTO.getCommentPK().getCommentId());
                 CommentPK commentPK = new CommentPK();
                 commentPK.setCommentId(commentDTO.getCommentPK().getCommentId());
                 System.out.println("ERRORS");

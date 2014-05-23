@@ -58,11 +58,12 @@ public class DiscussionCommentDialog extends Dialog {
         getButton(this.getPredefinedButtons().get(0)).addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
-                center.add(userHomeForm.asWidget());
+                SessionInfo.projectDTO = null;
+                center.clear();
                 west.clear();
                 east.clear();
-                SessionInfo.projectDTO = null;
+                UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
+                center.add(userHomeForm.asWidget());
                 if (SessionInfo.userDTO.isAdmin()){
                     AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
                     east.add(adminNavPanel.asWidget());
