@@ -21,8 +21,9 @@ public class UserStoryCommentDialog extends Dialog {
     private DScrumServiceAsync service;
     private ContentPanel center, west, east, north, south;
     private UserStoryDTO usDTO;
+    private boolean reject;
 
-    public UserStoryCommentDialog(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, UserStoryDTO usDTO) {
+    public UserStoryCommentDialog(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, UserStoryDTO usDTO, boolean reject) {
         this.service = service;
         this.center = center;
         this.west = west;
@@ -30,6 +31,7 @@ public class UserStoryCommentDialog extends Dialog {
         this.north = north;
         this.south = south;
         this.usDTO = usDTO;
+        this.reject = reject;
 
         // Layout
         setBodyBorder(false);
@@ -40,10 +42,11 @@ public class UserStoryCommentDialog extends Dialog {
         setHideOnButtonClick(true);
 
         ClearPanels();
+        if(reject) getButton(PredefinedButton.OK).setEnabled(false);
 
         FlowLayoutContainer layout = new FlowLayoutContainer();
         add(layout);
-        UserStoryCommentAddForm caf = new UserStoryCommentAddForm(this.service, this.center, this.west, this.east, this.usDTO);
+        UserStoryCommentAddForm caf = new UserStoryCommentAddForm(this.service, this.center, this.west, this.east, this.usDTO, reject, this);
         center.disable();
         east.disable();
         west.disable();

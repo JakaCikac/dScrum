@@ -161,7 +161,7 @@ public class SprintBacklogForm  implements IsWidget{
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
                     UserStoryDTO p = store.get(row);
-                    UserStoryCommentDialog uscd = new UserStoryCommentDialog(service, center, west, east, north, south, p);
+                    UserStoryCommentDialog uscd = new UserStoryCommentDialog(service, center, west, east, north, south, p, false);
                     uscd.show();
                 }
             });
@@ -237,7 +237,7 @@ public class SprintBacklogForm  implements IsWidget{
                     if (userStoryDTO.getSprint() == null){
                         MessageBox amb3 = new MessageBox("Message update User Story", "User story " + userStoryDTO.getName() +"is rejected.");
                         amb3.show();
-                        UserStoryCommentDialog uscd = new UserStoryCommentDialog(service, center, west, east, north, south, userStoryDTO); // Omogoci PO da doda komentar pri rejectu.
+                        UserStoryCommentDialog uscd = new UserStoryCommentDialog(service, center, west, east, north, south, userStoryDTO, true); // Omogoci PO da doda komentar pri rejectu.
                         uscd.show();
                     } else {
                         MessageBox amb3 = new MessageBox("Message update User Story", "User story " + userStoryDTO.getName() +"is finished.");

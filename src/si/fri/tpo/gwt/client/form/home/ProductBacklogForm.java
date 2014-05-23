@@ -144,7 +144,7 @@ public class ProductBacklogForm implements IsWidget {
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
                     UserStoryDTO p = ufSprintStore.get(row);
-                    UserStoryCommentDialog uscd = new UserStoryCommentDialog(service, center, west, east, north, south, p);
+                    UserStoryCommentDialog uscd = new UserStoryCommentDialog(service, center, west, east, north, south, p, false);
                     uscd.show();
                 }
             });
