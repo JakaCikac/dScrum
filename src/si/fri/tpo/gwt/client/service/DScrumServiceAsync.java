@@ -138,6 +138,8 @@ public interface DScrumServiceAsync {
 
     // WORKLOAD //
     void updateWorkload(WorkloadDTO workloadDTO, AsyncCallback<Pair<Boolean,String>> updateWorkload);
+
+    void saveWorkload(List<WorkloadDTO> workloadDTO, AsyncCallback<Pair<Boolean,List<Integer>>> saveWorkload);
     // WORKLOAD //
 }
 

@@ -26,16 +26,17 @@ import com.sencha.gxt.widget.core.client.grid.RowNumberer;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
 import si.fri.tpo.gwt.client.dto.WorkloadDTO;
+import si.fri.tpo.gwt.client.dto.WorkloadPKDTO;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
+import si.fri.tpo.gwt.server.jpa.TaskPK;
 import si.fri.tpo.gwt.server.jpa.Workload;
 
 import java.util.*;
-
 
 /**
  * Created by Administrator on 5/18/2014.
@@ -54,11 +55,19 @@ public class WorkHistoryForm implements IsWidget  {
     private WorkloadDTO workloadDTO;
     private ListStore<WorkloadDTO> store;
     private Grid<WorkloadDTO> grid;
+    private List<WorkloadDTO> workloadDTOList, workloadDTOListNEW;
+    private Comparator<WorkloadDTO> wbSortByDate;
 
     private DoubleField workSpent;
     private DoubleField workRemaining;
 
     private SubmitButton submitButton;
+
+    Date today = new Date();
+    Date lastDay;
+    long forDay;
+    int dateDifference = 0;
+    private String timeRem="";
 
     public WorkHistoryForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, TaskDTO tDTO, WorkHistoryDialog whd) {
         this.service = service;
@@ -105,17 +114,55 @@ public class WorkHistoryForm implements IsWidget  {
         l.add(hoursSpenCol);
         l.add(hoursRemainingCol);
 
-        Comparator<WorkloadDTO> wbSortByDate = new WBSortByDate();
+        wbSortByDate = new WBSortByDate();
 
         cm = new ColumnModel<WorkloadDTO>(l);
         store = new ListStore<WorkloadDTO>(getModelKeyProvider());
 
         //list for sorting date in a workload
-        List<WorkloadDTO> workloadDTOList = selectedTaskDTO.getWorkloadList();
+        workloadDTOList = selectedTaskDTO.getWorkloadList();
         Collections.sort(workloadDTOList, wbSortByDate);
-        store.addAll(workloadDTOList);
-        final WorkloadDTO lastElement = workloadDTOList.get(workloadDTOList.size() - 1);
-        System.out.println("last element Time" + lastElement.getTimeRemaining());
+        final WorkloadDTO lastElement;
+
+        if (workloadDTOList.isEmpty()){
+            lastElement = workloadDTO;
+            lastDay = selectedTaskDTO.getAssignedDate();
+            timeRem = (String.valueOf(selectedTaskDTO.getEstimatedTime()));
+        }
+
+        else {
+            lastElement =  workloadDTOList.get(workloadDTOList.size() - 1);
+            lastDay = lastElement.getDay();
+            timeRem = lastElement.getTimeRemaining();
+        }
+
+        dateDifference = (int)(today.getTime() - lastDay.getTime())/(1000*60*60*24);
+        forDay = lastDay.getTime()+(1000*60*60*24);
+
+        workloadDTOListNEW = new ArrayList<WorkloadDTO>();
+        for (int i=0; i<dateDifference; i++){
+            WorkloadDTO addWL = new WorkloadDTO();
+            WorkloadPKDTO workloadPKDTO = new WorkloadPKDTO();
+            workloadPKDTO.setUserUserId(selectedTaskDTO.getUserUserId().getUserId());
+            workloadPKDTO.setTaskTaskId(selectedTaskDTO.getTaskPK().getTaskId());
+            workloadPKDTO.setTaskUserStoryStoryId(selectedTaskDTO.getUserStory().getStoryId());
+            addWL.setWorkloadPK(workloadPKDTO);
+
+            addWL.setUser(selectedTaskDTO.getUserUserId());
+            addWL.setTask(selectedTaskDTO);
+            addWL.setTimeSpent("0");
+            addWL.setDay(new Date(forDay));
+            addWL.setTimeRemaining(timeRem);
+
+            forDay = forDay +(1000*60*60*24);
+
+            workloadDTOListNEW.add(addWL);
+        }
+        performSaveWorkload(workloadDTOListNEW);
+
+        lastDay = null;
+        long forDay = 0;
+        int dateDifference = 0;
 
         grid = new Grid<WorkloadDTO>(store, cm);
         grid.getView().setAutoExpandColumn(taskCreationDateCol);
@@ -214,14 +261,14 @@ public class WorkHistoryForm implements IsWidget  {
 
                 //if workRemaining!=0 -> taskStatus == Assigned
                 if (selectedTaskDTO.getEstimatedTime()!=0 && (workRemaining.getValue())!=0){
-                    System.out.println("ID taska:" + selectedTaskDTO.getTaskPK().getTaskId());
+                    //System.out.println("ID taska:" + selectedTaskDTO.getTaskPK().getTaskId());
                     selectedTaskDTO.setStatus("Assigned");
                     performUpdateTask(selectedTaskDTO);
                 }
 
                 /* ----------------------------- END VALIDATORS ------------------------------- */
 
-                //update remaining time @ task
+                //update remaining time @ task - Zaključevanje nalog
                 int lastTimeRemaining;
                 double doubleLastTimeRemaining;
                 doubleLastTimeRemaining = Double.parseDouble(lastElement.getTimeRemaining());
@@ -237,17 +284,16 @@ public class WorkHistoryForm implements IsWidget  {
                 wRemaining = wRemaining/10;
 
                 if (workloadDTO.getDay().compareTo(lastElement.getDay())==0){
-                    System.out.println("----------zadnji dan!--------------");
+                    //System.out.println("----------zadnji dan!--------------");
                     lastTimeRemaining = (int)wRemaining;
                 }
-                System.out.println("Time "+lastTimeRemaining);
 
                 selectedTaskDTO.setTimeRemaining(lastTimeRemaining);
 
                 workloadDTO.setTimeSpent(String.valueOf(wSpent));
                 workloadDTO.setTimeRemaining(String.valueOf(wRemaining));
 
-                performUpdateTask(selectedTaskDTO);
+                performUpdateTask(selectedTaskDTO); //zakljucevanje nalog
                 performUpdateWorkload(workloadDTO);
                 store.update(workloadDTO);
             //end OnClick
@@ -297,6 +343,61 @@ public class WorkHistoryForm implements IsWidget  {
             }
         };
         service.updateWorkload(workloadDTO, updateWorkload);
+    }
+
+    private void performSaveWorkload(List<WorkloadDTO> workloadDTOListSave){
+        AsyncCallback<Pair<Boolean, List<Integer>>> saveWorkload = new AsyncCallback<Pair<Boolean, List<Integer>>>() {
+            @Override
+            public void onSuccess(Pair<Boolean, List<Integer>> result) {
+                if (result == null) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing work updating!");
+                    amb2.show();
+                } else if (!result.getFirst()) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error updating work!", result.getSecond()+"");
+                    amb2.show();
+                } else {
+                    //List<WorkloadDTO> workloadDTOListN = new ArrayList<WorkloadDTO>();
+
+                    if ( workloadDTOListNEW.size() == result.getSecond().size()) {
+                        ListIterator litr = result.getSecond().listIterator();
+                        for (WorkloadDTO workloadDTO1 : workloadDTOListNEW){
+                            if(litr.hasNext()) {
+                                WorkloadPKDTO workloadPKDTO = workloadDTO1.getWorkloadPK();
+                                workloadPKDTO.setWorkloadId((Integer)litr.next());
+                                workloadDTO1.setWorkloadPK(workloadPKDTO);
+                                workloadDTOList.add(workloadDTO1);
+                            } else {
+                                errorMessage("Error saving acceptance test!", "There was an error while performing acceptance test saving!");
+                            }
+                        }
+                    } else {
+                        errorMessage("Error saving acceptance test!", "There was an error while performing acceptance test saving!");
+                    }
+
+                    //ponovno sortiraj
+                    Collections.sort(workloadDTOList, wbSortByDate);
+                    //shrani v store
+                    store.addAll(workloadDTOList);
+
+                    selectedTaskDTO.setWorkloadList(workloadDTOList);
+                    AsyncCallback<Pair<Boolean, String>> updateTask = new AsyncCallback<Pair<Boolean, String>>() {
+                        @Override
+                        public void onSuccess(Pair<Boolean, String> result) {
+                        }
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            Window.alert(caught.getMessage());
+                        }
+                    };
+                    service.updateTask(selectedTaskDTO, updateTask);
+                }
+            }
+            @Override
+            public void onFailure(Throwable caught) {
+                Window.alert(caught.getMessage());
+            }
+        };
+        service.saveWorkload(workloadDTOListSave, saveWorkload);
     }
 
     private void performUpdateTask(TaskDTO p) {
@@ -387,6 +488,10 @@ public class WorkHistoryForm implements IsWidget  {
             }
         };
         return vphr;
+    }
+    private void errorMessage(String s, String s1) {
+        AlertMessageBox amb = new AlertMessageBox(s, s1);
+        amb.show();
     }
 }
 
