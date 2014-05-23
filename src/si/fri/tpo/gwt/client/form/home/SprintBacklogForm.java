@@ -79,16 +79,16 @@ public class SprintBacklogForm  implements IsWidget{
                         int time = 0;
                         for (TaskDTO taskDTO : value.getTaskList()) {
                             sb.appendHtmlConstant("<tr>");
-                            sb.appendHtmlConstant("<td>" + taskDTO.getDescription() + "</td>");
-                            sb.appendHtmlConstant("<td>" + taskDTO.getStatus() + "</td>");
+                            sb.appendHtmlConstant("<td style='width: 200px'>" + taskDTO.getDescription() + "</td>");
+                            sb.appendHtmlConstant("<td style='width: 200px'>" + taskDTO.getStatus() + "</td>");
                             if(taskDTO.getUserUserId()!=null) {
-                                sb.appendHtmlConstant("<td>" + taskDTO.getUserUserId().getUsername() + "</td>");
+                                sb.appendHtmlConstant("<td style='width: 200px'>" + taskDTO.getUserUserId().getUsername() + "</td>");
                             } else if(taskDTO.getPreassignedUserName()!=null) {
                                 //TODO: get preassignet user from DB
-                                sb.appendHtmlConstant("<td>" + taskDTO.getPreassignedUserName() + "</td>");
+                                sb.appendHtmlConstant("<td style='width: 200px'>" + taskDTO.getPreassignedUserName() + "</td>");
                                 //sb.appendHtmlConstant("<td></td>");
-                            } else sb.appendHtmlConstant("<td>/</td>");
-                            sb.appendHtmlConstant("<td>" + taskDTO.getTimeRemaining() + " h</td>");
+                            } else sb.appendHtmlConstant("<td style='width: 200px'>/</td>");
+                            sb.appendHtmlConstant("<td style='width: 200px'>" + taskDTO.getTimeRemaining() + " h</td>");
                             time += taskDTO.getTimeRemaining();
                             sb.appendHtmlConstant("</tr>");
                         }
@@ -176,8 +176,6 @@ public class SprintBacklogForm  implements IsWidget{
                     UserStoryDTO p = store.get(row);
                     AcceptEditTasksDialog eatd = new AcceptEditTasksDialog(service, center, west, east, north, south, p);
                     eatd.show();
-                    //UserStoryCommentDialog uscd = new UserStoryCommentDialog(service, center, west, east, north, south, p);
-                    //uscd.show();
                 }
             });
             acceptEditTasksColumn.setCell(acceptEditTasksButton);
@@ -240,13 +238,14 @@ public class SprintBacklogForm  implements IsWidget{
                         UserStoryCommentDialog uscd = new UserStoryCommentDialog(service, center, west, east, north, south, userStoryDTO, true); // Omogoci PO da doda komentar pri rejectu.
                         uscd.show();
                     } else {
+                        SessionInfo.projectDTO = null;
+                        west.clear();
+                        east.clear();
+                        center.clear();
                         MessageBox amb3 = new MessageBox("Message update User Story", "User story " + userStoryDTO.getName() +"is finished.");
                         amb3.show();
                         UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
                         center.add(userHomeForm.asWidget());
-                        west.clear();
-                        east.clear();
-                        SessionInfo.projectDTO = null;
                         if (SessionInfo.userDTO.isAdmin()) {
                             AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
                             east.add(adminNavPanel.asWidget());

@@ -1,4 +1,4 @@
-package si.fri.tpo.gwt.server.impl.registration;
+package si.fri.tpo.gwt.server.impl.task;
 
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
@@ -9,7 +9,7 @@ import si.fri.tpo.gwt.server.proxy.ProxyManager;
 /**
  * Created by nanorax on 03/05/14.
  */
-public class TaskRegistrationServiceImpl {
+public class TaskImpl {
 
     public static Pair<Boolean, String> saveTask(TaskDTO taskDTO, UserStoryDTO userStoryDTO) {
         try {
@@ -71,7 +71,7 @@ public class TaskRegistrationServiceImpl {
             t.setDescription(taskDTO.getDescription());
             t.setEstimatedTime(taskDTO.getEstimatedTime());
             t.setPreassignedUserName(taskDTO.getPreassignedUserName());
-
+            t.setTimeRemaining(taskDTO.getTimeRemaining());
 
             User u;
             if (taskDTO.getPreassignedUserName() != null) {

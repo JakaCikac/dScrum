@@ -10,11 +10,11 @@ import si.fri.tpo.gwt.server.impl.login.LoginServiceImpl;
 import si.fri.tpo.gwt.server.impl.project.ProjectImpl;
 import si.fri.tpo.gwt.server.impl.registration.*;
 import si.fri.tpo.gwt.server.impl.sprint.SprintImpl;
+import si.fri.tpo.gwt.server.impl.task.TaskImpl;
 import si.fri.tpo.gwt.server.impl.team.TeamImpl;
 import si.fri.tpo.gwt.server.impl.user.UserImpl;
 import si.fri.tpo.gwt.server.impl.userStory.UserStoryImpl;
 import si.fri.tpo.gwt.server.impl.workload.WorkloadImpl;
-import si.fri.tpo.gwt.server.jpa.Discussion;
 
 import java.util.List;
 
@@ -276,17 +276,17 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     // TASK //
     @Override
     public Pair<Boolean, String> saveTask(TaskDTO taskDTO, UserStoryDTO userStoryDTO) {
-        return TaskRegistrationServiceImpl.saveTask(taskDTO, userStoryDTO);
+        return TaskImpl.saveTask(taskDTO, userStoryDTO);
     }
 
     @Override
     public Pair<Boolean, String> updateTask(TaskDTO p) {
-        return TaskRegistrationServiceImpl.updateTask(p);
+        return TaskImpl.updateTask(p);
     }
 
     @Override
     public Pair<Boolean, String> deleteTask(TaskDTO taskDTO) {
-        return TaskRegistrationServiceImpl.deleteTask(taskDTO);
+        return TaskImpl.deleteTask(taskDTO);
     }
     // TASK //
 

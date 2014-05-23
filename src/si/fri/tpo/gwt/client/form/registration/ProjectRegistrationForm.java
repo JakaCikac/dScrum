@@ -273,14 +273,15 @@ public class ProjectRegistrationForm implements IsWidget {
                             amb2.show();
                         }
                         else {
+                            SessionInfo.projectDTO = null;
+                            west.clear();
+                            east.clear();
+                            center.clear();
                             MessageBox amb3 = new MessageBox("Message save Project", result.getSecond());
                             amb3.show();
                             UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
                             center.add(userHomeForm.asWidget());
-                            west.clear();
-                            east.clear();//TODO: when home page (wall, sprint backlog etc) create as widget on center, till then just clear.
-                            SessionInfo.projectDTO = null;
-                            if (SessionInfo.userDTO.isAdmin()){
+                            if (SessionInfo.userDTO.isAdmin()) {
                                 AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
                                 east.add(adminNavPanel.asWidget());
                             } else {
