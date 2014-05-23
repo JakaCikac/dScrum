@@ -144,7 +144,7 @@ public class ProductBacklogForm implements IsWidget {
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
                     UserStoryDTO p = ufSprintStore.get(row);
-                    UserStoryCommentDialog uscd = new UserStoryCommentDialog(service, center, west, east, north, south, p);
+                    UserStoryCommentDialog uscd = new UserStoryCommentDialog(service, center, west, east, north, south, p, false);
                     uscd.show();
                 }
             });
@@ -251,14 +251,15 @@ public class ProductBacklogForm implements IsWidget {
                     amb2.show();
                 }
                 else {
+                    SessionInfo.projectDTO = null;
+                    west.clear();
+                    east.clear();
+                    center.clear();
                     MessageBox amb3 = new MessageBox("Message delete User Story", result.getSecond());
                     amb3.show();
                     UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
                     center.add(userHomeForm.asWidget());
-                    west.clear();
-                    east.clear();
-                    SessionInfo.projectDTO = null;
-                    if (SessionInfo.userDTO.isAdmin()){
+                    if (SessionInfo.userDTO.isAdmin()) {
                         AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
                         east.add(adminNavPanel.asWidget());
                     } else {

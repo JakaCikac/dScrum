@@ -76,7 +76,10 @@ public class UserNavPanel implements IsWidget{
         west.setHeadingText("Project list");
         west.add(psf.asWidget());
 
-        panel.setWidth(PANEL_WIDTH);
+        //panel.setPixelSize(center.getOffsetWidth(), center.getOffsetHeight());
+        System.out.println(center.getOffsetWidth() + ", " + center.getOffsetHeight());
+        panel.setWidth(center.getOffsetWidth());
+        panel.setHeight(center.getOffsetHeight());
     }
 
 }

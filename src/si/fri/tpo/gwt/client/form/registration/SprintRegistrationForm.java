@@ -221,14 +221,15 @@ public class SprintRegistrationForm implements IsWidget {
                                 amb2.show();
                             }
                             else {
+                                SessionInfo.projectDTO = null;
+                                west.clear();
+                                east.clear();
+                                center.clear();
                                 MessageBox amb3 = new MessageBox("Message update Sprint", result.getSecond());
                                 amb3.show();
                                 UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
                                 center.add(userHomeForm.asWidget());
-                                west.clear();
-                                east.clear();
-                                SessionInfo.projectDTO = null;
-                                if (SessionInfo.userDTO.isAdmin()){
+                                if (SessionInfo.userDTO.isAdmin()) {
                                     AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
                                     east.add(adminNavPanel.asWidget());
                                 } else {
