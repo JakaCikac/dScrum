@@ -6,10 +6,8 @@
 
 package si.fri.tpo.gwt.server.jpa;
 
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 
 /**
  *
@@ -17,7 +15,7 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class CommentPK implements Serializable {
-    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private int commentId;
     @Basic(optional = false)

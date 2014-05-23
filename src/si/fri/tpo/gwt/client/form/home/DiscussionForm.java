@@ -132,6 +132,7 @@ public class DiscussionForm implements IsWidget {
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
                     DiscussionCommentDialog dcd = new DiscussionCommentDialog(service, center, west, east, north, south, store.get(row));
+                    dcd.show();
                 }
             });
             addCommentButtonCol.setCell(addCommentButton);

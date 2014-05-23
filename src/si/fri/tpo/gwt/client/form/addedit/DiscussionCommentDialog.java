@@ -29,6 +29,7 @@ public class DiscussionCommentDialog extends Dialog {
         this.east = east;
         this.north = north;
         this.south = south;
+        this.discussionDTO = discussionDTO;
 
         // Layout
         setBodyBorder(false);

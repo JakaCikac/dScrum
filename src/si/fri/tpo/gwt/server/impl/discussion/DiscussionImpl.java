@@ -101,14 +101,25 @@ public class DiscussionImpl {
 
     public static Pair<Boolean, String> updateDiscussion(DiscussionDTO discussionDTO) {
         try {
-            Discussion d = ProxyManager.getDiscussionProxy().findDiscussion(discussionDTO.getDiscussionPK().getDiscussionId());
+
+            DiscussionPK discussionPK = new DiscussionPK();
+            discussionPK.setUserUserId(discussionDTO.getDiscussionPK().getUserUserId());
+            discussionPK.setDiscussionId(discussionDTO.getDiscussionPK().getDiscussionId());
+            discussionPK.setProjectProjectId(discussionDTO.getDiscussionPK().getProjectProjectId());
+
+            Discussion d = ProxyManager.getDiscussionProxy().findDiscussion(discussionPK);
             d.setContent(discussionDTO.getContent());
             d.setCreatetime(discussionDTO.getCreatetime());
 
             List<Comment> commentList = d.getCommentList();
-            for(CommentDTO commentDTO : discussionDTO.getCommentList()){
+            for (CommentDTO commentDTO : discussionDTO.getCommentList()) {
                 CommentPK commentPK = new CommentPK();
                 commentPK.setCommentId(commentDTO.getCommentPK().getCommentId());
+                System.out.println("ERRORS");
+                System.out.println(commentDTO);
+                System.out.println(commentDTO.getCommentPK());
+                System.out.println(commentDTO.getCommentPK().getCommentId());
+                System.out.println("DISCUSSION "+commentDTO.getCommentPK().getDiscussionDiscussionId());
                 commentPK.setDiscussionDiscussionId(commentDTO.getCommentPK().getDiscussionDiscussionId());
                 commentPK.setDiscussionProjectProjectId(commentDTO.getCommentPK().getDiscussionProjectProjectId());
                 commentPK.setDiscussionUserUserId(commentDTO.getCommentPK().getDiscussionUserUserId());
@@ -135,5 +146,56 @@ public class DiscussionImpl {
             return Pair.of(false, e.getMessage());
         }
         return Pair.of(true, "");
+    }
+
+    public static Pair<Boolean, Integer> saveDiscussionComment(CommentDTO commentDTO) {
+        int insertedCommentID = -1;
+        try {
+            Comment comment = new Comment();
+            comment.setContent(commentDTO.getContent());
+            comment.setCreatetime(commentDTO.getCreatetime());
+
+            DiscussionPK discussionPK = new DiscussionPK();
+            discussionPK.setUserUserId(commentDTO.getDiscussion().getDiscussionPK().getUserUserId());
+            discussionPK.setDiscussionId(commentDTO.getDiscussion().getDiscussionPK().getDiscussionId());
+            discussionPK.setProjectProjectId(commentDTO.getDiscussion().getDiscussionPK().getProjectProjectId());
+
+            Discussion discussion = ProxyManager.getDiscussionProxy().findDiscussion(discussionPK);
+            if (discussion == null) {
+                return Pair.of(false, -1);
+            }
+            comment.setDiscussion(discussion);
+
+            User user = ProxyManager.getUserProxy().findUser(commentDTO.getUser().getUserId());
+            if (user == null) {
+                return Pair.of(false, -2);
+            }
+            comment.setUser(user);
+
+            CommentPK commentPK = new CommentPK();
+            commentPK.setDiscussionUserUserId(discussion.getUser().getUserId());
+            commentPK.setDiscussionProjectProjectId(discussion.getProject().getProjectId());
+            commentPK.setUserUserId(user.getUserId());
+            commentPK.setDiscussionDiscussionId(discussion.getDiscussionPK().getDiscussionId());
+            comment.setCommentPK(commentPK);
+
+            try {
+                if (comment == null) {
+                    return Pair.of(false, -3);
+                }
+                insertedCommentID = ProxyManager.getCommentProxy().create(comment);
+                if (insertedCommentID == -1) {
+                    System.out.println("ob vstavljanju s kontrolerjem je Comment id ... -1 :(");
+                }
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+                return Pair.of(false, -4);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Pair.of(false, -5);
+        }
+        return Pair.of(true, insertedCommentID);
     }
 }

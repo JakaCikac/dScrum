@@ -137,6 +137,8 @@ public interface DScrumServiceAsync {
 
     void updateDiscussion(DiscussionDTO discussionDTO, AsyncCallback<Pair<Boolean,String>> updateDiscussion);
 
+    void saveDiscussionComment(CommentDTO commentDTO, AsyncCallback<Pair<Boolean,Integer>> saveDiscussionComment);
+
     // DISCUSSION //
 
     // WORKLOAD //

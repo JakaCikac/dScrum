@@ -139,6 +139,8 @@ public interface DScrumService extends RemoteService {
 
     public Pair<Boolean, String> updateDiscussion(DiscussionDTO discussionDTO);
 
+    public Pair<Boolean, Integer> saveDiscussionComment(CommentDTO commentDTO);
+
     // DISCUSSION //
 
     // WORKLOAD //

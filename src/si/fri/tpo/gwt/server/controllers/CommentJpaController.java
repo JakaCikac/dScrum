@@ -6,21 +6,21 @@
 
 package si.fri.tpo.gwt.server.controllers;
 
-import java.io.Serializable;
-import java.util.List;
-
 import si.fri.tpo.gwt.server.controllers.exceptions.NonexistentEntityException;
 import si.fri.tpo.gwt.server.controllers.exceptions.PreexistingEntityException;
 import si.fri.tpo.gwt.server.jpa.Comment;
 import si.fri.tpo.gwt.server.jpa.CommentPK;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import si.fri.tpo.gwt.server.jpa.Discussion;
 import si.fri.tpo.gwt.server.jpa.User;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -37,7 +37,8 @@ public class CommentJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Comment comment) throws PreexistingEntityException, Exception {
+    public Integer create(Comment comment) throws PreexistingEntityException, Exception {
+        int insertedCommentID = -1;
         if (comment.getCommentPK() == null) {
             comment.setCommentPK(new CommentPK());
         }
@@ -76,9 +77,11 @@ public class CommentJpaController implements Serializable {
             throw ex;
         } finally {
             if (em != null) {
+                insertedCommentID = comment.getCommentPK().getCommentId();
                 em.close();
             }
         }
+        return insertedCommentID;
     }
 
     public void edit(Comment comment) throws NonexistentEntityException, Exception {

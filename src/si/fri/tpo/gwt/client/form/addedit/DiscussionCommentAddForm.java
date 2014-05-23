@@ -14,13 +14,16 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextArea;
+import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.CommentDTO;
+import si.fri.tpo.gwt.client.dto.CommentPKDTO;
 import si.fri.tpo.gwt.client.dto.DiscussionDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by t13db on 22.5.2014.
@@ -66,18 +69,38 @@ public class DiscussionCommentAddForm implements IsWidget {
         contents = new TextArea();
 
         p.add(new FieldLabel(contents, "Comment"), new VerticalLayoutContainer.VerticalLayoutData(-1, 180));
-
         submitButton = new TextButton("Create");
-        contents.setValue(commentDTO.getContent());
 
         submitButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                commentDTO.setContent(contents.getValue());
-                commentDTO.setCreatetime(new Date());
-                commentDTO.setUser(SessionInfo.userDTO);
-                commentDTO.setDiscussion(discussionDTO);
-                performSaveDiscussionComment();
+                String commentText = contents.getValue();
+                if (commentText.isEmpty()) {
+                    Info.display("Empty comment", "Cant add empty comment!");
+                } else {
+                    commentDTO = new CommentDTO();
+                    commentDTO.setContent(commentText);
+                    commentDTO.setCreatetime(new Date());
+                    commentDTO.setUser(SessionInfo.userDTO);
+                    commentDTO.setDiscussion(discussionDTO);
+                    System.out.println("discussion DTO: " + discussionDTO);
+                    System.out.println("discussion PKDTO: " + discussionDTO.getDiscussionPK());
+                    CommentPKDTO commentPKDTO = new CommentPKDTO();
+                    commentPKDTO.setDiscussionProjectProjectId(SessionInfo.projectDTO.getProjectId());
+                    System.out.println("discussion user id: "+ SessionInfo.userDTO.getUserId());
+                    commentPKDTO.setDiscussionUserUserId(SessionInfo.userDTO.getUserId());
+                    System.out.println("discussion id: " + discussionDTO.getDiscussionPK().getDiscussionId());
+                    commentPKDTO.setDiscussionDiscussionId(discussionDTO.getDiscussionPK().getDiscussionId());
+                    System.out.println("user id: " +SessionInfo.userDTO.getUserId() );
+                    commentPKDTO.setUserUserId(SessionInfo.userDTO.getUserId());
+                    commentDTO.setCommentPK(commentPKDTO);
+
+                    commentDTO.setCommentPK(commentPKDTO);
+                    List<CommentDTO> commentDTOList = discussionDTO.getCommentList();
+                    commentDTOList.add(commentDTO);
+                    discussionDTO.setCommentList(commentDTOList);
+                    performSaveDiscussionComment();
+                }
 
             }
         });
@@ -98,7 +121,26 @@ public class DiscussionCommentAddForm implements IsWidget {
                     amb2.show();
                 }
                 else {
-                    //TODO: add comment id to discusion
+                    CommentPKDTO commentPKDTO = new CommentPKDTO();
+                    commentPKDTO.setDiscussionProjectProjectId(SessionInfo.projectDTO.getProjectId());
+                    System.out.println("2discussion user id: " + SessionInfo.userDTO.getUserId());
+                    commentPKDTO.setDiscussionUserUserId(SessionInfo.userDTO.getUserId());
+                    System.out.println("2discussion id: " + discussionDTO.getDiscussionPK().getDiscussionId());
+                    commentPKDTO.setDiscussionDiscussionId(discussionDTO.getDiscussionPK().getDiscussionId());
+                    System.out.println("2user id: " + SessionInfo.userDTO.getUserId());
+                    commentPKDTO.setUserUserId(SessionInfo.userDTO.getUserId());
+                    System.out.println("Comment ID: " + result.getSecond());
+                    commentPKDTO.setCommentId(result.getSecond());
+                    commentDTO.setCommentPK(commentPKDTO);
+                    List<CommentDTO> commentDTOList = discussionDTO.getCommentList();
+                    System.out.println("discusiion comnet list: " + commentDTOList);
+                    commentDTOList.add(commentDTO);
+                    System.out.println("comment dto za dodajanje lita: " +commentDTO );
+                    System.out.println("commen pk :" + commentDTO.getCommentPK());
+                    System.out.println("bozo je lol");
+                    discussionDTO.setCommentList(commentDTOList);
+                    System.out.println("comment list po updatanje " + discussionDTO.getCommentList());
+
                     AsyncCallback<Pair<Boolean, String>> updateDiscussion = new AsyncCallback<Pair<Boolean, String>>() {
                         @Override
                         public void onSuccess(Pair<Boolean, String> result) {
@@ -129,6 +171,6 @@ public class DiscussionCommentAddForm implements IsWidget {
                 Window.alert(caught.getMessage());
             }
         };
-        //service.saveDiscussionComment(commentDTO, saveDiscussionComment);
+        service.saveDiscussionComment(commentDTO, saveDiscussionComment);
     }
 }
