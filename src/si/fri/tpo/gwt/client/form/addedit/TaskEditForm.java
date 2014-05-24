@@ -111,7 +111,7 @@ public class TaskEditForm implements IsWidget, Editor<TaskDTO> {
         if(taskDTO.getDescription() != null){
             description.setValue(taskDTO.getDescription());
         }
-        estimateTime.setValue(taskDTO.getEstimatedTime());
+        estimateTime.setValue(taskDTO.getTimeRemaining());
 
         if(taskDTO.getPreassignedUserName() != null){
             for(UserDTO userDTO : members) {
@@ -138,7 +138,7 @@ public class TaskEditForm implements IsWidget, Editor<TaskDTO> {
                     taskDTO.setPreassignedUserName(null);
                 }
                 if (estimateTime.getValue() != null) {
-                    taskDTO.setEstimatedTime(estimateTime.getValue());
+                    //taskDTO.setEstimatedTime(estimateTime.getValue());
                     taskDTO.setTimeRemaining(estimateTime.getValue());
                 } else {
                     Info.display("Estimated time not entered.", "Please enter the estimated time (Integer value).");

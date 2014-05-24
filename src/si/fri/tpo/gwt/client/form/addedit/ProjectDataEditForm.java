@@ -330,15 +330,15 @@ public class ProjectDataEditForm implements IsWidget{
                             amb2.show();
                         }
                         else {
-                            MessageBox amb3 = new MessageBox("Message update Project", result.getSecond());
-                            amb3.show();
-                            // refresh gui
-                            UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
-                            center.add(userHomeForm.asWidget());
+                            SessionInfo.projectDTO = null;
                             west.clear();
                             east.clear();
-                            SessionInfo.projectDTO = null;
-                            if (SessionInfo.userDTO.isAdmin()){
+                            center.clear();
+                            MessageBox amb3 = new MessageBox("Message update Project", result.getSecond());
+                            amb3.show();
+                            UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
+                            center.add(userHomeForm.asWidget());
+                            if (SessionInfo.userDTO.isAdmin()) {
                                 AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
                                 east.add(adminNavPanel.asWidget());
                             } else {

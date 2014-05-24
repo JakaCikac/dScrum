@@ -325,14 +325,15 @@ public class UserStoryRegistrationForm implements IsWidget, Editor<UserStoryDTO>
                                 AlertMessageBox amb2 = new AlertMessageBox("Error saving user story!", result.getSecond());
                                 amb2.show();
                             } else {
+                                SessionInfo.projectDTO = null;
+                                west.clear();
+                                east.clear();
+                                center.clear();
                                 MessageBox amb3 = new MessageBox("Message save User Story", result.getSecond());
                                 amb3.show();
                                 UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
                                 center.add(userHomeForm.asWidget());
-                                west.clear();
-                                east.clear();
-                                SessionInfo.projectDTO = null;
-                                if (SessionInfo.userDTO.isAdmin()){
+                                if (SessionInfo.userDTO.isAdmin()) {
                                     AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
                                     east.add(adminNavPanel.asWidget());
                                 } else {

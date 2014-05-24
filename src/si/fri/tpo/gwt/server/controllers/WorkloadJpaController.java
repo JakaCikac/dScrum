@@ -36,7 +36,8 @@ public class WorkloadJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Workload workload) throws PreexistingEntityException, Exception {
+    public Integer create(Workload workload) throws PreexistingEntityException, Exception {
+        int insertedWorkloadID = -1;
         if (workload.getWorkloadPK() == null) {
             workload.setWorkloadPK(new WorkloadPK());
         }
@@ -92,9 +93,11 @@ public class WorkloadJpaController implements Serializable {
             throw ex;
         } finally {
             if (em != null) {
+                insertedWorkloadID = workload.getWorkloadPK().getWorkloadId();
                 em.close();
             }
         }
+        return insertedWorkloadID;
     }
 
     public void edit(Workload workload) throws IllegalOrphanException, NonexistentEntityException, Exception {

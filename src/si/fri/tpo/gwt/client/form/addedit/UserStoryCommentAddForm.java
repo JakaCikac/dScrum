@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
 import com.sencha.gxt.widget.core.client.box.MessageBox;
@@ -24,6 +25,8 @@ public class UserStoryCommentAddForm implements IsWidget {
     private DScrumServiceAsync service;
     private ContentPanel center, west, east;
     private VerticalPanel vp;
+    private boolean reject;
+    private UserStoryCommentDialog widgets;
 
     private TextArea description;
     private TextButton submitButton;
@@ -39,12 +42,14 @@ public class UserStoryCommentAddForm implements IsWidget {
         return vp;
     }
 
-    public UserStoryCommentAddForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, UserStoryDTO userStoryDTO) {
+    public UserStoryCommentAddForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, UserStoryDTO userStoryDTO, boolean reject, UserStoryCommentDialog widgets) {
         this.service = service;
         this.center = center;
         this.west = west;
         this.east = east;
         this.userStoryDTO = userStoryDTO;
+        this.reject = reject;
+        this.widgets = widgets;
     }
 
     private void createTaskForm() {
@@ -62,6 +67,8 @@ public class UserStoryCommentAddForm implements IsWidget {
 
         if(userStoryDTO.getComment() == null) {
             submitButton = new TextButton("Create");
+        } else if(reject){
+            submitButton = new TextButton("Add");
         } else {
             submitButton = new TextButton("Update");
             description.setValue(userStoryDTO.getComment());
@@ -73,7 +80,18 @@ public class UserStoryCommentAddForm implements IsWidget {
                     userStoryDTO.setComment(description.getValue());
                     performSaveComment();
                 } else {
-                    userStoryDTO.setComment(description.getValue());
+                    if(reject){
+                        if(description.getValue() == null){
+                            AlertMessageBox amb = new AlertMessageBox("Empty comment!", "Comment must not be empty!");
+                            amb.show();
+                            return;
+                        }
+                        widgets.getButton(Dialog.PredefinedButton.OK).setEnabled(true);
+                        String comment = userStoryDTO.getComment();
+                        userStoryDTO.setComment(comment.concat(description.getValue()));
+                    } else {
+                        userStoryDTO.setComment(description.getValue());
+                    }
                     performUpdateComment();
                 }
             }

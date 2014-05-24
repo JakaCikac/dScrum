@@ -26,6 +26,7 @@ import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.form.addedit.ProjectDataEditForm;
+import si.fri.tpo.gwt.client.form.home.NorthForm;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.GodNavPanel;
@@ -76,7 +77,7 @@ public class ProjectSelectForm implements IsWidget {
             vp.setBorderWidth(0);
 
             FramedPanel panel = new FramedPanel();
-            panel.setPixelSize(230, 400);
+            panel.setPixelSize(west.getOffsetWidth(), west.getOffsetHeight());
             panel.setHeaderVisible(true);
             panel.setHeadingText("Project list");
             panel.setBorders(false);
@@ -185,6 +186,7 @@ public class ProjectSelectForm implements IsWidget {
                 center.clear();
                 center.add(uhf.asWidget());
                 //pdef.fillFormData();
+                north.add(new NorthForm(service, center, north, south, east, west).asWidget());
             }
             @Override
             public void onFailure(Throwable caught) {

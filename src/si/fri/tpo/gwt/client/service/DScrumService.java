@@ -145,6 +145,5 @@ public interface DScrumService extends RemoteService {
 
     // WORKLOAD //
     public Pair<Boolean, String> updateWorkload(WorkloadDTO workloadDTO);
-
     // WORKLOAD //
 }
