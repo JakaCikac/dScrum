@@ -47,12 +47,12 @@ public class NorthForm implements IsWidget{
 
         String right = new String();
         if(SessionInfo.userDTO != null){
-            right += "Logged in as: " + SessionInfo.userDTO.getUsername() + "<br/>";
+            right += "<b>Logged in as:</b> " + SessionInfo.userDTO.getUsername() + "<br/>";
         }
 
         String left = new String();
         if(SessionInfo.projectDTO != null){
-            left += "Current Project:<br/>" + SessionInfo.projectDTO.getName() + "<br/>";
+            left += "<b>Current Project:</b><br/>" + SessionInfo.projectDTO.getName() + "<br/>";
 
             right += "as Team member";
 
@@ -68,8 +68,8 @@ public class NorthForm implements IsWidget{
 
             for(SprintDTO sprintDTO : SessionInfo.projectDTO.getSprintList()){
                 if(sprintDTO.getStatus().equals("In progress")){
-                    left += "<br/>Project status:<br/>Sprint" + sprintDTO.getSeqNumber() + " in progress, ";
-                    left += "ends on " + DateTimeFormat.getShortDateFormat().format(sprintDTO.getEndDate());
+                    left += "<br/><b>Project status:</b><br/>Sprint <b>" + sprintDTO.getSeqNumber() + "</b> in progress, ";
+                    left += "ends on <b>" + DateTimeFormat.getShortDateFormat().format(sprintDTO.getEndDate()) + "</b>";
                 }
             }
 
