@@ -42,7 +42,8 @@ public class DiscussionImpl {
 
                 List<CommentDTO> commentDTOList = new ArrayList<CommentDTO>();
                 List<Comment> commentList = ProxyManager.getCommentProxy().findCommentEntities();
-                for (Comment comment : commentList)
+                for (Comment comment : commentList) {
+                    comment = ProxyManager.getCommentProxy().findComment(comment.getCommentPK());
                     if (comment.getCommentPK().getDiscussionDiscussionId() == discussion.getDiscussionPK().getDiscussionId()) {
                         CommentDTO commentDTO = new CommentDTO();
                         CommentPKDTO commentPKDTO = new CommentPKDTO();
@@ -53,9 +54,25 @@ public class DiscussionImpl {
                         commentPKDTO.setDiscussionUserUserId(comment.getCommentPK().getDiscussionUserUserId());
                         commentDTO.setCommentPK(commentPKDTO);
                         commentDTO.setContent(comment.getContent());
+                        commentDTO.setCreatetime(comment.getCreatetime());
+
+                        user = ProxyManager.getUserProxy().findUser(comment.getUser().getUserId());
+                        UserDTO userDTO = new UserDTO();
+                        userDTO.setUserId(user.getUserId());
+                        userDTO.setUsername(user.getUsername());
+                        userDTO.setPassword(user.getPassword());
+                        userDTO.setFirstName(user.getFirstName());
+                        userDTO.setLastName(user.getLastName());
+                        userDTO.setEmail(user.getEmail());
+                        userDTO.setAdmin(user.getIsAdmin());
+                        userDTO.setSalt(user.getSalt());
+                        userDTO.setActive(user.getIsActive());
+                        userDTO.setTimeCreated(user.getTimeCreated());
+                        commentDTO.setUser(userDTO);
+
                         commentDTOList.add(commentDTO);
                     } else continue;
-
+                }
                 dDTO.setCommentList(commentDTOList);
 
                 discussionDTOList.add(dDTO);

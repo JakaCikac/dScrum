@@ -21,11 +21,13 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.grid.*;
 import si.fri.tpo.gwt.client.components.Pair;
+import si.fri.tpo.gwt.client.dto.CommentDTO;
 import si.fri.tpo.gwt.client.dto.DiscussionDTO;
 import si.fri.tpo.gwt.client.form.addedit.DiscussionCommentDialog;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -110,6 +112,14 @@ public class DiscussionForm implements IsWidget {
                     sb.appendHtmlConstant("<p style='margin: 5px 5px 3px'><b>Content:</b></p>");
                     sb.appendHtmlConstant("<p style='margin: 5px 5px 2px'>" + value.getContent().replaceAll("\n", "</br>") + "</p>");
                     sb.appendHtmlConstant("<p style='margin: 15px 5px 3px'><b>Comments:</b></p>");
+                    List<CommentDTO> commentDTOList = value.getCommentList();
+                    sb.appendHtmlConstant("<table><tr><th>Date</th><th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Author</th><th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Content</th></tr>");
+                    for (CommentDTO commentDTO : commentDTOList) {
+                        sb.appendHtmlConstant("<tr>");
+                        sb.appendHtmlConstant("<td>" + commentDTO.getCreatetime().toString().substring(4, 16) + "</td><td></td><td>" + commentDTO.getUser().getUsername() + "</td><td></td><td>" + commentDTO.getContent() + "</td>");
+                        sb.appendHtmlConstant("</tr>");
+                    }
+                    sb.appendHtmlConstant("</table>");
                 }
             });
 
