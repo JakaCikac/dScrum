@@ -57,7 +57,6 @@ public class SprintBacklogForm  implements IsWidget{
 
     @Override
     public Widget asWidget() {
-        boolean productOwner = SessionInfo.projectDTO.getTeamTeamId().getProductOwnerId()==SessionInfo.userDTO.getUserId();
         if (panel == null) {
 
             RowExpander<UserStoryDTO> expander = new RowExpander<UserStoryDTO>(new AbstractCell<UserStoryDTO>() {
@@ -79,16 +78,16 @@ public class SprintBacklogForm  implements IsWidget{
                         int time = 0;
                         for (TaskDTO taskDTO : value.getTaskList()) {
                             sb.appendHtmlConstant("<tr>");
-                            sb.appendHtmlConstant("<td style='width: 200px'>" + taskDTO.getDescription() + "</td>");
-                            sb.appendHtmlConstant("<td style='width: 200px'>" + taskDTO.getStatus() + "</td>");
+                            sb.appendHtmlConstant("<td style='width: 250px'>" + taskDTO.getDescription() + "</td>");
+                            sb.appendHtmlConstant("<td style='width: 100px'>" + taskDTO.getStatus() + "</td>");
                             if(taskDTO.getUserUserId()!=null) {
-                                sb.appendHtmlConstant("<td style='width: 200px'>" + taskDTO.getUserUserId().getUsername() + "</td>");
+                                sb.appendHtmlConstant("<td style='width: 70px'>" + taskDTO.getUserUserId().getUsername() + "</td>");
                             } else if(taskDTO.getPreassignedUserName()!=null) {
                                 //TODO: get preassignet user from DB
-                                sb.appendHtmlConstant("<td style='width: 200px'>" + taskDTO.getPreassignedUserName() + "</td>");
+                                sb.appendHtmlConstant("<td style='width: 70px'>" + taskDTO.getPreassignedUserName() + "</td>");
                                 //sb.appendHtmlConstant("<td></td>");
-                            } else sb.appendHtmlConstant("<td style='width: 200px'>/</td>");
-                            sb.appendHtmlConstant("<td style='width: 200px'>" + taskDTO.getTimeRemaining() + " h</td>");
+                            } else sb.appendHtmlConstant("<td style='width: 70px'>/</td>");
+                            sb.appendHtmlConstant("<td style='width: 70px'>" + taskDTO.getTimeRemaining() + " h</td>");
                             time += taskDTO.getTimeRemaining();
                             sb.appendHtmlConstant("</tr>");
                         }
@@ -186,10 +185,12 @@ public class SprintBacklogForm  implements IsWidget{
             l.add(priorityCol);
             l.add(estimatedTimeCol);
             l.add(businessValueCol);
-            l.add(addTaskColumn);
             l.add(ufNoteColumn);
-            l.add(acceptEditTasksColumn);
-            if(productOwner) {
+            if(!isProductOwner()) {
+                l.add(addTaskColumn);
+                l.add(acceptEditTasksColumn);
+            }
+            if(isProductOwner()) {
                 l.add(confirmColumn);
                 l.add(rejectColumn);
             }
@@ -264,6 +265,13 @@ public class SprintBacklogForm  implements IsWidget{
             }
         };
         service.updateUserStory(userStoryDTO, updateUserStory);
+    }
+
+    private boolean isProductOwner() {
+        if (SessionInfo.projectDTO.getTeamTeamId().getProductOwnerId() == SessionInfo.userDTO.getUserId()){
+            return true;
+        }
+        return false;
     }
 
     private boolean storyCompleted(UserStoryDTO userStoryDTO) {

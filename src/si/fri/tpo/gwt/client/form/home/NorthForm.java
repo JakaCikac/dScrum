@@ -12,6 +12,7 @@ import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.SimpleContainer;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
+import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
@@ -54,16 +55,34 @@ public class NorthForm implements IsWidget{
         if(SessionInfo.projectDTO != null){
             left += "<b>Current Project:</b><br/>" + SessionInfo.projectDTO.getName() + "<br/>";
 
-            right += "as Team member";
+            right += "as ";
+            boolean vejica = false;
+            for(UserDTO userDTO : SessionInfo.projectDTO.getTeamTeamId().getUserList()){
+                if(userDTO.getUserId() == SessionInfo.userDTO.getUserId()) {
+                    right += "Team member";
+                    vejica = true;
+                }
+            }
 
             if(SessionInfo.userDTO.isAdmin()){
-                right += ", Admin";
+                if(vejica){
+                    right += ", ";
+                }
+                right += "Admin";
+                vejica = true;
             }
             if(SessionInfo.projectDTO.getTeamTeamId().getProductOwnerId() == SessionInfo.userDTO.getUserId()){
-                right += ", Product Owner";
+                if(vejica){
+                    right += ", ";
+                }
+                right += "Product Owner";
+                vejica = true;
             }
             if(SessionInfo.projectDTO.getTeamTeamId().getScrumMasterId() == SessionInfo.userDTO.getUserId()){
-                right += ", Scrum Master";
+                if(vejica){
+                    right += ", ";
+                }
+                right += "Scrum Master";
             }
 
             for(SprintDTO sprintDTO : SessionInfo.projectDTO.getSprintList()){
@@ -75,7 +94,7 @@ public class NorthForm implements IsWidget{
 
         }
 
-        HTML label2 = new HTML("<h1 style='margin-left:auto; margin-right:auto; font-size:70px;'>dScrum</h1>");
+        HTML label2 = new HTML("<h1 style='margin-left:auto; margin-right:auto; margin-top:auto; margin-bottom:auto; font-size:70px;'>dScrum</h1>");
 
         hlc.add(new HTML(left), new HorizontalLayoutContainer.HorizontalLayoutData(0.15, 1, new Margins(4)));
         hlc.add(label2, new HorizontalLayoutContainer.HorizontalLayoutData(0.7, 1, new Margins(4, 0, 4, 0)));

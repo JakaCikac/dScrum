@@ -109,7 +109,10 @@ public class ProductBacklogForm implements IsWidget {
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
                     UserStoryDTO p = ufSprintStore.get(row);
-                    if ( p.getSprint().getStartDate().equals(new Date()) || p.getSprint().getEndDate().equals(new Date()) ||
+                    if(p.getSprint() == null) {
+                        UserStoryEditDialog sed = new UserStoryEditDialog(service, center, west, east, north, south, p);
+                        sed.show();
+                    } else if ( p.getSprint().getStartDate().equals(new Date()) || p.getSprint().getEndDate().equals(new Date()) ||
                     p.getSprint().getStartDate().before(new Date()) && p.getSprint().getEndDate().after(new Date())) {
                         Info.display("User story", "The user story " + p.getName() + " cannot be edited because it is in active sprint.");
                     } else {
@@ -127,7 +130,9 @@ public class ProductBacklogForm implements IsWidget {
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
                     UserStoryDTO p = ufSprintStore.get(row);
-                    if ( p.getSprint().getStartDate().equals(new Date()) || p.getSprint().getEndDate().equals(new Date()) ||
+                    if(p.getSprint() == null) {
+                        performDeleteUserStory(p);
+                    } else if ( p.getSprint().getStartDate().equals(new Date()) || p.getSprint().getEndDate().equals(new Date()) ||
                             p.getSprint().getStartDate().before(new Date()) && p.getSprint().getEndDate().after(new Date())) {
                         Info.display("User story", "The user story " + p.getName() + " cannot be deleted because it is in active sprint.");
                     } else {
@@ -335,7 +340,7 @@ public class ProductBacklogForm implements IsWidget {
             public String getValue(UserStoryDTO object) {
                 if(object.getSprint() != null){
                     if(object.getSprint().getSprintPK() != null){
-                        int id = object.getSprint().getSprintPK().getSprintId();
+                        int id = object.getSprint().getSeqNumber();
                         return "Sprint "+id;
                     }
                 }

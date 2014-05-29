@@ -53,7 +53,7 @@ public class UserImpl {
             e.printStackTrace();
             return Pair.of(false, e.getMessage());
         }
-        return Pair.of(true, "");
+        return Pair.of(true, "User saved successfully.");
     }
 
     // Return all users by id
@@ -127,7 +127,7 @@ public class UserImpl {
             e.printStackTrace();
             return Pair.of(false, e.getMessage());
         }
-        return Pair.of(true, "User should be updated, all good..");
+        return Pair.of(true, "User updated successfully.");
     }
 
     public static UserDTO findUserById(int userId) {

@@ -25,6 +25,7 @@ import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
+import si.fri.tpo.gwt.client.dto.UserDTO;
 import si.fri.tpo.gwt.client.form.addedit.ProjectDataEditForm;
 import si.fri.tpo.gwt.client.form.home.NorthForm;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
@@ -89,7 +90,7 @@ public class ProjectSelectForm implements IsWidget {
 
             // Check user role and display project list accordingly.
             if (SessionInfo.userDTO.isAdmin()) {
-                getProjectList();
+                getAdminProjectList();
             } else getUserProjectList();
 
             ListView<ProjectDTO, String> list1 = new ListView<ProjectDTO, String>(projectList, getNameValue());
@@ -196,7 +197,7 @@ public class ProjectSelectForm implements IsWidget {
         service.findProjectByName(name, callback);
     }
 
-    private void getProjectList() {
+    private void getAdminProjectList() {
         AsyncCallback<List<ProjectDTO>> callback = new AsyncCallback<List<ProjectDTO>>() {
             @Override
             public void onSuccess(List<ProjectDTO> result) {
@@ -215,14 +216,26 @@ public class ProjectSelectForm implements IsWidget {
         AsyncCallback<List<ProjectDTO>> callback = new AsyncCallback<List<ProjectDTO>>() {
             @Override
             public void onSuccess(List<ProjectDTO> result) {
-                projectList.addAll(result);
+                for(ProjectDTO projectDTO : result){
+                    if(projectDTO.getTeamTeamId().getScrumMasterId() == SessionInfo.userDTO.getUserId() ||
+                            projectDTO.getTeamTeamId().getProductOwnerId() == SessionInfo.userDTO.getUserId()){
+                        projectList.add(projectDTO);
+                    } else {
+                        for(UserDTO userDTO : projectDTO.getTeamTeamId().getUserList()){
+                            if(userDTO.getUserId() == SessionInfo.userDTO.getUserId()){
+                                projectList.add(projectDTO);
+                            }
+                        }
+                    }
+                }
             }
+
             @Override
             public void onFailure(Throwable caught) {
                 Window.alert(caught.getMessage());
             }
         };
-        service.findUserProjects(SessionInfo.userDTO, callback);
+        service.findAllProjects(callback);
     }
 
     // return the model key provider for the list store

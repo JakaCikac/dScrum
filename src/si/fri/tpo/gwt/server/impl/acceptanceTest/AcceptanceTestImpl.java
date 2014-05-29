@@ -87,7 +87,7 @@ public class AcceptanceTestImpl {
                 }
             }
         } catch(Exception ex) {}
-        return Pair.of(true, "Acceptance tests should be updated.");
+        return Pair.of(true, "Acceptance tests updated.");
     }
 
     public static Pair<Boolean, String> deleteAcceptanceTest(AcceptanceTestDTO acceptanceTestDTO) {
@@ -99,6 +99,6 @@ public class AcceptanceTestImpl {
             System.err.println("Error: " + e.getMessage());
             return Pair.of(false, e.getMessage());
         }
-        return Pair.of(true, "Acceptance test has been deleted successfully.");
+        return Pair.of(true, "Acceptance test deleted successfully.");
     }
 }

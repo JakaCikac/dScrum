@@ -110,7 +110,7 @@ public class ProjectImpl {
             e.printStackTrace();
             return Pair.of(false, e.getMessage());
         }
-        return Pair.of(true, "");
+        return Pair.of(true, "Project saved successfully.");
     }
 
     public static List<ProjectDTO> getUserProject(UserDTO dto) {
@@ -220,6 +220,7 @@ public class ProjectImpl {
                             userStoryDTO.setStoryId(userStory.getStoryId());
                             userStoryDTO.setProjectProjectId(projectDTO);
                             userStoryDTO.setComment(userStory.getComment());
+                            userStoryDTO.setSprint(sprintDTO);
 
                             PriorityDTO priorityDTO = new PriorityDTO();
                             priorityDTO.setPriorityId(userStory.getPriorityPriorityId().getPriorityId());
@@ -548,6 +549,6 @@ public class ProjectImpl {
             e.printStackTrace();
             return Pair.of(false, e.getMessage());
         }
-        return Pair.of(true, "Project should be updated, all good..");
+        return Pair.of(true, "Project updated successfully.");
     }
 }
