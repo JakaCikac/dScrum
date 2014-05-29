@@ -1,9 +1,7 @@
 package si.fri.tpo.gwt.client;
 
 
-import com.sencha.gxt.core.client.dom.ScrollSupport;
 import com.sencha.gxt.core.client.util.Format;
-import com.sencha.gxt.core.client.util.Scroll;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
@@ -19,8 +17,8 @@ import com.sencha.gxt.widget.core.client.form.FieldSet;
 import com.sencha.gxt.widget.core.client.form.PasswordField;
 import com.sencha.gxt.widget.core.client.form.TextField;
 import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.UserDTO;
+import si.fri.tpo.gwt.client.form.home.NorthForm;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
@@ -29,7 +27,6 @@ import si.fri.tpo.gwt.client.session.SessionInfo;
 import si.fri.tpo.gwt.client.verification.PassHash;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent;
 import com.sencha.gxt.widget.core.client.event.DialogHideEvent.DialogHideHandler;
-import si.fri.tpo.gwt.server.impl.fill.FillDTO;
 
 /**
  * Created by nanorax on 4/4/14.
@@ -211,5 +208,6 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                 center.add(new LoginPanel(dscrum, center, north, south, east, west, service).asWidget());            }
         });
         south.add(logoutButton);
+        north.add(new NorthForm(service, center, north, south, east, west).asWidget());
     }
 }

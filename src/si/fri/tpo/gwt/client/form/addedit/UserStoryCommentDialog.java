@@ -21,8 +21,9 @@ public class UserStoryCommentDialog extends Dialog {
     private DScrumServiceAsync service;
     private ContentPanel center, west, east, north, south;
     private UserStoryDTO usDTO;
+    private boolean reject;
 
-    public UserStoryCommentDialog(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, UserStoryDTO usDTO) {
+    public UserStoryCommentDialog(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, UserStoryDTO usDTO, boolean reject) {
         this.service = service;
         this.center = center;
         this.west = west;
@@ -30,6 +31,7 @@ public class UserStoryCommentDialog extends Dialog {
         this.north = north;
         this.south = south;
         this.usDTO = usDTO;
+        this.reject = reject;
 
         // Layout
         setBodyBorder(false);
@@ -40,10 +42,11 @@ public class UserStoryCommentDialog extends Dialog {
         setHideOnButtonClick(true);
 
         ClearPanels();
+        if(reject) getButton(PredefinedButton.OK).setEnabled(false);
 
         FlowLayoutContainer layout = new FlowLayoutContainer();
         add(layout);
-        UserStoryCommentAddForm caf = new UserStoryCommentAddForm(this.service, this.center, this.west, this.east, this.usDTO);
+        UserStoryCommentAddForm caf = new UserStoryCommentAddForm(this.service, this.center, this.west, this.east, this.usDTO, reject, this);
         center.disable();
         east.disable();
         west.disable();
@@ -58,12 +61,13 @@ public class UserStoryCommentDialog extends Dialog {
         getButton(this.getPredefinedButtons().get(0)).addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
-                center.add(userHomeForm.asWidget());
+                SessionInfo.projectDTO = null;
                 west.clear();
                 east.clear();
-                SessionInfo.projectDTO = null;
-                if (SessionInfo.userDTO.isAdmin()){
+                center.clear();
+                UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
+                center.add(userHomeForm.asWidget());
+                if (SessionInfo.userDTO.isAdmin()) {
                     AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
                     east.add(adminNavPanel.asWidget());
                 } else {

@@ -40,7 +40,7 @@ public class DiscussionForm implements IsWidget {
     private DScrumServiceAsync service;
     private ListStore<DiscussionDTO> store;
     private Grid<DiscussionDTO> grid;
-    private VerticalPanel vp;
+    private ContentPanel vp;
     private TabPanel tabPane;
     private com.google.gwt.user.client.ui.TextArea ta;
 
@@ -57,18 +57,12 @@ public class DiscussionForm implements IsWidget {
     public Widget asWidget() {
         if (vp == null) {
 
-            vp = new VerticalPanel();
+            vp = new ContentPanel();
+            vp.setHeaderVisible(false);
 
-            VerticalLayoutContainer p = new VerticalLayoutContainer();
-            vp.add(p);
-
-            FramedPanel fp = new FramedPanel();
             VerticalLayoutContainer fpp = new VerticalLayoutContainer();
-            fp.add(fpp);
-            fp.setHeaderVisible(false);
             ta = new TextArea();
-            ta.setWidth("750");
-            ta.setHeight("350");
+            ta.setPixelSize(400, 75);
             fpp.add(ta);
 
             TextButton addButton = new TextButton("Add");
@@ -99,11 +93,7 @@ public class DiscussionForm implements IsWidget {
                     service.saveDiscussion(dDTO, SessionInfo.projectDTO, callback);
                 }
             });
-
             fpp.add(addButton);
-            fp.add(fpp);
-            vp.add(fp);
-
 
             RowExpander<DiscussionDTO> expander = new RowExpander<DiscussionDTO>(new AbstractCell<DiscussionDTO>() {
                 @Override
@@ -140,8 +130,7 @@ public class DiscussionForm implements IsWidget {
                 public void onSelect(SelectEvent event) {
                     Cell.Context c = event.getContext();
                     int row = c.getIndex();
-                    DiscussionCommentDialog dcd = new DiscussionCommentDialog(service, center, west, east, north, south, store.get(row));
-                    dcd.show();
+
                 }
             });
             addCommentButtonCol.setCell(addCommentButton);
@@ -155,12 +144,11 @@ public class DiscussionForm implements IsWidget {
 
             ContentPanel cp = new ContentPanel();
             cp.setHeaderVisible(false);
-            cp.setPixelSize(850, 460);
+            cp.setPixelSize(center.getOffsetWidth(), center.getOffsetHeight()-150);
             cp.addStyleName("margin-10");
 
             final GroupingView<DiscussionDTO> viewDiscussion = new GroupingView<DiscussionDTO>();
             viewDiscussion.setForceFit(true);
-            ContentPanel lol = new ContentPanel();
             grid = new Grid<DiscussionDTO>(store, cm);
             grid.setView(viewDiscussion);
             grid.getView().setAutoExpandColumn(timestampCol);
@@ -171,10 +159,10 @@ public class DiscussionForm implements IsWidget {
             grid.getView().setColumnLines(true);
             grid.getView().setForceFit(true);
             expander.initPlugin(grid);
-            lol.setWidget(grid);
-            cp.add(lol);
+            cp.add(grid);
             tabPane.add(cp, "Discussion");
-            vp.add(tabPane);
+            fpp.add(tabPane);
+            vp.add(fpp);
         }
         return vp;
     }
