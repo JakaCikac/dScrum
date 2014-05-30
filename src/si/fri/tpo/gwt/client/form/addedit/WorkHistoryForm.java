@@ -3,9 +3,11 @@ package si.fri.tpo.gwt.client.form.addedit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.view.client.ListDataProvider;
 import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
@@ -19,14 +21,17 @@ import com.sencha.gxt.widget.core.client.event.RowClickEvent;
 import com.sencha.gxt.widget.core.client.form.DoubleField;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.FormPanel;
+import com.sencha.gxt.widget.core.client.form.IntegerField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.RowNumberer;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
+import si.fri.tpo.gwt.client.dto.WorkblockDTO;
 import si.fri.tpo.gwt.client.dto.WorkloadDTO;
 import si.fri.tpo.gwt.client.dto.WorkloadPKDTO;
+import com.google.gwt.editor.client.Editor;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
@@ -34,8 +39,10 @@ import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 import si.fri.tpo.gwt.server.jpa.TaskPK;
+import si.fri.tpo.gwt.server.jpa.Workblock;
 import si.fri.tpo.gwt.server.jpa.Workload;
 
+import java.sql.Date;
 import java.util.*;
 
 /**
@@ -122,6 +129,7 @@ public class WorkHistoryForm implements IsWidget  {
         //list for sorting date in a workload
         workloadDTOList = selectedTaskDTO.getWorkloadList();
         Collections.sort(workloadDTOList, wbSortByDate);
+        store.addAll(workloadDTOList);
         final WorkloadDTO lastElement;
 
         if (workloadDTOList.isEmpty()){
