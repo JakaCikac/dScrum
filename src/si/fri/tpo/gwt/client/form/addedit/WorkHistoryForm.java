@@ -42,7 +42,7 @@ import si.fri.tpo.gwt.server.jpa.TaskPK;
 import si.fri.tpo.gwt.server.jpa.Workblock;
 import si.fri.tpo.gwt.server.jpa.Workload;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.*;
 
 /**
