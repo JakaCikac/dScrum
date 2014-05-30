@@ -24,15 +24,15 @@ import si.fri.tpo.gwt.client.dto.WorkloadDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Created by t13db on 19.5.2014.
  */
 public class ProgressReportForm implements IsWidget {
+
+    private double max;
+    private double min;
 
     class BurndownData {
 
@@ -90,8 +90,8 @@ public class ProgressReportForm implements IsWidget {
             odd.setStroke(new Color("#bbb"));
             odd.setStrokeWidth(0.5);
             axis.setGridOddConfig(odd);
-            axis.setMinimum(0);
-            axis.setMaximum(100);
+            axis.setMinimum(min);
+            axis.setMaximum(max);
             chart.addAxis(axis);
 
             CategoryAxis<BurndownData, Integer> catAxis = new CategoryAxis<BurndownData, Integer>();
@@ -100,6 +100,8 @@ public class ProgressReportForm implements IsWidget {
             title = new TextSprite("Days since project start");
             title.setFontSize(18);
             catAxis.setTitleConfig(title);
+            catAxis.setLabelStepRatio(3);
+            //catAxis.setLabelOverlapHiding(true);
         /*catAxis.setLabelProvider(new LabelProvider<BurndownData>() {
             @Override
             public Integer getLabel(BurndownData item) {
@@ -119,6 +121,7 @@ public class ProgressReportForm implements IsWidget {
             series.setMarkerConfig(marker);
             series.setHighlighting(true);
             series.setLegendTitle("Time remaining");
+            series.setShowMarkers(false);
             chart.addSeries(series);
 
             // PORABLJEN CAS
@@ -133,6 +136,7 @@ public class ProgressReportForm implements IsWidget {
             series2.setMarkerConfig(marker);
             series2.setHighlighting(true);
             series2.setLegendTitle("Time spent");
+            series2.setShowMarkers(false);
             chart.addSeries(series2);
 
             final Legend<BurndownData> legend = new Legend<BurndownData>();
@@ -198,10 +202,27 @@ public class ProgressReportForm implements IsWidget {
         }
 
         int i = 1;
-        for (BurndownData bd : temp.values()) {
+        max = Double.MIN_VALUE;
+        min = Double.MAX_VALUE;
+        for (Map.Entry<Date, BurndownData> entry : temp.entrySet()) {
+            BurndownData bd = entry.getValue();
             bd.seqNumber = i;
             burndownDataList.add(bd);
+            //System.out.println(entry.getKey().toString() + "\t" + bd.seqNumber + "\t" + bd.hrsSpent + "\t" + bd.hrsRemaining);
             i++;
+
+            if (bd.hrsRemaining > max) {
+                max = bd.hrsRemaining;
+            }
+            if (bd.hrsSpent > max) {
+                max = bd.hrsSpent;
+            }
+            if (bd.hrsRemaining < min) {
+                min = bd.hrsRemaining;
+            }
+            if (bd.hrsSpent < min) {
+                min = bd.hrsSpent;
+            }
         }
 
         return burndownDataList;
