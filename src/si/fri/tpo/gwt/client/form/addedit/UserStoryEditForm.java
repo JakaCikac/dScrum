@@ -160,9 +160,11 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
         userStoryPriorityHorizontalPanel = new HorizontalPanel();
         userStoryPriorityHorizontalPanel.add(mustHave);
         userStoryPriorityHorizontalPanel.add(shouldHave);
+        verticalLayoutContainer.add(new FieldLabel(userStoryPriorityHorizontalPanel, "Priority *"));
+        userStoryPriorityHorizontalPanel = new HorizontalPanel();
         userStoryPriorityHorizontalPanel.add(couldHave);
         userStoryPriorityHorizontalPanel.add(wontHave);
-        verticalLayoutContainer.add(new FieldLabel(userStoryPriorityHorizontalPanel, "Priority *"));
+        verticalLayoutContainer.add(new FieldLabel(userStoryPriorityHorizontalPanel));
 
         userStoryPriorityToggleGroup = new ToggleGroup();
         userStoryPriorityToggleGroup.add(mustHave);

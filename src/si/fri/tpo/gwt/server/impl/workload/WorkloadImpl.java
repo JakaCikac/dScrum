@@ -42,7 +42,7 @@ public class WorkloadImpl {
             e.printStackTrace();
             return Pair.of(false, e.getMessage());
         }
-        return Pair.of(true, "Workload should be updated.");
+        return Pair.of(true, "Workload updated successfully.");
 
     }
 

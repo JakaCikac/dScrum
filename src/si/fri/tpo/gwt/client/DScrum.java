@@ -4,6 +4,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -13,6 +14,7 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.*;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer.BorderLayoutData;
 import si.fri.tpo.gwt.client.dto.*;
+import si.fri.tpo.gwt.client.form.home.NorthForm;
 import si.fri.tpo.gwt.client.service.DScrumService;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 
@@ -38,6 +40,7 @@ public class DScrum implements IsWidget, EntryPoint {
     private ContentPanel south;
     private ContentPanel north;
     private ContentPanel west;
+    private ContentPanel panel;
 
     private static final int BORDER_LAYOUT_HEIGHT = 100;
     private static final int BORDER_LAYOUT_WEIGHT = 234;
@@ -88,6 +91,8 @@ public class DScrum implements IsWidget, EntryPoint {
             northData.setSplit(false);
             //northData.setCollapsible(false);
             north.setHeaderVisible(false);
+            NorthForm nf = new NorthForm(service, center, north, south, east, west);
+            north.add(nf.asWidget());
 
             westData.setCollapsible(false);
             westData.setSplit(false);
@@ -104,6 +109,20 @@ public class DScrum implements IsWidget, EntryPoint {
             southData.setCollapsible(false);
             //southData.setCollapseMini(false);
             south.setHeaderVisible(false);
+            panel = new ContentPanel();
+            panel.setHeaderVisible(false);
+            panel.setPixelSize(north.getOffsetWidth(), north.getOffsetHeight());
+            panel.setBorders(false);
+            panel.setBodyBorder(false);
+            HorizontalLayoutContainer hlc = new HorizontalLayoutContainer();
+            panel.setWidget(hlc);
+            HTML copyright = new HTML("<h1 style='margin-left:auto; margin-right:auto; margin-top:auto; margin-bottom:auto; " +
+                    "font-size:10px;'>©Copyright, Matej & " +
+                    "Denis & Jaka & Anže<br/>Študentje 3.letnika<br/>Ljubljana, 2014</h1>");
+            hlc.add(new HTML(), new HorizontalLayoutContainer.HorizontalLayoutData(0.05, 1, new Margins(4)));
+            hlc.add(copyright, new HorizontalLayoutContainer.HorizontalLayoutData(0.9, 1, new Margins(4, 0, 4, 0)));
+            hlc.add(new HTML(), new HorizontalLayoutContainer.HorizontalLayoutData(0.05, 1, new Margins(4)));
+            south.add(panel);
 
             con.setNorthWidget(north, northData);
             con.setWestWidget(west, westData);

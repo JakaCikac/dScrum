@@ -118,7 +118,7 @@ public class UserStoryImpl {
             e.printStackTrace();
             return Pair.of(false, "Unknown error!");
         }
-        return Pair.of(true, "User story was saved successfully! :)");
+        return Pair.of(true, "User story saved successfully.");
     }
 
     public static Pair<Boolean, String> updateUserStory(UserStoryDTO userStoryDTO) {
@@ -173,7 +173,7 @@ public class UserStoryImpl {
             e.printStackTrace();
             return Pair.of(false, e.getMessage());
         }
-        return Pair.of(true, "User story should be updated.");
+        return Pair.of(true, "User story updated successfully.");
     }
 
     public static Pair<Boolean, String> deleteUserStory(UserStoryDTO userStoryDTO) {
@@ -193,7 +193,7 @@ public class UserStoryImpl {
             e.printStackTrace();
             return Pair.of(false, e.getMessage());
         }
-        return Pair.of(true, "User story should be deleted.");
+        return Pair.of(true, "User story deleted successfully.");
     }
 
     public static Pair<Boolean, String> saveComment(UserStoryDTO userStoryDTO) {
@@ -216,6 +216,6 @@ public class UserStoryImpl {
             e.printStackTrace();
             return Pair.of(false, "Unknown error!");
         }
-        return Pair.of(true, "Comment saved successfully! :)");
+        return Pair.of(true, "Comment saved successfully.");
     }
 }

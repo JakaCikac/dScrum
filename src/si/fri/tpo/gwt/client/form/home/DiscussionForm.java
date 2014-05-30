@@ -2,6 +2,7 @@ package si.fri.tpo.gwt.client.form.home;
 
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.cell.client.Cell;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -245,7 +246,7 @@ public class DiscussionForm implements IsWidget {
         ValueProvider<DiscussionDTO, String> vpn = new ValueProvider<DiscussionDTO, String>() {
             @Override
             public String getValue(DiscussionDTO object) {
-                return object.getCreatetime().toString();
+                return DateTimeFormat.getMediumDateTimeFormat().format(object.getCreatetime());
             }
             @Override
             public void setValue(DiscussionDTO object, String value) {

@@ -19,6 +19,7 @@ import si.fri.tpo.gwt.client.form.addedit.AdminUserDataEditForm;
 import si.fri.tpo.gwt.client.form.addedit.ProjectDataEditForm;
 import si.fri.tpo.gwt.client.form.registration.ProjectRegistrationForm;
 import si.fri.tpo.gwt.client.form.registration.UserRegistrationForm;
+import si.fri.tpo.gwt.client.form.registration.UserStoryRegistrationForm;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
@@ -113,11 +114,35 @@ public class AdminNavPanel implements IsWidget {
         });
         lcwest.add(projectEditing);
 
+        if(SessionInfo.projectDTO != null && isProductOwner()) {
+            final TextButton userStoryManagement = new TextButton("User Story Management");
+            userStoryManagement.addSelectHandler(new SelectEvent.SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+                    if (SessionInfo.projectDTO == null) {
+                        Info.display("No project selected", "Please select project from the list on the left.");
+                    } else {
+                        UserStoryRegistrationForm usrf = new UserStoryRegistrationForm(service, center, west, east, north, south);
+                        center.clear();
+                        center.add(usrf.asWidget());
+                    }
+                }
+            });
+            lcwest.add(userStoryManagement);
+        }
+
         ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
         west.setHeadingText("Project list");
         west.add(psf.asWidget());
 
         panel.setWidth(PANEL_WIDTH);
 
+    }
+
+    private boolean isProductOwner() {
+        if (SessionInfo.projectDTO.getTeamTeamId().getProductOwnerId() == SessionInfo.userDTO.getUserId()){
+            return true;
+        }
+        return false;
     }
 }

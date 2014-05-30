@@ -148,9 +148,11 @@ public class UserStoryRegistrationForm implements IsWidget, Editor<UserStoryDTO>
         hp = new HorizontalPanel();
         hp.add(mustHave);
         hp.add(shouldHave);
+        p.add(new FieldLabel(hp, "Priority *"));
+        hp = new HorizontalPanel();
         hp.add(couldHave);
         hp.add(wontHave);
-        p.add(new FieldLabel(hp, "Priority *"));
+        p.add(new FieldLabel(hp));
 
         toggle = new ToggleGroup();
         toggle.add(mustHave);

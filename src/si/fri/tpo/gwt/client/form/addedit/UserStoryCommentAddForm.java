@@ -17,6 +17,7 @@ import com.sencha.gxt.widget.core.client.form.*;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
+import si.fri.tpo.gwt.client.session.SessionInfo;
 
 /**
  * Created by anze on 16. 05. 14.
@@ -77,7 +78,7 @@ public class UserStoryCommentAddForm implements IsWidget {
             @Override
             public void onSelect(SelectEvent event) {
                 if(userStoryDTO.getComment() == null) {
-                    userStoryDTO.setComment(description.getValue());
+                    userStoryDTO.setComment(SessionInfo.userDTO.getUsername() + ": " + description.getValue());
                     performSaveComment();
                 } else {
                     if(reject){
@@ -88,9 +89,9 @@ public class UserStoryCommentAddForm implements IsWidget {
                         }
                         widgets.getButton(Dialog.PredefinedButton.OK).setEnabled(true);
                         String comment = userStoryDTO.getComment();
-                        userStoryDTO.setComment(comment.concat(description.getValue()));
+                        userStoryDTO.setComment(comment.concat(SessionInfo.userDTO.getUsername() + "(PO): " + description.getValue()));
                     } else {
-                        userStoryDTO.setComment(description.getValue());
+                        userStoryDTO.setComment(SessionInfo.userDTO.getUsername() + ": " + description.getValue());
                     }
                     performUpdateComment();
                 }

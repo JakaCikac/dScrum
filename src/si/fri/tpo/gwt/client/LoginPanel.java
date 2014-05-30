@@ -2,6 +2,7 @@ package si.fri.tpo.gwt.client;
 
 
 import com.sencha.gxt.core.client.util.Format;
+import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
 import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
@@ -9,6 +10,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.MarginData;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -42,6 +44,7 @@ public class LoginPanel  extends FormPanel implements IsWidget {
     private ContentPanel east;
     private ContentPanel west;
     private ContentPanel center;
+    private ContentPanel panel;
     private int CENTER_WIDTH = 0;
 
     private static final int PANEL_WIDTH = 230;
@@ -84,7 +87,7 @@ public class LoginPanel  extends FormPanel implements IsWidget {
 
     private void createLoginForm() {
         FramedPanel loginForm = new FramedPanel();
-        loginForm.setHeadingText("dScrum login form");
+        loginForm.setHeadingText("Login form");
         loginForm.setWidth(LOGIN_WIDTH);
 
         FieldSet fieldSet = new FieldSet();
@@ -191,6 +194,13 @@ public class LoginPanel  extends FormPanel implements IsWidget {
         east.add(navigationPanel);
         center.add(mainPanel);
 
+        panel = new ContentPanel();
+        panel.setHeaderVisible(false);
+        panel.setPixelSize(north.getOffsetWidth(), north.getOffsetHeight());
+        panel.setBorders(false);
+        panel.setBodyBorder(false);
+        HorizontalLayoutContainer hlc = new HorizontalLayoutContainer();
+        panel.setWidget(hlc);
         final TextButton logoutButton = new TextButton("Logout");
         logoutButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
@@ -201,13 +211,32 @@ public class LoginPanel  extends FormPanel implements IsWidget {
                 east.clear();
                 west.clear();
                 center.clear();
+                north.clear();
                 // reset session variables
                 SessionInfo.userDTO = null;
                 SessionInfo.projectDTO = null;
                 // display new login panel
-                center.add(new LoginPanel(dscrum, center, north, south, east, west, service).asWidget());            }
+                center.add(new LoginPanel(dscrum, center, north, south, east, west, service).asWidget());
+                north.add(new NorthForm(service, center, north, south, east, west));
+                HorizontalLayoutContainer hlc = new HorizontalLayoutContainer();
+                panel.setWidget(hlc);
+                HTML copyright = new HTML("<h1 style='margin-left:auto; margin-right:auto; margin-top:auto; margin-bottom:auto; " +
+                        "font-size:11px;'>©Copyright, Matej & " +
+                        "Denis & Jaka & Anže<br/>Najboljša skupina TPO 13<br/>Ljubljana, 2014</h1>");
+                hlc.add(new HTML(), new HorizontalLayoutContainer.HorizontalLayoutData(0.05, 1, new Margins(4)));
+                hlc.add(copyright, new HorizontalLayoutContainer.HorizontalLayoutData(0.9, 1, new Margins(4, 0, 4, 0)));
+                hlc.add(new HTML(), new HorizontalLayoutContainer.HorizontalLayoutData(0.05, 1, new Margins(4)));
+                south.add(panel);
+            }
         });
-        south.add(logoutButton);
+        HTML copyright = new HTML("<h1 style='margin-left:auto; margin-right:auto; margin-top:auto; margin-bottom:auto; " +
+                "font-size:11px;'>©Copyright, Matej & " +
+                "Denis & Jaka & Anže<br/>Najboljša skupina TPO 13<br/>Ljubljana, 2014</h1>");
+        hlc.add(new HTML(), new HorizontalLayoutContainer.HorizontalLayoutData(0.05, 1, new Margins(4)));
+        hlc.add(copyright, new HorizontalLayoutContainer.HorizontalLayoutData(0.9, 1, new Margins(4, 0, 4, 0)));
+        hlc.add(logoutButton, new HorizontalLayoutContainer.HorizontalLayoutData(0.05, 1, new Margins(4)));
+        south.add(panel);
+
         north.add(new NorthForm(service, center, north, south, east, west).asWidget());
     }
 }

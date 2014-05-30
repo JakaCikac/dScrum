@@ -120,7 +120,7 @@ public class DiscussionImpl {
             e.printStackTrace();
             return Pair.of(false, e.getMessage());
         }
-        return Pair.of(true, "");
+        return Pair.of(true, "Discussion saved successfully.");
     }
 
     public static Pair<Boolean, String> updateDiscussion(DiscussionDTO discussionDTO) {
@@ -185,7 +185,7 @@ public class DiscussionImpl {
             e.printStackTrace();
             return Pair.of(false, e.getMessage());
         }
-        return Pair.of(true, "");
+        return Pair.of(true, "Discussion updated successfully.");
     }
 
     public static Pair<Boolean, Integer> saveDiscussionComment(CommentDTO commentDTO) {
