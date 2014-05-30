@@ -1,7 +1,6 @@
 package si.fri.tpo.gwt.client.form.addedit;
 
-import com.google.gwt.dev.ModuleTabPanel;
-import com.google.gwt.dev.util.collect.Lists;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
