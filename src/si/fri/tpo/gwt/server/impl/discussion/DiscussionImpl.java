@@ -94,7 +94,7 @@ public class DiscussionImpl {
             d.setUser(u);
 
             Project p = ProxyManager.getProjectProxy().findProjectByName(projectDTO.getName());
-            if (p == null ){
+            if (p == null) {
                 return Pair.of(false, "Project doesnt exist.");
             }
             d.setProject(p);
@@ -106,8 +106,9 @@ public class DiscussionImpl {
             d.setDiscussionPK(dpk);
 
             try {
-                if (d == null)
+                if (d == null) {
                     return Pair.of(false, "Data error!");
+                }
 
                 ProxyManager.getDiscussionProxy().create(d);
 
@@ -156,7 +157,14 @@ public class DiscussionImpl {
                 commentPK.setDiscussionProjectProjectId(commentDTO.getCommentPK().getDiscussionProjectProjectId());
                 commentPK.setDiscussionUserUserId(commentDTO.getCommentPK().getDiscussionUserUserId());
                 commentPK.setUserUserId(commentDTO.getCommentPK().getUserUserId());
-                Comment comment = ProxyManager.getCommentProxy().findComment(commentPK);
+
+                Comment comment = new Comment();
+                comment.setDiscussion(d);
+                comment.setUser(u);
+                comment.setCommentPK(commentPK);
+                comment.setContent(commentDTO.getContent());
+                comment.setCreatetime(commentDTO.getCreatetime());
+
                 System.out.println("eki: " + comment);
                 // TODO: vrne 2 nulla, ne vemo se zakaj, ampak nujno popravit
                 commentList.add(comment);
