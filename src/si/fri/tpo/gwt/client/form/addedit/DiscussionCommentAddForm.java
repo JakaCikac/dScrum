@@ -133,6 +133,7 @@ public class DiscussionCommentAddForm implements IsWidget {
                     commentPKDTO.setCommentId(result.getSecond());
                     commentDTO.setCommentPK(commentPKDTO);
                     List<CommentDTO> commentDTOList = discussionDTO.getCommentList();
+                    // TODO: ze tle preveri ce so nulli, pa ce so sam pri dolocenih al pri vseh
                     System.out.println("discusiion comnet list: " + commentDTOList);
                     commentDTOList.add(commentDTO);
                     System.out.println("comment dto za dodajanje lita: " +commentDTO );

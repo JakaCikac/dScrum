@@ -147,25 +147,18 @@ public class DiscussionImpl {
             }
             d.setUser(u);
 
-            List<Comment> commentList = d.getCommentList();
+            List<Comment> commentList = new ArrayList<Comment>();
+
             for (CommentDTO commentDTO : discussionDTO.getCommentList()) {
-                System.out.println("Comment list size, inside impl: " + discussionDTO.getCommentList().size());
-                System.out.println("CommentDTO: " + commentDTO);
-                System.out.println("Comment PK: " + commentDTO.getCommentPK());
-                System.out.println("Comment PK ID " + commentDTO.getCommentPK().getCommentId());
                 CommentPK commentPK = new CommentPK();
                 commentPK.setCommentId(commentDTO.getCommentPK().getCommentId());
-                System.out.println("ERRORS");
-                System.out.println(commentDTO);
-                System.out.println(commentDTO.getCommentPK());
-                System.out.println(commentDTO.getCommentPK().getCommentId());
-                System.out.println("DISCUSSION "+commentDTO.getCommentPK().getDiscussionDiscussionId());
                 commentPK.setDiscussionDiscussionId(commentDTO.getCommentPK().getDiscussionDiscussionId());
                 commentPK.setDiscussionProjectProjectId(commentDTO.getCommentPK().getDiscussionProjectProjectId());
                 commentPK.setDiscussionUserUserId(commentDTO.getCommentPK().getDiscussionUserUserId());
                 commentPK.setUserUserId(commentDTO.getCommentPK().getUserUserId());
                 Comment comment = ProxyManager.getCommentProxy().findComment(commentPK);
-
+                System.out.println("eki: " + comment);
+                // TODO: vrne 2 nulla, ne vemo se zakaj, ampak nujno popravit
                 commentList.add(comment);
             }
             d.setCommentList(commentList);

@@ -101,7 +101,7 @@ public class ProgressReportForm implements IsWidget {
             title.setFontSize(18);
             catAxis.setTitleConfig(title);
             catAxis.setLabelStepRatio(3);
-            //catAxis.setLabelOverlapHiding(true);
+            catAxis.setLabelOverlapHiding(true);
         /*catAxis.setLabelProvider(new LabelProvider<BurndownData>() {
             @Override
             public Integer getLabel(BurndownData item) {
