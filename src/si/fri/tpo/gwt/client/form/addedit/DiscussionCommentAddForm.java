@@ -83,26 +83,23 @@ public class DiscussionCommentAddForm implements IsWidget {
                     commentDTO.setCreatetime(new Date());
                     commentDTO.setUser(SessionInfo.userDTO);
                     commentDTO.setDiscussion(discussionDTO);
-                    System.out.println("discussion DTO: " + discussionDTO);
-                    System.out.println("discussion PKDTO: " + discussionDTO.getDiscussionPK());
                     CommentPKDTO commentPKDTO = new CommentPKDTO();
                     commentPKDTO.setDiscussionProjectProjectId(SessionInfo.projectDTO.getProjectId());
-                    System.out.println("discussion user id: "+ SessionInfo.userDTO.getUserId());
-                    commentPKDTO.setDiscussionUserUserId(SessionInfo.userDTO.getUserId());
-                    System.out.println("discussion id: " + discussionDTO.getDiscussionPK().getDiscussionId());
+                    //TODO: tuki je napaka ker discussion ni nujno da ma istega userja kot comment!!!
+                    //commentPKDTO.setDiscussionUserUserId(SessionInfo.userDTO.getUserId());
+                    commentPKDTO.setDiscussionUserUserId(discussionDTO.getUser().getUserId());
                     commentPKDTO.setDiscussionDiscussionId(discussionDTO.getDiscussionPK().getDiscussionId());
-                    System.out.println("user id: " +SessionInfo.userDTO.getUserId() );
                     commentPKDTO.setUserUserId(SessionInfo.userDTO.getUserId());
                     commentDTO.setCommentPK(commentPKDTO);
 
-                    commentDTO.setCommentPK(commentPKDTO);
-                    List<CommentDTO> commentDTOList = discussionDTO.getCommentList();
-                    commentDTOList.add(commentDTO);
-                    discussionDTO.setCommentList(commentDTOList);
+                    //TODO: dvojno dodajanje commenta v list od discussion-a
+                    //List<CommentDTO> commentDTOList = discussionDTO.getCommentList();
+                    //commentDTOList.add(commentDTO);
+                    //discussionDTO.setCommentList(commentDTOList);
+                    submitButton.setEnabled(false);
                     performSaveDiscussionComment();
                 }
-
-            }
+        }
         });
         panel.addButton(submitButton);
         vp.add(panel);
@@ -121,26 +118,12 @@ public class DiscussionCommentAddForm implements IsWidget {
                     amb2.show();
                 }
                 else {
-                    CommentPKDTO commentPKDTO = new CommentPKDTO();
-                    commentPKDTO.setDiscussionProjectProjectId(SessionInfo.projectDTO.getProjectId());
-                    System.out.println("2discussion user id: " + SessionInfo.userDTO.getUserId());
-                    commentPKDTO.setDiscussionUserUserId(SessionInfo.userDTO.getUserId());
-                    System.out.println("2discussion id: " + discussionDTO.getDiscussionPK().getDiscussionId());
-                    commentPKDTO.setDiscussionDiscussionId(discussionDTO.getDiscussionPK().getDiscussionId());
-                    System.out.println("2user id: " + SessionInfo.userDTO.getUserId());
-                    commentPKDTO.setUserUserId(SessionInfo.userDTO.getUserId());
-                    System.out.println("Comment ID: " + result.getSecond());
+                    CommentPKDTO commentPKDTO = commentDTO.getCommentPK();
                     commentPKDTO.setCommentId(result.getSecond());
                     commentDTO.setCommentPK(commentPKDTO);
                     List<CommentDTO> commentDTOList = discussionDTO.getCommentList();
-                    // TODO: ze tle preveri ce so nulli, pa ce so sam pri dolocenih al pri vseh
-                    System.out.println("discusiion comnet list: " + commentDTOList);
                     commentDTOList.add(commentDTO);
-                    System.out.println("comment dto za dodajanje lita: " +commentDTO );
-                    System.out.println("commen pk :" + commentDTO.getCommentPK());
-                    System.out.println("bozo je lol");
                     discussionDTO.setCommentList(commentDTOList);
-                    System.out.println("comment list po updatanje " + discussionDTO.getCommentList());
 
                     AsyncCallback<Pair<Boolean, String>> updateDiscussion = new AsyncCallback<Pair<Boolean, String>>() {
                         @Override
@@ -154,7 +137,6 @@ public class DiscussionCommentAddForm implements IsWidget {
                                 amb2.show();
                             }
                             else {
-
                                 MessageBox amb3 = new MessageBox("Message save comment", result.getSecond());
                                 amb3.show();
                             }

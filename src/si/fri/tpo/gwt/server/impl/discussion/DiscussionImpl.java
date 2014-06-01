@@ -165,8 +165,6 @@ public class DiscussionImpl {
                 comment.setContent(commentDTO.getContent());
                 comment.setCreatetime(commentDTO.getCreatetime());
 
-                System.out.println("eki: " + comment);
-                // TODO: vrne 2 nulla, ne vemo se zakaj, ampak nujno popravit
                 commentList.add(comment);
             }
             d.setCommentList(commentList);
