@@ -39,8 +39,8 @@ public class UserHomeForm implements IsWidget {
             ContentPanel cp;
             if (SessionInfo.projectDTO == null) {
                 String noProject = "<h1 style='margin-left:auto; margin-right:auto; margin-top:30px; " +
-                        "font-size:15px;'>No project selected!</h1><br/><h2 style='margin-left:auto; margin-right:auto; " +
-                        "font-size:15px;'>Select project from Project list.</h2>";
+                        "font-size:15px;'>No project selected!</h1><br/><h1 style='margin-left:auto; margin-right:auto; " +
+                        "font-size:15px;'>Select project from Project list.</h1>";
 
                 cp = new ContentPanel();
                 cp.add(new HTML(noProject));
