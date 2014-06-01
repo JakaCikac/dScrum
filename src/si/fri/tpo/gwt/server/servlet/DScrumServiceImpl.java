@@ -14,6 +14,7 @@ import si.fri.tpo.gwt.server.impl.task.TaskImpl;
 import si.fri.tpo.gwt.server.impl.team.TeamImpl;
 import si.fri.tpo.gwt.server.impl.user.UserImpl;
 import si.fri.tpo.gwt.server.impl.userStory.UserStoryImpl;
+import si.fri.tpo.gwt.server.impl.workblock.WorkblockImpl;
 import si.fri.tpo.gwt.server.impl.workload.WorkloadImpl;
 
 import java.util.List;
@@ -335,4 +336,12 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
         return WorkloadImpl.saveWorkload(workloadDTO);
     }
     // WORKLOAD //
+
+    //WORKBLOCK //
+    @Override
+    public Pair<Boolean, Integer> saveWorkblock(WorkblockDTO workblockDTO) {
+        return WorkblockImpl.saveWorkblock(workblockDTO);
+    }
+    // WORKLOAD //
+
 }
