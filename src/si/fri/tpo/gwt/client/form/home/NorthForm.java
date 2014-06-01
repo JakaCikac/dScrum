@@ -46,30 +46,33 @@ public class NorthForm implements IsWidget{
         HorizontalLayoutContainer hlc = new HorizontalLayoutContainer();
         panel.setWidget(hlc);
 
+        boolean admin = false, vejica = false, acctiveSprint = false;
         String right = new String();
         if(SessionInfo.userDTO != null){
             right += "<b>Logged in as:</b> " + SessionInfo.userDTO.getUsername() + "<br/>";
+
+            if(SessionInfo.userDTO.isAdmin()){
+                right += "as Admin";
+                admin = true;
+                vejica = true;
+            }
         }
 
         String left = new String();
         if(SessionInfo.projectDTO != null){
             left += "<b>Current Project:</b><br/>" + SessionInfo.projectDTO.getName() + "<br/>";
 
-            right += "as ";
-            boolean vejica = false;
+            if(!admin){
+                right += "as ";
+            }
             for(UserDTO userDTO : SessionInfo.projectDTO.getTeamTeamId().getUserList()){
                 if(userDTO.getUserId() == SessionInfo.userDTO.getUserId()) {
+                    if(vejica){
+                        right += ", ";
+                    }
                     right += "Team member";
                     vejica = true;
                 }
-            }
-
-            if(SessionInfo.userDTO.isAdmin()){
-                if(vejica){
-                    right += ", ";
-                }
-                right += "Admin";
-                vejica = true;
             }
             if(SessionInfo.projectDTO.getTeamTeamId().getProductOwnerId() == SessionInfo.userDTO.getUserId()){
                 if(vejica){
@@ -89,9 +92,12 @@ public class NorthForm implements IsWidget{
                 if(sprintDTO.getStatus().equals("In progress")){
                     left += "<br/><b>Project status:</b><br/>Sprint <b>" + sprintDTO.getSeqNumber() + "</b> in progress, ";
                     left += "ends on <b>" + DateTimeFormat.getShortDateFormat().format(sprintDTO.getEndDate()) + "</b>";
+                    acctiveSprint = true;
                 }
             }
-
+            if(!acctiveSprint){
+                left += "<br/><b>Project status:</b><br/>No sprint in progress";
+            }
         }
 
         HTML label2 = new HTML("<h1 style='margin-left:auto; margin-right:auto; margin-top:auto; margin-bottom:auto; font-size:70px;'>dScrum</h1>");

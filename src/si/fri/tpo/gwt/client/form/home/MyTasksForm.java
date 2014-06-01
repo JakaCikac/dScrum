@@ -83,6 +83,7 @@ public class MyTasksForm implements IsWidget{
 
             panel = new ContentPanel();
             panel.setHeadingText("User's Tasklist");
+            panel .setHeaderVisible(false);
             panel.setPixelSize(850, 460);
             panel.addStyleName("margin-10");
 

@@ -158,12 +158,7 @@ public class DiscussionImpl {
                 commentPK.setDiscussionUserUserId(commentDTO.getCommentPK().getDiscussionUserUserId());
                 commentPK.setUserUserId(commentDTO.getCommentPK().getUserUserId());
 
-                Comment comment = new Comment();
-                comment.setDiscussion(d);
-                comment.setUser(u);
-                comment.setCommentPK(commentPK);
-                comment.setContent(commentDTO.getContent());
-                comment.setCreatetime(commentDTO.getCreatetime());
+                Comment comment = ProxyManager.getCommentProxy().findComment(commentPK);
 
                 commentList.add(comment);
             }

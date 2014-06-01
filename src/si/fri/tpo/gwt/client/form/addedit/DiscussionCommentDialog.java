@@ -6,6 +6,7 @@ import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import si.fri.tpo.gwt.client.dto.DiscussionDTO;
+import si.fri.tpo.gwt.client.form.home.NorthForm;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
@@ -59,12 +60,13 @@ public class DiscussionCommentDialog extends Dialog {
             @Override
             public void onSelect(SelectEvent event) {
                 SessionInfo.projectDTO = null;
-                center.clear();
+                north.clear();
                 west.clear();
                 east.clear();
-                UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
-                center.add(userHomeForm.asWidget());
-                if (SessionInfo.userDTO.isAdmin()){
+                center.clear();
+                NorthForm nf = new NorthForm(service, center, north, south, east, west);
+                north.add(nf.asWidget());
+                if (SessionInfo.userDTO.isAdmin()) {
                     AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
                     east.add(adminNavPanel.asWidget());
                 } else {
@@ -73,6 +75,8 @@ public class DiscussionCommentDialog extends Dialog {
                 }
                 ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                 west.add(psf.asWidget());
+                UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
+                center.add(userHomeForm.asWidget());
             }
         });
         addHideHandler(new HideEvent.HideHandler() {

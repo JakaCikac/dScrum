@@ -99,20 +99,22 @@ public class AdminNavPanel implements IsWidget {
         });
         lcwest.add(projectManagement);
 
-        final TextButton projectEditing = new TextButton("Project Editing");
-        projectEditing.addSelectHandler(new SelectEvent.SelectHandler() {
-            @Override
-            public void onSelect(SelectEvent event) {
-                if (SessionInfo.projectDTO == null) {
-                    Info.display("No project selected", "Please select project from the list on the left." );
-                } else {
-                    ProjectDataEditForm pdef = new ProjectDataEditForm(service, center, west, east, north, south);
-                    center.clear();
-                    center.add(pdef.asWidget());
+        if(SessionInfo.projectDTO != null) {
+            final TextButton projectEditing = new TextButton("Project Editing");
+            projectEditing.addSelectHandler(new SelectEvent.SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+                    if (SessionInfo.projectDTO == null) {
+                        Info.display("No project selected", "Please select project from the list on the left.");
+                    } else {
+                        ProjectDataEditForm pdef = new ProjectDataEditForm(service, center, west, east, north, south);
+                        center.clear();
+                        center.add(pdef.asWidget());
+                    }
                 }
-            }
-        });
-        lcwest.add(projectEditing);
+            });
+            lcwest.add(projectEditing);
+        }
 
         if(SessionInfo.projectDTO != null && isProductOwner()) {
             final TextButton userStoryManagement = new TextButton("User Story Management");

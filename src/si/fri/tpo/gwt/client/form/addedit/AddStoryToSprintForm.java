@@ -26,6 +26,7 @@ import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.ProjectDTO;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
+import si.fri.tpo.gwt.client.form.home.NorthForm;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
 import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
@@ -205,13 +206,12 @@ public class AddStoryToSprintForm implements IsWidget{
                 }
                 else {
                     SessionInfo.projectDTO = null;
+                    north.clear();
                     west.clear();
                     east.clear();
                     center.clear();
-                    MessageBox amb3 = new MessageBox("Message update Sprint", result.getSecond());
-                    amb3.show();
-                    UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
-                    center.add(userHomeForm.asWidget());
+                    NorthForm nf = new NorthForm(service, center, north, south, east, west);
+                    north.add(nf.asWidget());
                     if (SessionInfo.userDTO.isAdmin()) {
                         AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
                         east.add(adminNavPanel.asWidget());
@@ -221,6 +221,8 @@ public class AddStoryToSprintForm implements IsWidget{
                     }
                     ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                     west.add(psf.asWidget());
+                    UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
+                    center.add(userHomeForm.asWidget());
                 }
             }
             @Override

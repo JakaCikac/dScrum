@@ -191,7 +191,6 @@ public class ProductBacklogForm implements IsWidget {
 
             final GroupingView<UserStoryDTO> viewSprint = new GroupingView<UserStoryDTO>();
             viewSprint.setForceFit(true);
-            ContentPanel lol = new ContentPanel();
             ufSprintGrid = new Grid<UserStoryDTO>(ufSprintStore, ufScm);
             ufSprintGrid.setView(viewSprint);
             ufSprintGrid.getView().setAutoExpandColumn(nameCol);
@@ -202,8 +201,7 @@ public class ProductBacklogForm implements IsWidget {
             ufSprintGrid.getView().setColumnLines(true);
             ufSprintGrid.getView().setForceFit(true);
             ufExpander.initPlugin(ufSprintGrid);
-            lol.setWidget(ufSprintGrid);
-            cp.add(lol);
+            cp.setWidget(ufSprintGrid);
             tabPane.add(cp, "Unfinished User Stories");
 
 
@@ -257,13 +255,12 @@ public class ProductBacklogForm implements IsWidget {
                 }
                 else {
                     SessionInfo.projectDTO = null;
+                    north.clear();
                     west.clear();
                     east.clear();
                     center.clear();
-                    MessageBox amb3 = new MessageBox("Message delete User Story", result.getSecond());
-                    amb3.show();
-                    UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
-                    center.add(userHomeForm.asWidget());
+                    NorthForm nf = new NorthForm(service, center, north, south, east, west);
+                    north.add(nf.asWidget());
                     if (SessionInfo.userDTO.isAdmin()) {
                         AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
                         east.add(adminNavPanel.asWidget());
@@ -273,6 +270,8 @@ public class ProductBacklogForm implements IsWidget {
                     }
                     ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
                     west.add(psf.asWidget());
+                    UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
+                    center.add(userHomeForm.asWidget());
                 }
             }
             @Override
