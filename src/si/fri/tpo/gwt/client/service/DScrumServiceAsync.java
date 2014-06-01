@@ -139,11 +139,12 @@ public interface DScrumServiceAsync {
 
     void saveDiscussionComment(CommentDTO commentDTO, AsyncCallback<Pair<Boolean,Integer>> saveDiscussionComment);
 
+    void deleteDiscussion(DiscussionDTO discussionDTO, AsyncCallback<Pair<Boolean,String>> deleteDiscussion);
+
     // DISCUSSION //
 
     // WORKLOAD //
     void updateWorkload(WorkloadDTO workloadDTO, AsyncCallback<Pair<Boolean,String>> updateWorkload);
-
 
     void saveWorkload(List<WorkloadDTO> workloadDTO, AsyncCallback<Pair<Boolean,List<Integer>>> saveWorkload);
 

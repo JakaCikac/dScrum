@@ -15,10 +15,13 @@ import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.TabPanel;
+import com.sencha.gxt.widget.core.client.box.AlertMessageBox;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.grid.*;
+import com.sencha.gxt.widget.core.client.info.Info;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.CommentDTO;
 import si.fri.tpo.gwt.client.dto.DiscussionDTO;
@@ -115,6 +118,7 @@ public class DiscussionForm implements IsWidget {
             ColumnConfig<DiscussionDTO, String> contentCol = new ColumnConfig<DiscussionDTO, String>(getContentValue(), 250, "Content");
             ColumnConfig<DiscussionDTO, String> authorCol = new ColumnConfig<DiscussionDTO, String>(getAuthorValue(), 160, "Author");
             ColumnConfig<DiscussionDTO, String> addCommentButtonCol = new ColumnConfig<DiscussionDTO, String>(getAddCommentValue(), 160, "Comment");
+            ColumnConfig<DiscussionDTO, String> deleteDiscussionButtonCol = new ColumnConfig<DiscussionDTO, String>(getDeleteDiscussionValue(), 160, "Delete");
 
             List<ColumnConfig<DiscussionDTO, ?>> l = new ArrayList<ColumnConfig<DiscussionDTO, ?>>();
             l.add(expander);
@@ -122,6 +126,7 @@ public class DiscussionForm implements IsWidget {
             l.add(authorCol);
             l.add(contentCol);
             l.add(addCommentButtonCol);
+            l.add(deleteDiscussionButtonCol);
 
             TextButtonCell addCommentButton = new TextButtonCell();
             addCommentButton.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -134,6 +139,46 @@ public class DiscussionForm implements IsWidget {
                 }
             });
             addCommentButtonCol.setCell(addCommentButton);
+
+
+            TextButtonCell deleteDiscussionButton = new TextButtonCell();
+            deleteDiscussionButton.addSelectHandler(new SelectEvent.SelectHandler() {
+                @Override
+                public void onSelect(SelectEvent event) {
+
+                    Cell.Context c = event.getContext();
+                    int row = c.getIndex();
+
+                    if (SessionInfo.projectDTO.getTeamTeamId().getScrumMasterId() == SessionInfo.userDTO.getUserId()) { // preveri ce je scrum master
+
+                        AsyncCallback<Pair<Boolean, String>> deleteDiscussion = new AsyncCallback<Pair<Boolean, String>>() {
+                            @Override
+                            public void onSuccess(Pair<Boolean, String> result) {
+                                if (result == null) {
+                                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing discussion destruction!");
+                                    amb2.show();
+                                } else if (!result.getFirst()) {
+                                    AlertMessageBox amb2 = new AlertMessageBox("Error destroying discussion!", result.getSecond());
+                                    amb2.show();
+                                } else {
+                                    MessageBox amb3 = new MessageBox("Message destroy discussion", result.getSecond());
+                                    amb3.show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Throwable caught) {
+                                Window.alert(caught.getMessage());
+                            }
+                        };
+                        service.deleteDiscussion(store.get(row), deleteDiscussion);
+                        store.remove(row);
+                    } else {
+                        Info.display("Action aborted", "Only scrum master may delete discussions.");
+                    }
+                }
+            });
+            deleteDiscussionButtonCol.setCell(deleteDiscussionButton);
 
             ColumnModel<DiscussionDTO> cm = new ColumnModel<DiscussionDTO>(l);
 
@@ -275,4 +320,20 @@ public class DiscussionForm implements IsWidget {
         return vpn;
     }
 
+    private ValueProvider<DiscussionDTO, String> getDeleteDiscussionValue() {
+        ValueProvider<DiscussionDTO, String> vpn = new ValueProvider<DiscussionDTO, String>() {
+            @Override
+            public String getValue(DiscussionDTO object) {
+                return "Delete";
+            }
+            @Override
+            public void setValue(DiscussionDTO object, String value) {
+            }
+            @Override
+            public String getPath() {
+                return null;
+            }
+        };
+        return vpn;
+    }
 }

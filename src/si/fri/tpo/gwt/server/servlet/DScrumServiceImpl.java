@@ -322,6 +322,11 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     public Pair<Boolean, Integer> saveDiscussionComment(CommentDTO commentDTO) {
         return DiscussionImpl.saveDiscussionComment(commentDTO);
     }
+
+    @Override
+    public Pair<Boolean, String> deleteDiscussion(DiscussionDTO discussionDTO) {
+        return DiscussionImpl.deleteDiscussion(discussionDTO);
+    }
     // DISCUSION //
 
     // WORKLOAD //

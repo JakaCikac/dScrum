@@ -141,11 +141,14 @@ public interface DScrumService extends RemoteService {
 
     public Pair<Boolean, Integer> saveDiscussionComment(CommentDTO commentDTO);
 
+    public Pair<Boolean, String> deleteDiscussion(DiscussionDTO discussionDTO);
+
     // DISCUSSION //
 
     // WORKLOAD //
     public Pair<Boolean, String> updateWorkload(WorkloadDTO workloadDTO);
 
     public Pair<Boolean, List<Integer>> saveWorkload(List<WorkloadDTO> workloadDTO);
+
     // WORKLOAD //
 }

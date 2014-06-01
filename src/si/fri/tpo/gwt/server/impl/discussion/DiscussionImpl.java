@@ -232,4 +232,45 @@ public class DiscussionImpl {
         }
         return Pair.of(true, insertedCommentID);
     }
+
+    public static Pair<Boolean, String> deleteDiscussion(DiscussionDTO discussionDTO) {
+
+        try {
+            DiscussionPK discussionPK = new DiscussionPK();
+            discussionPK.setProjectProjectId(discussionDTO.getProject().getProjectId());
+            discussionPK.setDiscussionId(discussionDTO.getDiscussionPK().getDiscussionId());
+            discussionPK.setUserUserId(discussionDTO.getUser().getUserId());
+            Discussion discussion = ProxyManager.getDiscussionProxy().findDiscussion(discussionPK);
+            List<Comment> commentList = discussion.getCommentList();
+
+            for (Comment comment : commentList) {
+                try {
+                    if (comment == null) {
+                        return Pair.of(false, "Data error (comment)!");
+                    }
+
+                    ProxyManager.getCommentProxy().destroy(comment.getCommentPK());
+
+                } catch (Exception e) {
+                    System.err.println("Error while deleting comment with message: " + e.getMessage());
+                    return Pair.of(false, e.getMessage());
+                }
+            }
+
+            try {
+                if (discussion == null)
+                    return Pair.of(false, "Data error (discussion)!");
+
+                ProxyManager.getDiscussionProxy().destroy(discussion.getDiscussionPK());
+
+            } catch (Exception e) {
+                System.err.println("Error while deleting discussion with message: " + e.getMessage());
+                return Pair.of(false, e.getMessage());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Pair.of(false, e.getMessage());
+        }
+        return Pair.of(true, "Discussion deleted successfully.");
+    }
 }
