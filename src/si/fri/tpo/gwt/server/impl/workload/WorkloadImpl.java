@@ -1,10 +1,7 @@
 package si.fri.tpo.gwt.server.impl.workload;
 
 import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
-import si.fri.tpo.gwt.client.dto.SprintDTO;
-import si.fri.tpo.gwt.client.dto.SprintPKDTO;
-import si.fri.tpo.gwt.client.dto.WorkloadDTO;
+import si.fri.tpo.gwt.client.dto.*;
 import si.fri.tpo.gwt.server.jpa.*;
 import si.fri.tpo.gwt.server.proxy.ProxyManager;
 
@@ -28,6 +25,21 @@ public class WorkloadImpl {
 
             workload.setTimeRemaining(workloadDTO.getTimeRemaining());
             workload.setTimeSpent(workloadDTO.getTimeSpent());
+
+            List<Workblock> workblockList = new ArrayList<Workblock>();
+            for(WorkblockDTO workblockDTO : workloadDTO.getWorkblockList()){
+                WorkblockPK workblockPK = new WorkblockPK();
+                workblockPK.setWorkloadTaskTaskId(workblockDTO.getWorkblockPK().getWorkloadTaskTaskId());
+                workblockPK.setWorkloadTaskUserStoryStoryId(workblockDTO.getWorkblockPK().getWorkloadTaskUserStoryStoryId());
+                workblockPK.setWorkloadUserUserId(workblockDTO.getWorkblockPK().getWorkloadUserUserId());
+                workblockPK.setWorkloadWorkloadId(workblockDTO.getWorkblockPK().getWorkloadWorkloadId());
+                workblockPK.setWorkblockId(workblockDTO.getWorkblockPK().getWorkblockId());
+
+                Workblock workblock = ProxyManager.getWorkblockProxy().findWorkblock(workblockPK);
+
+                workblockList.add(workblock);
+            }
+            workload.setWorkblockList(workblockList);
             try {
                 if (workload == null)
                     return Pair.of(false, "Data error!");

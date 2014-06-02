@@ -58,6 +58,35 @@ public class WorkblockImpl {
             return Pair.of(false, -3);
         }
         return Pair.of(true, insertedWorkblockID);
+    }
 
+    public static Pair<Boolean, Integer> updateWorkblock(WorkblockDTO workblockDTO) {
+
+        try {
+            WorkblockPK workblockPK = new WorkblockPK();
+            workblockPK.setWorkloadTaskTaskId(workblockDTO.getWorkblockPK().getWorkloadTaskTaskId());
+            workblockPK.setWorkloadTaskUserStoryStoryId(workblockDTO.getWorkblockPK().getWorkloadTaskUserStoryStoryId());
+            workblockPK.setWorkloadUserUserId(workblockDTO.getWorkblockPK().getWorkloadUserUserId());
+            workblockPK.setWorkloadWorkloadId(workblockDTO.getWorkblockPK().getWorkloadWorkloadId());
+            workblockPK.setWorkblockId(workblockDTO.getWorkblockPK().getWorkblockId());
+            Workblock workblock = ProxyManager.getWorkblockProxy().findWorkblock(workblockPK);
+
+            workblock.setTimeStart(workblockDTO.getTimeStart());
+            workblock.setTimeStop(workblockDTO.getTimeStop());
+            try {
+                if (workblock == null)
+                    return Pair.of(false, -1);
+
+                ProxyManager.getWorkblockProxy().edit(workblock);
+
+            } catch (Exception e) {
+                System.err.println("Error while editing workload with message: " + e.getMessage());
+                return Pair.of(false, -2);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Pair.of(false, -3);
+        }
+        return Pair.of(true, 0);
     }
 }

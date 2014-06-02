@@ -342,6 +342,11 @@ public class DScrumServiceImpl extends RemoteServiceServlet implements DScrumSer
     public Pair<Boolean, Integer> saveWorkblock(WorkblockDTO workblockDTO) {
         return WorkblockImpl.saveWorkblock(workblockDTO);
     }
+
+    @Override
+    public Pair<Boolean, Integer> updateWorkblock(WorkblockDTO workblockDTO) {
+        return WorkblockImpl.updateWorkblock(workblockDTO);
+    }
     // WORKLOAD //
 
 }
