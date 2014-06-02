@@ -35,6 +35,7 @@ public class WorkblockImpl {
             workloadPK.setWorkloadId(workloadPKDTO.getWorkloadId());
             workloadPK.setTaskUserStoryStoryId(workloadPKDTO.getTaskUserStoryStoryId());
             workloadPK.setTaskTaskId(workloadPKDTO.getTaskTaskId());
+
             Workload workload = ProxyManager.getWorkloadProxy().findWorkload(workloadPK);
             workblock.setWorkload(workload);
 
