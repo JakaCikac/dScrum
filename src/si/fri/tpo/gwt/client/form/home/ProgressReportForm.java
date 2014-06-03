@@ -23,7 +23,6 @@ import si.fri.tpo.gwt.client.dto.UserStoryDTO;
 import si.fri.tpo.gwt.client.dto.WorkloadDTO;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
-
 import java.util.*;
 
 /**
@@ -165,12 +164,10 @@ public class ProgressReportForm implements IsWidget {
     private List<BurndownData> fillBurndownData() {
 
         List<BurndownData> burndownDataList = new ArrayList<BurndownData>();
-        TreeMap<Date, BurndownData> temp = new TreeMap<Date, BurndownData>();
+        TreeMap<Date, BurndownData> burndownMap = new TreeMap<Date, BurndownData>();
 
-        /* za najti zacetni datum projekta, se izkazalo kot nepotrebno ker na grafu ni datumov ampak cifro
+        /*// za najti zacetni datum projekta
         Date startDate = null;
-        Date endDate = new Date();
-
         // get/find start date
         for (SprintDTO sprintDTO : SessionInfo.projectDTO.getSprintList()) {
             if (startDate.after(sprintDTO.getStartDate()) || startDate == null) {
@@ -187,7 +184,7 @@ public class ProgressReportForm implements IsWidget {
                     Date key = workloadDTO.getDay();
                     double timeRemaining = Double.parseDouble(workloadDTO.getTimeRemaining());
                     double timeSpent = Double.parseDouble(workloadDTO.getTimeSpent());
-                    BurndownData value = temp.get(key);
+                    BurndownData value = burndownMap.get(key);
 
                     if (value != null) {
                         value.hrsRemaining += timeRemaining;
@@ -196,7 +193,7 @@ public class ProgressReportForm implements IsWidget {
                         value = new BurndownData(0, timeRemaining, timeSpent);
                     }
 
-                    temp.put(key, value);
+                    burndownMap.put(key, value);
                 }
             }
         }
@@ -204,11 +201,25 @@ public class ProgressReportForm implements IsWidget {
         int i = 1;
         max = Double.MIN_VALUE;
         min = Double.MAX_VALUE;
-        for (Map.Entry<Date, BurndownData> entry : temp.entrySet()) {
+        Date prevKey = null;
+        BurndownData prevVal = null;
+
+        for (Map.Entry<Date, BurndownData> entry : burndownMap.entrySet()) {
+
             BurndownData bd = entry.getValue();
+            Date key = entry.getKey();
+
+            // fill the missing spaces
+            if (prevKey != null) {
+                long days = diff(prevKey, key);
+                for (int j = 0; j < days-1; j++) {
+                    burndownDataList.add(new BurndownData(i, prevVal.hrsRemaining, prevVal.hrsSpent));
+                    i++;
+                }
+            }
+
             bd.seqNumber = i;
             burndownDataList.add(bd);
-            //System.out.println(entry.getKey().toString() + "\t" + bd.seqNumber + "\t" + bd.hrsSpent + "\t" + bd.hrsRemaining);
             i++;
 
             if (bd.hrsRemaining > max) {
@@ -223,6 +234,9 @@ public class ProgressReportForm implements IsWidget {
             if (bd.hrsSpent < min) {
                 min = bd.hrsSpent;
             }
+
+            prevKey = key;
+            prevVal = bd;
         }
 
         return burndownDataList;
@@ -277,5 +291,17 @@ public class ProgressReportForm implements IsWidget {
             }
         };
         return vpc;
+    }
+
+    private long diff (Date d1, Date d2) {
+
+        long diff = d2.getTime() - d1.getTime();
+
+        //long diffSeconds = diff / 1000 % 60;
+        //long diffMinutes = diff / (60 * 1000) % 60;
+        //long diffHours = diff / (60 * 60 * 1000) % 24;
+        long diffDays = diff / (24 * 60 * 60 * 1000);
+
+        return diffDays;
     }
 }
