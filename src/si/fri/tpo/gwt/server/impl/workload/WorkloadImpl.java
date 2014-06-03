@@ -26,20 +26,10 @@ public class WorkloadImpl {
             workload.setTimeRemaining(workloadDTO.getTimeRemaining());
             workload.setTimeSpent(workloadDTO.getTimeSpent());
 
-            List<Workblock> workblockList = new ArrayList<Workblock>();
-            for(WorkblockDTO workblockDTO : workloadDTO.getWorkblockList()){
-                WorkblockPK workblockPK = new WorkblockPK();
-                workblockPK.setWorkloadTaskTaskId(workblockDTO.getWorkblockPK().getWorkloadTaskTaskId());
-                workblockPK.setWorkloadTaskUserStoryStoryId(workblockDTO.getWorkblockPK().getWorkloadTaskUserStoryStoryId());
-                workblockPK.setWorkloadUserUserId(workblockDTO.getWorkblockPK().getWorkloadUserUserId());
-                workblockPK.setWorkloadWorkloadId(workblockDTO.getWorkblockPK().getWorkloadWorkloadId());
-                workblockPK.setWorkblockId(workblockDTO.getWorkblockPK().getWorkblockId());
+            workload.setStarted(workloadDTO.getStarted());
+            workload.setStartTime(workloadDTO.getStartTime());
+            workload.setStopTime(workloadDTO.getStopTime());
 
-                Workblock workblock = ProxyManager.getWorkblockProxy().findWorkblock(workblockPK);
-
-                workblockList.add(workblock);
-            }
-            workload.setWorkblockList(workblockList);
             try {
                 if (workload == null)
                     return Pair.of(false, "Data error!");
@@ -58,9 +48,9 @@ public class WorkloadImpl {
 
     }
 
-    public static Pair<Boolean,List<Integer>> saveWorkload(List<WorkloadDTO> workloadDTO1) {
+    public static Pair<Boolean,List<Integer>> saveWorkload(List<WorkloadDTO> workloadDTOList) {
         List<Integer> insertedWorkloadID = new ArrayList<Integer>();
-        for(WorkloadDTO workloadDTO : workloadDTO1) {
+        for(WorkloadDTO workloadDTO : workloadDTOList) {
             try {
                 WorkloadPK workloadPK = new WorkloadPK();
                 workloadPK.setTaskTaskId(workloadDTO.getWorkloadPK().getTaskTaskId());
@@ -79,6 +69,9 @@ public class WorkloadImpl {
 
                 workload.setUser(ProxyManager.getUserProxy().findUserById(workloadDTO.getUser().getUserId()));
 
+                workload.setStarted(workloadDTO.getStarted());
+                workload.setStartTime(workloadDTO.getStartTime());
+                workload.setStopTime(workloadDTO.getStopTime());
                 try {
                     if (workload == null)
                         return Pair.of(false, null);
