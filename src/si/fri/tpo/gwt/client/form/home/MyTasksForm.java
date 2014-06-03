@@ -16,6 +16,7 @@ import com.sencha.gxt.widget.core.client.grid.GroupingView;
 import si.fri.tpo.gwt.client.dto.SprintDTO;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
+import si.fri.tpo.gwt.client.dto.WorkloadDTO;
 import si.fri.tpo.gwt.client.form.addedit.WorkHistoryDialog;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
@@ -57,6 +58,7 @@ public class MyTasksForm implements IsWidget{
             ColumnConfig<TaskDTO, String> descriptionCol = new ColumnConfig<TaskDTO, String>(getDescriptionValue(), 200, "Description");
             ColumnConfig<TaskDTO, String> userStoryCol = new ColumnConfig<TaskDTO, String>(getUserStoryValue(), 200, "User Story");
             ColumnConfig<TaskDTO, String> workHistoryCol = new ColumnConfig<TaskDTO, String>(getWorkHistoryValue(), 100, "Work History");
+            ColumnConfig<TaskDTO, String> startStopCol = new ColumnConfig<TaskDTO, String>(getStartStopValue(), 100, "Start");
 
             List<ColumnConfig<TaskDTO, ?>> l = new ArrayList<ColumnConfig<TaskDTO, ?>>();
             l.add(descriptionCol);
@@ -101,6 +103,27 @@ public class MyTasksForm implements IsWidget{
             panel.setWidget(grid);
         }
         return panel;
+    }
+
+    private ValueProvider<TaskDTO, String> getStartStopValue() {
+        ValueProvider<TaskDTO, String> vpn = new ValueProvider<TaskDTO, String>() {
+            @Override
+            public String getValue(TaskDTO object) {
+                for(WorkloadDTO workloadDTO : object.getWorkloadList()){
+                    //for()
+                }
+                return object.getUserStory().getName();
+            }
+            @Override
+            public void setValue(TaskDTO object, String value) {
+
+            }
+            @Override
+            public String getPath() {
+                return null;
+            }
+        };
+        return vpn;
     }
 
     private void getTaskList() {

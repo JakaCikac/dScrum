@@ -151,26 +151,6 @@ public class WorkHistoryForm implements IsWidget  {
         System.out.println("today is: "+today);
 
         workloadDTOListNEW = new ArrayList<WorkloadDTO>();
-//        for(WorkloadDTO workloadDTO1 : selectedTaskDTO.getWorkloadList()){
-//            WorkloadDTO addWL = new WorkloadDTO();
-//            WorkloadPKDTO workloadPKDTO = new WorkloadPKDTO();
-//            workloadPKDTO.setUserUserId(workloadDTO1.getWorkloadPK().getUserUserId());
-//            workloadPKDTO.setTaskTaskId(workloadDTO1.getWorkloadPK().getTaskTaskId());
-//            workloadPKDTO.setTaskUserStoryStoryId(workloadDTO1.getWorkloadPK().getTaskUserStoryStoryId());
-//            workloadPKDTO.setWorkloadId(workloadDTO1.getWorkloadPK().getWorkloadId());
-//            addWL.setWorkloadPK(workloadPKDTO);
-//
-//            addWL.setUser(selectedTaskDTO.getUserUserId());
-//            addWL.setTask(selectedTaskDTO);
-//            addWL.setTimeSpent("0");
-//            addWL.setDay(new Date(forDay));
-//            addWL.setTimeRemaining(timeRem);
-//
-//            forDay = forDay +(1000*60*60*24);
-//
-//            workloadDTOListNEW.add(addWL);
-//        }
-
         for (int i=0; i<dateDifference; i++){
             WorkloadDTO addWL = new WorkloadDTO();
             WorkloadPKDTO workloadPKDTO = new WorkloadPKDTO();
