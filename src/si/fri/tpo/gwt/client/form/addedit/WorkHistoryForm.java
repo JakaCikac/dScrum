@@ -56,8 +56,7 @@ public class WorkHistoryForm implements IsWidget  {
     private WorkloadDTO selectedWorkloadDTO;
     private WorkloadDTO workloadDTO;
     private WorkloadDTO lastWorkloadDTO;
-    private WorkblockDTO workblockDTO;
-    private WorkblockPKDTO workblockPKDTO;
+    WorkblockDTO workblockDTO;
     private ListStore<WorkloadDTO> store;
     private Grid<WorkloadDTO> grid;
     private List<WorkloadDTO> workloadDTOList, workloadDTOListNEW;
@@ -70,8 +69,8 @@ public class WorkHistoryForm implements IsWidget  {
     private SubmitButton startButton;
 
     private Date today = new Date();
-    private Date startDate;
-    private Date stopDate;
+    private Date startDate = new Date(0);
+    private Date stopDate = new Date(0);
     private Date lastDay;
     private long forDay;
     private int dateDifference = 0;
@@ -152,13 +151,32 @@ public class WorkHistoryForm implements IsWidget  {
         System.out.println("today is: "+today);
 
         workloadDTOListNEW = new ArrayList<WorkloadDTO>();
-        for(WorkloadDTO workloadDTO1 : selectedTaskDTO.getWorkloadList()){
+//        for(WorkloadDTO workloadDTO1 : selectedTaskDTO.getWorkloadList()){
+//            WorkloadDTO addWL = new WorkloadDTO();
+//            WorkloadPKDTO workloadPKDTO = new WorkloadPKDTO();
+//            workloadPKDTO.setUserUserId(workloadDTO1.getWorkloadPK().getUserUserId());
+//            workloadPKDTO.setTaskTaskId(workloadDTO1.getWorkloadPK().getTaskTaskId());
+//            workloadPKDTO.setTaskUserStoryStoryId(workloadDTO1.getWorkloadPK().getTaskUserStoryStoryId());
+//            workloadPKDTO.setWorkloadId(workloadDTO1.getWorkloadPK().getWorkloadId());
+//            addWL.setWorkloadPK(workloadPKDTO);
+//
+//            addWL.setUser(selectedTaskDTO.getUserUserId());
+//            addWL.setTask(selectedTaskDTO);
+//            addWL.setTimeSpent("0");
+//            addWL.setDay(new Date(forDay));
+//            addWL.setTimeRemaining(timeRem);
+//
+//            forDay = forDay +(1000*60*60*24);
+//
+//            workloadDTOListNEW.add(addWL);
+//        }
+
+        for (int i=0; i<dateDifference; i++){
             WorkloadDTO addWL = new WorkloadDTO();
             WorkloadPKDTO workloadPKDTO = new WorkloadPKDTO();
-            workloadPKDTO.setUserUserId(workloadDTO1.getWorkloadPK().getUserUserId());
-            workloadPKDTO.setTaskTaskId(workloadDTO1.getWorkloadPK().getTaskTaskId());
-            workloadPKDTO.setTaskUserStoryStoryId(workloadDTO1.getWorkloadPK().getTaskUserStoryStoryId());
-            workloadPKDTO.setWorkloadId(workloadDTO1.getWorkloadPK().getWorkloadId());
+            workloadPKDTO.setUserUserId(selectedTaskDTO.getUserUserId().getUserId());
+            workloadPKDTO.setTaskTaskId(selectedTaskDTO.getTaskPK().getTaskId());
+            workloadPKDTO.setTaskUserStoryStoryId(selectedTaskDTO.getUserStory().getStoryId());
             addWL.setWorkloadPK(workloadPKDTO);
 
             addWL.setUser(selectedTaskDTO.getUserUserId());
@@ -327,11 +345,12 @@ public class WorkHistoryForm implements IsWidget  {
                 //nastavi FK kljuce za workblock
                 workblockDTO = new WorkblockDTO();
                 workblockDTO.setWorkload(workloadDTO);
-                workblockPKDTO = new WorkblockPKDTO();
+                WorkblockPKDTO workblockPKDTO = new WorkblockPKDTO();
                 workblockPKDTO.setWorkloadWorkloadId(lastWorkloadDTO.getWorkloadPK().getWorkloadId());
                 workblockPKDTO.setWorkloadTaskTaskId(lastTaskDTO.getTaskPK().getTaskId());
                 workblockPKDTO.setWorkloadTaskUserStoryStoryId(lastTaskDTO.getUserStory().getStoryId());
                 workblockPKDTO.setWorkloadUserUserId(lastWorkloadDTO.getUser().getUserId());
+
 
                 System.out.println("WorkloadID: " + String.valueOf(workblockPKDTO.getWorkloadWorkloadId()));
                 System.out.println("TaskID: " + String.valueOf(workblockPKDTO.getWorkloadTaskTaskId()));
@@ -339,25 +358,29 @@ public class WorkHistoryForm implements IsWidget  {
                 System.out.println("UserID: " + String.valueOf(workblockPKDTO.getWorkloadUserUserId()));
 
                 workblockDTO.setWorkblockPK(workblockPKDTO);
-                Date now = new Date();
 
                 if (workblockDTOList.isEmpty()==true) {
                     System.out.println("---------IS EMPTY---------------");
                     if (countClicks == 0) {
                         startButton.setText("Stop work EMPTY");
                         countClicks = 1;
-                        startDate = now;
-                        workblockDTO.setTimeStart(startDate);
-                        workblockDTO.setTimeStop(new Date(0));
+                        workblockDTO.setTimeStart(new Date());
+                        workblockDTO.setTimeStop(stopDate);
                         System.out.println("start EMPTY" + workblockDTO.getTimeStart());
                     } else {
                         startButton.setText("Start work EMPTY");
                         countClicks = 0;
-                        stopDate = now;
                         workblockDTO.setTimeStart(startDate);
-                        workblockDTO.setTimeStop(stopDate);
+                        workblockDTO.setTimeStop(new Date());
                         System.out.println("stop EMPTY" + workblockDTO.getTimeStop());
+
+                        double workingTime =(double) (stopDate.getTime()-startDate.getTime())/(1000*60);
+                        //calculate time spent
+                        workingTime = workingTime + Double.parseDouble(lastWorkloadDTO.getTimeSpent());
+                        lastWorkloadDTO.setTimeSpent(Double.toString(workingTime));
+                        performUpdateWorkload(lastWorkloadDTO);
                     }
+                    System.out.println("---pred saveWorkblock---");
                     performSaveWorkblock(workblockDTO);
                 }
 
@@ -365,26 +388,28 @@ public class WorkHistoryForm implements IsWidget  {
                 else {
                     System.out.println("---------IS NOOOOOOOOOOOOOOOT EMPTY-----------");
                     //preveri, če v bazi ze obstaja workblock z istimi FK kljuci.
-                    for (WorkblockDTO workblockDTO1 : workblockDTOList){
-                        int cmpDate = workblockDTO1.getTimeStart().compareTo(new Date(0));
-                        //primerjaj če je startTime nastavljen na 0
-                        if (cmpDate == 0){
+                    for (WorkblockDTO workblockDTO1 : workblockDTOList) {
+                        //primerjaj začetni čas workblockDTO1(iz baze) in workblockDTO(v programu)
+                        System.out.println("right after SIZE: "+workblockDTO1.getTimeStart());
+                        System.out.println("right after SIZE: "+workblockDTO.getTimeStart());
+                        int cmpDate = workblockDTO1.getTimeStart().compareTo(workblockDTO.getTimeStart());
+                        if (cmpDate == 0) {
                             startButton.setText("Stop work");
                             countClicks = 1;
-                            startDate = now;
-                            workblockDTO.setTimeStart(startDate);
-                            workblockDTO.setTimeStop(new Date(0));
-                            System.out.println("start " + workblockDTO.getTimeStart());
-                        }
-                        else{
+                            cmpDate = 1;
+                            workblockDTO.setTimeStart(new Date());
+                            workblockDTO.setTimeStop(stopDate);
+                            System.out.println("IF start " + workblockDTO.getTimeStart());
+                        } else {
                             startButton.setText("Start work");
                             countClicks = 0;
-                            stopDate = now;
+                            cmpDate = 0;
                             workblockDTO.setTimeStart(startDate);
-                            workblockDTO.setTimeStop(stopDate);
-                            System.out.println("stop " + workblockDTO.getTimeStop());
+                            workblockDTO.setTimeStop(new Date());
+                            System.out.println("IF stop " + workblockDTO.getTimeStop());
                         }
                     }
+                    System.out.println("---pred updateWorkblock---");
                     performUpdateWorkblock(workblockDTO);
                 }
             }
@@ -514,7 +539,7 @@ public class WorkHistoryForm implements IsWidget  {
                     amb2.show();
                 } else {
 
-                    workblockPKDTO = workblockDTO.getWorkblockPK();
+                    WorkblockPKDTO workblockPKDTO = workblockDTO.getWorkblockPK();
                     workblockPKDTO.setWorkloadWorkloadId(result.getSecond());
 
                     workblockDTO.setWorkblockPK(workblockPKDTO);
