@@ -90,13 +90,11 @@ public class TaskImpl {
             }
             t.setWorkloadList(workloadList);
 
-            t.setUserUserId(ProxyManager.getUserProxy().findUserById(taskDTO.getUserUserId().getUserId()));
-
             User u;
             if (taskDTO.getPreassignedUserName() != null) {
                 u = ProxyManager.getUserProxy().findUserByUsername(taskDTO.getPreassignedUserName());
                 if (u == null) {
-                    return Pair.of(false, "Data error (user doesn't exist!");
+                    return Pair.of(false, "Data error (user doesn't exist1)!");
                 }
                 t.setPreassignedUserName(u.getUsername());
             } else {
@@ -106,7 +104,7 @@ public class TaskImpl {
             if (taskDTO.getUserUserId() != null) {
                 u = ProxyManager.getUserProxy().findUserByUsername(taskDTO.getUserUserId().getUsername());
                 if (u == null) {
-                    return Pair.of(false, "Data error (user doesn't exist!");
+                    return Pair.of(false, "Data error (user doesn't exist2)!");
                 }
                 t.setUserUserId(u);
             } else {

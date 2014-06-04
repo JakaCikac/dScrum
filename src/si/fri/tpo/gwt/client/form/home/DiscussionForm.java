@@ -107,7 +107,7 @@ public class DiscussionForm implements IsWidget {
                     sb.appendHtmlConstant("<table><tr><th>Date</th><th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Author</th><th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th><th>Content</th></tr>");
                     for (CommentDTO commentDTO : commentDTOList) {
                         sb.appendHtmlConstant("<tr>");
-                        sb.appendHtmlConstant("<td>" + commentDTO.getCreatetime().toString().substring(4, 16) + "</td><td></td><td>" + commentDTO.getUser().getUsername() + "</td><td></td><td>" + commentDTO.getContent() + "</td>");
+                        sb.appendHtmlConstant("<td>" + commentDTO.getCreatetime().toString().substring(4, 16) + "</td><td></td><td>" + commentDTO.getUser().getUsername() + "</td><td></td><td>" + commentDTO.getContent().replaceAll("\n", "</br>") + "</td>");
                         sb.appendHtmlConstant("</tr>");
                     }
                     sb.appendHtmlConstant("</table>");

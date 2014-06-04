@@ -347,11 +347,14 @@ public class MyTasksForm implements IsWidget{
                     }
                     final Date lastDate = assDate;
 
+                    CalendarUtil.resetTime(today);
+                    CalendarUtil.resetTime(lastDate);
+
                     if(taskDTO.getWorkloadList().size() != 0) {
                         CalendarUtil.addDaysToDate(lastDate, 1);
                     }
 
-                    if (lastDate.equals(today) || lastDate.after(today)) end = false;
+                    if (lastDate.after(today)) end = false;
                     List<WorkloadDTO> workloadDTOList = new ArrayList<WorkloadDTO>();
                     while (end) {
                         WorkloadDTO workloadDTO = new WorkloadDTO();
@@ -369,13 +372,12 @@ public class MyTasksForm implements IsWidget{
                         workloadDTO.setStartTime(new Date(0));
                         workloadDTO.setStopTime(new Date(0));
                         workloadDTO.setStarted(false);
+                        workloadDTOList.add(workloadDTO);
 
                         CalendarUtil.addDaysToDate(lastDate, 1);
-                        if (lastDate.equals(today) || lastDate.after(today)) end = false;
-                        workloadDTOList.add(workloadDTO);
+                        if (lastDate.after(today)) end = false;
                         newWorkload = true;
                     }
-                    CalendarUtil.addDaysToDate(lastDate, -1);
                     if(newWorkload) {
                         performSaveWorkloadList(workloadDTOList, taskDTO);
                     }
