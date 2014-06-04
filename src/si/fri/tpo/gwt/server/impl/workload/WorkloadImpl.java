@@ -1,10 +1,7 @@
 package si.fri.tpo.gwt.server.impl.workload;
 
 import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.dto.AcceptanceTestDTO;
-import si.fri.tpo.gwt.client.dto.SprintDTO;
-import si.fri.tpo.gwt.client.dto.SprintPKDTO;
-import si.fri.tpo.gwt.client.dto.WorkloadDTO;
+import si.fri.tpo.gwt.client.dto.*;
 import si.fri.tpo.gwt.server.jpa.*;
 import si.fri.tpo.gwt.server.proxy.ProxyManager;
 
@@ -28,6 +25,11 @@ public class WorkloadImpl {
 
             workload.setTimeRemaining(workloadDTO.getTimeRemaining());
             workload.setTimeSpent(workloadDTO.getTimeSpent());
+
+            workload.setStarted(workloadDTO.getStarted());
+            workload.setStartTime(workloadDTO.getStartTime());
+            workload.setStopTime(workloadDTO.getStopTime());
+
             try {
                 if (workload == null)
                     return Pair.of(false, "Data error!");
@@ -46,9 +48,9 @@ public class WorkloadImpl {
 
     }
 
-    public static Pair<Boolean,List<Integer>> saveWorkload(List<WorkloadDTO> workloadDTO1) {
+    public static Pair<Boolean,List<Integer>> saveWorkload(List<WorkloadDTO> workloadDTOList) {
         List<Integer> insertedWorkloadID = new ArrayList<Integer>();
-        for(WorkloadDTO workloadDTO : workloadDTO1) {
+        for(WorkloadDTO workloadDTO : workloadDTOList) {
             try {
                 WorkloadPK workloadPK = new WorkloadPK();
                 workloadPK.setTaskTaskId(workloadDTO.getWorkloadPK().getTaskTaskId());
@@ -67,6 +69,9 @@ public class WorkloadImpl {
 
                 workload.setUser(ProxyManager.getUserProxy().findUserById(workloadDTO.getUser().getUserId()));
 
+                workload.setStarted(workloadDTO.getStarted());
+                workload.setStartTime(workloadDTO.getStartTime());
+                workload.setStopTime(workloadDTO.getStopTime());
                 try {
                     if (workload == null)
                         return Pair.of(false, null);

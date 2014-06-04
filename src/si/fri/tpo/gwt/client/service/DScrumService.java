@@ -151,4 +151,10 @@ public interface DScrumService extends RemoteService {
     public Pair<Boolean, List<Integer>> saveWorkload(List<WorkloadDTO> workloadDTO);
 
     // WORKLOAD //
+
+    // WORKBLOCK //
+    public Pair<Boolean, Integer> saveWorkblock(WorkblockDTO workblockDTO);
+
+    public Pair<Boolean, Integer> updateWorkblock(WorkblockDTO workblockDTO);
+    // WORKBLOCK //
 }

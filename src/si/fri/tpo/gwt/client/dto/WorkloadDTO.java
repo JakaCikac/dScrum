@@ -14,6 +14,9 @@ public class WorkloadDTO extends BaseModelData {
     //private String timeSpent;
     //private String timeRemaining;
     //private Date day;
+    //private Date startTime;
+    //private Date stopTime;
+    //private boolean started;
     //private User user;
     //private Task task;
     //private List<Workblock> workblockList;
@@ -51,6 +54,30 @@ public class WorkloadDTO extends BaseModelData {
 
     public void setDay(Date day) {
         set("day", day);
+    }
+
+    public Date getStartTime() {
+        return get("startTime");
+    }
+
+    public void setStartTime(Date startTime) {
+        set("startTime", startTime);
+    }
+
+    public Date getStopTime() {
+        return get("stopTime");
+    }
+
+    public void setStopTime(Date stopTime) {
+        set("stopTime", stopTime);
+    }
+
+    public boolean getStarted() {
+        return get("started");
+    }
+
+    public void setStarted(boolean started) {
+        set("started", started);
     }
 
     public UserDTO getUser() {
