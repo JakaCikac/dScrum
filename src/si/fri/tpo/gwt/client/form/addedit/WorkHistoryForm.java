@@ -7,7 +7,7 @@ import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.view.client.ListDataProvider;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.shared.ListStore;
@@ -21,17 +21,12 @@ import com.sencha.gxt.widget.core.client.event.RowClickEvent;
 import com.sencha.gxt.widget.core.client.form.DoubleField;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.FormPanel;
-import com.sencha.gxt.widget.core.client.form.IntegerField;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 import com.sencha.gxt.widget.core.client.grid.Grid;
 import com.sencha.gxt.widget.core.client.grid.RowNumberer;
 import si.fri.tpo.gwt.client.components.Pair;
-import si.fri.tpo.gwt.client.dto.TaskDTO;
-import si.fri.tpo.gwt.client.dto.WorkblockDTO;
-import si.fri.tpo.gwt.client.dto.WorkloadDTO;
-import si.fri.tpo.gwt.client.dto.WorkloadPKDTO;
-import com.google.gwt.editor.client.Editor;
+import si.fri.tpo.gwt.client.dto.*;
 import si.fri.tpo.gwt.client.form.home.NorthForm;
 import si.fri.tpo.gwt.client.form.home.UserHomeForm;
 import si.fri.tpo.gwt.client.form.navigation.AdminNavPanel;
@@ -39,9 +34,8 @@ import si.fri.tpo.gwt.client.form.navigation.UserNavPanel;
 import si.fri.tpo.gwt.client.form.select.ProjectSelectForm;
 import si.fri.tpo.gwt.client.service.DScrumServiceAsync;
 import si.fri.tpo.gwt.client.session.SessionInfo;
-import si.fri.tpo.gwt.server.jpa.TaskPK;
-import si.fri.tpo.gwt.server.jpa.Workblock;
-import si.fri.tpo.gwt.server.jpa.Workload;
+import si.fri.tpo.gwt.server.jpa.*;
+import si.fri.tpo.gwt.server.proxy.ProxyManager;
 
 import java.util.Date;
 import java.util.*;
@@ -59,11 +53,10 @@ public class WorkHistoryForm implements IsWidget  {
     private VerticalPanel verticalPanel;
     private FlowPanel container;
     private TaskDTO selectedTaskDTO;
-    private WorkloadDTO selectedWorkloadDTO;
     private WorkloadDTO workloadDTO;
     private ListStore<WorkloadDTO> store;
     private Grid<WorkloadDTO> grid;
-    private List<WorkloadDTO> workloadDTOList, workloadDTOListNEW;
+    private List<WorkloadDTO> workloadDTOList;
     private Comparator<WorkloadDTO> wbSortByDate;
 
     private DoubleField workSpent;
@@ -71,17 +64,13 @@ public class WorkHistoryForm implements IsWidget  {
 
     private SubmitButton submitButton;
 
-    Date today = new Date();
-    Date lastDay;
-    long forDay;
-    int dateDifference = 0;
-    private String timeRem="";
-
-    public WorkHistoryForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, TaskDTO tDTO, WorkHistoryDialog whd) {
+    public WorkHistoryForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, ContentPanel north, ContentPanel south, TaskDTO tDTO, WorkHistoryDialog whd) {
         this.service = service;
         this.center = center;
         this.west = west;
         this.east = east;
+        this.north = north;
+        this.south = south;
         this.selectedTaskDTO = tDTO;
         this.whd = whd;
     }
@@ -122,56 +111,14 @@ public class WorkHistoryForm implements IsWidget  {
         l.add(hoursSpenCol);
         l.add(hoursRemainingCol);
 
-        wbSortByDate = new WBSortByDate();
-
         cm = new ColumnModel<WorkloadDTO>(l);
         store = new ListStore<WorkloadDTO>(getModelKeyProvider());
 
         //list for sorting date in a workload
+        wbSortByDate = new WBSortByDate();
         workloadDTOList = selectedTaskDTO.getWorkloadList();
         Collections.sort(workloadDTOList, wbSortByDate);
         store.addAll(workloadDTOList);
-        final WorkloadDTO lastElement;
-
-        if (workloadDTOList.isEmpty()){
-            lastElement = workloadDTO;
-            lastDay = selectedTaskDTO.getAssignedDate();
-            timeRem = (String.valueOf(selectedTaskDTO.getEstimatedTime()));
-        }
-
-        else {
-            lastElement =  workloadDTOList.get(workloadDTOList.size() - 1);
-            lastDay = lastElement.getDay();
-            timeRem = lastElement.getTimeRemaining();
-        }
-
-        dateDifference = (int)(today.getTime() - lastDay.getTime())/(1000*60*60*24);
-        forDay = lastDay.getTime()+(1000*60*60*24);
-
-        workloadDTOListNEW = new ArrayList<WorkloadDTO>();
-        for (int i=0; i<dateDifference; i++){
-            WorkloadDTO addWL = new WorkloadDTO();
-            WorkloadPKDTO workloadPKDTO = new WorkloadPKDTO();
-            workloadPKDTO.setUserUserId(selectedTaskDTO.getUserUserId().getUserId());
-            workloadPKDTO.setTaskTaskId(selectedTaskDTO.getTaskPK().getTaskId());
-            workloadPKDTO.setTaskUserStoryStoryId(selectedTaskDTO.getUserStory().getStoryId());
-            addWL.setWorkloadPK(workloadPKDTO);
-
-            addWL.setUser(selectedTaskDTO.getUserUserId());
-            addWL.setTask(selectedTaskDTO);
-            addWL.setTimeSpent("0");
-            addWL.setDay(new Date(forDay));
-            addWL.setTimeRemaining(timeRem);
-
-            forDay = forDay +(1000*60*60*24);
-
-            workloadDTOListNEW.add(addWL);
-        }
-        performSaveWorkload(workloadDTOListNEW);
-
-        lastDay = null;
-        long forDay = 0;
-        int dateDifference = 0;
 
         grid = new Grid<WorkloadDTO>(store, cm);
         grid.getView().setAutoExpandColumn(taskCreationDateCol);
@@ -187,19 +134,16 @@ public class WorkHistoryForm implements IsWidget  {
             public void onRowClick(RowClickEvent event) {
                 workSpent.setEnabled(true);
                 workRemaining.setEnabled(true);
+                submitButton.setEnabled(true);
                 workloadDTO = grid.getSelectionModel().getSelectedItem();
 
                 if (workloadDTO.getTimeRemaining() == null){
                     workRemaining.setValue(Double.parseDouble(("0.0")));
                     workSpent.setValue(Double.parseDouble(workloadDTO.getTimeSpent()));
-                }
-
-                else if (workloadDTO.getTimeSpent() == null){
+                } else if (workloadDTO.getTimeSpent() == null){
                     workSpent.setValue(Double.parseDouble(("0.0")));
                     workRemaining.setValue(Double.parseDouble((workloadDTO.getTimeRemaining())));
-                }
-
-                else {
+                } else {
                     workSpent.setValue(Double.parseDouble(workloadDTO.getTimeSpent()));
                     workRemaining.setValue(Double.parseDouble((workloadDTO.getTimeRemaining())));
                 }
@@ -228,13 +172,12 @@ public class WorkHistoryForm implements IsWidget  {
 
         //submit button
         submitButton = new SubmitButton("Update work");
-        submitButton.setEnabled(true);
+        submitButton.setEnabled(false);
         submitButton.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
 
                 final WorkloadDTO workloadDTO = getWorkloadDTO();
-                List<WorkloadDTO> workloadDTOList = selectedTaskDTO.getWorkloadList();
 
                 /* ------------------------------- VALIDATORS --------------------------------- */
 
@@ -249,39 +192,8 @@ public class WorkHistoryForm implements IsWidget  {
                     d.show();
                     return;
                 }
-                double est = (double)selectedTaskDTO.getEstimatedTime();
-                double rem = workRemaining.getValue();
-                int res = Double.compare(est,rem);
-                if (res<0) {
-                    AlertMessageBox d = new AlertMessageBox("Error!", "Estimated time is " + (est) + ". Write smaller number!");
-                    d.show();
-                    return;
-                }
-
-                //if workRemaining==0 -> you have finished your work! :)
-                if (selectedTaskDTO.getEstimatedTime()!=0 && (workRemaining.getValue())==0){
-                    //System.out.println("ID taska:" + selectedTaskDTO.getTaskPK().getTaskId());
-                    selectedTaskDTO.setStatus("Completed");
-                    selectedTaskDTO.setTimeRemaining(0);
-                    MessageBox d = new MessageBox("Congratz!", "You just finished your task!");
-                    performUpdateTask(selectedTaskDTO);
-                    d.show();
-                }
-
-                //if workRemaining!=0 -> taskStatus == Assigned
-                if (selectedTaskDTO.getEstimatedTime()!=0 && (workRemaining.getValue())!=0){
-                    //System.out.println("ID taska:" + selectedTaskDTO.getTaskPK().getTaskId());
-                    selectedTaskDTO.setStatus("Assigned");
-                    performUpdateTask(selectedTaskDTO);
-                }
 
                 /* ----------------------------- END VALIDATORS ------------------------------- */
-
-                //update remaining time @ task - Zaključevanje nalog
-                int lastTimeRemaining;
-                double doubleLastTimeRemaining;
-                doubleLastTimeRemaining = Double.parseDouble(lastElement.getTimeRemaining());
-                lastTimeRemaining = (int)doubleLastTimeRemaining;
 
                 //round to 1decimal number and save to base
                 double wSpent = workSpent.getValue()*10;
@@ -292,23 +204,35 @@ public class WorkHistoryForm implements IsWidget  {
                 wRemaining = Math.round(wRemaining);
                 wRemaining = wRemaining/10;
 
-                if (workloadDTO.getDay().compareTo(lastElement.getDay())==0){
-                    //System.out.println("----------zadnji dan!--------------");
-                    lastTimeRemaining = (int)wRemaining;
-                }
+                //if workRemaining==0 -> you have finished your work! :)
+                if(CalendarUtil.isSameDate(workloadDTO.getDay(), new Date())) {
+                    if (selectedTaskDTO.getEstimatedTime() != 0 && (workRemaining.getValue()) == 0) {
+                        //System.out.println("ID taska:" + selectedTaskDTO.getTaskPK().getTaskId());
+                        selectedTaskDTO.setStatus("Completed");
+                        selectedTaskDTO.setTimeRemaining(0);
+                        MessageBox d = new MessageBox("Congratz!", "You just finished your task!");
+                        d.show();
+                    }
 
-                selectedTaskDTO.setTimeRemaining(lastTimeRemaining);
+                    //if workRemaining!=0 -> taskStatus == Assigned
+                    if (selectedTaskDTO.getEstimatedTime() != 0 && (workRemaining.getValue()) != 0) {
+                        //System.out.println("ID taska:" + selectedTaskDTO.getTaskPK().getTaskId());
+                        selectedTaskDTO.setStatus("Assigned");
+                    }
+                    selectedTaskDTO.setTimeRemaining((int)wRemaining);
+                    performUpdateTask(selectedTaskDTO);
+                }
 
                 workloadDTO.setTimeSpent(String.valueOf(wSpent));
                 workloadDTO.setTimeRemaining(String.valueOf(wRemaining));
 
-                performUpdateTask(selectedTaskDTO); //zakljucevanje nalog
                 performUpdateWorkload(workloadDTO);
                 store.update(workloadDTO);
             //end OnClick
             }
         //end addClickHandler
         });
+
         panel.addButton(submitButton);
         verticalPanel.add(panel);
     }
@@ -328,24 +252,8 @@ public class WorkHistoryForm implements IsWidget  {
                     AlertMessageBox amb2 = new AlertMessageBox("Error updating work!", result.getSecond());
                     amb2.show();
                 } else {
-                    SessionInfo.projectDTO = null;
-                    north.clear();
-                    west.clear();
-                    east.clear();
-                    center.clear();
-                    NorthForm nf = new NorthForm(service, center, north, south, east, west);
-                    north.add(nf.asWidget());
-                    if (SessionInfo.userDTO.isAdmin()) {
-                        AdminNavPanel adminNavPanel = new AdminNavPanel(center, west, east, north, south, service);
-                        east.add(adminNavPanel.asWidget());
-                    } else {
-                        UserNavPanel userNavPanel = new UserNavPanel(service, center, west, east, north, south);
-                        east.add(userNavPanel.asWidget());
-                    }
-                    ProjectSelectForm psf = new ProjectSelectForm(service, center, west, east, north, south);
-                    west.add(psf.asWidget());
-                    UserHomeForm userHomeForm = new UserHomeForm(service, center, west, east, north, south);
-                    center.add(userHomeForm.asWidget());
+                    MessageBox amb3 = new MessageBox("Message update Work History", result.getSecond());
+                    amb3.show();
                 }
             }
             @Override
@@ -356,65 +264,17 @@ public class WorkHistoryForm implements IsWidget  {
         service.updateWorkload(workloadDTO, updateWorkload);
     }
 
-    private void performSaveWorkload(List<WorkloadDTO> workloadDTOListSave){
-        AsyncCallback<Pair<Boolean, List<Integer>>> saveWorkload = new AsyncCallback<Pair<Boolean, List<Integer>>>() {
-            @Override
-            public void onSuccess(Pair<Boolean, List<Integer>> result) {
-                if (result == null) {
-                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing work updating!");
-                    amb2.show();
-                } else if (!result.getFirst()) {
-                    AlertMessageBox amb2 = new AlertMessageBox("Error updating work!", result.getSecond()+"");
-                    amb2.show();
-                } else {
-                    //List<WorkloadDTO> workloadDTOListN = new ArrayList<WorkloadDTO>();
-
-                    if ( workloadDTOListNEW.size() == result.getSecond().size()) {
-                        ListIterator litr = result.getSecond().listIterator();
-                        for (WorkloadDTO workloadDTO1 : workloadDTOListNEW){
-                            if(litr.hasNext()) {
-                                WorkloadPKDTO workloadPKDTO = workloadDTO1.getWorkloadPK();
-                                workloadPKDTO.setWorkloadId((Integer)litr.next());
-                                workloadDTO1.setWorkloadPK(workloadPKDTO);
-                                workloadDTOList.add(workloadDTO1);
-                            } else {
-                                errorMessage("Error saving acceptance test!", "There was an error while performing acceptance test saving!");
-                            }
-                        }
-                    } else {
-                        errorMessage("Error saving acceptance test!", "There was an error while performing acceptance test saving!");
-                    }
-
-                    //ponovno sortiraj
-                    Collections.sort(workloadDTOList, wbSortByDate);
-                    //shrani v store
-                    store.addAll(workloadDTOList);
-
-                    selectedTaskDTO.setWorkloadList(workloadDTOList);
-                    AsyncCallback<Pair<Boolean, String>> updateTask = new AsyncCallback<Pair<Boolean, String>>() {
-                        @Override
-                        public void onSuccess(Pair<Boolean, String> result) {
-                        }
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            Window.alert(caught.getMessage());
-                        }
-                    };
-                    service.updateTask(selectedTaskDTO, updateTask);
-                }
-            }
-            @Override
-            public void onFailure(Throwable caught) {
-                Window.alert(caught.getMessage());
-            }
-        };
-        service.saveWorkload(workloadDTOListSave, saveWorkload);
-    }
-
     private void performUpdateTask(TaskDTO p) {
         AsyncCallback<Pair<Boolean, String>> updateTask = new AsyncCallback<Pair<Boolean, String>>() {
             @Override
             public void onSuccess(Pair<Boolean, String> result) {
+                if (result == null) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error!", "Error while performing task updating!");
+                    amb2.show();
+                } else if (!result.getFirst()) {
+                    AlertMessageBox amb2 = new AlertMessageBox("Error updating Task!", result.getSecond());
+                    amb2.show();
+                }
             }
             @Override
             public void onFailure(Throwable caught) {
@@ -499,10 +359,6 @@ public class WorkHistoryForm implements IsWidget  {
             }
         };
         return vphr;
-    }
-    private void errorMessage(String s, String s1) {
-        AlertMessageBox amb = new AlertMessageBox(s, s1);
-        amb.show();
     }
 }
 

@@ -36,6 +36,15 @@ public class Workload implements Serializable {
     @Column(name = "day")
     @Temporal(TemporalType.TIMESTAMP)
     private Date day;
+    @Column(name = "startTime")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date startTime;
+    @Column(name = "stopTime")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date stopTime;
+    @Basic(optional = false)
+    @Column(name = "started")
+    private boolean started;
     @JoinColumn(name = "user_user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private User user;
@@ -88,6 +97,30 @@ public class Workload implements Serializable {
 
     public void setDay(Date day) {
         this.day = day;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getStopTime() {
+        return stopTime;
+    }
+
+    public void setStopTime(Date stopTime) {
+        this.stopTime = stopTime;
+    }
+
+    public boolean getStarted() {
+        return started;
+    }
+
+    public void setStarted(boolean started) {
+        this.started = started;
     }
 
     public User getUser() {

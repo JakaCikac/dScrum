@@ -278,6 +278,9 @@ public class ProjectImpl {
                                         workloadDTO.setDay(workload.getDay());
                                         workloadDTO.setTimeRemaining(workload.getTimeRemaining());
                                         workloadDTO.setTimeSpent(workload.getTimeSpent());
+                                        workloadDTO.setStarted(workload.getStarted());
+                                        workloadDTO.setStartTime(workload.getStartTime());
+                                        workloadDTO.setStopTime(workload.getStopTime());
 
                                         User user = ProxyManager.getUserProxy().findUser(workload.getUser().getUserId());
                                         UserDTO userDTO = new UserDTO();

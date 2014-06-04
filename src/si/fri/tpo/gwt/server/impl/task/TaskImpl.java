@@ -3,8 +3,12 @@ package si.fri.tpo.gwt.server.impl.task;
 import si.fri.tpo.gwt.client.components.Pair;
 import si.fri.tpo.gwt.client.dto.TaskDTO;
 import si.fri.tpo.gwt.client.dto.UserStoryDTO;
+import si.fri.tpo.gwt.client.dto.WorkloadDTO;
 import si.fri.tpo.gwt.server.jpa.*;
 import si.fri.tpo.gwt.server.proxy.ProxyManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by nanorax on 03/05/14.
@@ -66,18 +70,31 @@ public class TaskImpl {
             taskPK.setTaskId(taskDTO.getTaskPK().getTaskId());
             taskPK.setUserStoryStoryId(taskDTO.getTaskPK().getUserStoryStoryId());
             Task t = ProxyManager.getTaskProxy().findTask(taskPK);
+            t.setDescription(taskDTO.getDescription());
+            t.setTimeRemaining(taskDTO.getTimeRemaining());
+            t.setEstimatedTime(taskDTO.getEstimatedTime());
             t.setStatus(taskDTO.getStatus());
             t.setAssignedDate(taskDTO.getAssignedDate());
-            t.setDescription(taskDTO.getDescription());
-            t.setEstimatedTime(taskDTO.getEstimatedTime());
             t.setPreassignedUserName(taskDTO.getPreassignedUserName());
-            t.setTimeRemaining(taskDTO.getTimeRemaining());
+
+            List<Workload> workloadList = new ArrayList<Workload>();
+            for(WorkloadDTO workloadDTO : taskDTO.getWorkloadList()){
+                WorkloadPK workloadPK = new WorkloadPK();
+                workloadPK.setWorkloadId(workloadDTO.getWorkloadPK().getWorkloadId());
+                workloadPK.setTaskTaskId(workloadDTO.getWorkloadPK().getTaskTaskId());
+                workloadPK.setTaskUserStoryStoryId(workloadDTO.getWorkloadPK().getTaskUserStoryStoryId());
+                workloadPK.setUserUserId(workloadDTO.getWorkloadPK().getUserUserId());
+                Workload workload = ProxyManager.getWorkloadProxy().findWorkload(workloadPK);
+
+                workloadList.add(workload);
+            }
+            t.setWorkloadList(workloadList);
 
             User u;
             if (taskDTO.getPreassignedUserName() != null) {
                 u = ProxyManager.getUserProxy().findUserByUsername(taskDTO.getPreassignedUserName());
                 if (u == null) {
-                    return Pair.of(false, "Data error (user doesn't exist!");
+                    return Pair.of(false, "Data error (user doesn't exist1)!");
                 }
                 t.setPreassignedUserName(u.getUsername());
             } else {
@@ -87,7 +104,7 @@ public class TaskImpl {
             if (taskDTO.getUserUserId() != null) {
                 u = ProxyManager.getUserProxy().findUserByUsername(taskDTO.getUserUserId().getUsername());
                 if (u == null) {
-                    return Pair.of(false, "Data error (user doesn't exist!");
+                    return Pair.of(false, "Data error (user doesn't exist2)!");
                 }
                 t.setUserUserId(u);
             } else {

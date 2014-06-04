@@ -149,5 +149,13 @@ public interface DScrumServiceAsync {
     void saveWorkload(List<WorkloadDTO> workloadDTO, AsyncCallback<Pair<Boolean,List<Integer>>> saveWorkload);
 
     // WORKLOAD //
+
+    // WORKBLOCK //
+
+    void saveWorkblock(WorkblockDTO workblockDTO, AsyncCallback<Pair<Boolean,Integer>> saveWorkblock);
+
+    void updateWorkblock(WorkblockDTO wbDTO, AsyncCallback<Pair<Boolean, Integer>> updateWorkblock);
+
+    // WORKBLOCK //
 }
 

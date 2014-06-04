@@ -26,7 +26,7 @@ public class AcceptanceTestImpl {
                 if (insertedAcceptanceTestID == -1) {
                     System.out.println("ob vstavljanju s kontrolerjem je AcceptanceTest id ... -1 :(");
                 }
-                System.out.println(insertedAcceptanceTestID);
+                //System.out.println(insertedAcceptanceTestID);
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
                 return Pair.of(false, -1);

@@ -118,7 +118,7 @@ public class DScrum implements IsWidget, EntryPoint {
             panel.setWidget(hlc);
             HTML copyright = new HTML("<h1 style='margin-left:auto; margin-right:auto; margin-top:auto; margin-bottom:auto; " +
                     "font-size:10px;'>©Copyright, Matej & " +
-                    "Denis & Jaka & Anže<br/>Študentje 3.letnika<br/>Ljubljana, 2014</h1>");
+                    "Denis & Jaka & Anže<br/>Najboljša skupina TPO 13<br/>Ljubljana, 2014</h1>");
             hlc.add(new HTML(), new HorizontalLayoutContainer.HorizontalLayoutData(0.05, 1, new Margins(4)));
             hlc.add(copyright, new HorizontalLayoutContainer.HorizontalLayoutData(0.9, 1, new Margins(4, 0, 4, 0)));
             hlc.add(new HTML(), new HorizontalLayoutContainer.HorizontalLayoutData(0.05, 1, new Margins(4)));

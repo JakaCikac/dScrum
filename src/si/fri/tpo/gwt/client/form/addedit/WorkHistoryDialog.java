@@ -45,7 +45,7 @@ public class WorkHistoryDialog extends Dialog {
 
         FlowLayoutContainer layout = new FlowLayoutContainer();
         add(layout);
-        WorkHistoryForm whf = new WorkHistoryForm(this.service, this.center, this.west, this.east, this.tDTO, this);
+        WorkHistoryForm whf = new WorkHistoryForm(this.service, this.center, this.west, this.east, this.north, this.south, this.tDTO, this);
         layout.add(whf.asWidget());
         center.disable();
         east.disable();

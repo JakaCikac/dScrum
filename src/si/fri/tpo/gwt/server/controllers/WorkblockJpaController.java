@@ -36,7 +36,8 @@ public class WorkblockJpaController implements Serializable  {
         return emf.createEntityManager();
     }
 
-    public void create(Workblock workblock) throws PreexistingEntityException, Exception {
+    public int create(Workblock workblock) throws PreexistingEntityException, Exception {
+        int insertedWorkblockID = -1;
         if (workblock.getWorkblockPK() == null) {
             workblock.setWorkblockPK(new WorkblockPK());
         }
@@ -66,9 +67,11 @@ public class WorkblockJpaController implements Serializable  {
             throw ex;
         } finally {
             if (em != null) {
+                insertedWorkblockID = workblock.getWorkblockPK().getWorkblockId();
                 em.close();
             }
         }
+        return insertedWorkblockID;
     }
 
     public void edit(Workblock workblock) throws NonexistentEntityException, Exception {
