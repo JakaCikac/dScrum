@@ -90,8 +90,9 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
 
     private UserStoryDTO selectedUserStoryDTO;
 
-    public UserStoryEditForm(DScrumServiceAsync service, ContentPanel center, ContentPanel west, ContentPanel east, UserStoryDTO usDTO, UserStoryEditDialog used) {
+    public UserStoryEditForm(DScrumServiceAsync service, ContentPanel north, ContentPanel center, ContentPanel west, ContentPanel east, UserStoryDTO usDTO, UserStoryEditDialog used) {
         this.service = service;
+        this.north = north;
         this.center = center;
         this.west = west;
         this.east = east;
