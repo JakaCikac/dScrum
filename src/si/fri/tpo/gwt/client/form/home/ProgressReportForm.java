@@ -188,9 +188,9 @@ public class ProgressReportForm implements IsWidget {
 
                     if (value != null) {
                         value.hrsRemaining += timeRemaining;
-                        value.hrsSpent += timeSpent;
+                        value.hrsSpent += timeSpent+timeRemaining;
                     } else {
-                        value = new BurndownData(0, timeRemaining, timeSpent);
+                        value = new BurndownData(0, timeRemaining, timeSpent+timeRemaining);
                     }
 
                     burndownMap.put(key, value);
