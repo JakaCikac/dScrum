@@ -44,7 +44,7 @@ public class UserStoryEditDialog extends Dialog {
 
         FlowLayoutContainer layout = new FlowLayoutContainer();
         add(layout);
-        UserStoryEditForm usef = new UserStoryEditForm(this.service, this.center, this.west, this.east, this.usDTO, this);
+        UserStoryEditForm usef = new UserStoryEditForm(this.service, this.north, this.center, this.west, this.east, this.usDTO, this);
         layout.add(usef.asWidget());
         center.disable();
         east.disable();
