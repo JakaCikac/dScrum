@@ -205,7 +205,7 @@ public class UserStoryEditForm implements IsWidget, Editor<UserStoryDTO> {
         GridInlineEditing<AcceptanceTestDTO> acceptanceTestGridInlineEditor = new GridInlineEditing<AcceptanceTestDTO>(acceptanceTestGrid);
         acceptanceTestGridInlineEditor.addEditor(acceptanceTestsColumnConfig, new TextField());
 
-        acceptanceTestGrid.setWidth(382);
+        acceptanceTestGrid.setWidth(398);
         acceptanceTestGrid.setHeight(200);
 
         FieldLabel accTestContainer = new FieldLabel();

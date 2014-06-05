@@ -115,7 +115,7 @@ public class AddStoryToSprintForm implements IsWidget{
         ContentPanel panel1 = new ContentPanel();
         panel1.setHeaderVisible(true);
         panel1.setHeadingText("Select Sprint");
-        panel1.setSize("360", "100");
+        panel1.setSize("500", "200");
 
         panel1.setWidget(grid);
         p.add(panel1);

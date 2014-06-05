@@ -37,7 +37,7 @@ public class UserStoryEditDialog extends Dialog {
         setHeadingText("User story edit dialog");
 
         setWidth(501);
-        setHeight(630);
+        setHeight(670);
         setHideOnButtonClick(true);
 
         ClearPanels();
